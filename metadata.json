@@ -1,0 +1,6 @@
+{
+  "name": "World Channels",
+  "description": "An interactive global IPTV streaming hub featuring a real-time world map and automated stream health verification.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
