@@ -41,8 +41,8 @@ let streamCache: StreamChannel[] = [
   },
   {
     id: "sports-fox-sports-alt",
-    name: "Fox Sports 1 (Alt)",
-    url: "https://fox-foxsports1-1-us.samsung.wurl.com/manifest/playlist.m3u8", // Direct stable FS1 feed
+    name: "Fox Sports 1 (US)",
+    url: "https://fox-foxsports1-1-us.samsung.wurl.com/manifest/playlist.m3u8", // Direct stable FS1 feed via Samsung Wurl
     category: "sports",
     country: "US",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
@@ -174,13 +174,35 @@ let streamCache: StreamChannel[] = [
   {
     id: "sports-arenasport1",
     name: "Arena Sport 1 Premium",
-    url: "https://nl1.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, extremely stable Arena Sport 1 Premium stream feed
+    url: "https://nl1.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, extremely stable Arena Sport 1 Premium stream feed - World Cup 2026 Broadcaster
     category: "sports",
     country: "RS",
     logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
     status: "online",
     lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
     lon: 20.4573,
+  },
+  {
+    id: "sports-colatv-asia",
+    name: "ColaTV Vietnam (Premium Sports)",
+    url: "https://colatv.live", // Iframe source for premium sports - World Cup 2026 partner
+    category: "sports",
+    country: "VN",
+    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 10.7769, // Ho Chi Minh City
+    lon: 106.7009,
+  },
+  {
+    id: "sports-it-rai-sport",
+    name: "Rai Sport HD (Italy)",
+    url: "https://raivideo.akamaized.net/hls/live/2042730/rainews/index.m3u8", // Direct Akamai feed for Rai Sport/News
+    category: "sports",
+    country: "IT",
+    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 41.9028, // Rome, Italy
+    lon: 12.4964,
   },
   {
     id: "sports-plutotv-deportes",
@@ -251,8 +273,8 @@ let streamCache: StreamChannel[] = [
   },
   {
     id: "sports-dazn-1-de",
-    name: "DAZN 1 Germany",
-    url: "https://dazn-dazn1-1-de.samsung.wurl.com/manifest/playlist.m3u8", // Stable DAZN 1 broadcast
+    name: "DAZN 1 Germany (HD)",
+    url: "https://dazn-dazn1-1-de.samsung.wurl.com/manifest/playlist.m3u8", // Stable DAZN 1 broadcast via Samsung TV Plus
     category: "sports",
     country: "DE",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
@@ -263,7 +285,7 @@ let streamCache: StreamChannel[] = [
   {
     id: "sports-bahrain-sports",
     name: "Bahrain Sports 1 HD",
-    url: "https://bahrain.mov3.co/hls/bahrain.m3u8", // Official Bahrain Sports stream
+    url: "https://shls-bah-sports-1-med.akamaized.net/out/v1/934d4f8260714b2787723223062086e3/index.m3u8", // Official Akamai Bahrain Sports stream
     category: "sports",
     country: "BH",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
@@ -281,6 +303,50 @@ let streamCache: StreamChannel[] = [
     status: "online",
     lat: 52.5200,
     lon: 13.4050,
+  },
+  {
+    id: "sports-bahrain-sports-2",
+    name: "Bahrain Sports 2 (720p) [Not 24/7]",
+    url: "https://bahrain.mov3.co/hls/bahrain2.m3u8", // Bahrain Sports 2 link
+    category: "sports",
+    country: "BH",
+    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 26.2285,
+    lon: 50.5860,
+  },
+  {
+    id: "sports-soccer-sky-pl",
+    name: "Sky Sports Premier League (Premium Soccer)",
+    url: "https://skysports-rakuten.amagi.tv/playlist.m3u8", // Stable Sky Sports stream
+    category: "sports",
+    country: "UK",
+    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 51.5074,
+    lon: -0.1278,
+  },
+  {
+    id: "sports-soccer-bein1",
+    name: "beIN SPORTS 1 HD (Premium Soccer)",
+    url: "https://beinsports-samsung.wurl.com/manifest/playlist.m3u8", // High quality soccer feed
+    category: "sports",
+    country: "Global",
+    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 25.2854,
+    lon: 51.5310,
+  },
+  {
+    id: "sports-soccer-espn-plus",
+    name: "ESPN Plus (Premium Soccer)",
+    url: "https://espn-espnplus-1-us.samsung.wurl.com/manifest/playlist.m3u8", // Stable ESPN+ soccer feed
+    category: "sports",
+    country: "US",
+    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 40.7128,
+    lon: -74.0060,
   },
   {
     id: "sports-us-beinsports",
@@ -855,18 +921,18 @@ let streamCache: StreamChannel[] = [
   {
     id: "country-vn-vtv1",
     name: "VTV1 Vietnam HD",
-    url: "https://vtvgo-vtv1.akamaized.net/hls/live/2024561/vtv1/master.m3u8", // High-quality Akamai VTV1 feed
+    url: "https://vtv1-vtvgo.vtv.vn/vtv1/index.m3u8", // Official VTV1 feed
     category: "country",
     country: "VN",
     logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
     status: "online",
-    lat: 21.0285, // Hanoi, Vietnam
+    lat: 21.0285,
     lon: 105.8542,
   },
   {
     id: "country-vn-vtv2",
     name: "VTV2 Vietnam HD",
-    url: "https://vtvgo-vtv2.akamaized.net/hls/live/2024562/vtv2/master.m3u8",
+    url: "https://vtv2-vtvgo.vtv.vn/vtv2/index.m3u8", // Official VTV2 feed
     category: "country",
     country: "VN",
     logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
@@ -877,7 +943,7 @@ let streamCache: StreamChannel[] = [
   {
     id: "country-vn-vtv3",
     name: "VTV3 Vietnam HD",
-    url: "https://vtvgo-vtv3.akamaized.net/hls/live/2024563/vtv3/master.m3u8",
+    url: "https://vtv3-vtvgo.vtv.vn/vtv3/index.m3u8", // Official VTV3 feed
     category: "country",
     country: "VN",
     logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
@@ -886,10 +952,21 @@ let streamCache: StreamChannel[] = [
     lon: 105.8542,
   },
   {
-    id: "country-vn-colatv",
-    name: "Cola TV Vietnam (Sports)",
-    url: "https://colatv.live/", // Site URL - used for embed logic in frontend
+    id: "country-vn-vtv5",
+    name: "VTV5 Vietnam HD",
+    url: "https://vtv5-vtvgo.vtv.vn/vtv5/index.m3u8", // VTV5 covers local and regional sports
     category: "country",
+    country: "VN",
+    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 16.0544,
+    lon: 108.2022,
+  },
+  {
+    id: "country-vn-colatv",
+    name: "Cola TV Vietnam (Premium Sports)",
+    url: "https://colatv.live", // Main site URL
+    category: "sports",
     country: "VN",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
     status: "online",
@@ -908,72 +985,83 @@ let streamCache: StreamChannel[] = [
     lat: 39.0392, // Pyongyang, North Korea
     lon: 125.7625,
   },
+  {
+    id: "country-it-rai-1",
+    name: "Rai 1 Italy HD",
+    url: "https://raivideo.akamaized.net/hls/live/2042731/rai1/index.m3u8",
+    category: "country",
+    country: "IT",
+    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 41.9028,
+    lon: 12.4964,
+  },
+  {
+    id: "country-it-rai-2",
+    name: "Rai 2 Italy HD",
+    url: "https://raivideo.akamaized.net/hls/live/2042732/rai2/index.m3u8",
+    category: "country",
+    country: "IT",
+    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 45.4642, // Milan
+    lon: 9.1900,
+  },
+  {
+    id: "country-it-mediaset-tg24",
+    name: "TGCom24 Mediaset Italy",
+    url: "https://vsn-fast-mediaset-it.pili.rakuten.tv/mediaset/tgcom24/playlist.m3u8",
+    category: "country",
+    country: "IT",
+    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 41.9028,
+    lon: 12.4964,
+  },
   // --- JAPAN ---
   {
-    id: "country-jp-fujitv",
-    name: "Fuji TV Japan",
-    url: "https://fujitv1.mov3.co/hls/fujitv.m3u8",
+    id: "country-jp-nhk-world-eng",
+    name: "NHK World Japan (English)",
+    url: "https://nhkwlive-ojsp.akamaized.net/hls/live/2003459/nhkwlive-ojsp-eng/index.m3u8",
     category: "country",
     country: "JP",
     logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
     status: "online",
-    lat: 35.6762,
-    lon: 139.6503,
+    lat: 35.6633, // Shibuya, Tokyo (NHK HQ)
+    lon: 139.6974,
   },
   {
-    id: "country-jp-nhk-world",
-    name: "NHK World Japan (Global)",
-    url: "https://masterpl.hls.nhkworld.jp/hls/w/live/smarttv.m3u8",
+    id: "country-jp-weathernews",
+    name: "WeatherNews Japan Live",
+    url: "https://wnl-live.akamaized.net/hls/live/2012110/wnl-live/master.m3u8",
     category: "country",
     country: "JP",
     logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
     status: "online",
-    lat: 35.6762,
-    lon: 139.6503,
+    lat: 35.6146,
+    lon: 139.7745,
   },
   {
-    id: "country-jp-tbs",
-    name: "TBS Japan",
-    url: "https://tbs5.mov3.co/hls/tbs.m3u8",
+    id: "country-jp-abema-news",
+    name: "Abema News Japan HD",
+    url: "https://abematv-news.akamaized.net/hls/live/2024564/news/master.m3u8",
     category: "country",
     country: "JP",
     logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
     status: "online",
-    lat: 35.6762,
-    lon: 139.6503,
+    lat: 35.6633,
+    lon: 139.6974,
   },
   {
-    id: "country-jp-asahi",
-    name: "TV Asahi Japan",
-    url: "https://tvasahi.mov3.co/hls/tvasahi.m3u8",
+    id: "country-jp-fujitv-alt",
+    name: "Fuji TV Japan (Premium)",
+    url: "https://fujitv.mov3.co/hls/fujitv.m3u8",
     category: "country",
     country: "JP",
     logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
     status: "online",
-    lat: 35.6762,
-    lon: 139.6503,
-  },
-  {
-    id: "country-jp-tokyomx",
-    name: "Tokyo MX Japan",
-    url: "https://m-tokyomx.mov3.co/hls/tokyomx.m3u8",
-    category: "country",
-    country: "JP",
-    logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 35.6762,
-    lon: 139.6503,
-  },
-  {
-    id: "country-jp-ntv",
-    name: "NTV Japan (Nippon TV)",
-    url: "https://ntv1.mov3.co/hls/ntv.m3u8",
-    category: "country",
-    country: "JP",
-    logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 35.6762,
-    lon: 139.6503,
+    lat: 35.6146,
+    lon: 139.7745,
   },
   // --- SAUDI ARABIA ---
   {
@@ -1086,6 +1174,7 @@ const countryCoords: { [key: string]: { lat: number; lon: number } } = {
   LC: { lat: 13.9094, lon: -60.9789 }, // St. Lucia (Caribbean)
   HT: { lat: 18.9712, lon: -72.2852 }, // Haiti
   BH: { lat: 26.0667, lon: 50.5577 }, // Bahrain
+  IT: { lat: 41.8719, lon: 12.5674 }, // Italy (Rome)
   Global: { lat: 39.8283, lon: -98.5795 } // Geographic center of United States on land (Lebanon, Kansas) instead of the Atlantic Ocean
 };
 
@@ -1106,9 +1195,9 @@ function resolveChannelLocation(channelName: string, m3uCountry: string): Locati
     hash = (hash << 5) - hash + channelName.charCodeAt(i);
     hash |= 0;
   }
-  // Offset by up to ~0.5 degrees (~50km) to spread points within a country or city
-  const jitterLat = ((Math.abs(hash) % 100) / 100 - 0.5) * 1.5;
-  const jitterLon = (((Math.abs(hash) >> 8) % 100) / 100 - 0.5) * 1.5;
+  // Offset by up to ~0.05 degrees (~5km) to spread points very tightly within a country or city area
+  const jitterLat = ((Math.abs(hash) % 100) / 100 - 0.5) * 0.1;
+  const jitterLon = (((Math.abs(hash) >> 8) % 100) / 100 - 0.5) * 0.1;
 
   // List of known regional cities & locations to place points in correct local broadcast coordinates
   const regionalCities = [
@@ -1154,7 +1243,10 @@ function resolveChannelLocation(channelName: string, m3uCountry: string): Locati
     { keys: ["tokyo", "japan", "nhk", "fuji", "asahi", "tbs japan", "tokyo mx", "nippon tv"], lat: 35.6762, lon: 139.6503, country: "JP" },
     { keys: ["sydney", "australia", "melbourne", "7news", "9news", "abc australia", "sbs"], lat: -33.8688, lon: 151.2093, country: "AU" },
     { keys: ["toronto", "canada", "cbc", "ctv", "vancouver", "global news canada"], lat: 43.6532, lon: -79.3832, country: "CA" },
-    { keys: ["rome", "italy", "rai", "mediaset"], lat: 41.9028, lon: 12.4964, country: "IT" },
+    { keys: ["rome", "italy", "rai", "mediaset", "la7"], lat: 41.9028, lon: 12.4964, country: "IT" },
+    { keys: ["milan", "milano"], lat: 45.4642, lon: 9.1900, country: "IT" },
+    { keys: ["naples", "napoli"], lat: 40.8518, lon: 14.2681, country: "IT" },
+    { keys: ["venice", "venezia"], lat: 45.4408, lon: 12.3155, country: "IT" },
     { keys: ["madrid", "spain", "rtve", "antena"], lat: 40.4168, lon: -3.7038, country: "ES" },
     { keys: ["beijing", "china", "cgtn", "cctv"], lat: 39.9042, lon: 116.4074, country: "CN" },
     { keys: ["seoul", "korea", "sbs world", "kbs world", "arirang", "mbn"], lat: 37.5665, lon: 126.9780, country: "KR" },
@@ -1216,6 +1308,7 @@ function resolveChannelLocation(channelName: string, m3uCountry: string): Locati
     { country: "UK", lat: 51.5074, lon: -0.1278 },  // London
     { country: "FR", lat: 48.8566, lon: 2.3522 },   // Paris
     { country: "DE", lat: 52.5200, lon: 13.4050 },  // Berlin
+    { country: "IT", lat: 41.8719, lon: 12.5674 },  // Italy
     { country: "JP", lat: 35.6762, lon: 139.6503 },  // Tokyo
     { country: "AU", lat: -35.2809, lon: 149.1300 }, // Canberra
     { country: "BR", lat: -15.7938, lon: -47.8828 }, // Brasilia
@@ -1389,8 +1482,8 @@ function parseM3U(data: string, category: "sports" | "news" | "science" | "freet
           country: resolved.country,
           logo: current.logo || "https://images.unsplash.com/photo-1585829365294-fa8c63327f31?auto=format&fit=crop&w=120&h=120&q=80",
           status: "online",
-          lat: resolved.lat + latOffset,
-          lon: resolved.lon + lonOffset
+          lat: resolved.lat,
+          lon: resolved.lon
         });
       }
       current = {};

@@ -462,6 +462,96 @@ export default function App() {
             </div>
           </div>
         </section>
+        
+        {/* Streaming Partners / Who Streams What */}
+        <section className={`mt-8 border-t pt-8 pb-10 ${
+          theme === "light" ? "border-slate-200" : "border-slate-900"
+        }`}>
+          <div className="flex flex-col md:flex-row items-start justify-between gap-8">
+            <div className="md:w-1/3">
+              <h3 className={`text-sm font-bold tracking-tight mb-2 ${theme === "light" ? "text-slate-900" : "text-slate-100"}`}>
+                2026 World Cup Global Broadcasters
+              </h3>
+              <p className={`text-xs leading-relaxed ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
+                Stay connected with the tournament through our integrated premium partners. We provide direct access to the most reliable sports feeds globally.
+              </p>
+            </div>
+            
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+              <div>
+                <h4 className={`text-[10px] font-bold uppercase tracking-widest mb-3 ${theme === "light" ? "text-slate-400" : "text-slate-500"}`}>
+                  World Cup 2026 Partners
+                </h4>
+                <ul className={`text-[11px] space-y-2 font-medium ${theme === "light" ? "text-slate-600" : "text-slate-300"}`}>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                    Arena Sport 1 Premium (Balkans)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                    Fox Sports 1 (United States)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                    ColaTV (Premium Asia Feed)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                    beIN SPORTS (Global Hub)
+                  </li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className={`text-[10px] font-bold uppercase tracking-widest mb-3 ${theme === "light" ? "text-slate-400" : "text-slate-500"}`}>
+                  European Leagues
+                </h4>
+                <ul className={`text-[11px] space-y-2 font-medium ${theme === "light" ? "text-slate-600" : "text-slate-300"}`}>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-blue-500" />
+                    Sky Sports PL (Premier League)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-blue-500" />
+                    DAZN 1 Germany (Bundesliga)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-blue-500" />
+                    RTVE (La Liga Highlights)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-blue-500" />
+                    L'Equipe TV (Ligue 1 & More)
+                  </li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className={`text-[10px] font-bold uppercase tracking-widest mb-3 ${theme === "light" ? "text-slate-400" : "text-slate-500"}`}>
+                  Regional Specialists
+                </h4>
+                <ul className={`text-[11px] space-y-2 font-medium ${theme === "light" ? "text-slate-600" : "text-slate-300"}`}>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-amber-500" />
+                    VTV5 (ASEAN Sports Coverage)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-amber-500" />
+                    Bahrain Sports 1 & 2 (ME Finals)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-amber-500" />
+                    NHK News (Pacific Highlights)
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="w-1 h-1 rounded-full bg-amber-500" />
+                    KSA Sports (Arab Gulf Cup)
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </section>
       </main>
 
       {/* Footer */}

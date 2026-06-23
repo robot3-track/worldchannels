@@ -78,6 +78,17 @@ export default function VideoPlayer({
       hlsRef.current = null;
     }
 
+    // Determine if it's a website or an m3u8 stream
+    const isWebsite = channel.url.startsWith("http") && 
+                      !channel.url.includes(".m3u8") && 
+                      !channel.url.includes(".mp4") && 
+                      !channel.url.includes(".m4s");
+
+    if (isWebsite) {
+      setIsPlaying(true); // Treat website as playing
+      return;
+    }
+
     // Measure connection latency to stream source
     measureStreamLatency(channel.url);
 
@@ -304,13 +315,22 @@ export default function VideoPlayer({
           theme === "light" ? "border-slate-200" : "border-slate-800/80"
         }`}
       >
-        {/* Video Element */}
-        <video
-          ref={videoRef}
-          className="w-full h-full object-contain cursor-pointer"
-          playsInline
-          onClick={togglePlay}
-        />
+        {/* Video Element or Iframe */}
+        {channel.url.startsWith("http") && !channel.url.includes(".m3u8") && !channel.url.includes(".mp4") && !channel.url.includes(".m4s") ? (
+          <iframe
+            src={channel.url}
+            className="w-full h-full border-0"
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowFullScreen
+          />
+        ) : (
+          <video
+            ref={videoRef}
+            className="w-full h-full object-contain cursor-pointer"
+            playsInline
+            onClick={togglePlay}
+          />
+        )}
 
         {/* Scanlines / Dark Control Vignette overlay */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />

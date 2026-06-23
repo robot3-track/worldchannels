@@ -149,6 +149,13 @@ const countryCities: Record<string, { name: string; lat: number; lon: number }[]
     { name: "Ho Chi Minh City", lat: 10.8231, lon: 106.6297 },
     { name: "Da Nang", lat: 16.0544, lon: 108.2022 }
   ],
+  IT: [
+    { name: "Rome", lat: 41.9028, lon: 12.4964 },
+    { name: "Milan", lat: 45.4642, lon: 9.1900 },
+    { name: "Naples", lat: 40.8518, lon: 14.2681 },
+    { name: "Venice", lat: 45.4408, lon: 12.3155 },
+    { name: "Florence", lat: 43.7696, lon: 11.2558 }
+  ],
   KP: [
     { name: "Pyongyang", lat: 39.0392, lon: 125.7625 },
     { name: "Hamhung", lat: 39.9183, lon: 127.5358 }
