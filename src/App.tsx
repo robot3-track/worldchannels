@@ -164,22 +164,7 @@ export default function App() {
         if (data.success && data.streams) {
           const newCount = data.streams.length;
           
-          setStreams((prev) => {
-            const serverStreamsMap = new Map<string, StreamChannel>(data.streams.map((s: StreamChannel) => [s.id, s]));
-            
-            const merged = prev.map((local) => {
-              const server = serverStreamsMap.get(local.id);
-              if (server && server.status !== local.status) {
-                return { ...local, status: server.status };
-              }
-              return local;
-            });
-
-            const localIds = new Set(prev.map(s => s.id));
-            const newStreams = data.streams.filter((s: StreamChannel) => !localIds.has(s.id));
-
-            return [...merged, ...newStreams];
-          });
+          setStreams(data.streams);
 
           setSelectedChannel((current) => {
             if (!current) return null;
@@ -190,14 +175,13 @@ export default function App() {
             return current;
           });
 
-          // If catalog size grew significantly, poll faster (3s) to reach "max" sooner
-          // Otherwise stick to polite 10s sync
-          if (newCount > lastCount) {
-            pollInterval = 3000;
-          } else if (newCount >= 400) { // Assume bootstrap is mostly done
-            pollInterval = 15000;
+          // Optimize poll interval based on stability
+          if (newCount >= 1000) {
+            pollInterval = 60000; // Catalog is full, check once a minute
+          } else if (newCount > lastCount) {
+            pollInterval = 10000; // Still growing
           } else {
-            pollInterval = 10000;
+            pollInterval = 30000;
           }
           lastCount = newCount;
         }

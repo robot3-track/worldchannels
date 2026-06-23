@@ -217,7 +217,7 @@ function parseM3U(data, category) {
       if (line.includes(".m3u8")) {
         const resolved = resolveChannelLocation(current.name, current.country);
         list.push({
-          id: `v-dyn-${category}-${count++}-${Math.random().toString(36).substring(2, 7)}`,
+          id: `v-dyn-${category}-${count++}-${Buffer.from(line).toString('base64').substring(0, 8)}`,
           name: current.name,
           url: line,
           category: category,
