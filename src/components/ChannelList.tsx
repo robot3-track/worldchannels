@@ -61,7 +61,17 @@ export default function ChannelList({
     { code: "ES", name: "Spain" },
     { code: "RU", name: "Russia" },
     { code: "LB", name: "Lebanon" },
-    { code: "AF", name: "Afghanistan" }
+    { code: "AF", name: "Afghanistan" },
+    { code: "VN", name: "Vietnam" },
+    { code: "KP", name: "North Korea" },
+    { code: "IN", name: "India" },
+    { code: "SA", name: "Saudi Arabia" },
+    { code: "TR", name: "Turkey" },
+    { code: "MX", name: "Mexico" },
+    { code: "EG", name: "Egypt" },
+    { code: "IT", name: "Italy" },
+    { code: "SG", name: "Singapore" },
+    { code: "HK", name: "Hong Kong" }
   ];
 
   // Filter first, then Sort so "online" is on top, then "unstable", and "offline" at the very bottom

@@ -93,14 +93,6 @@ const countryCities: Record<string, { name: string; lat: number; lon: number }[]
     { name: "Hiroshima", lat: 34.3853, lon: 132.4553 },
     { name: "Sendai, MYG", lat: 38.2682, lon: 140.8694 }
   ],
-  TR: [
-    { name: "Istanbul", lat: 41.0082, lon: 28.9784 },
-    { name: "Ankara", lat: 39.9334, lon: 32.8597 },
-    { name: "Izmir", lat: 38.4192, lon: 27.1287 },
-    { name: "Antalya", lat: 36.8969, lon: 30.7133 },
-    { name: "Bursa", lat: 40.1885, lon: 29.0610 },
-    { name: "Adana", lat: 36.9914, lon: 35.3308 }
-  ],
   ID: [
     { name: "Jakarta", lat: -6.2088, lon: 106.8456 },
     { name: "Surabaya", lat: -7.2575, lon: 112.7521 },
@@ -151,6 +143,44 @@ const countryCities: Record<string, { name: string; lat: number; lon: number }[]
     { name: "Nizhny Novgorod", lat: 56.3269, lon: 44.0059 },
     { name: "Vladivostok", lat: 43.1198, lon: 131.8869 },
     { name: "Sochi", lat: 43.6028, lon: 39.7342 }
+  ],
+  VN: [
+    { name: "Hanoi", lat: 21.0285, lon: 105.8542 },
+    { name: "Ho Chi Minh City", lat: 10.8231, lon: 106.6297 },
+    { name: "Da Nang", lat: 16.0544, lon: 108.2022 }
+  ],
+  KP: [
+    { name: "Pyongyang", lat: 39.0392, lon: 125.7625 },
+    { name: "Hamhung", lat: 39.9183, lon: 127.5358 }
+  ],
+  IN: [
+    { name: "New Delhi", lat: 28.6139, lon: 77.2090 },
+    { name: "Mumbai", lat: 19.0760, lon: 72.8777 },
+    { name: "Bangalore", lat: 12.9716, lon: 77.5946 },
+    { name: "Chennai", lat: 13.0827, lon: 80.2707 },
+    { name: "Kolkata", lat: 22.5726, lon: 88.3639 }
+  ],
+  SA: [
+    { name: "Riyadh", lat: 24.7136, lon: 46.6753 },
+    { name: "Jeddah", lat: 21.4858, lon: 39.1925 },
+    { name: "Mecca", lat: 21.3891, lon: 39.8579 },
+    { name: "Medina", lat: 24.5247, lon: 39.5692 },
+    { name: "Dammam", lat: 26.4207, lon: 50.0888 }
+  ],
+  TR: [
+    { name: "Ankara", lat: 39.9334, lon: 32.8597 },
+    { name: "Istanbul", lat: 41.0082, lon: 28.9784 },
+    { name: "Izmir", lat: 38.4237, lon: 27.1428 }
+  ],
+  MX: [
+    { name: "Mexico City", lat: 19.4326, lon: -99.1332 },
+    { name: "Guadalajara", lat: 20.6597, lon: -103.3496 },
+    { name: "Monterrey", lat: 25.6866, lon: -100.3161 }
+  ],
+  EG: [
+    { name: "Cairo", lat: 30.0444, lon: 31.2357 },
+    { name: "Alexandria", lat: 31.2001, lon: 29.9187 },
+    { name: "Giza", lat: 30.0131, lon: 31.2089 }
   ],
   Global: [
     { name: "Geneva, Switzerland", lat: 46.2044, lon: 6.1432 },

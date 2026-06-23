@@ -152,17 +152,21 @@ export default function App() {
   };
 
   // Periodic background check: constantly sync status of ALL streams with the server
+  // Adaptive polling: poll faster when stream catalog is still growing (initial bootstrap)
   useEffect(() => {
+    let pollInterval = 10000;
+    let lastCount = streams.length;
+    
     const syncAllStreams = async () => {
       try {
         const res = await fetch("/api/streams");
         const data = await res.json();
-        if (data.success && data.streams && data.streams.length > 0) {
+        if (data.success && data.streams) {
+          const newCount = data.streams.length;
+          
           setStreams((prev) => {
-            // Keep map of ID to stream for quick merging of status
             const serverStreamsMap = new Map<string, StreamChannel>(data.streams.map((s: StreamChannel) => [s.id, s]));
             
-            // Merge status changes, keeping new streams too
             const merged = prev.map((local) => {
               const server = serverStreamsMap.get(local.id);
               if (server && server.status !== local.status) {
@@ -171,14 +175,12 @@ export default function App() {
               return local;
             });
 
-            // Add any newly discovered streams from the booster
             const localIds = new Set(prev.map(s => s.id));
             const newStreams = data.streams.filter((s: StreamChannel) => !localIds.has(s.id));
 
             return [...merged, ...newStreams];
           });
 
-          // Keep selected channel status in sync with updated list
           setSelectedChannel((current) => {
             if (!current) return null;
             const updated = data.streams.find((s: StreamChannel) => s.id === current.id);
@@ -187,15 +189,28 @@ export default function App() {
             }
             return current;
           });
+
+          // If catalog size grew significantly, poll faster (3s) to reach "max" sooner
+          // Otherwise stick to polite 10s sync
+          if (newCount > lastCount) {
+            pollInterval = 3000;
+          } else if (newCount >= 400) { // Assume bootstrap is mostly done
+            pollInterval = 15000;
+          } else {
+            pollInterval = 10000;
+          }
+          lastCount = newCount;
         }
       } catch (err) {
         console.error("Error background-syncing streams:", err);
       }
+      
+      // Schedule next poll
+      setTimeout(syncAllStreams, pollInterval);
     };
 
-    // Run sync every 10 seconds to keep all online/offline/unstable status updated
-    const intervalId = setInterval(syncAllStreams, 10000);
-    return () => clearInterval(intervalId);
+    const initialTimeout = setTimeout(syncAllStreams, 2000);
+    return () => clearTimeout(initialTimeout);
   }, []);
 
   return (
@@ -297,6 +312,20 @@ export default function App() {
       {/* Main Container */}
       <main className="flex-grow max-w-7xl w-full mx-auto px-6 py-6 md:py-8 flex flex-col gap-8 z-10">
         
+        {/* Refresh Disclaimer */}
+        <div className={`p-3 rounded-xl border flex items-center gap-3 text-[11px] font-medium transition-all ${
+          theme === "light" 
+            ? "bg-amber-50 border-amber-100 text-amber-700" 
+            : "bg-amber-900/10 border-amber-900/30 text-amber-400"
+        }`}>
+          <Info className="w-3.5 h-3.5 flex-shrink-0" />
+          <p>
+            Note: If you don't see many channels on the map, please 
+            <button onClick={() => window.location.reload()} className="mx-1 underline hover:no-underline cursor-pointer">refresh the page</button> 
+            to re-sync with the global broadcast satellites.
+          </p>
+        </div>
+
         {/* Connection Failure Display */}
         {error && (
           <div className="bg-rose-500/5 border border-rose-500/20 rounded-2xl p-4 flex items-center justify-between gap-4 text-sm text-rose-600 dark:text-rose-300">
