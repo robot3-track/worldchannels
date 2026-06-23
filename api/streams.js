@@ -292,8 +292,8 @@ export default async function handler(request, response) {
     
     let allStreams = [...staticStreams];
     m3uResults.forEach(list => {
-      // Limit each category to ~150 to stay within response limits and target count
-      allStreams = allStreams.concat(list.slice(0, 150));
+      // Buffer slightly more per category to hit the 1500 target after deduplication
+      allStreams = allStreams.concat(list.slice(0, 400));
     });
 
     // Remove duplicates based on URL
@@ -306,10 +306,13 @@ export default async function handler(request, response) {
       }
     }
 
+    // Strict 1500 cap for Vercel deployment stability
+    const cappedStreams = uniqueStreams.slice(0, 1500);
+
     return response.status(200).json({
       success: true,
-      count: uniqueStreams.length,
-      streams: uniqueStreams
+      count: cappedStreams.length,
+      streams: cappedStreams
     });
   } catch (error) {
     console.error("API error:", error);
