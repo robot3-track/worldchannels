@@ -37,12 +37,27 @@ export default function VideoPlayer({
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(0.8);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showControls, setShowControls] = useState(true);
   const [streamError, setStreamError] = useState<string | null>(null);
   const [healingStatus, setHealingStatus] = useState<"idle" | "healing" | "healed" | "failed">("idle");
   const [backupsFound, setBackupsFound] = useState<StreamChannel[]>([]);
   const [checkingLatency, setCheckingLatency] = useState(false);
   const [latencyMs, setLatencyMs] = useState<number | null>(null);
   const [countdownSec, setCountdownSec] = useState<number | null>(null);
+  const [levels, setLevels] = useState<{ id: number; name: string }[]>([]);
+  const [currentLevel, setCurrentLevel] = useState<number>(-1); // -1 is auto
+  const [showSettings, setShowSettings] = useState(false);
+
+  // Handle controls visibility timeout
+  useEffect(() => {
+    if (!showControls || !isPlaying) return;
+
+    const timer = setTimeout(() => {
+      setShowControls(false);
+    }, 3500);
+
+    return () => clearTimeout(timer);
+  }, [showControls, isPlaying]);
 
   // Latest refs pattern to prevent stale closures in asynchronous event handlers
   const channelRef = useRef(channel);
@@ -84,6 +99,10 @@ export default function VideoPlayer({
                       !channel.url.includes(".mp4") && 
                       !channel.url.includes(".m4s");
 
+    setLevels([]);
+    setCurrentLevel(-1);
+    setShowSettings(false);
+
     if (isWebsite) {
       setIsPlaying(true); // Treat website as playing
       return;
@@ -107,13 +126,23 @@ export default function VideoPlayer({
       hls.loadSource(channel.url);
       hls.attachMedia(video);
 
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+      hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
+        const availableLevels = data.levels.map((level, index) => ({
+          id: index,
+          name: level.height ? `${level.height}p` : `Level ${index}`
+        }));
+        setLevels(availableLevels);
+        
         video.play().then(() => {
           setIsPlaying(true);
         }).catch(() => {
           // Playback blocked by browser autoplay policy, keep paused but ready
           setIsPlaying(false);
         });
+      });
+
+      hls.on(Hls.Events.LEVEL_SWITCHED, (event, data) => {
+        setCurrentLevel(hls.autoLevelEnabled ? -1 : data.level);
       });
 
       hls.on(Hls.Events.ERROR, (event, data) => {
@@ -155,7 +184,16 @@ export default function VideoPlayer({
       });
     }
 
+    // Sync play/pause state from video element events
+    const handlePlay = () => setIsPlaying(true);
+    const handlePause = () => setIsPlaying(false);
+    
+    video.addEventListener("play", handlePlay);
+    video.addEventListener("pause", handlePause);
+
     return () => {
+      video.removeEventListener("play", handlePlay);
+      video.removeEventListener("pause", handlePause);
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
@@ -227,13 +265,18 @@ export default function VideoPlayer({
   };
 
   // Playback Control Handlers
-  const togglePlay = () => {
+  const togglePlay = (e?: React.MouseEvent) => {
+    if (e) {
+      e.stopPropagation();
+    }
+    
     const video = videoRef.current;
     if (!video) return;
 
     if (isPlaying) {
       video.pause();
       setIsPlaying(false);
+      setShowControls(true);
     } else {
       video.play().then(() => {
         setIsPlaying(true);
@@ -241,6 +284,19 @@ export default function VideoPlayer({
         setIsPlaying(false);
       });
     }
+  };
+
+  const handleContainerClick = () => {
+    setShowControls(true);
+    if (showSettings) setShowSettings(false);
+  };
+
+  const handleLevelChange = (levelId: number) => {
+    if (hlsRef.current) {
+      hlsRef.current.currentLevel = levelId;
+      setCurrentLevel(levelId);
+    }
+    setShowSettings(false);
   };
 
   const toggleMute = () => {
@@ -263,17 +319,41 @@ export default function VideoPlayer({
   };
 
   const toggleFullscreen = () => {
+    setShowSettings(false);
     const container = containerRef.current;
+    const video = videoRef.current;
     if (!container) return;
 
     if (!document.fullscreenElement) {
-      container.requestFullscreen().then(() => {
-        setIsFullscreen(true);
-      }).catch((err) => {
-        console.error("Fullscreen request failed:", err);
-      });
+      const requestFullscreen = 
+        container.requestFullscreen || 
+        (container as any).webkitRequestFullscreen || 
+        (container as any).mozRequestFullScreen || 
+        (container as any).msRequestFullscreen;
+
+      if (requestFullscreen) {
+        requestFullscreen.call(container).then(() => {
+          setIsFullscreen(true);
+        }).catch((err: any) => {
+          console.error("Fullscreen request failed:", err);
+          // Fallback to video fullscreen for iOS
+          if (video && (video as any).webkitEnterFullscreen) {
+            (video as any).webkitEnterFullscreen();
+          }
+        });
+      } else if (video && (video as any).webkitEnterFullscreen) {
+        (video as any).webkitEnterFullscreen();
+      }
     } else {
-      document.exitFullscreen();
+      const exitFullscreen = 
+        document.exitFullscreen || 
+        (document as any).webkitExitFullscreen || 
+        (document as any).mozCancelFullScreen || 
+        (document as any).msExitFullscreen;
+      
+      if (exitFullscreen) {
+        exitFullscreen.call(document);
+      }
       setIsFullscreen(false);
     }
   };
@@ -311,6 +391,7 @@ export default function VideoPlayer({
       {/* Container holding video and controls */}
       <div
         ref={containerRef}
+        onClick={handleContainerClick}
         className={`w-full aspect-video bg-black rounded-2xl overflow-hidden relative shadow-lg border group ${
           theme === "light" ? "border-slate-200" : "border-slate-800/80"
         }`}
@@ -328,7 +409,7 @@ export default function VideoPlayer({
             ref={videoRef}
             className="w-full h-full object-contain cursor-pointer"
             playsInline
-            onClick={togglePlay}
+            onClick={(e) => togglePlay(e)}
           />
         )}
 
@@ -429,8 +510,10 @@ export default function VideoPlayer({
           </div>
         )}
 
-        {/* Custom Controller Overlay - shows on hover or focus */}
-        <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/95 via-slate-950/70 to-transparent p-4 flex flex-col gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+        {/* Custom Controller Overlay - shows on hover or focus, or if showControls is true */}
+        <div className={`absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/95 via-slate-950/70 to-transparent p-4 flex flex-col gap-3 transition-opacity duration-300 ${
+          showControls || !isPlaying ? "opacity-100" : "opacity-0 group-hover:opacity-100"
+        }`}>
           
           {/* Progress / Stream Duration Line (Static live indicator) */}
           <div className="flex items-center gap-2">
@@ -475,7 +558,7 @@ export default function VideoPlayer({
                   step="0.05"
                   value={volume}
                   onChange={handleVolumeChange}
-                  className="w-16 md:w-24 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                  className="w-12 sm:w-24 h-1 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                 />
               </div>
             </div>
@@ -487,9 +570,60 @@ export default function VideoPlayer({
             </div>
 
             {/* Right side controls */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 relative">
+              {/* Quality / Modes Selector */}
+              {levels.length > 0 && (
+                <div className="relative">
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setShowSettings(!showSettings);
+                    }}
+                    className={`bg-slate-900 hover:bg-slate-800 border border-slate-800 rounded-lg px-2.5 py-2 flex items-center gap-1.5 transition-all active:scale-95 ${
+                      showSettings ? "text-emerald-400 border-emerald-500/50" : "text-slate-300"
+                    }`}
+                  >
+                    <span className="text-[10px] font-bold font-mono tracking-tighter">
+                      {currentLevel === -1 ? "AUTO" : levels.find(l => l.id === currentLevel)?.name || "MODE"}
+                    </span>
+                  </button>
+
+                  {showSettings && (
+                    <div className="absolute bottom-full right-0 mb-3 w-32 bg-slate-950 border border-slate-800 rounded-xl overflow-hidden shadow-2xl z-50 animate-in fade-in slide-in-from-bottom-2">
+                      <div className="p-2 border-b border-slate-900 bg-slate-900/50">
+                        <span className="text-[9px] font-bold text-slate-500 uppercase tracking-widest px-1">Video Modes</span>
+                      </div>
+                      <div className="max-h-48 overflow-y-auto py-1">
+                        <button
+                          onClick={() => handleLevelChange(-1)}
+                          className={`w-full text-left px-3 py-2 text-[11px] font-medium transition-colors ${
+                            currentLevel === -1 ? "text-emerald-400 bg-emerald-500/10" : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+                          }`}
+                        >
+                          Auto Quality
+                        </button>
+                        {levels.map((level) => (
+                          <button
+                            key={level.id}
+                            onClick={() => handleLevelChange(level.id)}
+                            className={`w-full text-left px-3 py-2 text-[11px] font-medium transition-colors ${
+                              currentLevel === level.id ? "text-emerald-400 bg-emerald-500/10" : "text-slate-400 hover:bg-slate-900 hover:text-slate-200"
+                            }`}
+                          >
+                            {level.name} Mode
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+
               <button
-                onClick={toggleFullscreen}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFullscreen();
+                }}
                 className="bg-slate-900 hover:bg-slate-800 border border-slate-800 text-slate-300 rounded-lg p-2 transition-colors active:scale-95"
               >
                 <Maximize className="w-4 h-4" />
