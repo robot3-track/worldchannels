@@ -8,6 +8,8 @@ export interface StreamChannel {
   status: "online" | "unstable" | "offline";
   lat: number;
   lon: number;
+  cityName?: string;
+  city?: string;
   healthCheckedAt?: string;
   failureCount?: number;
   offlineUntil?: number; // timestamp in ms during which stream must remain offline

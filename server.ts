@@ -42,7 +42,7 @@ let streamCache: StreamChannel[] = [
   {
     id: "sports-fox-sports-alt",
     name: "Fox Sports 1 (US)",
-    url: "https://fox-foxsports1-1-us.samsung.wurl.com/manifest/playlist.m3u8", // Direct stable FS1 feed via Samsung Wurl
+    url: "https://fox-foxsports1-us.samsung.wurl.com/manifest/playlist.m3u8", // Direct stable FS1 feed via Samsung Wurl
     category: "sports",
     country: "US",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
@@ -174,7 +174,7 @@ let streamCache: StreamChannel[] = [
   {
     id: "sports-arenasport1",
     name: "Arena Sport 1 Premium",
-    url: "https://nl1.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, extremely stable Arena Sport 1 Premium stream feed - World Cup 2026 Broadcaster
+    url: "https://nl2.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
     category: "sports",
     country: "RS",
     logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
@@ -185,7 +185,7 @@ let streamCache: StreamChannel[] = [
   {
     id: "sports-colatv-asia",
     name: "ColaTV Vietnam (Premium Sports)",
-    url: "https://colatv.live", // Iframe source for premium sports - World Cup 2026 partner
+    url: "https://vcdn.colatv.net/hls/colatv/master.m3u8", // High-quality direct VCDN stream - World Cup 2026 partner
     category: "sports",
     country: "VN",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
@@ -252,7 +252,7 @@ let streamCache: StreamChannel[] = [
   {
     id: "sports-us-foxsports",
     name: "Fox Sports 1 (US)",
-    url: "https://fox-foxsports1-1-us.samsung.wurl.com/manifest/playlist.m3u8", // High-quality Wurl Fox Sports 1 feed
+    url: "https://fox-foxsports1-us.samsung.wurl.com/manifest/playlist.m3u8", // High-quality Wurl Fox Sports 1 feed
     category: "sports",
     country: "US",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
@@ -965,7 +965,7 @@ let streamCache: StreamChannel[] = [
   {
     id: "country-vn-colatv",
     name: "Cola TV Vietnam (Premium Sports)",
-    url: "https://colatv.live", // Main site URL
+    url: "https://vcdn.colatv.net/hls/colatv/master.m3u8", // Direct VCDN stream source
     category: "sports",
     country: "VN",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
