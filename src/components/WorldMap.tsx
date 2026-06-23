@@ -230,11 +230,12 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
     const cityIndex = index % cities.length;
     const baseCity = cities[cityIndex];
     
-    // Slight deterministic offset for subsequent passes to prevent exact overlap
-    const pass = Math.floor(index / cities.length);
-    const jitterFactor = 0.08 * pass;
-    const latShift = pass > 0 ? Math.sin(index * 45) * jitterFactor : 0;
-    const lonShift = pass > 0 ? Math.cos(index * 45) * jitterFactor : 0;
+    // Slight deterministic offset to ensure markers never overlap perfectly
+    // Spiral pattern ensures a clean visual spread for "precise" points
+    const angle = index * 137.5; // Golden angle for even distribution
+    const radius = 0.06 * Math.sqrt(index + 1); // Increased radius (approx 6-15km)
+    const latShift = Math.sin(angle * (Math.PI / 180)) * radius;
+    const lonShift = Math.cos(angle * (Math.PI / 180)) * radius;
     
     return {
       ...stream,
@@ -324,18 +325,85 @@ export default function WorldMap({
     // Dynamic marker layer group (Clustered)
     const markerGroup = (L as any).markerClusterGroup({
       showCoverageOnHover: false,
-      zoomToBoundsOnClick: true,
+      zoomToBoundsOnClick: false, // Disable auto-zoom to allow custom popup
       spiderfyOnMaxZoom: true,
-      maxClusterRadius: 40,
+      maxClusterRadius: 45,
+      disableClusteringAtZoom: 14, // Break clusters earlier to show precise points
       iconCreateFunction: (cluster: any) => {
         const count = cluster.getChildCount();
         return L.divIcon({
-          html: `<div class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/90 text-white text-[10px] font-bold border-2 border-white shadow-lg"><span>${count}</span></div>`,
+          html: `<div class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/90 text-white text-[10px] font-bold border-2 border-white shadow-lg cursor-pointer hover:bg-emerald-600 transition-colors"><span>${count}</span></div>`,
           className: 'custom-cluster-icon',
           iconSize: [32, 32]
         });
       }
     }).addTo(map);
+
+    // Handle cluster clicks to show a channel list popup
+    markerGroup.on('clusterclick', (a: any) => {
+      const markers = a.layer.getAllChildMarkers();
+      const clusterLatLng = a.latlng;
+
+      let listHtml = `
+        <div class="flex flex-col gap-1 max-h-[240px] overflow-y-auto pr-1 no-scrollbar min-w-[210px] font-sans p-2 bg-white dark:bg-slate-950 rounded-lg">
+          <div class="text-[11px] font-extrabold text-slate-800 dark:text-slate-200 uppercase tracking-widest mb-3 px-1 flex justify-between border-b-2 border-slate-100 dark:border-slate-800 pb-1.5">
+            <span>Broadcast Feeds</span>
+            <span class="bg-slate-100 dark:bg-slate-800 px-1.5 rounded text-slate-600 dark:text-slate-400 font-mono">${markers.length}</span>
+          </div>
+      `;
+
+      markers.forEach((marker: any) => {
+        const stream = marker.options.streamData;
+        if (!stream) return;
+
+        const statusColor = stream.status === "online" ? "bg-emerald-500" : stream.status === "unstable" ? "bg-amber-500" : "bg-rose-500";
+        
+        listHtml += `
+          <div class="channel-popup-item flex items-center justify-between p-3 hover:bg-slate-100 dark:hover:bg-slate-800/90 rounded-2xl cursor-pointer transition-all border border-slate-50 dark:border-slate-900 hover:border-slate-200 dark:hover:border-slate-700 group mb-1 shadow-sm" data-id="${stream.id}">
+            <div class="flex items-center gap-3 truncate">
+              <div class="w-2.5 h-2.5 rounded-full ${statusColor} shadow-[0_0_8px_rgba(16,185,129,0.3)] flex-shrink-0"></div>
+              <div class="flex flex-col truncate">
+                <span class="text-[13px] font-black text-slate-950 dark:text-white truncate leading-none mb-1">${stream.name}</span>
+                <span class="text-[10px] text-slate-700 dark:text-slate-300 uppercase font-black tracking-wider leading-none">${stream.category}</span>
+              </div>
+            </div>
+            <div class="flex-shrink-0 opacity-40 group-hover:opacity-100 transition-opacity ml-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" class="text-emerald-700 dark:text-emerald-400"><path d="m9 18 6-6-6-6"/></svg>
+            </div>
+          </div>
+        `;
+      });
+
+      listHtml += `</div>`;
+
+      const popup = L.popup({
+        closeButton: false,
+        className: 'custom-cluster-popup',
+        offset: L.point(0, -10),
+        maxWidth: 250
+      })
+        .setLatLng(clusterLatLng)
+        .setContent(listHtml)
+        .openOn(map);
+
+      // Add click listeners to the popup items
+      setTimeout(() => {
+        const container = popup.getElement();
+        if (!container) return;
+        
+        const items = container.querySelectorAll('.channel-popup-item');
+        items.forEach(item => {
+          item.addEventListener('click', () => {
+            const id = (item as HTMLElement).dataset.id;
+            const targetStream = markers.find((m: any) => m.options.streamData?.id === id)?.options.streamData;
+            if (targetStream) {
+              onSelectChannel(targetStream);
+              map.closePopup();
+            }
+          });
+        });
+      }, 100);
+    });
     
     markerGroupRef.current = markerGroup;
     mapRef.current = map;
@@ -445,7 +513,10 @@ export default function WorldMap({
         </div>
       `;
 
-      const marker = L.marker([lat, lon], { icon: customIcon });
+      const marker = L.marker([lat, lon], { 
+        icon: customIcon,
+        streamData: stream 
+      } as any);
       
       marker.bindPopup(popupContent, {
         className: "custom-leaflet-popup",
