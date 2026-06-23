@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, ChangeEvent } from "react";
+import React, { useEffect, useRef, useState, ChangeEvent, MouseEvent } from "react";
 import Hls from "hls.js";
 import {
   Play,
