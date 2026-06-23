@@ -32,7 +32,6 @@ export default function ChannelList({
   const [searchTerm, setSearchTerm] = useState("");
   const [countryFilter, setCountryFilter] = useState<CountryFilter | "all">("all");
 
-  // Modern category list with descriptive labels
   const categories: { value: CategoryFilter; label: string; icon: any }[] = [
     { value: "all", label: "All Feeds", icon: Globe },
     { value: "sports", label: "Sports Live", icon: Award },
@@ -41,6 +40,25 @@ export default function ChannelList({
     { value: "freetv", label: "Global TV", icon: Tv },
     { value: "country", label: "Local Broadcasters", icon: SlidersHorizontal }
   ];
+
+  const processedStreams = useMemo(() => {
+    const filtered = streams.filter((stream) => {
+      const matchCategory = selectedCategory === "all" || stream.category === selectedCategory;
+      const matchCountry = countryFilter === "all" || stream.country === countryFilter;
+      const matchSearch =
+        stream.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        stream.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        stream.category.toLowerCase().includes(searchTerm.toLowerCase());
+      
+      return matchCategory && matchCountry && matchSearch;
+    });
+
+    return [...filtered].sort((a, b) => {
+      const weightA = a.status === "online" ? 0 : a.status === "unstable" ? 1 : 2;
+      const weightB = b.status === "online" ? 0 : b.status === "unstable" ? 1 : 2;
+      return weightA - weightB;
+    });
+  }, [streams, selectedCategory, countryFilter, searchTerm]);
 
   // Countries dropdown listing
   const countriesList: { code: CountryFilter | "all"; name: string }[] = [
@@ -66,35 +84,12 @@ export default function ChannelList({
     { code: "KP", name: "North Korea" },
     { code: "IN", name: "India" },
     { code: "SA", name: "Saudi Arabia" },
-    { code: "TR", name: "Turkey" },
     { code: "MX", name: "Mexico" },
     { code: "EG", name: "Egypt" },
     { code: "IT", name: "Italy" },
     { code: "SG", name: "Singapore" },
     { code: "HK", name: "Hong Kong" }
   ];
-
-  // Filter first, then Sort so "online" is on top, then "unstable", and "offline" at the very bottom
-  const processedStreams = useMemo(() => {
-    // 1. Filter
-    const filtered = streams.filter((stream) => {
-      const matchCategory = selectedCategory === "all" || stream.category === selectedCategory;
-      const matchCountry = countryFilter === "all" || stream.country === countryFilter;
-      const matchSearch =
-        stream.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        stream.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        stream.category.toLowerCase().includes(searchTerm.toLowerCase());
-      
-      return matchCategory && matchCountry && matchSearch;
-    });
-
-    // 2. Sort: online first (0), unstable next (1), offline last (2)
-    return [...filtered].sort((a, b) => {
-      const weightA = a.status === "online" ? 0 : a.status === "unstable" ? 1 : 2;
-      const weightB = b.status === "online" ? 0 : b.status === "unstable" ? 1 : 2;
-      return weightA - weightB;
-    });
-  }, [streams, selectedCategory, countryFilter, searchTerm]);
 
   return (
     <div className={`border rounded-3xl p-5 flex flex-col h-[650px] shadow-xs relative overflow-hidden transition-all ${

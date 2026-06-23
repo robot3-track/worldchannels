@@ -1,6 +1,9 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
+import "leaflet.markercluster/dist/MarkerCluster.css";
+import "leaflet.markercluster/dist/MarkerCluster.Default.css";
+import "leaflet.markercluster";
 import { Search, Globe, Compass, RefreshCw, Layers } from "lucide-react";
 import { StreamChannel } from "../types";
 
@@ -206,6 +209,16 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   const countryCounts: Record<string, number> = {};
   
   return streamsList.map((stream) => {
+    // If stream already has a valid non-zero coordinate, respect it
+    if (stream.lat && stream.lon && (stream.lat !== 0 || stream.lon !== 0)) {
+      return {
+        ...stream,
+        cityName: stream.cityName || "Broadcast Hub",
+        mappedLat: stream.lat,
+        mappedLon: stream.lon
+      };
+    }
+
     const code = stream.country || "Global";
     if (countryCounts[code] === undefined) {
       countryCounts[code] = 0;
@@ -250,7 +263,7 @@ export default function WorldMap({
   const [searchQuery, setSearchQuery] = useState("");
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
-  const markerGroupRef = useRef<L.LayerGroup | null>(null);
+  const markerGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const isInitialRenderRef = useRef(true);
 
@@ -308,8 +321,22 @@ export default function WorldMap({
     // Zoom buttons in custom position
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    // Dynamic marker layer group
-    const markerGroup = L.layerGroup().addTo(map);
+    // Dynamic marker layer group (Clustered)
+    const markerGroup = (L as any).markerClusterGroup({
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true,
+      spiderfyOnMaxZoom: true,
+      maxClusterRadius: 40,
+      iconCreateFunction: (cluster: any) => {
+        const count = cluster.getChildCount();
+        return L.divIcon({
+          html: `<div class="flex items-center justify-center w-8 h-8 rounded-full bg-emerald-500/90 text-white text-[10px] font-bold border-2 border-white shadow-lg"><span>${count}</span></div>`,
+          className: 'custom-cluster-icon',
+          iconSize: [32, 32]
+        });
+      }
+    }).addTo(map);
+    
     markerGroupRef.current = markerGroup;
     mapRef.current = map;
 

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { motion } from "motion/react";
 import {
   Globe,
@@ -93,7 +93,7 @@ export default function App() {
   }, [streams]);
 
   // Handle reporting broken link & fetching backup hot-swap
-  const handleReportBroken = async (url: string) => {
+  const handleReportBroken = useCallback(async (url: string) => {
     try {
       const res = await fetch("/api/report-broken", {
         method: "POST",
@@ -124,10 +124,10 @@ export default function App() {
       console.error("Failed reporting broken link:", err);
       return { success: false, backupAvailable: false, backups: [] };
     }
-  };
+  }, []);
 
   // Switch to recommended backup stream
-  const handleSelectBackup = (backupChannel: StreamChannel) => {
+  const handleSelectBackup = useCallback((backupChannel: StreamChannel) => {
     // Inject or update state
     setStreams((prev) => {
       const exists = prev.some((s) => s.id === backupChannel.id);
@@ -138,10 +138,10 @@ export default function App() {
     });
     
     setSelectedChannel(backupChannel);
-  };
+  }, []);
 
   // Select channel and scroll down smoothly to the Live Player
-  const handleSelectChannel = (channel: StreamChannel) => {
+  const handleSelectChannel = useCallback((channel: StreamChannel) => {
     setSelectedChannel(channel);
     setTimeout(() => {
       const playerElement = document.getElementById("live-player-section");
@@ -149,7 +149,7 @@ export default function App() {
         playerElement.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     }, 100);
-  };
+  }, []);
 
   // Periodic background check: constantly sync status of ALL streams with the server
   // Adaptive polling: poll faster when stream catalog is still growing (initial bootstrap)

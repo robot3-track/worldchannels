@@ -14,4 +14,4 @@ export interface StreamChannel {
 }
 
 export type CategoryFilter = "all" | "sports" | "news" | "science" | "freetv" | "country";
-export type CountryFilter = "all" | "US" | "UK" | "AU" | "CA" | "FR" | "DE" | "BR" | "JP" | "TR" | "ID" | "CN" | "TW" | "KR" | "ES" | "RU" | "LB" | "AF" | "VN" | "KP" | "IN" | "SA" | "MX" | "EG" | "IT" | "SG" | "HK" | "BR";
+export type CountryFilter = "all" | "US" | "UK" | "AU" | "CA" | "FR" | "DE" | "BR" | "JP" | "TR" | "ID" | "CN" | "TW" | "KR" | "ES" | "RU" | "LB" | "AF" | "VN" | "KP" | "IN" | "SA" | "MX" | "EG" | "IT" | "SG" | "HK";
