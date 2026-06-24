@@ -441,7 +441,7 @@ const staticStreams = [
     url: "http://playcom.trapemn.tv:1935/transcoderip/tycsports.stream/playlist.m3u8", // High quality TyC Sports USA stream feed
     category: "sports",
     country: "US",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/b/b5/Tycsports2026.svg/revision/latest?cb=20260602013902",
     status: "online",
     lat: 40.7128, // New York, NY
     lon: -74.0060,
@@ -452,7 +452,7 @@ const staticStreams = [
     url: "https://jmp2.uk/plu-5dcde07af1c85b0009b18651.m3u8", // High quality Pluto TV Deportes live stream
     category: "sports",
     country: "US",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/2/26/Pluto_TV_2024.svg/revision/latest?cb=20240126205307",
     status: "online",
     lat: 34.0522, // Los Angeles, California
     lon: -118.2437,
@@ -487,7 +487,7 @@ const staticStreams = [
     url: "https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5d8a9e0f6f4c0c001a1c97c3/master.m3u8?advertisingId=&appName=web&appVersion=unknown&appStoreUrl=&architecture=&buildVersion=&clientTime=0&deviceDNT=0&deviceId=123&deviceMake=unknown&deviceModel=unknown&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&sid=123&userId=", // Official Pluto TV Sports ID
     category: "sports",
     country: "US",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/2/26/Pluto_TV_2024.svg/revision/latest?cb=20240126205307",
     status: "online",
     lat: 34.0522,
     lon: -118.2437,
@@ -498,7 +498,7 @@ const staticStreams = [
     url: "https://dazn-dazn1-1-de.samsung.wurl.com/manifest/playlist.m3u8", // Stable DAZN 1 broadcast via Samsung TV Plus
     category: "sports",
     country: "DE",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/7/7c/DAZN_1_logo.png",
     status: "online",
     lat: 52.5200,
     lon: 13.4050,

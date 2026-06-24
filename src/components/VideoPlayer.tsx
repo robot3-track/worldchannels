@@ -637,7 +637,6 @@ export default function VideoPlayer({
             {/* Displaying name inside controller bar */}
             <div className="hidden md:flex flex-col text-right truncate max-w-md">
               <span className="text-xs text-slate-100 font-semibold truncate">{channel.name}</span>
-              <span className="text-[9px] text-slate-500 truncate font-mono">{channel.url}</span>
             </div>
 
             {/* Right side controls */}
