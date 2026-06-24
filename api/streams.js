@@ -199,24 +199,49 @@ function downloadM3U(urlStr) {
 function parseM3U(data, category) {
   const list = [];
   if (!data) return list;
+  
   const lines = data.split("\n");
   let current = {};
   let count = 0;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
+
     if (line.startsWith("#EXTINF:")) {
-      current = {};
+      current = { headers: {} }; // Initialize headers object for the channel
+      
       const commaIndex = line.lastIndexOf(",");
       if (commaIndex !== -1) current.name = line.substring(commaIndex + 1).trim();
+      
       const logoMatch = line.match(/tvg-logo="([^"]+)"/);
       current.logo = logoMatch ? logoMatch[1] : "";
+      
       const countryMatch = line.match(/tvg-country="([^"]+)"/);
       current.country = countryMatch ? countryMatch[1].toUpperCase() : "Global";
+
+    } else if (line.startsWith("#EXTVLCOPT:")) {
+      // 1. Identifies header options inside the playlist
+      // Captures options formatted like: #EXTVLCOPT:http-user-agent=Mozilla/5.0
+      // Captures options formatted like: #EXTVLCOPT:http-referrer=https://example.com
+      if (current.headers) {
+        const optMatch = line.match(/#EXTVLCOPT:http-(user-agent|referrer)=(.*)/i);
+        if (optMatch) {
+          const key = optMatch[1].toLowerCase();
+          const value = optMatch[2].trim();
+          
+          if (key === "user-agent") {
+            current.headers["User-Agent"] = value;
+          } else if (key === "referrer") {
+            current.headers["Referer"] = value; // Canonical HTTP format spelling
+          }
+        }
+      }
+
     } else if (line.startsWith("http") && current.name) {
       if (line.includes(".m3u8")) {
         const resolved = resolveChannelLocation(current.name, current.country);
-        list.push({
+        
+        const channelObj = {
           id: `v-dyn-${category}-${count++}-${Buffer.from(line).toString('base64').substring(0, 8)}`,
           name: current.name,
           url: line,
@@ -226,13 +251,21 @@ function parseM3U(data, category) {
           status: "online",
           lat: resolved.lat,
           lon: resolved.lon
-        });
+        };
+
+        // 2. Only map and append headers if any were successfully identified
+        if (Object.keys(current.headers).length > 0) {
+          channelObj.headers = current.headers;
+        }
+
+        list.push(channelObj);
       }
-      current = {};
+      current = {}; // Reset container state
     }
   }
   return list;
 }
+
 
 // Full static list from server.ts (High-priority stable streams)
 const staticStreams = [
@@ -425,12 +458,17 @@ const staticStreams = [
     lon: -118.2437,
   },
   {
-    id: "sports-cctv16",
-    name: "CCTV-16 Olympic",
-    url: "http://74.91.26.218:82/live/cctv16hd.m3u8", // High quality CCTV-16 Olympic broadcast stream feed
+     id: "sports-cctv16-olympic",
+    name: "CCTV-16 Olympic Channel",
+    // Main official high-definition distribution hub
+    url: "http://74.91.26.218:82/live/cctv16hd.m3u8", 
+    headers: {
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
+      "Referer": "https://cctv.com"
+    },
     category: "sports",
     country: "CN",
-    logo: "https://images.unsplash.com/photo-1547989453-11e67ffb3885?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "http://51zmt.top",
     status: "online",
     lat: 39.9042, // Beijing, China
     lon: 116.4074,
