@@ -326,15 +326,15 @@ const staticStreams = [
     lon: -3.7038,
   },
   {
-    id: "sports-fox-sports-alt",
-    name: "Fox Sports 1 (US)",
-    url: "https://fox-foxsports1-us.samsung.wurl.com/manifest/playlist.m3u8", // Direct stable FS1 feed via Samsung Wurl
+    id: "sports-trtv-sports",
+    name: "TR Sport TV",
+    url: "https://livetr.teleromagna.it/mia/live/playlist.m3u8", // TRTV working server
     category: "sports",
-    country: "US",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    country: "IN",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/7/7a/TR_TV.png/revision/latest?cb=20250116224024",
     status: "online",
-    lat: 34.0522,
-    lon: -118.2437,
+    lat: 20.5937,
+    lon: 78.9629,
   },
   {
     id: "sports-fifa-plus-alt",
@@ -508,17 +508,6 @@ const staticStreams = [
     lon: 2.3522,
   },
   {
-    id: "sports-realmadrid",
-    name: "Real Madrid TV (ES)",
-    url: "https://rmtv-live.akamaized.net/hls/live/2043232/rmtv-es/master.m3u8", // Official Real Madrid TV Spanish feed
-    category: "sports",
-    country: "ES",
-    logo: "https://i.ibb.co/KXhYwm0/realmadrid.png",
-    status: "online",
-    lat: 40.4168,
-    lon: -3.7038,
-  },
-  {
     id: "sports-us-foxsports",
     name: "Fox Sports 1 (US)",
     url: "https://fox-foxsports1-us.samsung.wurl.com/manifest/playlist.m3u8", // High-quality Wurl Fox Sports 1 feed
@@ -618,23 +607,12 @@ const staticStreams = [
     lon: -74.0060,
   },
   {
-    id: "sports-us-beinsports",
-    name: "beIN SPORTS (US)",
-    url: "https://beinsports-samsung.wurl.com/manifest/playlist.m3u8", // Extremely stable beIN SPORTS live stream
-    category: "sports",
-    country: "US",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 25.7617, // Miami, Florida
-    lon: -80.1918,
-  },
-  {
     id: "sports-us-telemundo",
-    name: "Telemundo Deportes (US Backup)",
-    url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8", // Red Bull Sports feed used as stable backup
+    name: "Telemundo West",
+    url: "https://content.uplynk.com/channel/b6a96ed39d694ae1b738faa98cf7dd3f.m3u8", // Red Bull Sports feed used as stable backup
     category: "sports",
     country: "US",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
     status: "online",
     lat: 25.7617, // Miami, Florida (Telemundo HQ)
     lon: -80.1918,
@@ -864,7 +842,7 @@ const staticStreams = [
   {
     id: "news-france24",
     name: "France 24 English",
-    url: "https://youtu.be/HvZt-nh9sGg",
+    url: "https://www.youtube.com/embed/HvZt-nh9sGg?si=65pWG4eDUOL3JQ3h&amp;controls=0",
     category: "news",
     country: "FR",
     logo: "https://upload.wikimedia.org/wikipedia/commons/c/c1/France_24_logo_%282013%29.svg",
@@ -897,7 +875,7 @@ const staticStreams = [
   {
     id: "news-abc",
     name: "ABC News Live",
-    url: "https://www.youtube.com/watch?v=iipR5yUp36o",
+    url: "https://www.youtube.com/embed/iipR5yUp36o?si=ib0ookVfqOWBgLJX;controls=0",
     category: "news",
     country: "US",
     logo: "https://s.abcnews.com/images/Live/abc_news_live-abc-ml-250210_1739199021469_hpMain_16x9_608.jpg",
@@ -921,7 +899,7 @@ const staticStreams = [
   {
     id: "science-nasa",
     name: "NASA Live Space Station",
-    url: "https://www.youtube.com/watch?v=uwXgcTc8oY8",
+    url: "https://www.youtube.com/watch?v=uwXgcTc8oY8;controls=0",
     category: "science",
     country: "US",
     logo: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=120&h=120&q=80",
@@ -967,7 +945,7 @@ const staticStreams = [
   {
     id: "country-tw-pts",
     name: "Aqua Taiwan News",
-    url: "https://www.youtube.com/embed/Vrs-AeKZIEg?si=kYuNuSQtb6jLupP4", // Working sport/general backup
+    url: "https://www.youtube.com/embed/Vrs-AeKZIEg?si=kYuNuSQtb6jLupP4;controls=0", // Working sport/general backup
     category: "country",
     country: "TW",
     logo: "https://images.unsplash.com/photo-1552912441-d110009b6340?auto=format&fit=crop&w=120&h=120&q=80",
@@ -988,8 +966,8 @@ const staticStreams = [
   },
   {
     id: "freetv-cctv",
-    name: "CCTV News Global",
-    url: "https://www.cgtn.com/tv",
+    name: "CCTV Français News Global",
+    url: "https://news.cgtn.com/resource/live/french/cgtn-f.m3u8",
     category: "country",
     country: "CN",
     logo: "https://images.unsplash.com/photo-1547989453-11e67ffb3885?auto=format&fit=crop&w=120&h=120&q=80",
