@@ -30,4 +30,7 @@ The application utilizes a Node.js backend to scrape, validate, and serve thousa
 ## Usage
 
 Simply search for a country or channel name in the search bar, or explore the world map to find live broadcasts. The status indicator (green/red) shows real-time availability of the stream.
+
+## Try it now!
+
 Ever wondered what the other side of the globe watches? Don't need to wait anymore!
