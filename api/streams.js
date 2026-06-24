@@ -461,14 +461,14 @@ const staticStreams = [
      id: "sports-cctv16-olympic",
     name: "CCTV-16 Olympic Channel",
     // Main official high-definition distribution hub
-    url: "http://74.91.26.218:82/live/cctv16hd.m3u8", 
+    url: "http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888888/224/3221226921/1.m3u8", 
     headers: {
       "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
       "Referer": "https://cctv.com"
     },
     category: "sports",
     country: "CN",
-    logo: "http://51zmt.top",
+    logo: "https://live.fanmingming.com/tv/CCTV16.png",
     status: "online",
     lat: 39.9042, // Beijing, China
     lon: 116.4074,
