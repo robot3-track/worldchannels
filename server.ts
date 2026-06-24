@@ -185,7 +185,7 @@ let streamCache: StreamChannel[] = [
   {
     id: "sports-colatv-asia",
     name: "ColaTV Vietnam (Premium Sports)",
-    url: "https://vcdn.colatv.net/hls/colatv/master.m3u8", // High-quality direct VCDN stream - World Cup 2026 partner
+    url: "https://colatv.live", // Iframe source for premium sports - World Cup 2026 partner
     category: "sports",
     country: "VN",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
@@ -965,7 +965,7 @@ let streamCache: StreamChannel[] = [
   {
     id: "country-vn-colatv",
     name: "Cola TV Vietnam (Premium Sports)",
-    url: "https://vcdn.colatv.net/hls/colatv/master.m3u8", // Direct VCDN stream source
+    url: "https://colatv.live", // Main site URL
     category: "sports",
     country: "VN",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
