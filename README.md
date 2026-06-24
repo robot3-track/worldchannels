@@ -1,6 +1,6 @@
 # Global Broadcast Network & 2026 World Cup Hub
 
-A high-performance, real-time IPTV streaming dashboard designed for the 2026 World Cup and global sports events. This application provides a unified interface to access premium sports feeds, national broadcasters, and real-time news from across the globe.
+A high-performance, real-time IPTV streaming dashboard designed for the 2026 World Cup and global sports events. This application provides a unified interface to access sports feeds, national broadcasters, and real-time news from across the globe.
 
 ## Core Features
 
@@ -14,11 +14,7 @@ A high-performance, real-time IPTV streaming dashboard designed for the 2026 Wor
 We have integrated specialized feeds for the upcoming FIFA World Cup 2026. Key partners include:
 
 *   **Arena Sport 1 Premium**: Official broadcaster for the Balkans, providing ultra-high-definition coverage of all tournament matches.
-*   **Fox Sports 1 (US)**: The primary English-language broadcaster in the United States, covering NFL, MLB, and full World Cup 2026 coverage.
 *   **ColaTV Vietnam**: A premium regional hub specializing in Asian market sports feeds and international football.
-*   **beIN SPORTS**: Global sports network providing comprehensive coverage across the Middle East, North Africa, and France.
-*   **Sky Sports Premier League**: Dedicated soccer coverage from the United Kingdom.
-*   **VTV1, VTV2, VTV3**: National broadcasters of Vietnam providing extensive regional sports and tournament highlights.
 
 ## Technical Infrastructure
 
@@ -31,3 +27,4 @@ The application utilizes a Node.js backend to scrape, validate, and serve thousa
 ## Usage
 
 Simply search for a country or channel name in the search bar, or explore the world map to find live broadcasts. The status indicator (green/red) shows real-time availability of the stream.
+Ever wondered what the other side of the globe watches? Don't need to wait anymore!
