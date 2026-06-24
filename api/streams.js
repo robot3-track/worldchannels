@@ -309,7 +309,7 @@ const staticStreams = [
     url: "https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8", // High quality official stable FIFA+ live channel stream
     category: "sports",
     country: "Global",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/1/1c/FIFA.svg/revision/latest/scale-to-width-down/200?cb=20220919201858",
     status: "online",
     lat: 47.3769, // Zurich, Switzerland (FIFA HQ)
     lon: 8.5417,
@@ -342,7 +342,7 @@ const staticStreams = [
     url: "https://fifaplus-rakuten.amagi.tv/playlist.m3u8", // Alternative stable FIFA+ stream link via Rakuten Amagi CDN
     category: "sports",
     country: "Global",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/1/1c/FIFA.svg/revision/latest/scale-to-width-down/200?cb=20220919201858",
     status: "online",
     lat: 47.3769,
     lon: 8.5417,
@@ -978,7 +978,7 @@ const staticStreams = [
   {
     id: "country-tw-pts",
     name: "Aqua Taiwan News",
-    url: "https://www.youtube.com/watch?v=Vrs-AeKZIEg", // Working sport/general backup
+    url: "https://www.youtube.com/embed/Vrs-AeKZIEg?si=kYuNuSQtb6jLupP4", // Working sport/general backup
     category: "country",
     country: "TW",
     logo: "https://images.unsplash.com/photo-1552912441-d110009b6340?auto=format&fit=crop&w=120&h=120&q=80",
@@ -1428,6 +1428,7 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/categories/science.m3u", category: "science" },
       { url: "https://iptv-org.github.io/iptv/categories/movies.m3u", category: "freetv" },
       { url: "https://iptv-org.github.io/iptv/categories/general.m3u", category: "country" },
+      { url: "https://iptv-org.github.io/iptv/categories/music.m3u", category: "music"},
       { url: "https://iptv-org.github.io/iptv/countries/jp.m3u", category: "country", country: "JP" },
       { url: "https://iptv-org.github.io/iptv/countries/kr.m3u", category: "country", country: "KR" },
       { url: "https://iptv-org.github.io/iptv/countries/vn.m3u", category: "country", country: "VN" },
@@ -1443,7 +1444,7 @@ export default async function handler(request, response) {
     
     let allStreams = [...staticStreams];
     m3uResults.forEach(list => {
-      // Buffer slightly more per category to hit the 1500 target after deduplication
+      // Buffer slightly more per category to hit the 2000 target after deduplication
       allStreams = allStreams.concat(list.slice(0, 400));
     });
 
@@ -1473,8 +1474,8 @@ export default async function handler(request, response) {
       }
     }
 
-    // Strict 1500 cap for Vercel deployment stability
-    const cappedStreams = uniqueStreams.slice(0, 1500);
+    // Strict 2000 cap for Vercel deployment stability
+    const cappedStreams = uniqueStreams.slice(0, 2000);
 
     return response.status(200).json({
       success: true,
