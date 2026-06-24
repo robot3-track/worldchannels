@@ -27,7 +27,7 @@ export default async function handler(request, response) {
       success: true,
       message: "Stream failure reported to satellite monitoring network",
       backupAvailable: true,
-      backups: emergencyBackups
+      backups: null
     });
   } catch (error) {
     console.error("API error:", error);
