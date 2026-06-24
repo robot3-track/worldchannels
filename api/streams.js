@@ -1098,8 +1098,8 @@ export default async function handler(request, response) {
       }
     }
 
-    // Strict 2000 cap for Vercel deployment stability
-    const cappedStreams = uniqueStreams.slice(0, 2000);
+    // Strict 10000 cap for Vercel deployment stability
+    const cappedStreams = uniqueStreams.slice(0, 10000);
 
     return response.status(200).json({
       success: true,
