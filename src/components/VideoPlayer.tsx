@@ -38,6 +38,8 @@ export default function VideoPlayer({
   const [volume, setVolume] = useState(0.8);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const [streamError, setStreamError] = useState<string | null>(null);
   const [healingStatus, setHealingStatus] = useState<"idle" | "healing" | "healed" | "failed">("idle");
   const [backupsFound, setBackupsFound] = useState<StreamChannel[]>([]);
@@ -191,9 +193,29 @@ export default function VideoPlayer({
     video.addEventListener("play", handlePlay);
     video.addEventListener("pause", handlePause);
 
+    const handleTimeUpdate = () => {
+      setCurrentTime(video.currentTime);
+      if (video.duration && !isNaN(video.duration) && video.duration !== Infinity) {
+        setDuration(video.duration);
+      } else if (hlsRef.current && hlsRef.current.liveSyncPosition) {
+        setDuration(hlsRef.current.liveSyncPosition);
+      }
+    };
+
+    const handleLoadedMetadata = () => {
+      if (video.duration && !isNaN(video.duration) && video.duration !== Infinity) {
+        setDuration(video.duration);
+      }
+    };
+
+    video.addEventListener("timeupdate", handleTimeUpdate);
+    video.addEventListener("loadedmetadata", handleLoadedMetadata);
+
     return () => {
       video.removeEventListener("play", handlePlay);
       video.removeEventListener("pause", handlePause);
+      video.removeEventListener("timeupdate", handleTimeUpdate);
+      video.removeEventListener("loadedmetadata", handleLoadedMetadata);
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
@@ -284,6 +306,33 @@ export default function VideoPlayer({
         setIsPlaying(false);
       });
     }
+  };
+
+  const handleMouseMove = () => {
+    setShowControls(true);
+  };
+
+  const handleSeek = (e: ChangeEvent<HTMLInputElement>) => {
+    const val = parseFloat(e.target.value);
+    const video = videoRef.current;
+    if (video) {
+      video.currentTime = val;
+    }
+    setCurrentTime(val);
+  };
+
+  const reloadToLive = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    if (hlsRef.current && hlsRef.current.liveSyncPosition) {
+      video.currentTime = hlsRef.current.liveSyncPosition;
+    } else if (video.duration && !isNaN(video.duration) && video.duration !== Infinity) {
+      video.currentTime = video.duration;
+    }
+    
+    video.play().catch(() => {});
+    setShowControls(true);
   };
 
   const handleContainerClick = () => {
@@ -392,8 +441,10 @@ export default function VideoPlayer({
       <div
         ref={containerRef}
         onClick={handleContainerClick}
+        onMouseMove={handleMouseMove}
+        onMouseEnter={handleMouseMove}
         className={`w-full aspect-video bg-black rounded-2xl overflow-hidden relative shadow-lg border group ${
-          theme === "light" ? "border-slate-200" : "border-slate-800/80"
+          theme === "light" ? "border-slate-200" : "border-slate-850"
         }`}
       >
         {/* Video Element or Iframe */}
@@ -436,10 +487,13 @@ export default function VideoPlayer({
         {/* Top-Right: Dynamic Stream Health Controller */}
         <div className="absolute top-4 right-4 z-10 flex gap-2">
           <button
-            onClick={() => measureStreamLatency(channel.url)}
+            onClick={() => {
+              measureStreamLatency(channel.url);
+              reloadToLive();
+            }}
             disabled={checkingLatency}
             className="bg-slate-950/85 hover:bg-slate-900 border border-slate-800/50 rounded-full p-2 text-slate-300 hover:text-slate-100 transition-all shadow-md active:scale-95 disabled:opacity-50"
-            title="Ping check stream carrier"
+            title="Reload to live & Ping check"
           >
             <RefreshCw className={`w-3.5 h-3.5 ${checkingLatency ? "animate-spin text-emerald-500" : ""}`} />
           </button>
@@ -515,15 +569,32 @@ export default function VideoPlayer({
           showControls || !isPlaying ? "opacity-100" : "opacity-0 group-hover:opacity-100"
         }`}>
           
-          {/* Progress / Stream Duration Line (Static live indicator) */}
-          <div className="flex items-center gap-2">
-            <div className="h-1 bg-emerald-500 rounded-full flex-grow relative overflow-hidden">
-              <div className="absolute top-0 bottom-0 left-0 bg-emerald-300 w-1/3 animate-[pulse_1.5s_infinite]" />
+          {/* Progress / Stream Duration Line (Interactive Live Seeker) */}
+          <div className="flex items-center gap-3">
+            <div className="flex-grow flex items-center relative group/seek">
+              <input
+                type="range"
+                min="0"
+                max={duration || currentTime || 100}
+                value={currentTime}
+                onChange={handleSeek}
+                className="w-full h-1.5 bg-slate-800 rounded-full appearance-none cursor-pointer accent-emerald-500 hover:accent-emerald-400 transition-all"
+              />
             </div>
-            <div className="flex items-center gap-1.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-              <span className="text-[9px] font-sans text-emerald-400 font-bold tracking-wider uppercase">LIVE FEED</span>
-            </div>
+            <button 
+              onClick={reloadToLive}
+              className="flex items-center gap-1.5 bg-slate-900/50 hover:bg-slate-800 px-2 py-1 rounded-md transition-colors group/live"
+            >
+              <div className="relative flex items-center justify-center">
+                <span className={`w-1.5 h-1.5 rounded-full ${Math.abs(currentTime - duration) < 8 || duration === 0 ? "bg-emerald-500" : "bg-slate-500"}`} />
+                {(Math.abs(currentTime - duration) < 8 || duration === 0) && (
+                  <span className="absolute w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                )}
+              </div>
+              <span className={`text-[10px] font-sans font-bold tracking-wider uppercase ${Math.abs(currentTime - duration) < 8 || duration === 0 ? "text-emerald-400" : "text-slate-400 group-hover/live:text-slate-200"}`}>
+                {Math.abs(currentTime - duration) < 8 || duration === 0 ? "LIVE" : "GO LIVE"}
+              </span>
+            </button>
           </div>
 
           <div className="flex items-center justify-between gap-4">
