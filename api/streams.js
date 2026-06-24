@@ -282,6 +282,39 @@ const staticStreams = [
     lon: 13.0550,
   },
   {
+    id: "sports-arenasport1",
+    name: "Arena Sport 1 Premium",
+    url: "https://nl2.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
+    category: "sports",
+    country: "RS",
+    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
+    lon: 20.4573,
+  },
+  {
+    id: "sports-fifaplus",
+    name: "FIFA+ Live",
+    url: "https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8", // High quality official stable FIFA+ live channel stream
+    category: "sports",
+    country: "Global",
+    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 47.3769, // Zurich, Switzerland (FIFA HQ)
+    lon: 8.5417,
+  },
+  {
+    id: "sports-es-dazn",
+    name: "Red Bull TV Sports (ES)",
+    url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8", // Red Bull TV sports stream
+    category: "sports",
+    country: "ES",
+    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 40.4168, // Madrid, Spain
+    lon: -3.7038,
+  },
+  {
     id: "sports-fox-sports-alt",
     name: "Fox Sports 1 (US)",
     url: "https://fox-foxsports1-us.samsung.wurl.com/manifest/playlist.m3u8", // Direct stable FS1 feed via Samsung Wurl
@@ -381,17 +414,6 @@ const staticStreams = [
     lon: 11.5820,
   },
   {
-    id: "sports-fifaplus",
-    name: "FIFA+ Live",
-    url: "https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8", // High quality official stable FIFA+ live channel stream
-    category: "sports",
-    country: "Global",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 47.3769, // Zurich, Switzerland (FIFA HQ)
-    lon: 8.5417,
-  },
-  {
     id: "sports-tennischannel2",
     name: "Tennis Channel 2",
     url: "https://tennischannelt2-plex.amagi.tv/playlist.m3u8", // High quality, stable Tennis Channel T2 live stream
@@ -412,17 +434,6 @@ const staticStreams = [
     status: "online",
     lat: 40.7128, // New York, NY
     lon: -74.0060,
-  },
-  {
-    id: "sports-arenasport1",
-    name: "Arena Sport 1 Premium",
-    url: "https://nl2.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
-    category: "sports",
-    country: "RS",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
-    lon: 20.4573,
   },
   {
     id: "sports-colatv-asia",
@@ -829,6 +840,17 @@ const staticStreams = [
 
   // --- NEWS (Category: news, Country: Global/Specific) ---
   {
+    id: "news-trtworld",
+    name: "TRT World English",
+    url: "https://tv-trtworld.medya.trt.com.tr/master.m3u8",
+    category: "news",
+    country: "TR",
+    logo: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 38.9637,
+    lon: 35.2433,
+  },
+  {
     id: "news-skynews",
     name: "Sky News International",
     url: "https://skynews-live.akamaized.net/hls/live/2007802/skynewsn-global/master.m3u8",
@@ -894,17 +916,6 @@ const staticStreams = [
     lat: 40.7128,
     lon: -74.0060,
   },
-  {
-    id: "news-trtworld",
-    name: "TRT World English",
-    url: "https://tv-trtworld.medya.trt.com.tr/master.m3u8",
-    category: "news",
-    country: "TR",
-    logo: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 38.9637,
-    lon: 35.2433,
-  },
 
   // --- SCIENCE (Category: science, Country: Global/Specific) ---
   {
@@ -954,6 +965,17 @@ const staticStreams = [
 
   // --- FREE TV GLOBAL (Category: freetv, Country: Global) ---
   {
+    id: "country-tw-pts",
+    name: "Aqua Taiwan News",
+    url: "https://www.youtube.com/watch?v=Vrs-AeKZIEg", // Working sport/general backup
+    category: "country",
+    country: "TW",
+    logo: "https://images.unsplash.com/photo-1552912441-d110009b6340?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 25.0330, // Taipei, Taiwan
+    lon: 121.5654,
+  },
+  {
     id: "freetv-fashion",
     name: "Fashion TV L'Original",
     url: "https://fash1043.cloudycdn.host/play/hls/ftv_ftv_mid_east_en/index.m3u8",
@@ -967,8 +989,8 @@ const staticStreams = [
   {
     id: "freetv-cctv",
     name: "CCTV News Global",
-    url: "https://cctvenghls.cntv.myalicdn.com/asp/hls/2000/0303000a/3/default/2000/fmp4.m3u8",
-    category: "freetv",
+    url: "https://www.cgtn.com/tv",
+    category: "country",
     country: "CN",
     logo: "https://images.unsplash.com/photo-1547989453-11e67ffb3885?auto=format&fit=crop&w=120&h=120&q=80",
     status: "online",
@@ -1012,8 +1034,8 @@ const staticStreams = [
   },
   {
     id: "country-uk-skynews",
-    name: "Sky News UK Stream",
-    url: "https://skynews-live.akamaized.net/hls/live/2007802/skynewsn-global/master.m3u8",
+    name: "Sky News Live Stream",
+    url: "https://news.sky.com/watch-live",
     category: "country",
     country: "UK",
     logo: "https://images.unsplash.com/photo-1513829096999-4978602294fc?auto=format&fit=crop&w=120&h=120&q=80",
@@ -1119,17 +1141,6 @@ const staticStreams = [
     status: "online",
     lat: 39.9042,
     lon: 116.4074,
-  },
-  {
-    id: "country-tw-pts",
-    name: "PTS Taiwan (Backup)",
-    url: "https://edgesport-edge.amagi.tv/playlist.m3u8", // Working sport/general backup
-    category: "country",
-    country: "TW",
-    logo: "https://images.unsplash.com/photo-1552912441-d110009b6340?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 25.0330, // Taipei, Taiwan
-    lon: 121.5654,
   },
   {
     id: "country-kr-arirang",
@@ -1405,7 +1416,16 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/categories/sports.m3u", category: "sports" },
       { url: "https://iptv-org.github.io/iptv/categories/science.m3u", category: "science" },
       { url: "https://iptv-org.github.io/iptv/categories/movies.m3u", category: "freetv" },
-      { url: "https://iptv-org.github.io/iptv/categories/general.m3u", category: "country" }
+      { url: "https://iptv-org.github.io/iptv/categories/general.m3u", category: "country" },
+      { url: "https://iptv-org.github.io/iptv/countries/jp.m3u", category: "country", country: "JP" },
+      { url: "https://iptv-org.github.io/iptv/countries/kr.m3u", category: "country", country: "KR" },
+      { url: "https://iptv-org.github.io/iptv/countries/vn.m3u", category: "country", country: "VN" },
+      { url: "https://iptv-org.github.io/iptv/countries/sa.m3u", category: "country", country: "SA" },
+      { url: "https://iptv-org.github.io/iptv/countries/in.m3u", category: "country", country: "IN" },
+      { url: "https://iptv-org.github.io/iptv/countries/br.m3u", category: "country", country: "BR" },
+      { url: "https://iptv-org.github.io/iptv/countries/ru.m3u", category: "country", country: "RU" },
+      { url: "https://iptv-org.github.io/iptv/countries/it.m3u", category: "country", country: "IT" },
+      { url: "https://iptv-org.github.io/iptv/countries/fr.m3u", category: "country", country: "FR" }
     ];
 
     const m3uResults = await Promise.all(sources.map(src => downloadM3U(src.url).then(data => parseM3U(data, src.category))));
