@@ -416,7 +416,7 @@ const staticStreams = [
   {
     id: "sports-motorvision",
     name: "Motorvision TV Eng",
-    url: "https://motorvision-plex.amagi.tv/playlist.m3u8",
+    url: "https://mvg-mv-xumo.otteravision.com/mvg/mv/mv.m3u8",
     category: "sports",
     country: "DE",
     logo: "https://images.unsplash.com/photo-1511919884226-fd3cad34687c?auto=format&fit=crop&w=120&h=120&q=80",
@@ -438,7 +438,7 @@ const staticStreams = [
   {
     id: "sports-tycsports-usa",
     name: "TyC Sports USA",
-    url: "http://45.170.130.224:8000/play/a020/index.m3u8", // High quality TyC Sports USA stream feed
+    url: "http://playcom.trapemn.tv:1935/transcoderip/tycsports.stream/playlist.m3u8", // High quality TyC Sports USA stream feed
     category: "sports",
     country: "US",
     logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
@@ -469,17 +469,13 @@ const staticStreams = [
     lon: -118.2437,
   },
   {
-     id: "sports-cctv16-olympic",
-    name: "CCTV-16 Olympic Channel",
+     id: "sports-cctv1-plus",
+    name: "CCTV-1+",
     // Main official high-definition distribution hub
-    url: "http://39.134.24.162/dbiptv.sn.chinamobile.com/PLTV/88888888/224/3221226921/1.m3u8", 
-    headers: {
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:140.0) Gecko/20100101 Firefox/140.0",
-      "Referer": "https://cctv.com"
-    },
+    url: "https://cd-live-stream.news.cctvplus.com/live/smil:CHANNEL1.smil/playlist.m3u8", 
     category: "sports",
     country: "CN",
-    logo: "https://live.fanmingming.com/tv/CCTV16.png",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f6/CCTV-1_Logo.svg/revision/latest/scale-to-width-down/1000?cb=20240211154812",
     status: "online",
     lat: 39.9042, // Beijing, China
     lon: 116.4074,
