@@ -1200,11 +1200,22 @@ const staticStreams = [
   },
   {
     id: "country-vn-colatv",
-    name: "Cola TV Vietnam (Premium Sports)",
+    name: "Cola TV Vietnam (Web)",
     url: "https://colatv.live", // Main site URL
     category: "sports",
     country: "VN",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "country-vn-colatv-alt",
+    name: "Cola TV Vietnam (Backup)",
+    url: "https://live05.apusport.com/live/78905744.m3u8", // M3U8 Link
+    category: "sports",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
     status: "online",
     lat: 10.8231, // Ho Chi Minh City
     lon: 106.6297,
@@ -1404,7 +1415,8 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/br.m3u", category: "country", country: "BR" },
       { url: "https://iptv-org.github.io/iptv/countries/ru.m3u", category: "country", country: "RU" },
       { url: "https://iptv-org.github.io/iptv/countries/it.m3u", category: "country", country: "IT" },
-      { url: "https://iptv-org.github.io/iptv/countries/fr.m3u", category: "country", country: "FR" }
+      { url: "https://iptv-org.github.io/iptv/countries/fr.m3u", category: "country", country: "FR" },
+      { url: "https://iptv-org.github.io/iptv/regions/amer.m3u", category: "region", region: "AMER" }
     ];
 
     const m3uResults = await Promise.all(sources.map(src => downloadM3U(src.url).then(data => parseM3U(data, src.category))));
