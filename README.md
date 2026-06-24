@@ -18,6 +18,7 @@ Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. 
 
 *   **Arena Sport 1 Premium**: Official broadcaster for the Balkans, providing ultra-high-definition coverage of all tournament matches.
 *   **ColaTV Vietnam**: A premium regional hub specializing in Asian market sports feeds and international football.
+*   **Fox Sports 1**: Official Broadcaster in the United States.
 
 ## Technical Infrastructure
 
