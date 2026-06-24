@@ -862,17 +862,6 @@ const staticStreams = [
     lon: 35.2433,
   },
   {
-    id: "news-skynews",
-    name: "Sky News International",
-    url: "https://skynews-live.akamaized.net/hls/live/2007802/skynewsn-global/master.m3u8",
-    category: "news",
-    country: "UK",
-    logo: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "offline",
-    lat: 51.5074,
-    lon: -0.1278,
-  },
-  {
     id: "news-france24",
     name: "France 24 English",
     url: "https://youtu.be/HvZt-nh9sGg",
