@@ -315,6 +315,17 @@ const staticStreams = [
     lon: -118.2437,
   },
   {
+    id:"sports-fubotv-sports",
+    name: "Fubo Sports Network",
+    url: "https://dnf08l6u6uxnz.cloudfront.net/master.m3u8", // High quality, stable Fubo Sports Network stream
+    category: "sports",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/1/1e/2023-fubotv-new-logo-design-2-520x321.png/revision/latest?cb=20230519120710",
+    status: "online",
+    lat: 40.7128, // New York City, US (FuboTV HQ)
+    lon: -74.0060,
+  },
+  {
     id: "sports-fifaplus",
     name: "FIFA+ Live",
     url: "https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8", // High quality official stable FIFA+ live channel stream
