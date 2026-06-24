@@ -287,7 +287,18 @@ const staticStreams = [
     url: "https://nl2.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
     category: "sports",
     country: "RS",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Arena_Sport_1_Premium_%282021%2C_short%29.svg/revision/latest?cb=20221111214150",
+    status: "online",
+    lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
+    lon: 20.4573,
+  },
+  {
+    id: "sports-arenasport1-backup",
+    name: "Arena Sport 1 Premium (Backup)",
+    url: "https://nl1.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
+    category: "sports",
+    country: "RS",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Arena_Sport_1_Premium_%282021%2C_short%29.svg/revision/latest?cb=20221111214150",
     status: "online",
     lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
     lon: 20.4573,
