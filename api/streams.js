@@ -857,7 +857,7 @@ const staticStreams = [
     category: "news",
     country: "UK",
     logo: "https://images.unsplash.com/photo-1504711434969-e33886168f5c?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
+    status: "offline",
     lat: 51.5074,
     lon: -0.1278,
   },
