@@ -447,17 +447,6 @@ const staticStreams = [
     lon: -74.0060,
   },
   {
-    id: "sports-it-rai-sport",
-    name: "Rai Sport HD (Italy)",
-    url: "https://raivideo.akamaized.net/hls/live/2042730/rainews/index.m3u8", // Direct Akamai feed for Rai Sport/News
-    category: "sports",
-    country: "IT",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 41.9028, // Rome, Italy
-    lon: 12.4964,
-  },
-  {
     id: "sports-plutotv-deportes",
     name: "Pluto TV Deportes",
     url: "https://jmp2.uk/plu-5dcde07af1c85b0009b18651.m3u8", // High quality Pluto TV Deportes live stream
@@ -592,17 +581,6 @@ const staticStreams = [
     lon: -80.1918,
   },
   {
-    id: "sports-ca-tsn",
-    name: "Pac-12 Network",
-    url: "https://pac12-samsung.wurl.com/manifest/playlist.m3u8", // Stable Wurl Pac-12 sports broadcast
-    category: "sports",
-    country: "CA",
-    logo: "https://images.unsplash.com/photo-1541252260730-0412e8e2108e?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 43.6532, // Toronto, Canada
-    lon: -79.3832,
-  },
-  {
     id: "sports-ca-ctv",
     name: "ACC Digital Network",
     url: "https://acc-samsung.wurl.com/manifest/playlist.m3u8", // Stable ACC college sports broadcast
@@ -625,17 +603,6 @@ const staticStreams = [
     lon: -58.3816,
   },
   {
-    id: "sports-br-globo",
-    name: "Fight Network (BR)",
-    url: "https://channelfight-samsung.wurl.com/manifest/playlist.m3u8", // Live Combat/Fight sports stream
-    category: "sports",
-    country: "BR",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: -22.9068, // Rio de Janeiro, Brazil
-    lon: -43.1729,
-  },
-  {
     id: "sports-es-rtve",
     name: "RTVE Teledeporte (Live)",
     url: "https://d2a02gfcid1k4a.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-clihr3vf54f9j/Teledeporte_ES.m3u8", // Cloudfront-cached direct stream for RTVE Teledeporte
@@ -645,39 +612,6 @@ const staticStreams = [
     status: "online",
     lat: 40.4168, // Madrid, Spain
     lon: -3.7038,
-  },
-  {
-    id: "sports-nl-nos",
-    name: "Deutsche Welle (NL Backup)",
-    url: "https://dwstream72-lh.akamaihd.net/i/dwstream72_1@119305/master.m3u8", // High quality Dutch region news/sports backup stream
-    category: "sports",
-    country: "NL",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 52.2292, // Hilversum, Netherlands (NOS HQ)
-    lon: 5.1669,
-  },
-  {
-    id: "sports-in-jiocinema",
-    name: "Unbeaten Sports (IN)",
-    url: "https://unbeaten-samsung.wurl.com/manifest/playlist.m3u8", // Reliable sports stream for Indian sports
-    category: "sports",
-    country: "IN",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 19.0760, // Mumbai, India
-    lon: 72.8777,
-  },
-  {
-    id: "sports-in-viacom18",
-    name: "beIN SPORTS (IN)",
-    url: "https://beinsports-samsung.wurl.com/manifest/playlist.m3u8", // beIN Sports coverage for India
-    category: "sports",
-    country: "IN",
-    logo: "https://images.unsplash.com/photo-1541252260730-0412e8e2108e?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 19.0760, // Mumbai, India (Viacom18 HQ)
-    lon: 72.8777,
   },
   {
     id: "sports-au-sbssports",
@@ -703,6 +637,17 @@ const staticStreams = [
   },
 
   // --- NEWS (Category: news, Country: Global/Specific) ---
+  {
+    id: "news-skyarabia",
+    name: "Sky News Arabia",
+    url: "https://stream.skynewsarabia.com/ott/ott.m3u8",
+    category: "news",
+    country: "AE",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f0/Sky_News_Arabia_2024.svg/revision/latest?cb=20240721145837",
+    status: "online",
+    lat: 24.4539, // Abu Dhabi, UAE
+    lon: 54.3773,
+  },
   {
     id: "news-trtworld",
     name: "TRT World English",
@@ -1276,12 +1221,12 @@ export default async function handler(request, response) {
 
   try {
     const sources = [
-      { url: "https://iptv-org.github.io/iptv/categories/news.m3u", category: "news" },
-      { url: "https://iptv-org.github.io/iptv/categories/sports.m3u", category: "sports" },
-      { url: "https://iptv-org.github.io/iptv/categories/science.m3u", category: "science" },
-      { url: "https://iptv-org.github.io/iptv/categories/movies.m3u", category: "freetv" },
-      { url: "https://iptv-org.github.io/iptv/categories/general.m3u", category: "country" },
-      { url: "https://iptv-org.github.io/iptv/categories/music.m3u", category: "music"},
+      //{ url: "https://iptv-org.github.io/iptv/categories/news.m3u", category: "news" },
+      //{ url: "https://iptv-org.github.io/iptv/categories/sports.m3u", category: "sports" },
+      //{ url: "https://iptv-org.github.io/iptv/categories/science.m3u", category: "science" },
+      //{ url: "https://iptv-org.github.io/iptv/categories/movies.m3u", category: "freetv" },
+      //{ url: "https://iptv-org.github.io/iptv/categories/general.m3u", category: "country" },
+      //{ url: "https://iptv-org.github.io/iptv/categories/music.m3u", category: "music"},
       { url: "https://iptv-org.github.io/iptv/countries/jp.m3u", category: "country", country: "JP" },
       { url: "https://iptv-org.github.io/iptv/countries/kr.m3u", category: "country", country: "KR" },
       { url: "https://iptv-org.github.io/iptv/countries/vn.m3u", category: "country", country: "VN" },
