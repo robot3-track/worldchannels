@@ -276,7 +276,7 @@ const staticStreams = [
     url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8",
     category: "sports",
     country: "Global",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/3/3c/Red_Bull_TV.svg/revision/latest?cb=20180423100712",
     status: "online",
     lat: 47.8095, // Salzburg, Austria
     lon: 13.0550,
@@ -331,7 +331,7 @@ const staticStreams = [
     url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8", // Red Bull TV sports stream
     category: "sports",
     country: "ES",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/3/3c/Red_Bull_TV.svg/revision/latest?cb=20180423100712",
     status: "online",
     lat: 40.4168, // Madrid, Spain
     lon: -3.7038,
@@ -375,7 +375,7 @@ const staticStreams = [
     url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8", // Red Bull TV sports stream
     category: "sports",
     country: "ES",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/3/3c/Red_Bull_TV.svg/revision/latest?cb=20180423100712",
     status: "online",
     lat: 40.4168, // Madrid, Spain
     lon: -3.7038,
@@ -397,7 +397,7 @@ const staticStreams = [
     url: "https://bein-beinxtrasports-firetv.amagi.tv/playlist.m3u8", // High-quality, CORS-friendly beIN sports stream
     category: "sports",
     country: "US",
-    logo: "https://images.unsplash.com/photo-1541252260730-0412e8e2108e?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/b/b6/Xtra.png/revision/latest?cb=20201108180634",
     status: "online",
     lat: 25.826725, // Florida, US
     lon: -80.314954,
@@ -491,83 +491,6 @@ const staticStreams = [
     status: "online",
     lat: 34.0522,
     lon: -118.2437,
-  },
-  {
-    id: "sports-dazn-1-de",
-    name: "DAZN 1 Germany (HD)",
-    url: "https://dazn-dazn1-1-de.samsung.wurl.com/manifest/playlist.m3u8", // Stable DAZN 1 broadcast via Samsung TV Plus
-    category: "sports",
-    country: "DE",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/7/7c/DAZN_1_logo.png",
-    status: "online",
-    lat: 52.5200,
-    lon: 13.4050,
-  },
-  {
-    id: "sports-bahrain-sports",
-    name: "Bahrain Sports 1 HD",
-    url: "https://shls-bah-sports-1-med.akamaized.net/out/v1/934d4f8260714b2787723223062086e3/index.m3u8", // Official Akamai Bahrain Sports stream
-    category: "sports",
-    country: "BH",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 26.2285,
-    lon: 50.5860,
-  },
-  {
-    id: "sports-more-than-sports",
-    name: "More than Sports TV",
-    url: "https://morethansports.mov3.co/hls/morethansports.m3u8", // German sports channel
-    category: "sports",
-    country: "DE",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 52.5200,
-    lon: 13.4050,
-  },
-  {
-    id: "sports-bahrain-sports-2",
-    name: "Bahrain Sports 2 (720p) [Not 24/7]",
-    url: "https://bahrain.mov3.co/hls/bahrain2.m3u8", // Bahrain Sports 2 link
-    category: "sports",
-    country: "BH",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 26.2285,
-    lon: 50.5860,
-  },
-  {
-    id: "sports-soccer-sky-pl",
-    name: "Sky Sports Premier League (Premium Soccer)",
-    url: "https://skysports-rakuten.amagi.tv/playlist.m3u8", // Stable Sky Sports stream
-    category: "sports",
-    country: "UK",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 51.5074,
-    lon: -0.1278,
-  },
-  {
-    id: "sports-soccer-bein1",
-    name: "beIN SPORTS 1 HD (Premium Soccer)",
-    url: "https://beinsports-samsung.wurl.com/manifest/playlist.m3u8", // High quality soccer feed
-    category: "sports",
-    country: "Global",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 25.2854,
-    lon: 51.5310,
-  },
-  {
-    id: "sports-soccer-espn-plus",
-    name: "ESPN Plus (Premium Soccer)",
-    url: "https://espn-espnplus-1-us.samsung.wurl.com/manifest/playlist.m3u8", // Stable ESPN+ soccer feed
-    category: "sports",
-    country: "US",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 40.7128,
-    lon: -74.0060,
   },
   {
     id: "sports-us-telemundo",
@@ -669,17 +592,6 @@ const staticStreams = [
     status: "online",
     lat: 48.8566, // Paris, France
     lon: 2.3522,
-  },
-  {
-    id: "news-dwnews",
-    name: "DW News English",
-    url: "https://dwamdstream-lh.akamaihd.net/i/dwamd_en@122717/master.m3u8",
-    category: "news",
-    country: "DE",
-    logo: "https://images.unsplash.com/photo-1585829365294-fa8c63327f31?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 50.7374, // Bonn, Germany
-    lon: 7.0982,
   },
   {
     id: "news-aljazeera",
@@ -812,7 +724,7 @@ const staticStreams = [
     url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8",
     category: "freetv",
     country: "Global",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/3/3c/Red_Bull_TV.svg/revision/latest?cb=20180423100712",
     status: "online",
     lat: -34.6037, // Buenos Aires, Argentina
     lon: -58.3816,
