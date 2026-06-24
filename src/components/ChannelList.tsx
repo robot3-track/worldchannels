@@ -209,7 +209,7 @@ export default function ChannelList({
             </p>
           </div>
         ) : (
-          processedStreams.map((stream) => {
+          processedStreams.slice(0, 100).map((stream) => {
             const isSelected = selectedChannel?.id === stream.id;
             return (
               <button
