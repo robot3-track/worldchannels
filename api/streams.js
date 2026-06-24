@@ -94,7 +94,7 @@ const regionalCities = [
     { keys: ["qatar", "doha", "al jazeera"], lat: 25.2854, lon: 51.5310, country: "QA" },
     { keys: ["middle east", "dubai", "uae", "abu dhabi", "sharjah"], lat: 25.2048, lon: 55.2708, country: "AE" },
     { keys: ["istanbul", "turkey", "trt", "haberturk"], lat: 41.0082, lon: 28.9784, country: "TR" },
-    { keys: ["tokyo", "nhk", "fuji tv", "fujitv", "asahi", "tbs japan", "tokyo mx", "nippon tv", "abema", "weathernews japan", "wowow", "sky a+", "gaora", "j sports"], lat: 35.6762, lon: 139.6503, country: "JP" },
+    { keys: ["tokyo", "nhk", "fuji tv", "fujitv", "asahi", "tbs japan", "tokyo mx", "nippon tv", "abema", "weathernews japan", "wowow", "sky a+", "gaora", "j sports", "cgntv japan"], lat: 35.6762, lon: 139.6503, country: "JP" },
     { keys: ["beijing", "china", "cgtn", "cctv"], lat: 39.9042, lon: 116.4074, country: "CN" },
     { keys: ["seoul", "korea", "sbs world", "kbs world", "arirang", "mbn", "sbs sports"], lat: 37.5665, lon: 126.9780, country: "KR" },
     { keys: ["taipei", "taiwan", "pts", "set news", "f tv "], lat: 25.0330, lon: 121.5654, country: "TW" },
