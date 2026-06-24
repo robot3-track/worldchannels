@@ -34,3 +34,4 @@ Simply search for a country or channel name in the search bar, or explore the wo
 ## Try it now!
 
 Ever wondered what the other side of the globe watches? Don't need to wait anymore!
+Try it at: https://worldchannels.vercel.app
