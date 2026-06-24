@@ -477,10 +477,10 @@ const staticStreams = [
   {
     id: "sports-lequipe",
     name: "L'Equipe TV (FR)",
-    url: "https://lequipe-hls-fra-cl.vcdn.biz/hls/lequipe/master.m3u8", // Direct stable L'Equipe TV feed
+    url: "https://viamotionhsi.netplus.ch/live/eds/lequipe21/browser-HLS8/lequipe21.m3u8", // Direct stable L'Equipe TV feed
     category: "sports",
     country: "FR",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://i.ibb.co/KXhYwm0/lequipe.png",
     status: "online",
     lat: 48.8566,
     lon: 2.3522,
@@ -491,7 +491,7 @@ const staticStreams = [
     url: "https://rmtv-live.akamaized.net/hls/live/2043232/rmtv-es/master.m3u8", // Official Real Madrid TV Spanish feed
     category: "sports",
     country: "ES",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://i.ibb.co/KXhYwm0/realmadrid.png",
     status: "online",
     lat: 40.4168,
     lon: -3.7038,
