@@ -503,61 +503,6 @@ const staticStreams = [
     lat: 25.7617, // Miami, Florida (Telemundo HQ)
     lon: -80.1918,
   },
-  {
-    id: "sports-ca-ctv",
-    name: "ACC Digital Network",
-    url: "https://acc-samsung.wurl.com/manifest/playlist.m3u8", // Stable ACC college sports broadcast
-    category: "sports",
-    country: "CA",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 43.6532, // Toronto, Canada
-    lon: -79.3832,
-  },
-  {
-    id: "sports-ar-tvpublica",
-    name: "TV Pública Argentina (Live)",
-    url: "https://live-col.solumedia.com.ar/tvpublica/720/playlist.m3u8", // TV Pública Argentina Live feed (Broadcasting the World Cup!)
-    category: "sports",
-    country: "AR",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: -34.6037, // Buenos Aires, Argentina
-    lon: -58.3816,
-  },
-  {
-    id: "sports-es-rtve",
-    name: "RTVE Teledeporte (Live)",
-    url: "https://d2a02gfcid1k4a.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-clihr3vf54f9j/Teledeporte_ES.m3u8", // Cloudfront-cached direct stream for RTVE Teledeporte
-    category: "sports",
-    country: "ES",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 40.4168, // Madrid, Spain
-    lon: -3.7038,
-  },
-  {
-    id: "sports-au-sbssports",
-    name: "SBS Sports (KR)",
-    url: "http://221.157.125.239:1935/live/psike/playlist.m3u8", // High-quality, extremely stable SBS Sports live broadcast feed
-    category: "sports",
-    country: "KR",
-    logo: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 37.5665, // Seoul, South Korea
-    lon: 126.9780,
-  },
-  {
-    id: "sports-mena-beinsports",
-    name: "beIN SPORTS MENA",
-    url: "https://beinsports-samsung.wurl.com/manifest/playlist.m3u8", // Premium CORS-friendly beIN sports stream
-    category: "sports",
-    country: "Global",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 25.2854, // Doha, Qatar (beIN HQ)
-    lon: 51.5310,
-  },
 
   // --- NEWS (Category: news, Country: Global/Specific) ---
   {
@@ -615,17 +560,6 @@ const staticStreams = [
     lat: 37.0902,
     lon: -95.7129,
   },
-  {
-    id: "news-bloomberg",
-    name: "Bloomberg Global TV",
-    url: "https://live-bloomberg-us.amagi.tv/playlist.m3u8",
-    category: "news",
-    country: "Global",
-    logo: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 40.7128,
-    lon: -74.0060,
-  },
 
   // --- SCIENCE (Category: science, Country: Global/Specific) ---
   {
@@ -640,17 +574,6 @@ const staticStreams = [
     lon: -95.0853,
   },
   {
-    id: "science-dwdoc",
-    name: "DW Documentary English",
-    url: "https://dwstream47-lh.akamaihd.net/i/dwstream47_1@118020/master.m3u8",
-    category: "science",
-    country: "DE",
-    logo: "https://images.unsplash.com/photo-1447069387593-a5de0862481e?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 50.7374,
-    lon: 7.0982,
-  },
-  {
     id: "science-nasamedia",
     name: "NASA Media Channel",
     url: "https://ntv-intel-01.akamaized.net/hls/live/2042750/NASA-NTV-2-HQ/master.m3u8",
@@ -660,17 +583,6 @@ const staticStreams = [
     status: "online",
     lat: 28.5729, // Cape Canaveral, US
     lon: -80.6490,
-  },
-  {
-    id: "science-wired",
-    name: "Wired Science & Tech",
-    url: "https://wired-samsung.wurl.com/manifest/playlist.m3u8",
-    category: "science",
-    country: "Global",
-    logo: "https://images.unsplash.com/photo-1531297484001-80022131f5a1?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 37.7749, // San Francisco, US
-    lon: -122.4194,
   },
 
   // --- FREE TV GLOBAL (Category: freetv, Country: Global) ---
@@ -1137,7 +1049,7 @@ export default async function handler(request, response) {
       //{ url: "https://iptv-org.github.io/iptv/categories/sports.m3u", category: "sports" },
       { url: "https://iptv-org.github.io/iptv/categories/science.m3u", category: "science" },
       { url: "https://iptv-org.github.io/iptv/categories/movies.m3u", category: "freetv" },
-      //{ url: "https://iptv-org.github.io/iptv/categories/general.m3u", category: "country" },
+      { url: "https://iptv-org.github.io/iptv/categories/general.m3u", category: "country" },
       { url: "https://iptv-org.github.io/iptv/categories/music.m3u", category: "music"},
       { url: "https://iptv-org.github.io/iptv/countries/jp.m3u", category: "country", country: "JP" },
       { url: "https://iptv-org.github.io/iptv/countries/kr.m3u", category: "country", country: "KR" },
