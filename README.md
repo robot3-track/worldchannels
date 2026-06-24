@@ -1,3 +1,4 @@
+![First Screenshot](Screenshot%202026-06-23%20182943.png)
 # Global Broadcast Network & 2026 World Cup Hub
 
 A high-performance, real-time IPTV streaming dashboard designed for the 2026 World Cup and global sports events. This application provides a unified interface to access sports feeds, national broadcasters, and real-time news from across the globe.
@@ -8,6 +9,8 @@ A high-performance, real-time IPTV streaming dashboard designed for the 2026 Wor
 - **World Map Interface**: Interactive geospatial dashboard to discover broadcasts by location.
 - **Real-Time Health Monitoring**: Automatic background verification of stream uptime and latency.
 - **Themed UI**: Elegant Dark and Light modes for optimized viewing in any environment.
+
+![Second Screenshot](Screenshot%202026-06-23%20183018.png)
 
 ## 2026 World Cup Broadcasters
 
