@@ -1045,8 +1045,8 @@ export default async function handler(request, response) {
 
   try {
     const sources = [
-      //{ url: "https://iptv-org.github.io/iptv/categories/news.m3u", category: "news" },
-      //{ url: "https://iptv-org.github.io/iptv/categories/sports.m3u", category: "sports" },
+      { url: "https://iptv-org.github.io/iptv/categories/news.m3u", category: "news" },
+      { url: "https://iptv-org.github.io/iptv/categories/sports.m3u", category: "sports" },
       { url: "https://iptv-org.github.io/iptv/categories/science.m3u", category: "science" },
       { url: "https://iptv-org.github.io/iptv/categories/movies.m3u", category: "freetv" },
       { url: "https://iptv-org.github.io/iptv/categories/general.m3u", category: "country" },
