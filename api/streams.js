@@ -304,6 +304,17 @@ const staticStreams = [
     lon: 20.4573,
   },
   {
+    id: "sports-foxsports-1",
+    name: "FS1 (Fox Sports)",
+    url: "https://amg02855-foxsports-amg02855c1-xumo-us-1755.playouts.now.amagi.tv/Fox-Sports-AmazonNews/playlist.m3u8", // High quality, stable FS1 stream
+    category: "sports",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
+    status: "online",
+    lat: 34.0522, // Los Angeles, US (Fox Sports HQ)
+    lon: -118.2437,
+  },
+  {
     id: "sports-fifaplus",
     name: "FIFA+ Live",
     url: "https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8", // High quality official stable FIFA+ live channel stream
@@ -330,7 +341,7 @@ const staticStreams = [
     name: "TR Sport TV",
     url: "https://livetr.teleromagna.it/mia/live/playlist.m3u8", // TRTV working server
     category: "sports",
-    country: "IN",
+    country: "IT",
     logo: "https://static.wikia.nocookie.net/logopedia/images/7/7a/TR_TV.png/revision/latest?cb=20250116224024",
     status: "online",
     lat: 20.5937,
@@ -348,70 +359,59 @@ const staticStreams = [
     lon: 8.5417,
   },
   {
-    id: "sports-eurosport-1",
-    name: "Eurosport 1 (Live)",
-    url: "https://d2a02gfcid1k4a.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-clihr3vf54f9j/Eurosport_1.m3u8",
-    category: "sports",
-    country: "Global",
-    logo: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 48.8566,
-    lon: 2.3522,
-  },
-  {
     id: "sports-sportsgrid",
     name: "SportsGrid Live",
     url: "https://sportsgrid-klowdtv.amagi.tv/playlist.m3u8",
     category: "sports",
     country: "US",
-    logo: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/1/16/SportsGrid_Live.png/revision/latest?cb=20250821170615",
     status: "online",
     lat: 40.7128, // New York, US
     lon: -74.0060,
   },
   {
-    id: "sports-ftf",
-    name: "For The Fans (FTF) Sports",
-    url: "https://ftf-klowdtv.amagi.tv/playlist.m3u8",
+    id: "sports-es-dazn",
+    name: "Red Bull TV Sports (ES)",
+    url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8", // Red Bull TV sports stream
     category: "sports",
-    country: "US",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
+    country: "ES",
+    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
     status: "online",
-    lat: 34.0522, // Los Angeles, US
-    lon: -118.2437,
+    lat: 40.4168, // Madrid, Spain
+    lon: -3.7038,
   },
   {
-    id: "sports-edgesport",
-    name: "EDGE Sport Live",
-    url: "https://edgesport-edge.amagi.tv/playlist.m3u8",
+    id: "news-fox-weather",
+    name: "Fox Weather US",
+    url: "https://jmp2.uk/plu-640a68880e884c0009979cc2.m3u8",
+    category: "news",
+    country: "US",
+    logo: "https://images.pluto.tv/channels/640a68880e884c0009979cc2/colorLogoPNG_1779087602438.png",
+    status: "online",
+    lat: 40.7589, // New York City, US
+    lon: 73.9822,
+  },
+  {
+    id: "sports-fr-beinsportsxtra",
+    name: "beIN SPORTS Xtra (US)",
+    url: "https://bein-beinxtrasports-firetv.amagi.tv/playlist.m3u8", // High-quality, CORS-friendly beIN sports stream
+    category: "sports",
+    country: "US",
+    logo: "https://images.unsplash.com/photo-1541252260730-0412e8e2108e?auto=format&fit=crop&w=120&h=120&q=80",
+    status: "online",
+    lat: 25.826725, // Florida, US
+    lon: -80.314954,
+  },
+  {
+    id:"sports-bbc-topgear",
+    name: "BBC Top Gear (UK)",
+    url: "https://amg00793-amg00793c5-firetv-us-4068.playouts.now.amagi.tv/playlist.m3u8", // High-quality, stable BBC Top Gear stream
     category: "sports",
     country: "UK",
-    logo: "https://images.unsplash.com/photo-1541252260730-0412e8e2108e?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/b/b3/Top_Gear_%282021%29.png/revision/latest?cb=20220211183139",
     status: "online",
     lat: 51.5074, // London, UK
     lon: -0.1278,
-  },
-  {
-    id: "sports-stadium",
-    name: "Stadium Sports",
-    url: "https://stadium-stadium.amagi.tv/playlist.m3u8",
-    category: "sports",
-    country: "US",
-    logo: "https://images.unsplash.com/photo-1519766304817-4f37bda74a27?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 41.8781, // Chicago, US
-    lon: -87.6298,
-  },
-  {
-    id: "sports-unbeaten",
-    name: "Unbeaten Sports Live",
-    url: "https://unbeaten-distro.amagi.tv/playlist.m3u8",
-    category: "sports",
-    country: "Global",
-    logo: "https://images.unsplash.com/photo-1471295263379-6ca2e4109cf1?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 55.3781,
-    lon: -3.4360,
   },
   {
     id: "sports-motorvision",
@@ -445,17 +445,6 @@ const staticStreams = [
     status: "online",
     lat: 40.7128, // New York, NY
     lon: -74.0060,
-  },
-  {
-    id: "sports-colatv-asia",
-    name: "ColaTV Vietnam (Premium Sports)",
-    url: "https://colatv.live", // Iframe source for premium sports - World Cup 2026 partner
-    category: "sports",
-    country: "VN",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 10.7769, // Ho Chi Minh City
-    lon: 106.7009,
   },
   {
     id: "sports-it-rai-sport",
@@ -506,17 +495,6 @@ const staticStreams = [
     status: "online",
     lat: 48.8566,
     lon: 2.3522,
-  },
-  {
-    id: "sports-us-foxsports",
-    name: "Fox Sports 1 (US)",
-    url: "https://fox-foxsports1-us.samsung.wurl.com/manifest/playlist.m3u8", // High-quality Wurl Fox Sports 1 feed
-    category: "sports",
-    country: "US",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 34.0522, // Los Angeles, California
-    lon: -118.2437,
   },
   {
     id: "sports-pluto-sports",
@@ -640,17 +618,6 @@ const staticStreams = [
     lon: -79.3832,
   },
   {
-    id: "sports-ar-tycsports",
-    name: "TyC Sports (Live)",
-    url: "https://live-04-11-tyc24.vodgc.net/tyc24/index_tyc24_1080.m3u8", // Highly stable 1080p direct CDN stream for TyC Sports Argentina Live feed
-    category: "sports",
-    country: "AR",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: -34.6037, // Buenos Aires, Argentina
-    lon: -58.3816,
-  },
-  {
     id: "sports-ar-tvpublica",
     name: "TV Pública Argentina (Live)",
     url: "https://live-col.solumedia.com.ar/tvpublica/720/playlist.m3u8", // TV Pública Argentina Live feed (Broadcasting the World Cup!)
@@ -673,50 +640,6 @@ const staticStreams = [
     lon: -43.1729,
   },
   {
-    id: "sports-uk-bbc",
-    name: "Sky News (UK/Sports News Feed)",
-    url: "https://skynews-live.akamaized.net/hls/live/2007802/skynewsn-global/master.m3u8", // Solid, high-quality UK broadcaster stream
-    category: "sports",
-    country: "UK",
-    logo: "https://images.unsplash.com/photo-1541252260730-0412e8e2108e?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 51.5074, // London, United Kingdom
-    lon: -0.1278,
-  },
-  {
-    id: "sports-uk-itv",
-    name: "Edge Sport Live (UK)",
-    url: "https://edgesport-samsung.wurl.com/manifest/playlist.m3u8", // Premium Wurl Edge Sports stream
-    category: "sports",
-    country: "UK",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 51.5074, // London, United Kingdom
-    lon: -0.1278,
-  },
-  {
-    id: "sports-de-ard",
-    name: "Deutsche Welle (DE)",
-    url: "https://dwstream72-lh.akamaihd.net/i/dwstream72_1@119305/master.m3u8", // High quality German public broadcaster stream
-    category: "sports",
-    country: "DE",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 52.5200, // Berlin, Germany
-    lon: 13.4050,
-  },
-  {
-    id: "sports-de-zdf",
-    name: "Deutsche Welle (DE Backup)",
-    url: "https://dwstream72-lh.akamaihd.net/i/dwstream72_1@119305/master.m3u8", // German language broadcast live stream
-    category: "sports",
-    country: "DE",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 49.9929, // Mainz, Germany (ZDF HQ)
-    lon: 8.2473,
-  },
-  {
     id: "sports-es-rtve",
     name: "RTVE Teledeporte (Live)",
     url: "https://d2a02gfcid1k4a.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-clihr3vf54f9j/Teledeporte_ES.m3u8", // Cloudfront-cached direct stream for RTVE Teledeporte
@@ -726,50 +649,6 @@ const staticStreams = [
     status: "online",
     lat: 40.4168, // Madrid, Spain
     lon: -3.7038,
-  },
-  {
-    id: "sports-es-mediapro",
-    name: "Unbeaten Sports (ES)",
-    url: "https://unbeaten-samsung.wurl.com/manifest/playlist.m3u8", // High quality sports stream
-    category: "sports",
-    country: "ES",
-    logo: "https://images.unsplash.com/photo-1541252260730-0412e8e2108e?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 41.3851, // Barcelona, Spain (Mediapro HQ)
-    lon: 2.1734,
-  },
-  {
-    id: "sports-es-dazn",
-    name: "Red Bull TV Sports (ES)",
-    url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8", // Red Bull TV sports stream
-    category: "sports",
-    country: "ES",
-    logo: "https://images.unsplash.com/photo-1517649763962-0c623066013b?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 40.4168, // Madrid, Spain
-    lon: -3.7038,
-  },
-  {
-    id: "sports-fr-tf1",
-    name: "France 24 (FR)",
-    url: "https://static.france24.com/live/F24_FR_LO_HLS/live_web.m3u8", // France 24 French stream backup
-    category: "sports",
-    country: "FR",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 48.8566, // Paris, France
-    lon: 2.3522,
-  },
-  {
-    id: "sports-fr-beinsports",
-    name: "beIN SPORTS (FR)",
-    url: "https://beinsports-samsung.wurl.com/manifest/playlist.m3u8", // High-quality, CORS-friendly beIN sports stream
-    category: "sports",
-    country: "FR",
-    logo: "https://images.unsplash.com/photo-1541252260730-0412e8e2108e?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 48.8566, // Paris, France
-    lon: 2.3522,
   },
   {
     id: "sports-nl-nos",
