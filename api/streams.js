@@ -864,10 +864,10 @@ const staticStreams = [
   {
     id: "news-france24",
     name: "France 24 English",
-    url: "https://static.france24.com/live/F24_EN_LO_HLS/live_web.m3u8",
+    url: "https://youtu.be/HvZt-nh9sGg",
     category: "news",
     country: "FR",
-    logo: "https://images.unsplash.com/photo-1495020689067-958852a6565d?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/c/c1/France_24_logo_%282013%29.svg",
     status: "online",
     lat: 48.8566, // Paris, France
     lon: 2.3522,
@@ -897,10 +897,10 @@ const staticStreams = [
   {
     id: "news-abc",
     name: "ABC News Live",
-    url: "https://abc-abcnews-1-us.samsung.wurl.com/manifest/playlist.m3u8",
+    url: "https://www.youtube.com/watch?v=iipR5yUp36o",
     category: "news",
     country: "US",
-    logo: "https://images.unsplash.com/photo-1546422904-90eabf3bac0a?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://s.abcnews.com/images/Live/abc_news_live-abc-ml-250210_1739199021469_hpMain_16x9_608.jpg",
     status: "online",
     lat: 37.0902,
     lon: -95.7129,
@@ -920,8 +920,8 @@ const staticStreams = [
   // --- SCIENCE (Category: science, Country: Global/Specific) ---
   {
     id: "science-nasa",
-    name: "NASA TV Public Live",
-    url: "https://ntv-intel-01.akamaized.net/hls/live/2042749/NASA-NTV-1-HQ/master.m3u8",
+    name: "NASA Live Space Station",
+    url: "https://www.youtube.com/watch?v=uwXgcTc8oY8",
     category: "science",
     country: "US",
     logo: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=120&h=120&q=80",
