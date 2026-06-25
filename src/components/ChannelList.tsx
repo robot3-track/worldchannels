@@ -310,7 +310,7 @@ export default function ChannelList({
                     : "bg-neutral-900/20 border-neutral-800 text-neutral-500 hover:bg-neutral-900/60 hover:text-neutral-200"
                   }`}
               >
-                [SHOW_MORE_FEEDS // FETCH_NEXT_100]
+                Show More
               </button>
             )}
           </>
