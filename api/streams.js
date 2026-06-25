@@ -321,8 +321,7 @@ const staticStreams = [
   {
     id: "sports-foxsports-1",
     name: "FS1 (Fox Sports)",
-    url: "http://43.250.127.149:8080/live/play/ZWxaR05ubE5Zekp4VlZGNWRrODRObXREVmpoQmJqUnFjR2hKY1hZd2RuTlpOMDV0ZFdJd1VVOUtWVDA9/2432261", // High quality, stable FS1 stream
-    category: "sports",
+    url: "http://45.139.122.199:2095/live/ftU3Se0G/nSgzwb7/2432261.m3u8",
     category: "world cup",
     country: "US",
     logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
