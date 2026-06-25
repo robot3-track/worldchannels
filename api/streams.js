@@ -984,7 +984,8 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/dk.m3u", category: "country", country: "DK" },
       { url: "https://iptv-org.github.io/iptv/countries/nl.m3u", category: "country", country: "NL" },
       { url: "https://iptv-org.github.io/iptv/countries/be.m3u", category: "country", country: "BE" },
-      { url: "https://iptv-org.github.io/iptv/countries/ch.m3u", category: "country", country: "CH" }
+      { url: "https://iptv-org.github.io/iptv/countries/ch.m3u", category: "country", country: "CH" },
+      { url: "https://iptv-org.github.io/iptv/index.m3u", category: "general"}
     ];
 
     const m3uResults = await Promise.all(sources.map(src => downloadM3U(src.url).then(data => parseM3U(data, src.category))));
