@@ -7,8 +7,9 @@ import {
   Award,
   BookOpen,
   SlidersHorizontal,
-  ChevronRight,
-  Filter
+  ArrowRight,
+  Filter,
+  Activity
 } from "lucide-react";
 import { StreamChannel, CategoryFilter, CountryFilter } from "../types";
 
@@ -60,84 +61,80 @@ export default function ChannelList({
     });
   }, [streams, selectedCategory, countryFilter, searchTerm]);
 
-  // Countries dropdown listing
+  // Dynamic selector metadata counters
+  const getCategoryCount = (catValue: CategoryFilter) => {
+    return streams.filter(s => catValue === "all" || s.category === catValue).length;
+  };
+
   const countriesList: { code: CountryFilter | "all"; name: string }[] = [
-    { code: "all", name: "All Regions" },
-    { code: "US", name: "United States" },
-    { code: "UK", name: "United Kingdom" },
-    { code: "AU", name: "Australia" },
-    { code: "CA", name: "Canada" },
-    { code: "FR", name: "France" },
-    { code: "DE", name: "Germany" },
-    { code: "BR", name: "Brazil" },
-    { code: "JP", name: "Japan" },
-    { code: "TR", name: "Turkey" },
-    { code: "ID", name: "Indonesia" },
-    { code: "CN", name: "China" },
-    { code: "TW", name: "Taiwan" },
-    { code: "KR", name: "South Korea" },
-    { code: "ES", name: "Spain" },
-    { code: "RU", name: "Russia" },
-    { code: "LB", name: "Lebanon" },
-    { code: "AF", name: "Afghanistan" },
-    { code: "VN", name: "Vietnam" },
-    { code: "KP", name: "North Korea" },
-    { code: "IN", name: "India" },
-    { code: "SA", name: "Saudi Arabia" },
-    { code: "MX", name: "Mexico" },
-    { code: "EG", name: "Egypt" },
-    { code: "IT", name: "Italy" },
-    { code: "SG", name: "Singapore" },
+    { code: "all", name: "All Regions" }, { code: "US", name: "United States" },
+    { code: "UK", name: "United Kingdom" }, { code: "AU", name: "Australia" },
+    { code: "CA", name: "Canada" }, { code: "FR", name: "France" },
+    { code: "DE", name: "Germany" }, { code: "BR", name: "Brazil" },
+    { code: "JP", name: "Japan" }, { code: "TR", name: "Turkey" },
+    { code: "ID", name: "Indonesia" }, { code: "CN", name: "China" },
+    { code: "TW", name: "Taiwan" }, { code: "KR", name: "South Korea" },
+    { code: "ES", name: "Spain" }, { code: "RU", name: "Russia" },
+    { code: "LB", name: "Lebanon" }, { code: "AF", name: "Afghanistan" },
+    { code: "VN", name: "Vietnam" }, { code: "KP", name: "North Korea" },
+    { code: "IN", name: "India" }, { code: "SA", name: "Saudi Arabia" },
+    { code: "MX", name: "Mexico" }, { code: "EG", name: "Egypt" },
+    { code: "IT", name: "Italy" }, { code: "SG", name: "Singapore" },
     { code: "HK", name: "Hong Kong" }
   ];
 
   return (
-    <div className={`border rounded-3xl p-5 flex flex-col h-[650px] shadow-xs relative overflow-hidden transition-all ${
+    <div className={`border p-6 flex flex-col h-[650px] relative transition-all duration-300 font-sans ${
       theme === "light"
-        ? "bg-white border-slate-200"
-        : "bg-slate-950 border-slate-900"
+        ? "bg-[#faf9f6] border-zinc-300/80 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]"
+        : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.05)]"
     }`}>
-      {/* Header & Search */}
+      
+      {/* Structural Header */}
       <div className="mb-5 flex flex-col gap-4">
-        <div className={`flex items-center justify-between pb-3 border-b ${theme === "light" ? "border-slate-100" : "border-slate-900"}`}>
+        <div className="flex items-end justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-neutral-800">
           <div className="flex items-center gap-2">
-            <Filter className={`w-4 h-4 ${theme === "light" ? "text-slate-500" : "text-slate-400"}`} />
-            <h3 className={`text-sm font-semibold ${theme === "light" ? "text-slate-800" : "text-slate-200"}`}>
-              Channel Directory
+            <div className={`p-1 rounded-sm ${theme === "light" ? "bg-zinc-900 text-white" : "bg-neutral-800 text-indigo-400"}`}>
+              <Filter className="w-3.5 h-3.5" />
+            </div>
+            <h3 className={`text-xs font-black tracking-tight uppercase ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
+              Master Control Index
             </h3>
           </div>
-          <span className={`text-[11px] font-sans font-medium ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
-            {processedStreams.length} available
+          <span className={`text-[10px] font-mono tracking-wider px-1.5 py-0.5 rounded ${
+            theme === "light" ? "bg-zinc-200 text-zinc-700" : "bg-neutral-900 text-neutral-400"
+          }`}>
+            REC: {processedStreams.length} FEEDS
           </span>
         </div>
 
-        {/* Input search */}
+        {/* Tactical Search Box */}
         <div className="relative">
           <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <Search className={`h-4 w-4 ${theme === "light" ? "text-slate-400" : "text-slate-500"}`} />
+            <Search className={`h-4 w-4 ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`} />
           </span>
           <input
             type="text"
-            className={`w-full border rounded-2xl pl-9 pr-4 py-2 text-xs transition-all ${
+            className={`w-full border-2 text-xs transition-all duration-150 rounded-none pl-9 pr-4 py-2.5 font-medium ${
               theme === "light"
-                ? "bg-slate-50 border-slate-200 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-slate-450 focus:ring-1 focus:ring-slate-450"
-                : "bg-slate-900 border-slate-800/80 text-slate-200 placeholder-slate-500 focus:outline-none focus:border-slate-700 focus:ring-1 focus:ring-slate-700"
+                ? "bg-white border-zinc-900 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:bg-zinc-50"
+                : "bg-neutral-950 border-neutral-800 text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-indigo-500"
             }`}
-            placeholder="Search stream name, tags, source..."
+            placeholder="TYPE CHNL NAME, TAG, SOURCE..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
 
-      {/* Category Pills */}
-      <div className="mb-4">
-        <span className={`text-[10px] font-semibold uppercase tracking-wider block mb-2.5 font-sans ${
-          theme === "light" ? "text-slate-500" : "text-slate-400"
+      {/* Grid-style Tab Matrix */}
+      <div className="mb-5">
+        <span className={`text-[9px] font-black uppercase tracking-widest block mb-2 font-mono ${
+          theme === "light" ? "text-zinc-500" : "text-neutral-500"
         }`}>
-          Filter by Type
+          // CATEGORY SELECT
         </span>
-        <div className="flex flex-wrap gap-1.5 max-h-24 overflow-y-auto no-scrollbar">
+        <div className="grid grid-cols-2 gap-1 max-h-24 overflow-y-auto no-scrollbar">
           {categories.map((cat) => {
             const Icon = cat.icon;
             const isSelected = selectedCategory === cat.value;
@@ -145,67 +142,74 @@ export default function ChannelList({
               <button
                 key={cat.value}
                 onClick={() => onChangeCategory(cat.value)}
-                className={`flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs transition-all border ${
+                className={`flex items-center justify-between px-2.5 py-1.5 text-left text-xs border transition-all duration-100 font-medium ${
                   isSelected
-                    ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-600 dark:text-emerald-400 font-semibold"
+                    ? theme === "light"
+                      ? "bg-zinc-900 border-zinc-900 text-white"
+                      : "bg-indigo-600 border-indigo-600 text-white shadow-[2px_2px_0px_0px_rgba(255,255,255,0.1)]"
                     : theme === "light"
-                    ? "bg-slate-50 border-slate-100 text-slate-600 hover:text-slate-900 hover:border-slate-300"
-                    : "bg-slate-900/40 border-slate-900 text-slate-400 hover:text-slate-200 hover:border-slate-800"
+                    ? "bg-white border-zinc-200 text-zinc-700 hover:border-zinc-400"
+                    : "bg-neutral-950 border-neutral-900 text-neutral-400 hover:border-neutral-700 hover:text-neutral-200"
                 }`}
               >
-                <Icon className={`w-3.5 h-3.5 ${isSelected ? 'text-emerald-500' : 'text-slate-400'}`} />
-                <span>{cat.label}</span>
+                <div className="flex items-center gap-2 truncate">
+                  <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${isSelected ? 'text-white' : 'text-zinc-400'}`} />
+                  <span className="truncate text-[11px] font-bold uppercase tracking-tight">{cat.label}</span>
+                </div>
+                <span className={`text-[9px] font-mono px-1 rounded-sm ml-1 ${isSelected ? 'bg-white/20 text-white' : 'bg-zinc-100 dark:bg-neutral-900 text-zinc-500'}`}>
+                  {getCategoryCount(cat.value)}
+                </span>
               </button>
             );
           })}
         </div>
       </div>
 
-      {/* Region Dropdown */}
+      {/* Minimalist Regional Dropdown */}
       <div className="mb-5">
-        <span className={`text-[10px] font-semibold uppercase tracking-wider block mb-2.5 font-sans ${
-          theme === "light" ? "text-slate-500" : "text-slate-400"
+        <span className={`text-[9px] font-black uppercase tracking-widest block mb-1.5 font-mono ${
+          theme === "light" ? "text-zinc-500" : "text-neutral-500"
         }`}>
-          Region Selection
+          // REGION FREQUENCY
         </span>
         <select
           value={countryFilter}
           onChange={(e) => setCountryFilter(e.target.value as CountryFilter | "all")}
-          className={`w-full border rounded-2xl px-3 py-2 text-xs transition-all font-sans cursor-pointer ${
+          className={`w-full border px-3 py-2 text-xs transition-all font-mono tracking-tight cursor-pointer ${
             theme === "light"
-              ? "bg-slate-50 border-slate-200 text-slate-800 focus:outline-none focus:border-slate-400"
-              : "bg-slate-900 border-slate-800/80 text-slate-200 focus:outline-none focus:border-slate-700"
+              ? "bg-white border-zinc-200 text-zinc-900 focus:outline-none focus:border-zinc-900"
+              : "bg-neutral-950 border-neutral-900 text-neutral-300 focus:outline-none focus:border-indigo-500"
           }`}
         >
           {countriesList.map((country) => (
             <option
               key={country.code}
               value={country.code}
-              className={theme === "light" ? "bg-white text-slate-800" : "bg-slate-950 text-slate-200"}
+              className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-200"}
             >
-              {country.name}
+              {country.code === "all" ? "GLOBAL BROADCASTS" : `[${country.code}] ${country.name.toUpperCase()}`}
             </option>
           ))}
         </select>
       </div>
 
-      {/* Channel Rows */}
-      <div className="flex-1 overflow-y-auto pr-1 space-y-2 no-scrollbar scroll-smooth">
-        <div className="flex justify-between items-center text-[10px] font-semibold text-slate-500 px-1 mb-1 font-sans uppercase tracking-wider">
-          <span>Broadcast Feeds</span>
-          <span>Status</span>
+      {/* Broadcast Feed Rows */}
+      <div className="flex-1 overflow-y-auto pr-1 space-y-1 no-scrollbar scroll-smooth">
+        <div className="flex justify-between items-center text-[9px] font-bold text-zinc-400 dark:text-neutral-600 px-1 mb-1 font-mono uppercase tracking-wider">
+          <span>STATION MATCHES</span>
+          <span>SIG METRICS</span>
         </div>
 
         {processedStreams.length === 0 ? (
-          <div className={`text-center py-16 rounded-2xl border border-dashed ${
-            theme === "light" ? "bg-slate-50 border-slate-200" : "bg-slate-900/10 border-slate-900"
+          <div className={`text-center py-12 border-2 border-dashed ${
+            theme === "light" ? "bg-zinc-100/50 border-zinc-300" : "bg-neutral-950/40 border-neutral-800"
           }`}>
-            <Globe className="w-8 h-8 text-slate-400 mx-auto mb-2 animate-pulse" />
-            <p className={`text-xs font-semibold ${theme === "light" ? "text-slate-700" : "text-slate-450"}`}>No Channels Found</p>
-            <p className={`text-[11px] mt-1 max-w-[200px] mx-auto leading-relaxed ${
-              theme === "light" ? "text-slate-500" : "text-slate-550"
+            <Activity className="w-5 h-5 text-zinc-400 mx-auto mb-2 animate-pulse" />
+            <p className={`text-xs font-bold font-mono uppercase tracking-wide ${theme === "light" ? "text-zinc-700" : "text-neutral-400"}`}>NO SIGNAL DETECTED</p>
+            <p className={`text-[10px] mt-1 max-w-[200px] mx-auto leading-relaxed ${
+              theme === "light" ? "text-zinc-400" : "text-neutral-600"
             }`}>
-              Try adjusting your region filter or search terms.
+              Check keywords or broaden frequency criteria.
             </p>
           </div>
         ) : (
@@ -215,19 +219,20 @@ export default function ChannelList({
               <button
                 key={stream.id}
                 onClick={() => onSelectChannel(stream)}
-                className={`w-full text-left flex items-center justify-between p-2 rounded-2xl border transition-all ${
+                className={`w-full text-left flex items-center justify-between p-2 border transition-all duration-150 group ${
                   isSelected
                     ? theme === "light"
-                      ? "bg-slate-50 border-slate-300 text-slate-900 shadow-sm ring-1 ring-slate-300"
-                      : "bg-slate-900 border-slate-800 text-slate-100 shadow-md ring-1 ring-slate-800"
+                      ? "bg-white border-zinc-900 text-zinc-900 translate-x-1"
+                      : "bg-neutral-950 border-indigo-500 text-neutral-100 translate-x-1"
                     : theme === "light"
-                    ? "bg-white border-transparent text-slate-700 hover:bg-slate-50"
-                    : "bg-slate-900/30 border-transparent text-slate-300 hover:bg-slate-900/60"
+                    ? "bg-white border-zinc-200/80 text-zinc-800 hover:bg-zinc-50 hover:border-zinc-400"
+                    : "bg-neutral-950/40 border-neutral-900 text-neutral-400 hover:bg-neutral-950 hover:border-neutral-700 hover:text-neutral-200"
                 }`}
               >
                 <div className="flex items-center gap-3 truncate pr-2">
-                  <div className={`w-8 h-8 rounded-xl overflow-hidden border flex items-center justify-center flex-shrink-0 ${
-                    theme === "light" ? "bg-slate-50 border-slate-200" : "bg-slate-950 border-slate-800/80"
+                  {/* Television Box Frame */}
+                  <div className={`w-7 h-7 overflow-hidden border flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 ${
+                    theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"
                   }`}>
                     {stream.logo ? (
                       <img
@@ -240,44 +245,45 @@ export default function ChannelList({
                         referrerPolicy="no-referrer"
                       />
                     ) : (
-                      <Tv className="w-4 h-4 text-slate-400" />
+                      <Tv className="w-3.5 h-3.5 text-zinc-400" />
                     )}
                   </div>
 
                   <div className="truncate flex flex-col justify-center">
-                    <span className={`text-xs font-medium truncate ${
+                    <span className={`text-xs font-bold tracking-tight truncate ${
                       isSelected
-                        ? "text-emerald-600 dark:text-emerald-400 font-semibold"
+                        ? "text-zinc-900 dark:text-indigo-400"
                         : theme === "light"
-                        ? "text-slate-800 font-medium"
-                        : "text-slate-200"
+                        ? "text-zinc-900"
+                        : "text-neutral-300"
                     }`}>
                       {stream.name}
                     </span>
-                    <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-slate-500 font-sans font-medium">
-                      <span className="capitalize">{stream.category}</span>
-                      <span>•</span>
-                      <span className="uppercase">{stream.country}</span>
+                    <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-zinc-400 font-mono font-medium">
+                      <span className="uppercase tracking-tight">{stream.category}</span>
+                      <span>//</span>
+                      <span className="font-bold text-zinc-500 dark:text-neutral-500">{stream.country}</span>
                     </div>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-2 flex-shrink-0">
-                  <span
-                    className={`w-2 h-2 rounded-full ${
-                      stream.status === "online"
-                        ? "bg-emerald-500"
-                        : stream.status === "unstable"
-                        ? "bg-amber-500"
-                        : "bg-rose-500"
-                    }`}
-                  />
-                  <ChevronRight className={`w-4 h-4 transition-transform duration-300 ${
+                <div className="flex items-center gap-2.5 flex-shrink-0">
+                  {/* Technical Live Status Bar */}
+                  <div className="flex items-center gap-1 font-mono text-[9px] font-bold tracking-tighter">
+                    <span className={
+                      stream.status === "online" ? "text-emerald-500" : stream.status === "unstable" ? "text-amber-500" : "text-rose-500"
+                    }>
+                      ●
+                    </span>
+                    <span className="text-[8px] opacity-40 group-hover:opacity-100 transition-opacity">
+                      {stream.status.toUpperCase()}
+                    </span>
+                  </div>
+                  
+                  <ArrowRight className={`w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 ${
                     isSelected
-                      ? "text-slate-500 translate-x-0.5"
-                      : theme === "light"
-                      ? "text-slate-300"
-                      : "text-slate-600"
+                      ? "text-zinc-900 dark:text-indigo-400"
+                      : "text-zinc-300 dark:text-neutral-800"
                   }`} />
                 </div>
               </button>

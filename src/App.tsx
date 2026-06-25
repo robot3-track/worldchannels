@@ -210,116 +210,135 @@ export default function App() {
           : "bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.03)_0%,transparent_50%)]"
       }`} />
 
-      {/* Main Top Header */}
-      <header className={`border-b backdrop-blur-md sticky top-0 z-50 transition-all duration-300 ${
+      {/* Header / Top Navigation Bar */}
+      <header className={`border-b backdrop-blur-md sticky top-0 z-50 transition-all duration-300 font-sans ${
         theme === "light"
-          ? "border-slate-200 bg-white/80"
-          : "border-slate-900 bg-slate-950/80"
+          ? "border-zinc-300/80 bg-[#faf9f6]/90"
+          : "border-neutral-900 bg-[#0d0e12]/90"
       }`}>
-        <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-4">
           
-          {/* Logo Brand */}
+          {/* Logo Brand / Hardware Plate */}
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="absolute inset-0 bg-emerald-500 rounded-2xl blur-md opacity-20 animate-pulse" />
-              <div className={`w-10 h-10 border rounded-2xl flex items-center justify-center shadow-xs relative ${
-                theme === "light" ? "bg-slate-100 border-slate-200" : "bg-slate-900 border-slate-800"
+              <div className="absolute inset-0 bg-indigo-500 rounded-none blur-md opacity-10 animate-pulse" />
+              <div className={`w-9 h-9 border flex items-center justify-center relative rounded-none ${
+                theme === "light" ? "bg-white border-zinc-300" : "bg-neutral-950 border-neutral-800"
               }`}>
-                <Globe className="w-5 h-5 text-emerald-500 animate-spin" style={{ animationDuration: '40s' }} />
+                <Globe className={`w-4 h-4 text-indigo-500 ${loading ? 'animate-spin' : ''}`} style={!loading ? { animation: 'none' } : undefined} />
+                <span className="absolute top-0 left-0 text-[6px] font-mono text-zinc-400 p-0.5 leading-none">SYS</span>
               </div>
             </div>
+            
             <div>
               <div className="flex items-center gap-2">
-                <h1 className={`text-md font-bold tracking-tight ${theme === "light" ? "text-slate-800" : "text-slate-100"}`}>
+                <h1 className={`text-sm font-black uppercase tracking-tight ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
                   World Channels
                 </h1>
-                <span className="text-[9px] font-semibold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-500/20">
-                  LIVE
+                <span className="text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 border border-emerald-500/20">
+                  LIVE_FEED
                 </span>
               </div>
-              <p className={`text-[10px] font-medium tracking-wide ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
-                Global Broadcast Explorer & Player
+              <p className={`text-[10px] font-mono uppercase tracking-wider ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
+                Global Broadcast Explorer // Matrix Display
               </p>
             </div>
           </div>
 
-          {/* Clean Modern Telemetry & Control Suite */}
-          <div className="flex flex-wrap items-center justify-center gap-3 md:gap-5 text-xs">
-            {/* Dark / Light Toggle */}
+          {/* Telemetry Control Rack */}
+          <div className="flex items-center gap-2 text-xs font-mono">
+            
+            {/* System Mode Switch (Theme Toggle) */}
             <button
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className={`p-2 rounded-xl border transition-all active:scale-95 cursor-pointer flex items-center justify-center ${
+              className={`px-2.5 py-2 border text-[10px] font-bold uppercase transition-all active:scale-98 cursor-pointer flex items-center gap-2 ${
                 theme === "light"
-                  ? "bg-slate-100 border-slate-200 text-slate-700 hover:bg-slate-200"
-                  : "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-850"
+                  ? "bg-white border-zinc-300 text-zinc-800 hover:bg-zinc-50 hover:border-zinc-400"
+                  : "bg-neutral-950 border-neutral-800 text-neutral-400 hover:border-neutral-700 hover:text-neutral-200"
               }`}
-              title={theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}
+              title={theme === "light" ? "Switch to Dark Operations" : "Switch to Light Operations"}
             >
               {theme === "light" ? (
-                <Moon className="w-4 h-4" />
+                <>
+                  <Moon className="w-3.5 h-3.5 text-indigo-600" />
+                  <span>OPR: LIGHT_MODE</span>
+                </>
               ) : (
-                <Sun className="w-4 h-4 text-amber-400" />
+                <>
+                  <Sun className="w-3.5 h-3.5 text-amber-500" />
+                  <span>OPR: DARK_CORE</span>
+                </>
               )}
             </button>
 
-            {/* Statistics and Refresh Controls */}
-            <div className={`flex items-center gap-4 px-4 py-2 rounded-2xl border shadow-xs font-sans ${
+            {/* Signal Metrics Block */}
+            <div className={`flex items-center gap-3 px-3 py-2 border tracking-tight text-[11px] ${
               theme === "light"
-                ? "bg-slate-100/55 border-slate-200 text-slate-600"
-                : "bg-slate-900/60 border-slate-800/80 text-slate-400"
+                ? "bg-white border-zinc-300 text-zinc-600"
+                : "bg-neutral-950 border-neutral-800 text-neutral-400"
             }`}>
               <div className="flex items-center gap-1.5">
-                <span className={`w-1.5 h-1.5 rounded-full ${theme === "light" ? "bg-slate-400" : "bg-slate-500"}`} />
-                <span className="font-medium">Streams: <strong className={theme === "light" ? "text-slate-800 font-semibold" : "text-slate-200 font-semibold"}>{stats.total}</strong></span>
+                <span className="font-bold">FEEDS: <span className={theme === "light" ? "text-zinc-900" : "text-neutral-100"}>{stats.total}</span></span>
               </div>
-              <div className={`h-3.5 w-px ${theme === "light" ? "bg-slate-200" : "bg-slate-850"}`} />
+              
+              <div className={`h-3 w-px ${theme === "light" ? "bg-zinc-200" : "bg-neutral-800"}`} />
+              
               <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="font-medium">Active: <strong className="text-emerald-600 dark:text-emerald-400 font-semibold">{stats.online} online</strong></span>
+                <span className="relative flex h-1.5 w-1.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                </span>
+                <span className="font-bold">ON_AIR: <span className="text-emerald-600 dark:text-emerald-400">{stats.online}</span></span>
               </div>
-              <div className={`h-3.5 w-px ${theme === "light" ? "bg-slate-200" : "bg-slate-850"}`} />
+              
+              <div className={`h-3 w-px ${theme === "light" ? "bg-zinc-200" : "bg-neutral-800"}`} />
+              
+              {/* Tactical Action Triggers */}
               <button
                 onClick={fetchStreams}
                 disabled={loading}
-                className={`transition-colors flex items-center gap-1 cursor-pointer disabled:opacity-50 font-medium ${
-                  theme === "light" ? "hover:text-emerald-600 text-slate-700" : "hover:text-emerald-400 text-slate-300"
+                className={`transition-colors flex items-center gap-1 font-bold cursor-pointer disabled:opacity-40 ${
+                  theme === "light" ? "hover:text-zinc-900 text-zinc-500" : "hover:text-neutral-200 text-neutral-500"
                 }`}
               >
-                <RefreshCw className={`w-3.5 h-3.5 ${loading ? 'animate-spin text-emerald-500' : ''}`} />
-                <span>Refresh</span>
+                <RefreshCw className={`w-3 h-3 ${loading ? 'animate-spin text-indigo-500' : ''}`} />
+                <span className="uppercase text-[10px] tracking-wide">Sync</span>
               </button>
             </div>
+
           </div>
         </div>
       </header>
 
-      {/* Main Container */}
-      <main className="flex-grow max-w-7xl w-full mx-auto px-6 py-6 md:py-8 flex flex-col gap-8 z-10">
+      {/* Main Container - Primary Operations Grid */}
+      <main className="flex-grow max-w-7xl w-full mx-auto px-6 py-6 md:py-8 flex flex-col gap-6 z-10 font-sans">
         
-        {/* Refresh Disclaimer */}
-        <div className={`p-3 rounded-xl border flex items-center gap-3 text-[11px] font-medium transition-all ${
+        {/* Hardware Status & Telemetry Sync Warning */}
+        <div className={`p-3 border text-[11px] font-mono tracking-tight transition-all duration-150 ${
           theme === "light" 
-            ? "bg-amber-50 border-amber-100 text-amber-700" 
-            : "bg-amber-900/10 border-amber-900/30 text-amber-400"
+            ? "bg-amber-500/10 border-amber-500/30 text-amber-900" 
+            : "bg-amber-950/20 border-amber-900/40 text-amber-400"
         }`}>
-          <Info className="w-3.5 h-3.5 flex-shrink-0" />
-          <p>
-            Note: If you don't see many channels on the map, please 
-            <button onClick={() => window.location.reload()} className="mx-1 underline hover:no-underline cursor-pointer">refresh the page</button> 
-            to re-sync with the global broadcast satellites.
-          </p>
+          <div className="flex items-center gap-2.5">
+            <Info className="w-3.5 h-3.5 flex-shrink-0 text-amber-500" />
+            <p className="uppercase font-medium">
+              [WARN_SYNC]: Map rendering relies on broadcast satellite coordinates. If feeds are missing, 
+              <button onClick={() => window.location.reload()} className="mx-1 underline hover:text-amber-600 font-bold cursor-pointer">FORCE CORE RESYNC</button> 
+              to parse current orbits.
+            </p>
+          </div>
         </div>
 
         {/* Connection Failure Display */}
         {error && (
-          <div className="bg-rose-500/5 border border-rose-500/20 rounded-2xl p-4 flex items-center justify-between gap-4 text-sm text-rose-600 dark:text-rose-300">
+          <div className="bg-rose-500/5 border-2 border-rose-500/30 p-4 flex items-center justify-between gap-4 text-xs font-mono text-rose-600 dark:text-rose-400">
             <div className="flex items-center gap-3">
-              <CloudLightning className="w-5 h-5 text-rose-500 animate-bounce" />
-              <span>{error}</span>
+              <CloudLightning className="w-4 h-4 text-rose-500" />
+              <span className="font-bold uppercase">[LINK_FAILURE]: {error}</span>
             </div>
             <button
               onClick={fetchStreams}
-              className="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-600 dark:text-rose-300 px-3 py-1.5 rounded-xl text-xs transition-all active:scale-95 font-semibold"
+              className="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-600 dark:text-rose-400 px-3 py-2 text-[10px] font-bold uppercase transition-all active:scale-98"
             >
               Retry Connection
             </button>
@@ -327,19 +346,21 @@ export default function App() {
         )}
 
         {loading && streams.length === 0 ? (
-          <div className="flex-grow flex flex-col items-center justify-center py-24 text-center">
+          <div className="flex-grow flex flex-col items-center justify-center py-28 text-center font-mono">
             <div className="relative mb-6">
-              <div className="w-16 h-16 rounded-full border-t-2 border-emerald-500 border-r-2 border-transparent animate-spin" />
-              <Globe className="w-8 h-8 text-emerald-500 absolute inset-0 m-auto animate-pulse" />
+              <div className="w-12 h-12 border-2 border-indigo-500 border-r-transparent animate-spin" />
+              <Globe className="w-5 h-5 text-indigo-500 absolute inset-0 m-auto" />
             </div>
-            <h3 className={`text-md font-semibold ${theme === "light" ? "text-slate-700" : "text-slate-200"}`}>Connecting to global streams...</h3>
-            <p className={`text-xs mt-1 max-w-xs mx-auto ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
-              Fetching active channels, sports feeds, and parsing country playlists. Please wait...
+            <h3 className={`text-xs font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
+              ESTABLISHING LINK TO GLOBAL SAT_MATRICES...
+            </h3>
+            <p className={`text-[11px] mt-1.5 max-w-xs mx-auto uppercase tracking-wide leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
+              Parsing country indexers, sports feeds, and live streaming endpoints. Hold operations...
             </p>
           </div>
         ) : (
           <>
-            {/* 1. Real-time World Map - CENTER OF ATTENTION & PRIMARY SECTOR */}
+            {/* 1. Real-time World Map - MAIN SCAN DECK */}
             <section className="w-full">
               <WorldMap
                 streams={streams}
@@ -350,23 +371,24 @@ export default function App() {
               />
             </section>
 
-            {/* 2. Secondary Row: Video Player & Sidebar Channel list */}
-            <section className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            {/* 2. Secondary Operations Row: Video Player & Selector Panel */}
+            <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+              
               {/* Left Side: Advanced Streaming Deck */}
-              <div id="live-player-section" className="lg:col-span-8 flex flex-col gap-5 scroll-mt-24">
-                <div className="flex items-center justify-between">
+              <div id="live-player-section" className="lg:col-span-8 flex flex-col gap-4 scroll-mt-24">
+                <div className="flex items-end justify-between pb-1.5 border-b border-zinc-200 dark:border-neutral-800">
                   <div className="flex items-center gap-2">
-                    <Tv className={`w-4 h-4 ${theme === "light" ? "text-slate-600" : "text-slate-300"}`} />
-                    <h2 className={`text-md font-bold tracking-tight ${theme === "light" ? "text-slate-700" : "text-slate-200"}`}>
-                      Live Broadcast Player
+                    <Tv className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-800" : "text-neutral-400"}`} />
+                    <h2 className={`text-xs font-black uppercase tracking-tight ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
+                      Broadcast Monitoring Monitor
                     </h2>
                   </div>
                   {selectedChannel && (
-                    <div className={`text-xs px-3 py-1 rounded-full flex items-center gap-1.5 font-sans font-semibold ${
-                      theme === "light" ? "bg-slate-100 text-slate-600 border border-slate-200" : "bg-slate-900 border border-slate-800 text-slate-400"
+                    <div className={`text-[9px] font-mono font-bold px-2 py-0.5 border flex items-center gap-1.5 ${
+                      theme === "light" ? "bg-white border-zinc-300 text-zinc-700" : "bg-neutral-950 border-neutral-800 text-neutral-400"
                     }`}>
-                      <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
-                      <span>Live Feed Deck</span>
+                      <span className="w-1 h-1 bg-emerald-500 animate-pulse" />
+                      <span className="uppercase tracking-wider">DECK_ENGAGED</span>
                     </div>
                   )}
                 </div>
@@ -394,142 +416,149 @@ export default function App() {
           </>
         )}
 
-        {/* Feature Explanatory Block */}
-        <section className={`grid grid-cols-1 md:grid-cols-3 gap-6 mt-4 border-t pt-8 pb-4 ${
-          theme === "light" ? "border-slate-200" : "border-slate-900"
+        {/* Feature Explanatory Block - System Diagnostic Overview */}
+        <section className={`grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 border-t pt-6 pb-4 font-mono ${
+          theme === "light" ? "border-zinc-300/80" : "border-neutral-900"
         }`}>
-          <div className={`border rounded-2xl p-5 flex gap-4 ${
-            theme === "light" ? "bg-white border-slate-200" : "bg-slate-950/20 border-slate-900"
+          
+          <div className={`border p-5 flex flex-col gap-3 transition-all ${
+            theme === "light" ? "bg-white border-zinc-200" : "bg-neutral-950/40 border-neutral-900"
           }`}>
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center flex-shrink-0">
-              <Zap className="w-4 h-4 text-emerald-500" />
-            </div>
-            <div>
-              <h4 className={`text-xs font-bold uppercase tracking-wider ${theme === "light" ? "text-slate-700" : "text-slate-200"}`}>
-                Automated Self-Healing
+            <div className="flex items-center gap-2.5">
+              <div className={`w-6 h-6 border flex items-center justify-center ${theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"}`}>
+                <Zap className="w-3.5 h-3.5 text-indigo-500" />
+              </div>
+              <h4 className={`text-[11px] font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}>
+                01 // SELF-HEALING ARCH
               </h4>
-              <p className={`text-xs mt-1.5 leading-relaxed font-sans ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
-                We automatically detect when a stream is unavailable. If playback fails, our self-healing player immediately locates and suggests an alternative stable feed.
-              </p>
             </div>
+            <p className={`text-[11px] font-sans leading-relaxed font-medium ${theme === "light" ? "text-zinc-600" : "text-neutral-400"}`}>
+              Autonomous detection trackers track connection failures. If upstream stream links collapse, fallback nodes route instantly to isolate backup feeds without dropping monitoring sessions.
+            </p>
           </div>
 
-          <div className={`border rounded-2xl p-5 flex gap-4 ${
-            theme === "light" ? "bg-white border-slate-200" : "bg-slate-950/20 border-slate-900"
+          <div className={`border p-5 flex flex-col gap-3 transition-all ${
+            theme === "light" ? "bg-white border-zinc-200" : "bg-neutral-950/40 border-neutral-900"
           }`}>
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center flex-shrink-0">
-              <Compass className="w-4 h-4 text-emerald-500" />
-            </div>
-            <div>
-              <h4 className={`text-xs font-bold uppercase tracking-wider ${theme === "light" ? "text-slate-700" : "text-slate-200"}`}>
-                Interactive Coordinates
+            <div className="flex items-center gap-2.5">
+              <div className={`w-6 h-6 border flex items-center justify-center ${theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"}`}>
+                <Compass className="w-3.5 h-3.5 text-indigo-500" />
+              </div>
+              <h4 className={`text-[11px] font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}>
+                02 // RECTOR GRID COORDS
               </h4>
-              <p className={`text-xs mt-1.5 leading-relaxed font-sans ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
-                Explore channels mapped across the globe. We distribute multiple streams across countries to represent real cities, letting you explore regional broadcasting seamlessly.
-              </p>
             </div>
+            <p className={`text-[11px] font-sans leading-relaxed font-medium ${theme === "light" ? "text-zinc-600" : "text-neutral-400"}`}>
+              Geographical distribution algorithms map channel registries onto accurate world coordinates. Stream clusters are dynamically grouped across country regions for seamless telemetry tracking.
+            </p>
           </div>
 
-          <div className={`border rounded-2xl p-5 flex gap-4 ${
-            theme === "light" ? "bg-white border-slate-200" : "bg-slate-950/20 border-slate-900"
+          <div className={`border p-5 flex flex-col gap-3 transition-all ${
+            theme === "light" ? "bg-white border-zinc-200" : "bg-neutral-950/40 border-neutral-900"
           }`}>
-            <div className="w-9 h-9 rounded-xl bg-emerald-500/5 border border-emerald-500/10 flex items-center justify-center flex-shrink-0">
-              <SlidersHorizontal className="w-4 h-4 text-emerald-500" />
-            </div>
-            <div>
-              <h4 className={`text-xs font-bold uppercase tracking-wider ${theme === "light" ? "text-slate-700" : "text-slate-200"}`}>
-                Responsive Architecture
+            <div className="flex items-center gap-2.5">
+              <div className={`w-6 h-6 border flex items-center justify-center ${theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"}`}>
+                <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-500" />
+              </div>
+              <h4 className={`text-[11px] font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}>
+                03 // MATRIX SCALING
               </h4>
-              <p className={`text-xs mt-1.5 leading-relaxed font-sans ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
-                World Channels scales dynamically across all window sizes, providing smooth navigation on widescreen desktop setups as well as touch-friendly tablet and mobile views.
-              </p>
             </div>
+            <p className={`text-[11px] font-sans leading-relaxed font-medium ${theme === "light" ? "text-zinc-600" : "text-neutral-400"}`}>
+              The tracking interface operates on modular breakgrids. Bounding parameters update fluidly, sustaining high-density dashboard layouts across theater projection layouts down to compact devices.
+            </p>
           </div>
         </section>
         
-        {/* Streaming Partners / Who Streams What */}
-        <section className={`mt-8 border-t pt-8 pb-10 ${
-          theme === "light" ? "border-slate-200" : "border-slate-900"
+        {/* Streaming Partners / Network Relay Routing Matrix */}
+        <section className={`mt-8 border-t pt-6 pb-8 font-mono ${
+          theme === "light" ? "border-zinc-300/80" : "border-neutral-900"
         }`}>
           <div className="flex flex-col md:flex-row items-start justify-between gap-8">
             <div className="md:w-1/3">
-              <h3 className={`text-sm font-bold tracking-tight mb-2 ${theme === "light" ? "text-slate-900" : "text-slate-100"}`}>
-                2026 World Cup Global Broadcasters
+              <h3 className={`text-xs font-black uppercase tracking-tight mb-2 ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
+                GLOBAL TRANS_LINK RELAYS // WC_2026
               </h3>
-              <p className={`text-xs leading-relaxed ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
-                Stay connected with the tournament through our integrated premium partners. We provide direct access to the most reliable sports feeds globally.
+              <p className={`text-[11px] font-sans leading-relaxed font-medium ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}`}>
+                Operational connections verified across tournament relays. Satellite streams link dynamically to upstream edge routes to handle priority sports delivery matrices.
               </p>
             </div>
             
-            <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full">
+            <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full text-[11px]">
               <div>
-                <h4 className={`text-[10px] font-bold uppercase tracking-widest mb-3 ${theme === "light" ? "text-slate-400" : "text-slate-500"}`}>
-                  World Cup 2026 Partners
+                <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b ${
+                  theme === "light" ? "text-zinc-400 border-zinc-200" : "text-neutral-600 border-neutral-900"
+                }`}>
+                  [0x01] TOURNAMENT_NODES
                 </h4>
-                <ul className={`text-[11px] space-y-2 font-medium ${theme === "light" ? "text-slate-600" : "text-slate-300"}`}>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-emerald-500" />
-                    Arena Sport 1 Premium (Balkans)
+                <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>Arena Sport 1 Premium (Balkans)</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-emerald-500" />
-                    Fox Sports 1 (United States)
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>Fox Sports 1 (United States)</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-emerald-500" />
-                    ColaTV (Premium Asia Feed)
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>ColaTV (Premium Asia Feed)</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-emerald-500" />
-                    beIN SPORTS (Global Hub)
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>beIN SPORTS (Global Hub)</span>
                   </li>
                 </ul>
               </div>
               
               <div>
-                <h4 className={`text-[10px] font-bold uppercase tracking-widest mb-3 ${theme === "light" ? "text-slate-400" : "text-slate-500"}`}>
-                  European Leagues
+                <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b ${
+                  theme === "light" ? "text-zinc-400 border-zinc-200" : "text-neutral-600 border-neutral-900"
+                }`}>
+                  [0x02] EURO_LEAGUE_RELAYS
                 </h4>
-                <ul className={`text-[11px] space-y-2 font-medium ${theme === "light" ? "text-slate-600" : "text-slate-300"}`}>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-blue-500" />
-                    Sky Sports PL (Premier League)
+                <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-indigo-500 text-[9px] font-bold">●</span>
+                    <span>Sky Sports PL (Premier League)</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-blue-500" />
-                    DAZN 1 Germany (Bundesliga)
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-indigo-500 text-[9px] font-bold">●</span>
+                    <span>DAZN 1 Germany (Bundesliga)</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-blue-500" />
-                    RTVE (La Liga Highlights)
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-indigo-500 text-[9px] font-bold">●</span>
+                    <span>RTVE (La Liga Highlights)</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-blue-500" />
-                    L'Equipe TV (Ligue 1 & More)
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-indigo-500 text-[9px] font-bold">●</span>
+                    <span>L'Equipe TV (Ligue 1 & More)</span>
                   </li>
                 </ul>
               </div>
               
               <div>
-                <h4 className={`text-[10px] font-bold uppercase tracking-widest mb-3 ${theme === "light" ? "text-slate-400" : "text-slate-500"}`}>
-                  Regional Specialists
+                <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b ${
+                  theme === "light" ? "text-zinc-400 border-zinc-200" : "text-neutral-600 border-neutral-900"
+                }`}>
+                  [0x03] REGIONAL_UPLINKS
                 </h4>
-                <ul className={`text-[11px] space-y-2 font-medium ${theme === "light" ? "text-slate-600" : "text-slate-300"}`}>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-amber-500" />
-                    VTV5 (ASEAN Sports Coverage)
+                <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-amber-500 text-[9px] font-bold">●</span>
+                    <span>VTV5 (ASEAN Sports Coverage)</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-amber-500" />
-                    Bahrain Sports 1 & 2 (ME Finals)
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-amber-500 text-[9px] font-bold">●</span>
+                    <span>Bahrain Sports 1 & 2 (ME Finals)</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-amber-500" />
-                    NHK News (Pacific Highlights)
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-amber-500 text-[9px] font-bold">●</span>
+                    <span>NHK News (Pacific Highlights)</span>
                   </li>
-                  <li className="flex items-center gap-2">
-                    <span className="w-1 h-1 rounded-full bg-amber-500" />
-                    KSA Sports (Arab Gulf Cup)
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-amber-500 text-[9px] font-bold">●</span>
+                    <span>KSA Sports (Arab Gulf Cup)</span>
                   </li>
                 </ul>
               </div>
@@ -539,20 +568,43 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className={`border-t py-6 text-center text-xs z-10 relative transition-all ${
+      <footer className={`border-t py-4 text-xs z-10 relative transition-all font-mono tracking-tight ${
         theme === "light"
-          ? "border-slate-200 bg-white text-slate-500"
-          : "border-slate-900 bg-slate-950/80 text-slate-500"
+          ? "border-zinc-300/80 bg-[#faf9f6] text-zinc-600"
+          : "border-neutral-900 bg-[#0d0e12] text-neutral-500"
       }`}>
-        <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-4">
-          <span>&copy; {new Date().getFullYear()} World Channels. All rights reserved.</span>
-          <div className="flex gap-4 items-center">
-            <span className={theme === "light" ? "text-slate-600" : "text-slate-400"}>All channels verified online</span>
-            <span className="text-emerald-500 flex items-center gap-1.5 font-semibold">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              Secure Stream Connection
+        <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          
+          {/* Left: Metadata Track */}
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1">
+            <span className={`font-bold ${theme === "light" ? "text-zinc-900" : "text-neutral-300"}`}>
+              WORLD_CHANNELS // CORE_v4.0
             </span>
+            <span className="opacity-30 hidden sm:inline">|</span>
+            <span>&copy; {new Date().getFullYear()}</span>
+            <span>BY YOHAN CHANG [MHS 2029]</span>
           </div>
+
+          {/* Right: Technical Diagnostic Metrics */}
+          <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-4 gap-y-2 text-[11px] font-bold">
+            <div className="flex items-center gap-1.5">
+              <span className={theme === "light" ? "text-zinc-400" : "text-neutral-600"}>SIG_STAT:</span>
+              <span className={theme === "light" ? "text-zinc-800" : "text-neutral-300"}>VERIFIED_UPSTREAM</span>
+            </div>
+            
+            <div className={`px-2 py-0.5 border flex items-center gap-2 ${
+              theme === "light" 
+                ? "bg-white border-zinc-300 text-emerald-700" 
+                : "bg-neutral-950 border-neutral-800 text-emerald-400"
+            }`}>
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+              </span>
+              <span className="text-[10px] uppercase tracking-wider font-bold">SECURE_LINK</span>
+            </div>
+          </div>
+
         </div>
       </footer>
     </div>
