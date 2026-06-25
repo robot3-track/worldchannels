@@ -106,7 +106,7 @@ const regionalCities = [
     { keys: ["middle east", "dubai", "uae", "abu dhabi", "sharjah", "al yaum tv", "al ghad tv"], lat: 25.2048, lon: 55.2708, country: "AE" },
     { keys: ["istanbul", "turkey", "trt", "haberturk"], lat: 41.0082, lon: 28.9784, country: "TR" },
     { keys: ["tokyo", "nhk", "fuji tv", "fujitv", "asahi", "tbs japan", "tokyo mx", "nippon tv", "weathernews japan", "wowow", "sky a+", "j sports", "cgntv japan"], lat: 35.6762, lon: 139.6503, country: "JP" },
-    { keys: ["beijing", "china", "cgtn", "cctv"], lat: 39.9042, lon: 116.4074, country: "CN" },
+    { keys: ["beijing", "china", "cgtn", "cctv", "西安丝路", "山东卫视"], lat: 39.9042, lon: 116.4074, country: "CN" },
     { keys: ["seoul", "korea", "sbs world", "kbs world", "arirang", "mbn", "sbs sports", "chosun"], lat: 37.5665, lon: 126.9780, country: "KR" },
     { keys: ["taipei", "taiwan", "pts", "set news", "f tv "], lat: 25.0330, lon: 121.5654, country: "TW" },
     { keys: ["singapore", "channel newsasia", "cna"], lat: 1.3521, lon: 103.8198, country: "SG" },
@@ -311,6 +311,7 @@ const staticStreams = [
     name: "Arena Sport 1 Premium (Backup)",
     url: "https://nl1.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
     category: "sports",
+    category: "world cup",
     country: "RS",
     logo: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Arena_Sport_1_Premium_%282021%2C_short%29.svg/revision/latest?cb=20221111214150",
     status: "online",
