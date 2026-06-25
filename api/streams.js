@@ -321,7 +321,7 @@ const staticStreams = [
   {
     id: "sports-foxsports-1",
     name: "FS1 (Fox Sports)",
-    url: "http://45.139.122.199:2095/live/ftU3Se0G/nSgzwb7/2432261.m3u8", // High quality, stable FS1 stream
+    url: "http://43.250.127.149:8080/live/play/ZWxaR05ubE5Zekp4VlZGNWRrODRObXREVmpoQmJqUnFjR2hKY1hZd2RuTlpOMDV0ZFdJd1VVOUtWVDA9/2432261", // High quality, stable FS1 stream
     category: "sports",
     category: "world cup",
     country: "US",
