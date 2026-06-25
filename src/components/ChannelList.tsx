@@ -120,7 +120,7 @@ export default function ChannelList({
                 ? "bg-white border-zinc-900 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:bg-zinc-50"
                 : "bg-neutral-950 border-neutral-800 text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-indigo-500"
             }`}
-            placeholder="TYPE CHNL NAME, TAG, SOURCE..."
+            placeholder="TYPE CHANNEL NAME, TAG, SOURCE..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
