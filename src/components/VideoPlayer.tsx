@@ -119,8 +119,8 @@ export default function VideoPlayer({
         enableWorker: true,
         lowLatencyMode: true,
         backBufferLength: 60,
-        manifestLoadingTimeOut: 8000,
-        levelLoadingTimeOut: 8000,
+        manifestLoadingTimeOut: 15000,
+        levelLoadingTimeOut: 15000,
         fragLoadingTimeOut: 12000,
       });
 
