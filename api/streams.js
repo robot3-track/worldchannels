@@ -726,7 +726,7 @@ const staticStreams = [
     url: "https://tvr-international.lg.mncdn.com/tvrinternational/smil:tvrinternational.smil/chunklist_b5160000.m3u8", // Working backup
     category: "country",
     country: "RO",
-    logo: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ae/TVRi_2019.svg/revision/latest/scale-to-width-down/1000?cb=20260220213825",
     status: "online",
     lat: 44.46331, // Bucharest, Romania
     lon: 26.0921,
@@ -734,7 +734,7 @@ const staticStreams = [
   {
     id: "country-cn-cgtn",
     name: "CGTN News China",
-    url: "https://cgtnenghls.cntv.myalicdn.com/asp/hls/2000/0303000a/3/default/2000/fmp4.m3u8",
+    url: "https://dash4.antik.sk/live/test_cgtn/playlist.m3u8",
     category: "country",
     country: "CN",
     logo: "https://static.wikia.nocookie.net/logopedia/images/4/4d/CGTN_%28China_Global_Television_Network%29.svg/revision/latest?cb=20210816144604",
