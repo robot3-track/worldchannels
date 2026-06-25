@@ -321,7 +321,7 @@ const staticStreams = [
   {
     id: "sports-foxsports-1",
     name: "FS1 (Fox Sports)",
-    url: "https://amg02855-foxsports-amg02855c1-xumo-us-1755.playouts.now.amagi.tv/Fox-Sports-AmazonNews/playlist.m3u8", // High quality, stable FS1 stream
+    url: "http://45.139.122.199:2095/live/ftU3Se0G/nSgzwb7/2432261.m3u8", // High quality, stable FS1 stream
     category: "sports",
     country: "US",
     logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
