@@ -568,7 +568,7 @@ export default function WorldMap({
           <div className="flex items-center gap-2">
             <Globe className="w-4 h-4 text-indigo-500" />
             <h2 className={`text-xs font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
-              CORE_STREAM_NAVIGATOR // MATRIX_MAP
+              Live Channel Global Map
             </h2>
           </div>
           <p className={`text-[11px] font-sans font-medium mt-1 leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}`}>
@@ -619,21 +619,21 @@ export default function WorldMap({
         <div className="flex items-center gap-4">
           <span className="flex items-center gap-2 font-bold">
             <span className="w-1.5 h-1.5 bg-emerald-500 relative flex"><span className="animate-ping absolute inline-flex h-full w-full bg-emerald-400 opacity-75" /></span>
-            [FEED_SYS]: ACTIVE
+            Channel: Live
           </span>
           <span className="flex items-center gap-2 font-bold">
             <span className="w-1.5 h-1.5 bg-amber-500" />
-            [FEED_SYS]: UNSTABLE
+            Channel: Unstable
           </span>
           <span className="flex items-center gap-2 font-bold">
             <span className="w-1.5 h-1.5 bg-rose-500" />
-            [FEED_SYS]: DROP_FAULT
+            Channel: Offline
           </span>
         </div>
         
         <div className="flex items-center gap-1.5 font-bold">
           <Compass className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-400" : "text-neutral-600"}`} />
-          <span>PROJ_METRIC: EQUIRECTANGULAR // GEOD_V4</span>
+          <span>Equirectangular Map Distortion</span>
         </div>
       </div>
     </div>

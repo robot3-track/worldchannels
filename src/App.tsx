@@ -236,11 +236,11 @@ export default function App() {
                   World Channels
                 </h1>
                 <span className="text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 border border-emerald-500/20">
-                  LIVE_FEED
+                  Live
                 </span>
               </div>
               <p className={`text-[10px] font-mono uppercase tracking-wider ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
-                Global Broadcast Explorer // Matrix Display
+                Global Channel Explorer
               </p>
             </div>
           </div>
@@ -261,12 +261,12 @@ export default function App() {
               {theme === "light" ? (
                 <>
                   <Moon className="w-3.5 h-3.5 text-indigo-600" />
-                  <span>OPR: LIGHT_MODE</span>
+                  <span>LIGHT MODE</span>
                 </>
               ) : (
                 <>
                   <Sun className="w-3.5 h-3.5 text-amber-500" />
-                  <span>OPR: DARK_CORE</span>
+                  <span>DARK MODE</span>
                 </>
               )}
             </button>
@@ -288,7 +288,7 @@ export default function App() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
                 </span>
-                <span className="font-bold">ON_AIR: <span className="text-emerald-600 dark:text-emerald-400">{stats.online}</span></span>
+                <span className="font-bold">LIVE: <span className="text-emerald-600 dark:text-emerald-400">{stats.online}</span></span>
               </div>
               
               <div className={`h-3 w-px ${theme === "light" ? "bg-zinc-200" : "bg-neutral-800"}`} />
@@ -322,7 +322,7 @@ export default function App() {
           <div className="flex items-center gap-2.5">
             <Info className="w-3.5 h-3.5 flex-shrink-0 text-amber-500" />
             <p className="uppercase font-medium">
-              [WARN_SYNC]: Map rendering relies on broadcast satellite coordinates. If channels are missing, 
+              Notification: Map rendering relies on broadcast satellite coordinates. If channels are missing, 
               <button onClick={() => window.location.reload()} className="mx-1 underline hover:text-amber-600 font-bold cursor-pointer">REFRESH</button> 
               to reload broadcast data.
             </p>
@@ -429,7 +429,7 @@ export default function App() {
                 <Zap className="w-3.5 h-3.5 text-indigo-500" />
               </div>
               <h4 className={`text-[11px] font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}>
-                01 // SELF-HEALING ARCH
+                01 - Autonomous Link Detection
               </h4>
             </div>
             <p className={`text-[11px] font-sans leading-relaxed font-medium ${theme === "light" ? "text-zinc-600" : "text-neutral-400"}`}>
@@ -445,7 +445,7 @@ export default function App() {
                 <Compass className="w-3.5 h-3.5 text-indigo-500" />
               </div>
               <h4 className={`text-[11px] font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}>
-                02 // RECTOR GRID COORDS
+                02 - Geographic Distribution Algorithms
               </h4>
             </div>
             <p className={`text-[11px] font-sans leading-relaxed font-medium ${theme === "light" ? "text-zinc-600" : "text-neutral-400"}`}>
@@ -461,7 +461,7 @@ export default function App() {
                 <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-500" />
               </div>
               <h4 className={`text-[11px] font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}>
-                03 // MATRIX SCALING
+                03 - Matrix Scaling
               </h4>
             </div>
             <p className={`text-[11px] font-sans leading-relaxed font-medium ${theme === "light" ? "text-zinc-600" : "text-neutral-400"}`}>
@@ -477,7 +477,7 @@ export default function App() {
           <div className="flex flex-col md:flex-row items-start justify-between gap-8">
             <div className="md:w-1/3">
               <h3 className={`text-xs font-black uppercase tracking-tight mb-2 ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
-                GLOBAL TRANS_LINK RELAYS // WC_2026
+                Featured: World Cup 2026 Broadcast Partners
               </h3>
               <p className={`text-[11px] font-sans leading-relaxed font-medium ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}`}>
                 Operational connections verified across tournament relays. Satellite streams link dynamically to upstream edge routes to handle priority sports delivery matrices.
@@ -489,7 +489,7 @@ export default function App() {
                 <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b ${
                   theme === "light" ? "text-zinc-400 border-zinc-200" : "text-neutral-600 border-neutral-900"
                 }`}>
-                  [0x01] TOURNAMENT_NODES
+                  Providers
                 </h4>
                 <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
                   <li className="flex items-center gap-1.5">
@@ -515,7 +515,7 @@ export default function App() {
                 <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b ${
                   theme === "light" ? "text-zinc-400 border-zinc-200" : "text-neutral-600 border-neutral-900"
                 }`}>
-                  [0x02] EURO_LEAGUE_RELAYS
+                  European League Providers
                 </h4>
                 <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
                   <li className="flex items-center gap-1.5">
@@ -541,7 +541,7 @@ export default function App() {
                 <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b ${
                   theme === "light" ? "text-zinc-400 border-zinc-200" : "text-neutral-600 border-neutral-900"
                 }`}>
-                  [0x03] REGIONAL_UPLINKS
+                  Regional Sport Providers
                 </h4>
                 <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
                   <li className="flex items-center gap-1.5">
@@ -578,18 +578,18 @@ export default function App() {
           {/* Left: Metadata Track */}
           <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-3 gap-y-1">
             <span className={`font-bold ${theme === "light" ? "text-zinc-900" : "text-neutral-300"}`}>
-              WORLD_CHANNELS // CORE_v4.0
+              World Channels
             </span>
             <span className="opacity-30 hidden sm:inline">|</span>
             <span>&copy; {new Date().getFullYear()}</span>
-            <span>BY YOHAN CHANG [MHS 2029]</span>
+            <span>By Yohan Chang [MHS 2029]</span>
           </div>
 
           {/* Right: Technical Diagnostic Metrics */}
           <div className="flex flex-wrap items-center justify-center sm:justify-end gap-x-4 gap-y-2 text-[11px] font-bold">
             <div className="flex items-center gap-1.5">
-              <span className={theme === "light" ? "text-zinc-400" : "text-neutral-600"}>SIG_STAT:</span>
-              <span className={theme === "light" ? "text-zinc-800" : "text-neutral-300"}>VERIFIED_UPSTREAM</span>
+              <span className={theme === "light" ? "text-zinc-400" : "text-neutral-600"}>Current Signal:</span>
+              <span className={theme === "light" ? "text-zinc-800" : "text-neutral-300"}>Live</span>
             </div>
             
             <div className={`px-2 py-0.5 border flex items-center gap-2 ${
@@ -601,7 +601,7 @@ export default function App() {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
               </span>
-              <span className="text-[10px] uppercase tracking-wider font-bold">SECURE_LINK</span>
+              <span className="text-[10px] uppercase tracking-wider font-bold">Secure Browser</span>
             </div>
           </div>
 

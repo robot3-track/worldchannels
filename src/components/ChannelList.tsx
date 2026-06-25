@@ -98,7 +98,7 @@ export default function ChannelList({
               <Filter className="w-3.5 h-3.5" />
             </div>
             <h3 className={`text-xs font-black tracking-tight uppercase ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
-              Master Control Index
+              Live Channel/Broadcast List
             </h3>
           </div>
           <span className={`text-[10px] font-mono tracking-wider px-1.5 py-0.5 rounded ${
@@ -132,7 +132,7 @@ export default function ChannelList({
         <span className={`text-[9px] font-black uppercase tracking-widest block mb-2 font-mono ${
           theme === "light" ? "text-zinc-500" : "text-neutral-500"
         }`}>
-          // CATEGORY SELECT
+          CATEGORY SELECT
         </span>
         <div className="grid grid-cols-2 gap-1 max-h-24 overflow-y-auto no-scrollbar">
           {categories.map((cat) => {
@@ -170,7 +170,7 @@ export default function ChannelList({
         <span className={`text-[9px] font-black uppercase tracking-widest block mb-1.5 font-mono ${
           theme === "light" ? "text-zinc-500" : "text-neutral-500"
         }`}>
-          // REGION FREQUENCY
+          REGION FREQUENCY
         </span>
         <select
           value={countryFilter}
