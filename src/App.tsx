@@ -352,7 +352,7 @@ export default function App() {
               <Globe className="w-5 h-5 text-indigo-500 absolute inset-0 m-auto" />
             </div>
             <h3 className={`text-xs font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
-              ESTABLISHING LINK TO GLOBAL SAT_MATRICES...
+              Loading World Channels..
             </h3>
             <p className={`text-[11px] mt-1.5 max-w-xs mx-auto uppercase tracking-wide leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
               Parsing country indexers, sports feeds, and live streaming endpoints. Hold operations...

@@ -80,7 +80,9 @@ export default function ChannelList({
     { code: "IN", name: "India" }, { code: "SA", name: "Saudi Arabia" },
     { code: "MX", name: "Mexico" }, { code: "EG", name: "Egypt" },
     { code: "IT", name: "Italy" }, { code: "SG", name: "Singapore" },
-    { code: "HK", name: "Hong Kong" }
+    { code: "HK", name: "Hong Kong" }, { code: "IR", name: "Iran" }, { code: "BH", name: "Bahrain" },
+    { code: "NG", name: "Nigeria" }, { code: "RS", name: "Serbia" }, { code: "UY", name: "Uruguay" },
+    { code: "LC", name: "Carribean" }
   ];
 
   return (
