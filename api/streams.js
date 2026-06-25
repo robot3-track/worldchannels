@@ -333,7 +333,7 @@ const staticStreams = [
   {
     id:"sports-fubotv-sports",
     name: "Fubo Sports Network",
-    url: "https://dnf08l6u6uxnz.cloudfront.net/master.m3u8", // High quality, stable Fubo Sports Network stream
+    url: "http://main.light-ott.net:80/play/live.php?mac=00:1A:79:3A:93:FD&stream=858538&extension=m3u8", // High quality, stable Fubo Sports Network stream
     category: "sports",
     country: "US",
     logo: "https://static.wikia.nocookie.net/logopedia/images/1/1e/2023-fubotv-new-logo-design-2-520x321.png/revision/latest?cb=20230519120710",
@@ -520,8 +520,8 @@ const staticStreams = [
     lon: -118.2437,
   },
   {
-    id: "sports-us-telemundo",
-    name: "Telemundo West",
+    id: "cam-us-telemundo",
+    name: "Live Telemundo Security Cam",
     url: "https://content.uplynk.com/channel/b6a96ed39d694ae1b738faa98cf7dd3f.m3u8", // Red Bull Sports feed used as stable backup
     category: "sports",
     country: "US",
@@ -530,7 +530,17 @@ const staticStreams = [
     lat: 25.7617, // Miami, Florida (Telemundo HQ)
     lon: -80.1918,
   },
-
+  {
+    id: "sports-us-telemundo",
+    name: "Telemundo Sports",
+    url: "http://ikitv.exid.me/play/live.php?mac=00:1A:79:18:15:1D&stream=934970&extension=m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
+    status: "online",
+    lat: 25.7617,
+    lon: -80.1918
+  },
   // --- NEWS (Category: news, Country: Global/Specific) ---
   {
     id: "news-skyarabia",
