@@ -467,46 +467,7 @@ export default function VideoPlayer({
         {/* Scanlines / Dark Control Vignette overlay */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-        {/* Status indicator pill top left */}
-        <div className="absolute top-4 left-4 flex items-center gap-2 z-10">
-          <div className="bg-slate-950/85 backdrop-blur-md px-3 py-1 rounded-full border border-slate-800/50 flex items-center gap-1.5 shadow-md">
-            <span className={`w-2 h-2 rounded-full ${channel.status === "online" ? "bg-emerald-500 animate-pulse" : "bg-red-500"}`} />
-            <span className="text-[10px] font-sans text-slate-200 font-semibold uppercase tracking-wider">
-              {channel.country === "Global" ? "GLOBAL FEED" : `${channel.country} Broadcast`}
-            </span>
-          </div>
-
-          {latencyMs !== null && (
-            <div className="bg-slate-950/85 backdrop-blur-md px-2.5 py-1 rounded-full border border-slate-800/50 flex items-center gap-1.5 shadow-md">
-              <Zap className="w-3 h-3 text-emerald-400" />
-              <span className="text-[10px] font-mono text-emerald-400 font-semibold">{latencyMs}ms ping</span>
-            </div>
-          )}
-        </div>
-
-        {/* Top-Right: Dynamic Stream Health Controller */}
-        <div className="absolute top-4 right-4 z-10 flex gap-2">
-          <button
-            onClick={() => {
-              measureStreamLatency(channel.url);
-              reloadToLive();
-            }}
-            disabled={checkingLatency}
-            className="bg-slate-950/85 hover:bg-slate-900 border border-slate-800/50 rounded-full p-2 text-slate-300 hover:text-slate-100 transition-all shadow-md active:scale-95 disabled:opacity-50"
-            title="Reload to live & Ping check"
-          >
-            <RefreshCw className={`w-3.5 h-3.5 ${checkingLatency ? "animate-spin text-emerald-500" : ""}`} />
-          </button>
-          
-          <button
-            onClick={handleStreamFailure}
-            className="bg-slate-950/85 hover:bg-slate-900 border border-slate-800/50 rounded-full p-2 text-rose-400 hover:text-rose-300 transition-all shadow-md active:scale-95"
-            title="Report stream outage (Force recovery)"
-          >
-            <AlertTriangle className="w-3.5 h-3.5" />
-          </button>
-        </div>
-
+        
         {/* RECOVERING / SIGNAL LOST SIMPLE AND BEAUTIFUL OVERLAY */}
         {streamError && (
           <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-20">
@@ -520,10 +481,10 @@ export default function VideoPlayer({
             </div>
 
             <h3 className="text-md font-semibold text-slate-100 tracking-tight">
-              Signal Lost
+              Broadcast Signal Lost
             </h3>
             <p className="text-xs text-slate-400 mt-1.5 max-w-xs leading-relaxed font-sans">
-              The broadcast is offline or experiencing connection issues. We are automatically looking for an alternative stream...
+              The broadcast is offline or experiencing connection issues.
             </p>
 
             {/* Seamless, beautiful, clean loader */}

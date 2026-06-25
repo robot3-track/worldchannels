@@ -355,7 +355,7 @@ export default function App() {
               Loading World Channels..
             </h3>
             <p className={`text-[11px] mt-1.5 max-w-xs mx-auto uppercase tracking-wide leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
-              Parsing country indexers, sports feeds, and live streaming endpoints. Hold operations...
+              Opening packages, establishing satellite links, and syncing channel telemetry. Please wait while the system boots up.
             </p>
           </div>
         ) : (
