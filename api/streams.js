@@ -603,7 +603,7 @@ const staticStreams = [
     url: "https://www.youtube.com/embed/Vrs-AeKZIEg?si=kYuNuSQtb6jLupP4;controls=0", // Working sport/general backup
     category: "country",
     country: "TW",
-    logo: "https://images.unsplash.com/photo-1552912441-d110009b6340?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/New_Taipei_City_Library_logo.svg/250px-New_Taipei_City_Library_logo.svg.png",
     status: "online",
     lat: 25.0330, // Taipei, Taiwan
     lon: 121.5654,
@@ -625,7 +625,7 @@ const staticStreams = [
     url: "https://news.cgtn.com/resource/live/french/cgtn-f.m3u8",
     category: "country",
     country: "CN",
-    logo: "https://images.unsplash.com/photo-1547989453-11e67ffb3885?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/7/78/CGTN_-_fran%C3%A7ais.png",
     status: "online",
     lat: 39.9042, // Beijing, China
     lon: 116.4074,
@@ -660,7 +660,7 @@ const staticStreams = [
     url: "https://pbs-kids.samsung.wurl.com/manifest/playlist.m3u8",
     category: "country",
     country: "US",
-    logo: "https://images.unsplash.com/photo-1485546246426-74dc88dec4d9?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/PBS_Kids_logo_%282022%29.svg/960px-PBS_Kids_logo_%282022%29.svg.png",
     status: "online",
     lat: 38.9072, // Washington D.C., US
     lon: -77.0369,
@@ -699,45 +699,12 @@ const staticStreams = [
     lon: -75.6972,
   },
   {
-    id: "country-fr-france24",
-    name: "France 24 French Stream",
-    url: "https://static.france24.com/live/F24_FR_LO_HLS/live_web.m3u8",
-    category: "country",
-    country: "FR",
-    logo: "https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 48.8566,
-    lon: 2.3522,
-  },
-  {
-    id: "country-de-dw",
-    name: "DW Deutsch Live",
-    url: "https://dwstream72-lh.akamaihd.net/i/dwstream72_1@119305/master.m3u8",
-    category: "country",
-    country: "DE",
-    logo: "https://images.unsplash.com/photo-1467269204594-9661b134dd2b?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 52.5200, // Berlin, Germany
-    lon: 13.4050,
-  },
-  {
-    id: "country-br-record",
-    name: "Record News Brazil (Backup)",
-    url: "https://edgesport-edge.amagi.tv/playlist.m3u8", // Backup working stream
-    category: "country",
-    country: "BR",
-    logo: "https://images.unsplash.com/photo-1483728642387-6c3bdd6c93e5?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: -15.7938, // Brasilia, Brazil
-    lon: -47.8828,
-  },
-  {
     id: "country-jp-nhk",
     name: "NHK World Japan English",
-    url: "https://nhkwlive-ojsp.akamaized.net/hls/live/2003459/nhkwlive-ojsp-eng/index.m3u8",
+    url: "https://masterpl.hls.nhkworld.jp/hls/w/live/smarttv.m3u8",
     category: "country",
     country: "JP",
-    logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/5/57/Gf_nhk_logo_gray.svg/revision/latest/scale-to-width-down/1000?cb=20200402134529",
     status: "online",
     lat: 35.6762, // Tokyo, Japan
     lon: 139.6503,
@@ -748,21 +715,21 @@ const staticStreams = [
     url: "https://tv-trthaber.medya.trt.com.tr/master.m3u8",
     category: "country",
     country: "TR",
-    logo: "https://images.unsplash.com/photo-1527838832700-50592524df73?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f5/TRT_Haber_2020.svg/revision/latest/scale-to-width-down/1000?cb=20201112125806",
     status: "online",
     lat: 39.9334, // Ankara, Turkey
     lon: 32.8597,
   },
   {
     id: "country-id-tvrf",
-    name: "TVRI News Indonesia (Backup)",
-    url: "https://sportsgrid-klowdtv.amagi.tv/playlist.m3u8", // Working backup
+    name: "TVRInternational Romania",
+    url: "https://tvr-international.lg.mncdn.com/tvrinternational/smil:tvrinternational.smil/chunklist_b5160000.m3u8", // Working backup
     category: "country",
-    country: "ID",
+    country: "RO",
     logo: "https://images.unsplash.com/photo-1555685812-4b943f1cb0eb?auto=format&fit=crop&w=120&h=120&q=80",
     status: "online",
-    lat: -6.2088, // Jakarta, Indonesia
-    lon: 106.8456,
+    lat: 44.46331, // Bucharest, Romania
+    lon: 26.0921,
   },
   {
     id: "country-cn-cgtn",
@@ -770,7 +737,7 @@ const staticStreams = [
     url: "https://cgtnenghls.cntv.myalicdn.com/asp/hls/2000/0303000a/3/default/2000/fmp4.m3u8",
     category: "country",
     country: "CN",
-    logo: "https://images.unsplash.com/photo-1508672019048-805c876b67e2?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4d/CGTN_%28China_Global_Television_Network%29.svg/revision/latest?cb=20210816144604",
     status: "online",
     lat: 39.9042,
     lon: 116.4074,
@@ -778,10 +745,10 @@ const staticStreams = [
   {
     id: "country-kr-arirang",
     name: "Arirang World Korea",
-    url: "https://amdlive-ch01.arirang.co.kr/ch01/index.m3u8",
+    url: "https://cdn-01.bonus-tv.ru/arirang_edge/playlist.m3u8",
     category: "country",
     country: "KR",
-    logo: "https://images.unsplash.com/photo-1517154421773-0529f29ea451?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/9/94/Arirang_TV_Logo.svg/revision/latest?cb=20210828042411",
     status: "online",
     lat: 37.5665, // Seoul, South Korea
     lon: 126.9780,
@@ -789,10 +756,10 @@ const staticStreams = [
   {
     id: "country-es-rtve",
     name: "RTVE Canal 24h Spain",
-    url: "https://rtve24h-live.akamaized.net/hls/live/2043190/rtve24h-global/master.m3u8",
+    url: "https://ztnr.rtve.es/ztnr/1694255.m3u8",
     category: "country",
     country: "ES",
-    logo: "https://images.unsplash.com/photo-1543783207-ec64e4d95325?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/2/2b/Logo_Canal_24_horas.svg",
     status: "online",
     lat: 40.4168, // Madrid, Spain
     lon: -3.7038,
@@ -800,59 +767,15 @@ const staticStreams = [
   {
     id: "country-ru-rthaber",
     name: "RT News Russia (English)",
-    url: "https://rt-eng.rttv.com/live/rt-eng/playlist.m3u8",
+    url: "https://rt-doc.rttv.com/dvr/rtdru/playlist.m3u8",
     category: "country",
     country: "RU",
-    logo: "https://images.unsplash.com/photo-1513326738677-b964603b136d?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/a/a0/Russia-today-logo.svg",
     status: "online",
     lat: 55.7558,
     lon: 37.6173,
   },
   // --- VIETNAM ---
-  {
-    id: "country-vn-vtv1",
-    name: "VTV1 Vietnam HD",
-    url: "https://vtv1-vtvgo.vtv.vn/vtv1/index.m3u8", // Official VTV1 feed
-    category: "country",
-    country: "VN",
-    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 21.0285,
-    lon: 105.8542,
-  },
-  {
-    id: "country-vn-vtv2",
-    name: "VTV2 Vietnam HD",
-    url: "https://vtv2-vtvgo.vtv.vn/vtv2/index.m3u8", // Official VTV2 feed
-    category: "country",
-    country: "VN",
-    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 21.0285,
-    lon: 105.8542,
-  },
-  {
-    id: "country-vn-vtv3",
-    name: "VTV3 Vietnam HD",
-    url: "https://vtv3-vtvgo.vtv.vn/vtv3/index.m3u8", // Official VTV3 feed
-    category: "country",
-    country: "VN",
-    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 21.0285,
-    lon: 105.8542,
-  },
-  {
-    id: "country-vn-vtv5",
-    name: "VTV5 Vietnam HD",
-    url: "https://vtv5-vtvgo.vtv.vn/vtv5/index.m3u8", // VTV5 covers local and regional sports
-    category: "country",
-    country: "VN",
-    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 16.0544,
-    lon: 108.2022,
-  },
   {
     id: "country-vn-colatv",
     name: "Cola TV Vietnam (Web)",
@@ -882,7 +805,7 @@ const staticStreams = [
     url: "https://kctv.koryofront.org/stream/index.m3u8",
     category: "country",
     country: "KP",
-    logo: "https://images.unsplash.com/photo-1548102032-2d6887550f24?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/Korean_Central_Television_2005.svg/revision/latest/scale-to-width-down/250?cb=20240831112220",
     status: "online",
     lat: 39.0392, // Pyongyang, North Korea
     lon: 125.7625,
@@ -893,7 +816,7 @@ const staticStreams = [
     url: "https://raivideo.akamaized.net/hls/live/2042731/rai1/index.m3u8",
     category: "country",
     country: "IT",
-    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f7/Rai_1_2016.svg/revision/latest?cb=20190913200441",
     status: "online",
     lat: 41.9028,
     lon: 12.4964,
@@ -904,30 +827,19 @@ const staticStreams = [
     url: "https://raivideo.akamaized.net/hls/live/2042732/rai2/index.m3u8",
     category: "country",
     country: "IT",
-    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f7/Rai_1_2016.svg/revision/latest?cb=20190913200441",
     status: "online",
     lat: 45.4642, // Milan
     lon: 9.1900,
-  },
-  {
-    id: "country-it-mediaset-tg24",
-    name: "TGCom24 Mediaset Italy",
-    url: "https://vsn-fast-mediaset-it.pili.rakuten.tv/mediaset/tgcom24/playlist.m3u8",
-    category: "country",
-    country: "IT",
-    logo: "https://images.unsplash.com/photo-1528127269322-539801943592?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 41.9028,
-    lon: 12.4964,
   },
   // --- JAPAN ---
   {
     id: "country-jp-nhk-world-eng",
     name: "NHK World Japan (English)",
-    url: "https://nhkwlive-ojsp.akamaized.net/hls/live/2003459/nhkwlive-ojsp-eng/index.m3u8",
+    url: "https://masterpl.hls.nhkworld.jp/hls/w/live/smarttv.m3u8",
     category: "country",
     country: "JP",
-    logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/5/57/Gf_nhk_logo_gray.svg/revision/latest/scale-to-width-down/1000?cb=20200402134529",
     status: "online",
     lat: 35.6633, // Shibuya, Tokyo (NHK HQ)
     lon: 139.6974,
@@ -935,44 +847,23 @@ const staticStreams = [
   {
     id: "country-jp-weathernews",
     name: "WeatherNews Japan Live",
-    url: "https://wnl-live.akamaized.net/hls/live/2012110/wnl-live/master.m3u8",
+    url: "https://rch01e-alive-hls.akamaized.net/38fb45b25cdb05a1/out/v1/4e907bfabc684a1dae10df8431a84d21/index.m3u8",
     category: "country",
     country: "JP",
-    logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/8/87/Weathernews.svg/revision/latest?cb=20190214232403",
     status: "online",
     lat: 35.6146,
     lon: 139.7745,
   },
-  {
-    id: "country-jp-abema-news",
-    name: "Abema News Japan HD",
-    url: "https://abematv-news.akamaized.net/hls/live/2024564/news/master.m3u8",
-    category: "country",
-    country: "JP",
-    logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 35.6633,
-    lon: 139.6974,
-  },
-  {
-    id: "country-jp-fujitv-alt",
-    name: "Fuji TV Japan (Premium)",
-    url: "https://fujitv.mov3.co/hls/fujitv.m3u8",
-    category: "country",
-    country: "JP",
-    logo: "https://images.unsplash.com/photo-1493976040374-85c8e12f0c0e?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 35.6146,
-    lon: 139.7745,
-  },
+
   // --- SAUDI ARABIA ---
   {
     id: "country-sa-al-arabiya",
     name: "Al Arabiya News",
-    url: "https://live.alarabiya.net/alarabiya/index.m3u8",
+    url: "https://live.alarabiya.net/alarabiapublish/english/playlist_dvr.m3u8",
     category: "country",
     country: "SA",
-    logo: "https://images.unsplash.com/photo-1518933165971-611dbc9c412d?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e0/Al-Arabiya_new_logo.svg/1280px-Al-Arabiya_new_logo.svg.png?_=20241011192745",
     status: "online",
     lat: 24.7136, // Riyadh
     lon: 46.6753,
@@ -980,25 +871,15 @@ const staticStreams = [
   {
     id: "country-sa-al-hadath",
     name: "Al Hadath",
-    url: "https://live.alarabiya.net/alhadath/index.m3u8",
+    url: "https://av.alarabiya.net/alarabiapublish/alhadath.smil/playlist.m3u8",
     category: "country",
     country: "SA",
-    logo: "https://images.unsplash.com/photo-1518933165971-611dbc9c412d?auto=format&fit=crop&w=120&h=120&q=80",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ed/6F9E60A2-4A2C-4902-A03B-A52B2A112A6D.png/revision/latest/scale-to-width-down/1000?cb=20231126172043",
     status: "online",
     lat: 24.7136,
     lon: 46.6753,
   },
-  {
-    id: "country-sa-ksa-sports-1",
-    name: "KSA Sports 1",
-    url: "https://shls-ksa-sports-1-med.akamaized.net/out/v1/934d4f8260714b2787723223062086e3/index.m3u8",
-    category: "sports",
-    country: "SA",
-    logo: "https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 24.7136,
-    lon: 46.6753,
-  },
+
   // --- INDIA ---
   {
     id: "country-in-aajtak",
