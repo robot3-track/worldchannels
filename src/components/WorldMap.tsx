@@ -588,7 +588,7 @@ export default function WorldMap({
                 ? "bg-zinc-50 border-zinc-300 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-400 focus:ring-0"
                 : "bg-neutral-950 border-neutral-800 text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-700 focus:ring-0"
             }`}
-            placeholder="FILTER_BY_CITY_COUNTRY_OR_ID..."
+            placeholder="Filter by country, city, channel..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
