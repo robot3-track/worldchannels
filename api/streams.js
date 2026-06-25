@@ -46,6 +46,17 @@ const countryCoords = {
   HT: { lat: 18.9712, lon: -72.2852 },
   BH: { lat: 26.0667, lon: 50.5577 },
   IT: { lat: 41.8719, lon: 12.5674 },
+  TR: { lat: 38.9615, lon: 35.2517},
+  RO: { lat: 45.9432, lon: 24.9668 },
+  AE: { lat: 23.4241, lon: 53.8478 },
+  NZ: { lat: -40.9006, lon: 174.8860 },
+  FI: { lat: 64.0000, lon: 26.0000 },
+  NO: { lat: 62.0000, lon: 10.0000},
+  SE: { lat: 60.1282, lon: 18.6435 },
+  DK: { lat: 56.2639, lon: 9.5018 },
+  NL: { lat: 52.1326, lon: 5.2913 },
+  BE: { lat: 50.5039, lon: 4.4699 },
+  CH: { lat: 46.8182, lon: 8.2275 },
   Global: { lat: 39.8283, lon: -98.5795 }
 };
 
@@ -955,7 +966,25 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/it.m3u", category: "country", country: "IT" },
       { url: "https://iptv-org.github.io/iptv/countries/fr.m3u", category: "country", country: "FR" },
       { url: "https://iptv-org.github.io/iptv/regions/amer.m3u", category: "region", region: "AMER" },
-      { url: "https://iptv-org.github.io/iptv/countries/uk.m3u", category: "country", country: "UK" }
+      { url: "https://iptv-org.github.io/iptv/countries/uk.m3u", category: "country", country: "UK" },
+      { url: "https://iptv-org.github.io/iptv/countries/au.m3u", category: "country", country: "AU" },
+      { url: "https://iptv-org.github.io/iptv/countries/ca.m3u", category: "country", country: "CA" },
+      { url: "https://iptv-org.github.io/iptv/countries/tw.m3u", category: "country", country: "TW" },
+      { url: "https://iptv-org.github.io/iptv/countries/tr.m3u", category: "country", country: "TR" },
+      { url: "https://iptv-org.github.io/iptv/countries/es.m3u", category: "country", country: "ES" },
+      { url: "https://iptv-org.github.io/iptv/countries/de.m3u", category: "country", country: "DE" },
+      { url: "https://iptv-org.github.io/iptv/countries/cn.m3u", category: "country", country: "CN" },
+      { url: "https://iptv-org.github.io/iptv/countries/ro.m3u", category: "country", country: "RO" },
+      { url: "https://iptv-org.github.io/iptv/countries/ae.m3u", category: "country", country: "AE" },
+      { url: "https://iptv-org.github.io/iptv/countries/nz.m3u", category: "country", country: "NZ" },
+      { url: "https://iptv-org.github.io/iptv/countries/kp.m3u", category: "country", country: "KP" },
+      { url: "https://iptv-org.github.io/iptv/countries/fi.m3u", category: "country", country: "FI" },
+      { url: "https://iptv-org.github.io/iptv/countries/no.m3u", category: "country", country: "NO" },
+      { url: "https://iptv-org.github.io/iptv/countries/se.m3u", category: "country", country: "SE" },
+      { url: "https://iptv-org.github.io/iptv/countries/dk.m3u", category: "country", country: "DK" },
+      { url: "https://iptv-org.github.io/iptv/countries/nl.m3u", category: "country", country: "NL" },
+      { url: "https://iptv-org.github.io/iptv/countries/be.m3u", category: "country", country: "BE" },
+      { url: "https://iptv-org.github.io/iptv/countries/ch.m3u", category: "country", country: "CH" }
     ];
 
     const m3uResults = await Promise.all(sources.map(src => downloadM3U(src.url).then(data => parseM3U(data, src.category))));
