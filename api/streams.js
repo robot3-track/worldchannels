@@ -121,7 +121,7 @@ const regionalCities = [
     { keys: ["israel", "palestine", "jerusalem", "tel aviv", "ramallah", "gaza"], lat: 31.7683, lon: 35.2137, country: "IL" },
     { keys: ["iraq", "baghdad", "basra", "erbil"], lat: 33.3152, lon: 44.3661, country: "IQ" },
     { keys: ["iran", "tehran", "mashhad", "isfahan"], lat: 35.6892, lon: 51.3890, country: "IR" },
-    { keys: ["bahrain", "manama", "bahrain sports"], lat: 26.2285, lon: 50.5860, country: "BH" },
+    { keys: ["bahrain", "manama", "bahrain sports", "bahrain sports 1 (720p) [Not 24/7]", "bahrain sports 2 (720p) [Not 24/7]", "bahrain international", "bahrain tv"], lat: 26.2285, lon: 50.5860, country: "BH" },
     { keys: ["africa", "pan africa", "african"], lat: 9.0820, lon: 8.6753, country: "NG" },
     { keys: ["uruguay","dsports uruguay", "dsports" ], lat: -33.0000, lon: -56.0000, country: "UY"},
     { keys: ["serbia", "arena sport 1 premium", "arena sport 2 premium", "arena sport 3 premium", "arena sport 4 premium"], lat: 44.8176, lon: 20.4569, country: "RS" }
