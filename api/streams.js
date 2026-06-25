@@ -323,6 +323,7 @@ const staticStreams = [
     name: "FS1 (Fox Sports)",
     url: "http://45.139.122.199:2095/live/ftU3Se0G/nSgzwb7/2432261.m3u8", // High quality, stable FS1 stream
     category: "sports",
+    category: "world cup",
     country: "US",
     logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
     status: "online",
