@@ -300,6 +300,7 @@ const staticStreams = [
     url: "https://nl2.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
     category: "sports",
     country: "RS",
+    category: "world cup",
     logo: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Arena_Sport_1_Premium_%282021%2C_short%29.svg/revision/latest?cb=20221111214150",
     status: "online",
     lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
@@ -794,6 +795,7 @@ const staticStreams = [
     name: "Cola TV Vietnam (Web)",
     url: "https://colatv.live", // Main site URL
     category: "sports",
+    category: "world cup",
     country: "VN",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
     status: "online",
@@ -805,6 +807,7 @@ const staticStreams = [
     name: "Cola TV Vietnam (Backup)",
     url: "https://live05.apusport.com/live/78905744.m3u8", // M3U8 Link
     category: "sports",
+    category: "world cup",
     country: "VN",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
     status: "online",

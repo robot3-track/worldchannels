@@ -41,6 +41,7 @@ export default function ChannelList({
 
   const categories: { value: CategoryFilter; label: string; icon: any }[] = [
     { value: "all", label: "All Feeds", icon: Globe },
+    { value: "world cup", label: "World Cup", icon: Award },
     { value: "general", label: "General TV", icon: Tv },
     { value: "sports", label: "Sports Live", icon: Award },
     { value: "news", label: "World News", icon: Radio },
