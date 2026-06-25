@@ -368,8 +368,8 @@ const staticStreams = [
     country: "IT",
     logo: "https://static.wikia.nocookie.net/logopedia/images/7/7a/TR_TV.png/revision/latest?cb=20250116224024",
     status: "online",
-    lat: 20.5937,
-    lon: 78.9629,
+    lat: 44.4949, // Bologna, Italy
+    lon: 11.3426,
   },
   {
     id: "sports-fifa-plus-alt",
