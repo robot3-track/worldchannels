@@ -322,9 +322,9 @@ export default function App() {
           <div className="flex items-center gap-2.5">
             <Info className="w-3.5 h-3.5 flex-shrink-0 text-amber-500" />
             <p className="uppercase font-medium">
-              [WARN_SYNC]: Map rendering relies on broadcast satellite coordinates. If feeds are missing, 
-              <button onClick={() => window.location.reload()} className="mx-1 underline hover:text-amber-600 font-bold cursor-pointer">FORCE CORE RESYNC</button> 
-              to parse current orbits.
+              [WARN_SYNC]: Map rendering relies on broadcast satellite coordinates. If channels are missing, 
+              <button onClick={() => window.location.reload()} className="mx-1 underline hover:text-amber-600 font-bold cursor-pointer">REFRESH</button> 
+              to reload broadcast data.
             </p>
           </div>
         </div>
