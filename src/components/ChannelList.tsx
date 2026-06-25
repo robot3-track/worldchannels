@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import {
   Search,
   Tv,
@@ -32,6 +32,12 @@ export default function ChannelList({
 }: ChannelListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [countryFilter, setCountryFilter] = useState<CountryFilter | "all">("all");
+  const [visibleLimit, setVisibleLimit] = useState(100);
+
+  // Reset page pagination bounds back to default when sorting or search criteria alter
+  useEffect(() => {
+    setVisibleLimit(100);
+  }, [searchTerm, selectedCategory, countryFilter]);
 
   const categories: { value: CategoryFilter; label: string; icon: any }[] = [
     { value: "all", label: "All Feeds", icon: Globe },
@@ -199,8 +205,8 @@ export default function ChannelList({
       {/* Broadcast Feed Rows */}
       <div className="flex-1 overflow-y-auto pr-1 space-y-1 no-scrollbar scroll-smooth">
         <div className="flex justify-between items-center text-[9px] font-bold text-zinc-400 dark:text-neutral-600 px-1 mb-1 font-mono uppercase tracking-wider">
-          <span>STATION MATCHES</span>
-          <span>SIG METRICS</span>
+          <span>Station matches</span>
+          <span>Sig</span>
         </div>
 
         {processedStreams.length === 0 ? (
@@ -216,82 +222,98 @@ export default function ChannelList({
             </p>
           </div>
         ) : (
-          processedStreams.slice(0, 100).map((stream) => {
-            const isSelected = selectedChannel?.id === stream.id;
-            return (
-              <button
-                key={stream.id}
-                onClick={() => onSelectChannel(stream)}
-                className={`w-full text-left flex items-center justify-between p-2 border transition-all duration-150 group ${
-                  isSelected
-                    ? theme === "light"
-                      ? "bg-white border-zinc-900 text-zinc-900 translate-x-1"
-                      : "bg-neutral-950 border-indigo-500 text-neutral-100 translate-x-1"
-                    : theme === "light"
-                    ? "bg-white border-zinc-200/80 text-zinc-800 hover:bg-zinc-50 hover:border-zinc-400"
-                    : "bg-neutral-950/40 border-neutral-900 text-neutral-400 hover:bg-neutral-950 hover:border-neutral-700 hover:text-neutral-200"
-                }`}
-              >
-                <div className="flex items-center gap-3 truncate pr-2">
-                  {/* Television Box Frame */}
-                  <div className={`w-7 h-7 overflow-hidden border flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 ${
-                    theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"
-                  }`}>
-                    {stream.logo ? (
-                      <img
-                        src={stream.logo}
-                        alt=""
-                        className="w-full h-full object-cover"
-                        onError={(e) => {
-                          (e.target as HTMLImageElement).src = "";
-                        }}
-                        referrerPolicy="no-referrer"
-                      />
-                    ) : (
-                      <Tv className="w-3.5 h-3.5 text-zinc-400" />
-                    )}
-                  </div>
-
-                  <div className="truncate flex flex-col justify-center">
-                    <span className={`text-xs font-bold tracking-tight truncate ${
-                      isSelected
-                        ? "text-zinc-900 dark:text-indigo-400"
-                        : theme === "light"
-                        ? "text-zinc-900"
-                        : "text-neutral-300"
+          <>
+            {processedStreams.slice(0, visibleLimit).map((stream) => {
+              const isSelected = selectedChannel?.id === stream.id;
+              return (
+                <button
+                  key={stream.id}
+                  onClick={() => onSelectChannel(stream)}
+                  className={`w-full text-left flex items-center justify-between p-2 border transition-all duration-150 group ${
+                    isSelected
+                      ? theme === "light"
+                        ? "bg-white border-zinc-900 text-zinc-900 translate-x-1"
+                        : "bg-neutral-950 border-indigo-500 text-neutral-100 translate-x-1"
+                      : theme === "light"
+                      ? "bg-white border-zinc-200/80 text-zinc-800 hover:bg-zinc-50 hover:border-zinc-400"
+                      : "bg-neutral-950/40 border-neutral-900 text-neutral-400 hover:bg-neutral-950 hover:border-neutral-700 hover:text-neutral-200"
+                  }`}
+                >
+                  <div className="flex items-center gap-3 truncate pr-2">
+                    {/* Television Box Frame */}
+                    <div className={`w-7 h-7 overflow-hidden border flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 ${
+                      theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"
                     }`}>
-                      {stream.name}
-                    </span>
-                    <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-zinc-400 font-mono font-medium">
-                      <span className="uppercase tracking-tight">{stream.category}</span>
-                      <span>//</span>
-                      <span className="font-bold text-zinc-500 dark:text-neutral-500">{stream.country}</span>
+                      {stream.logo ? (
+                        <img
+                          src={stream.logo}
+                          alt=""
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = "";
+                          }}
+                          referrerPolicy="no-referrer"
+                        />
+                      ) : (
+                        <Tv className="w-3.5 h-3.5 text-zinc-400" />
+                      )}
+                    </div>
+
+                    <div className="truncate flex flex-col justify-center">
+                      <span className={`text-xs font-bold tracking-tight truncate ${
+                        isSelected
+                          ? "text-zinc-900 dark:text-indigo-400"
+                          : theme === "light"
+                          ? "text-zinc-900"
+                          : "text-neutral-300"
+                      }`}>
+                        {stream.name}
+                      </span>
+                      <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-zinc-400 font-mono font-medium">
+                        <span className="uppercase tracking-tight">{stream.category}</span>
+                        <span>//</span>
+                        <span className="font-bold text-zinc-500 dark:text-neutral-500">{stream.country}</span>
+                      </div>
                     </div>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-2.5 flex-shrink-0">
-                  {/* Technical Live Status Bar */}
-                  <div className="flex items-center gap-1 font-mono text-[9px] font-bold tracking-tighter">
-                    <span className={
-                      stream.status === "online" ? "text-emerald-500" : stream.status === "unstable" ? "text-amber-500" : "text-rose-500"
-                    }>
-                      ●
-                    </span>
-                    <span className="text-[8px] opacity-40 group-hover:opacity-100 transition-opacity">
-                      {stream.status.toUpperCase()}
-                    </span>
+                  <div className="flex items-center gap-2.5 flex-shrink-0">
+                    {/* Technical Live Status Bar */}
+                    <div className="flex items-center gap-1 font-mono text-[9px] font-bold tracking-tighter">
+                      <span className={
+                        stream.status === "online" ? "text-emerald-500" : stream.status === "unstable" ? "text-amber-500" : "text-rose-500"
+                      }>
+                        ●
+                      </span>
+                      <span className="text-[8px] opacity-40 group-hover:opacity-100 transition-opacity">
+                        {(stream.status || "OFFLINE").toUpperCase()}
+                      </span>
+                    </div>
+                    
+                    <ArrowRight className={`w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 ${
+                      isSelected
+                        ? "text-zinc-900 dark:text-indigo-400"
+                        : "text-zinc-300 dark:text-neutral-800"
+                    }`} />
                   </div>
-                  
-                  <ArrowRight className={`w-3.5 h-3.5 transition-transform duration-200 group-hover:translate-x-0.5 ${
-                    isSelected
-                      ? "text-zinc-900 dark:text-indigo-400"
-                      : "text-zinc-300 dark:text-neutral-800"
-                  }`} />
-                </div>
+                </button>
+              );
+            })}
+
+            {/* Pagination Control Node Trigger */}
+            {processedStreams.length > visibleLimit && (
+              <button
+                onClick={() => setVisibleLimit((prev) => prev + 100)}
+                className={`w-full py-2.5 mt-2 font-mono text-[10px] font-bold uppercase tracking-wider border border-dashed transition-all duration-150 text-center
+                  ${theme === "light" 
+                    ? "bg-zinc-50 border-zinc-300 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900" 
+                    : "bg-neutral-900/20 border-neutral-800 text-neutral-500 hover:bg-neutral-900/60 hover:text-neutral-200"
+                  }`}
+              >
+                [SHOW_MORE_FEEDS // FETCH_NEXT_100]
               </button>
-            );
-          })
+            )}
+          </>
         )}
       </div>
     </div>
