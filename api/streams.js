@@ -336,7 +336,7 @@ const staticStreams = [
   {
     id: "sports-foxsports-backup",
     name: "FS1 (Fox Sports Backup)",
-    url: "https://corsporxy.io/?url=http://s3.e-cdn.me:80/live/Bengamenbukinafaso2026/msvrpi45e1/197329.m3u8",
+    url: "https://corsporxy.io/?url=https://s3.e-cdn.me:80/live/Bengamenbukinafaso2026/msvrpi45e1/197329.m3u8",
     category: "world cup",
     country: "US",
     logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
