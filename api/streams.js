@@ -329,6 +329,17 @@ const staticStreams = [
     lat: 34.0522, // Los Angeles, US (Fox Sports HQ)
     lon: -118.2437,
   },
+    {
+    id: "sports-foxsports-backup",
+    name: "FS1 (Fox Sports Backup)",
+    url: "http://s3.e-cdn.me:80/live/Bengamenbukinafaso2026/msvrpi45e1/197329.m3u8",
+    category: "world cup",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
+    status: "online",
+    lat: 34.0522, // Los Angeles, US (Fox Sports HQ)
+    lon: -118.2437,
+  },
   {
     id:"sports-fubotv-sports",
     name: "Fubo Sports Network",
