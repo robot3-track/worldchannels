@@ -321,27 +321,10 @@ const staticStreams = [
   {
     id: "sports-foxsports-1",
     name: "FS1 (Fox Sports)",
-    // Point this to your relative Vercel API route instead of raw HTTP
-    url: "/api/proxy-stream?id=sports-foxsports-1", 
-    headers: {
-      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
-      "Referer": "http://45.139.122.199:2095/live/ftU3Se0G/nSgzwb7/2432261.m3u8",
-      "Origin": "http://45.139.122.199:2095/live/ftU3Se0G/nSgzwb7/2432261.m3u8"
-    },
-    category: "world cup",
-    country: "US",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
-    status: "online",
-    lat: 34.0522, 
-    lon: -118.2437
-  },
-  {
-    id: "sports-foxsports-backup",
-    name: "FS1 (Fox Sports Backup)",
     url: "http://s3.e-cdn.me:80/live/Bengamenbukinafaso2026/msvrpi45e1/197329.m3u8",
     category: "world cup",
     country: "US",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
+    logo: "https://cdn.stmify.com/embed-free/v1/fox-spores-mx-jw",
     status: "online",
     lat: 34.0522, // Los Angeles, US (Fox Sports HQ)
     lon: -118.2437,
