@@ -321,7 +321,7 @@ const staticStreams = [
   { 
     id: "sports-foxsports-1", 
     name: "FS1 (Fox Sports)", 
-    url: "https://cdn.stmify.com/embed-free/v1/fox-spores-mx-jw", 
+    url: "https://cdn.stmify.com/embed-free/v1/fox-spores-mx-jw;allowfullscreen=true;autoplay=true;controls=false;mute=false;loop=false;playsinline=true", 
     isEmbed: true, // Custom flag to help your frontend player switch modes
     category: "world cup", 
     country: "US", 
