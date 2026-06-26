@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/proxy-stream",
+      "destination": "http://45.139.122.199:2095/live/ftU3Se0G/nSgzwb7/2432261.m3u8"
+    }
+  ]
+}
