@@ -333,7 +333,7 @@ const staticStreams = [
   {
     id:"sports-fubotv-sports",
     name: "Fubo Sports Network",
-    url: "http://main.light-ott.net:80/play/live.php?mac=00:1A:79:3A:93:FD&stream=858538&extension=m3u8", // High quality, stable Fubo Sports Network stream
+    url: "https://live-manifest.production-public.tubi.io/live/d8c035df-1076-4aa6-8628-da2ec80781f9/playlist.m3u8", // High quality, stable Fubo Sports Network stream
     category: "sports",
     country: "US",
     logo: "https://static.wikia.nocookie.net/logopedia/images/1/1e/2023-fubotv-new-logo-design-2-520x321.png/revision/latest?cb=20230519120710",
