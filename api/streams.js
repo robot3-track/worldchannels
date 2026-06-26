@@ -319,16 +319,27 @@ const staticStreams = [
     lon: 20.4573,
   },
   { 
-    id: "sports-foxsports-1", 
-    name: "FS1 (Fox Sports)", 
+    id: "sports-tsn-1", 
+    name: "TSN (Canada Streaming)", 
     url: "https://602.formaturamaxi.com.br/tsn.m3u8", 
     isEmbed: false, // Set to false since this is a direct .mpd stream manifest link, not an iframe embed page
     category: "world cup", 
-    country: "US", 
-    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648", 
+    country: "CA", 
+    logo: "https://static.wikia.nocookie.net/logopedia/images/b/b6/Tsn1hd.png/revision/latest?cb=20150709183637", 
     status: "online", 
-    lat: 34.0522, 
-    lon: -118.2437 
+    lat: 56.130366,
+    lon: -106.346771,
+  },
+  {
+    id: "sports-fs1-sports",
+    name: "FS1 (Fox Sports 1)",
+    url: "https://602.formaturamaxi.com.br/fs1.m3u8",
+    category: "world cup",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
+    status: "online",
+    lat: 34.0522, // Los Angeles, US (Fox Sports HQ)
+    lon: -118.2437,
   },
   {
     id:"sports-fubotv-sports",
