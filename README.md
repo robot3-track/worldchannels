@@ -19,7 +19,7 @@ Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. 
 *   **Arena Sport 1 Premium**: Official broadcaster for the Balkans, providing ultra-high-definition coverage of all tournament matches.
 *   **ColaTV Vietnam**: A premium regional hub specializing in Asian market sports feeds and international football.
 *   **TSN Sports**: Official Broadcaster in Canada.
-note that we only provide legal sources. any copyright interferences are taken down (ex. FS1)
+*   DISCLAIMIR: ote that we only provide legal sources. any copyright interferences are taken down (ex. FS1)
 
 ## Technical Infrastructure
 
