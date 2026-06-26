@@ -1002,6 +1002,7 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/ch.m3u", category: "country", country: "CH" },
       { url: "https://iptv-org.github.io/iptv/countries/kp.m3u", category: "country", country: "KP" },
       { url: "https://iptv-org.github.io/channels/za/SuperSportAction#SD", category: "sports", country: "ZA" },
+      { url: "https://iptv-org.github.io/channels/us/FoxSports1", category: "sports", country: "US" },
       { url: "https://iptv-org.github.io/iptv/index.m3u", category: "general"}
     ];
 
