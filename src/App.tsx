@@ -582,7 +582,7 @@ export default function App() {
             </span>
             <span className="opacity-30 hidden sm:inline">|</span>
             <span>&copy; {new Date().getFullYear()}</span>
-            <span>By Yohan Chang [MHS 2029]</span>
+            <span>By Yohan Chang [MHS 2029]. We ensure that all channels are legitimate and legal. Any channels conflicting with copyright are taken down.</span>
           </div>
 
           {/* Right: Technical Diagnostic Metrics */}
