@@ -321,8 +321,8 @@ const staticStreams = [
   { 
     id: "sports-foxsports-1", 
     name: "FS1 (Fox Sports)", 
-    url: "https://cdn.stmify.com/embed-free/v1/fox-spores-mx-jw", 
-    isEmbed: true, // Custom flag to help your frontend player switch modes
+    url: "https://602.formaturamaxi.com.br/tsn.m3u8", 
+    isEmbed: false, // Set to false since this is a direct .mpd stream manifest link, not an iframe embed page
     category: "world cup", 
     country: "US", 
     logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648", 
@@ -1001,8 +1001,6 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/be.m3u", category: "country", country: "BE" },
       { url: "https://iptv-org.github.io/iptv/countries/ch.m3u", category: "country", country: "CH" },
       { url: "https://iptv-org.github.io/iptv/countries/kp.m3u", category: "country", country: "KP" },
-      { url: "https://iptv-org.github.io/channels/za/SuperSportAction#SD", category: "sports", country: "ZA" },
-      { url: "https://iptv-org.github.io/channels/us/FoxSports1", category: "sports", country: "US" },
       { url: "https://iptv-org.github.io/iptv/index.m3u", category: "general"}
     ];
 
