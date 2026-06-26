@@ -321,7 +321,7 @@ const staticStreams = [
   {
     id: "sports-foxsports-1",
     name: "FS1 (Fox Sports)",
-    url: "http://cdn.stmify.com/embed-free/v1/fox-spores-mx-jw",
+    url: "https://cdn.stmify.com/embed-free/v1/fox-spores-mx-jw",
     category: "world cup",
     country: "US",
     logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
