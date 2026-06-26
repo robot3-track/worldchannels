@@ -318,16 +318,17 @@ const staticStreams = [
     lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
     lon: 20.4573,
   },
-  {
-    id: "sports-foxsports-1",
-    name: "FS1 (Fox Sports)",
-    url: "https://cdn.stmify.com/embed-free/v1/fox-spores-mx-jw",
-    category: "world cup",
-    country: "US",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
-    status: "online",
-    lat: 34.0522, // Los Angeles, US (Fox Sports HQ)
-    lon: -118.2437,
+  { 
+    id: "sports-foxsports-1", 
+    name: "FS1 (Fox Sports)", 
+    url: "https://cdn.stmify.com/embed-free/v1/fox-spores-mx-jw", 
+    isEmbed: true, // Custom flag to help your frontend player switch modes
+    category: "world cup", 
+    country: "US", 
+    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648", 
+    status: "online", 
+    lat: 34.0522, 
+    lon: -118.2437 
   },
   {
     id:"sports-fubotv-sports",
