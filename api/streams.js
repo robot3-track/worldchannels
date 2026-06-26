@@ -331,17 +331,6 @@ const staticStreams = [
     lon: -106.346771,
   },
   {
-    id: "sports-fs1-sports",
-    name: "FS1 (Fox Sports 1)",
-    url: "https://602.formaturamaxi.com.br/fs1.m3u8",
-    category: "world cup",
-    country: "US",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/a/ad/FS1_New_Logo.svg/revision/latest?cb=20230817005648",
-    status: "online",
-    lat: 34.0522, // Los Angeles, US (Fox Sports HQ)
-    lon: -118.2437,
-  },
-  {
     id:"sports-fubotv-sports",
     name: "Fubo Sports Network",
     url: "https://live-manifest.production-public.tubi.io/live/d8c035df-1076-4aa6-8628-da2ec80781f9/playlist.m3u8", // High quality, stable Fubo Sports Network stream
