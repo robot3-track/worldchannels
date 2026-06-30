@@ -725,6 +725,17 @@ const staticStreams = [
     lon: -77.0369,
   },
   {
+    id: "sports-tnt-1",
+    name: "TNT Sports 1",
+    url: "https://cc-zv5hyc9jj47n5.akamaized.net/ogc/nsprt/nsprt_1080p.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/5/56/TNT_Sports_US_2023.svg/revision/latest?cb=20250831005248",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
     id: "country-uk-skynews",
     name: "Sky News Live Stream",
     url: "https://news.sky.com/watch-live",
