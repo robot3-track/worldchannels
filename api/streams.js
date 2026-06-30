@@ -295,6 +295,30 @@ const staticStreams = [
     lon: 13.0550,
   },
   {
+    id: "sports-turkmenistan",
+    name: "Turkmenistan Sports",
+    url: "https://alpha.tv.online.tm/legacyhls/ch004_720/index.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TM",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/b/be/Turkmenistan_Sport.png/revision/latest?cb=20211225160814",
+    status: "online",
+    lat: 38.9697, // Ashgabat, Turkmenistan
+    lon: 58.3794,
+  },
+  {
+    id: "sports-bein-fr",
+    name: "Bein Sports France",
+    url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
     id: "news-euro",
     name: "EuroNews",
     url: "https://live-manifest.production-public.tubi.io/live/c841471d-dc14-43fb-9ba5-c266e7edcce4/playlist.m3u8",
@@ -573,6 +597,28 @@ const staticStreams = [
     status: "online",
     lat: 25.7617,
     lon: -80.1918
+  },
+  {
+    id:"news-kurdistan",
+    name: "Kurdistan News",
+    url: "https://5a3ed7a72ed4b.streamlock.net/live/SMIL:myStream.smil/chunklist.m3u8",
+    category: "news",
+    country: "IQ",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/1/14/Kurdistan_tv.png/revision/latest?cb=20210928122946",
+    status: "online",
+    lat: 36.1911, // Erbil, Iraq
+    lon: 44.0094,
+  },
+  {
+    id:"news-turkmenistan",
+    name: "Arkadag TV",
+    url: "https://alpha.tv.online.tm/hls/ch000.m3u8",
+    category: "news",
+    country: "TM",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/a/a2/Arkadag.png/revision/latest?cb=20230911111206",
+    status: "online",
+    lat: 38.9697, // Ashgabat, Turkmenistan
+    lon: 58.3794,
   },
   // --- NEWS (Category: news, Country: Global/Specific) ---
   {
