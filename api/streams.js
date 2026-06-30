@@ -295,28 +295,15 @@ const staticStreams = [
     lon: 13.0550,
   },
   {
-    id: "sports-arenasport1",
-    name: "Arena Sport 1 Premium",
-    url: "https://nl2.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
-    category: "sports",
-    country: "RS",
-    category: "world cup",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Arena_Sport_1_Premium_%282021%2C_short%29.svg/revision/latest?cb=20221111214150",
+    id: "news-euro",
+    name: "EuroNews",
+    url: "https://live-manifest.production-public.tubi.io/live/c841471d-dc14-43fb-9ba5-c266e7edcce4/playlist.m3u8",
+    category: "news",
+    country: "UK",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/9/9c/Euronews_2022.svg",
     status: "online",
-    lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
-    lon: 20.4573,
-  },
-  {
-    id: "sports-arenasport1-backup",
-    name: "Arena Sport 1 Premium (Backup)",
-    url: "https://nl1.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
-    category: "sports",
-    category: "world cup",
-    country: "RS",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Arena_Sport_1_Premium_%282021%2C_short%29.svg/revision/latest?cb=20221111214150",
-    status: "online",
-    lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
-    lon: 20.4573,
+    lat: 51.5074, // London, UK (EuroNews HQ)
+    lon: -0.1278,
   },
   { 
     id: "sports-tsn-1", 
@@ -340,6 +327,28 @@ const staticStreams = [
     status: "online",
     lat: 40.7128, // New York City, US (FuboTV HQ)
     lon: -74.0060,
+  },
+  {
+    id:"news-cctv-4",
+    name: "CCTV 4",
+    url: "https://hc9lby9bzw8zcar.wcetv.com/hls/cctv4.m3u8", // High quality, stable Fubo Sports Network stream
+    category: "news",
+    country: "CN",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/1/11/CCTV-4_%E4%B8%AD%E6%96%87%E5%9B%BD%E9%99%85.svg/revision/latest/scale-to-width-down/1000?cb=20230517084450",
+    status: "online",
+    lat: 39.9042, // Beijing, China (CCTV HQ)
+    lon: 116.4074,
+  },
+  {
+    id:"news-bbc-earth",
+    name: "BBC Earth",
+    url: "https://live-manifest.production-public.tubi.io/live/88810cb1-e91e-4f19-870b-513ffc9a39cb/playlist.m3u8",
+    category: "news",
+    country: "UK",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/BBC_Earth_2023.svg/500px-BBC_Earth_2023.svg.png",
+    status: "online",
+    lat: 51.5074, // London, UK (BBC HQ)
+    lon: -0.1278,
   },
   {
     id: "sports-fifaplus",
@@ -495,6 +504,30 @@ const staticStreams = [
     status: "online",
     lat: 39.9042, // Beijing, China
     lon: 116.4074,
+  },
+  {
+    id: "sports-arenasport1",
+    name: "Arena Sport 1 Premium",
+    url: "https://nl1.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
+    category: "sports",
+    category: "world cup",
+    country: "RS",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Arena_Sport_1_Premium_%282021%2C_short%29.svg/revision/latest?cb=20221111214150",
+    status: "online",
+    lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
+    lon: 20.4573,
+  },
+  {
+    id: "sports-arenasport1-backup",
+    name: "Arena Sport 1 Premium (Backup)",
+    url: "https://nl2.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
+    category: "sports",
+    country: "RS",
+    category: "world cup",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Arena_Sport_1_Premium_%282021%2C_short%29.svg/revision/latest?cb=20221111214150",
+    status: "online",
+    lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
+    lon: 20.4573,
   },
   // --- ADDED PREMIUM REGIONAL SPORTS CHANNELS ---
   {
