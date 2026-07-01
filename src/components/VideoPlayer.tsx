@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Tv, AlertTriangle, RefreshCw, Play, Pause, Volume2, VolumeX } from "lucide-react";
+import { Tv, AlertTriangle, RefreshCw, Play, Pause, Volume2, VolumeX, Maximize, Minimize } from "lucide-react";
 import { StreamChannel } from "../types";
 
 interface VideoPlayerProps {
@@ -15,17 +15,20 @@ export default function VideoPlayer({
   onSelectBackup,
   theme
 }: VideoPlayerProps) {
+  const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const failureTimerRef = useRef<any | null>(null);
   
-  // External control states
+  // Controls state managers
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(true); // Default muted to ensure browser auto-play passes restrictions
+  const [isMuted, setIsMuted] = useState(true); 
   const [volume, setVolume] = useState(1);
+  const [isFullscreen, setIsFullscreen] = useState(false);
 
-  // Failure tracking states
+  // Failure tracking metrics
   const [playbackError, setPlaybackError] = useState<string | null>(null);
   const [isRecovering, setIsRecovering] = useState(false);
+  const [isReloading, setIsReloading] = useState(false);
 
   // Helper function to extract YouTube IDs
   const getYouTubeId = (url: string): string | null => {
@@ -35,7 +38,39 @@ export default function VideoPlayer({
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
-  // Sync state values directly back to video ref manually on change
+  // Force Reload Stream Action
+  const handleReloadStream = () => {
+    const video = videoRef.current;
+    if (!video || !channel) return;
+
+    setIsReloading(true);
+    setPlaybackError(null);
+    setIsRecovering(false);
+    if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
+
+    // Re-assign source to kick the browser network layer into re-fetching shards
+    const currentSrc = video.src;
+    video.src = "";
+    video.load();
+    
+    // Add a tiny buffer delay before resetting the link to clear cached failures
+    setTimeout(() => {
+      video.src = currentSrc;
+      video.load();
+      video.play()
+        .then(() => {
+          setIsPlaying(true);
+          setIsReloading(false);
+        })
+        .catch((err) => {
+          console.log("Reload auto-play blocked, waiting for interaction:", err);
+          setIsPlaying(false);
+          setIsReloading(false);
+        });
+    }, 200);
+  };
+
+  // Sync execution triggers manually back to standard video element references
   const togglePlay = () => {
     if (!videoRef.current) return;
     if (isPlaying) {
@@ -64,7 +99,30 @@ export default function VideoPlayer({
     }
   };
 
-  // Channel processing runtime
+  const toggleFullscreen = () => {
+    if (!containerRef.current) return;
+
+    if (!document.fullscreenElement) {
+      containerRef.current.requestFullscreen()
+        .then(() => setIsFullscreen(true))
+        .catch((err) => console.error("Fullscreen request blocked:", err));
+    } else {
+      document.exitFullscreen()
+        .then(() => setIsFullscreen(false))
+        .catch((err) => console.error("Exit fullscreen error:", err));
+    }
+  };
+
+  useEffect(() => {
+    const handleFullscreenChange = () => {
+      setIsFullscreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+  }, []);
+
+  // Channel processing loop runtime configuration
   useEffect(() => {
     if (!channel) return;
 
@@ -88,13 +146,10 @@ export default function VideoPlayer({
       video.src = finalUrl;
       video.load();
       
-      // Auto-play hook execution loop (Starts muted automatically)
       video.play()
-        .then(() => {
-          setIsPlaying(true);
-        })
+        .then(() => setIsPlaying(true))
         .catch((err) => {
-          console.log("Auto-play tracking blocked or restricted by platform policies:", err);
+          console.log("Auto-play context loop deferred until user interaction occurs:", err);
           setIsPlaying(false);
         });
     }
@@ -106,18 +161,16 @@ export default function VideoPlayer({
     };
   }, []);
 
-  // Multi-tier Intelligent Fallback verification engine
+  // Precise safety verification pipeline monitor
   const monitorStreamHealthState = (errorMessage: string, criticalLevel = false) => {
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
-    // Critical failures (like Network missing source) fail faster, stutters get a longer timeline window
     const safetyBufferWindow = criticalLevel ? 2000 : 6000;
 
     failureTimerRef.current = setTimeout(() => {
       const video = videoRef.current;
       if (!video || !channel) return;
 
-      // Ensure data buffers are completely stalled and execution has truly dropped
       if (video.readyState >= 2 && !video.paused && video.networkState !== HTMLMediaElement.NETWORK_NO_SOURCE) {
         return; 
       }
@@ -153,7 +206,7 @@ export default function VideoPlayer({
       }`}>
         <Tv className="w-10 h-10 text-slate-400 mb-4 animate-pulse" />
         <p className="text-sm font-semibold">Broadcast Feed Receiver Idle</p>
-        <p className="text-xs text-slate-500 mt-1 max-w-xs">Select an option on the network index to track a live feed.</p>
+        <p className="text-xs text-slate-500 mt-1 max-w-xs">Select a feed channel on the navigation index array.</p>
       </div>
     );
   }
@@ -165,94 +218,138 @@ export default function VideoPlayer({
 
   return (
     <div className="flex flex-col gap-4">
-      {/* Viewport Frame */}
-      <div className={`w-full aspect-video bg-black rounded-2xl overflow-hidden relative shadow-lg border ${
-        theme === "light" ? "border-slate-200" : "border-slate-850"
-      }`}>
+      
+      {/* INTEGRATED MASTER PLAYER CONTAINER */}
+      <div 
+        ref={containerRef}
+        className={`w-full flex flex-col bg-black relative shadow-lg border overflow-hidden ${
+          isFullscreen ? "h-screen w-screen" : "aspect-video"
+        } ${theme === "light" ? "border-slate-200" : "border-slate-850"}`}
+      >
         
-        {youtubeId ? (
-          <iframe
-            src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&mute=1&modestbranding=1&rel=0`}
-            className="w-full h-full border-0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-          />
-        ) : isM3U8 || isVideoFile ? (
-          <video
-            ref={videoRef}
-            className="w-full h-full object-contain"
-            playsInline
-            muted={isMuted} // Mute explicitly paired to passing standard modern browser context blockers
-            onPlaying={resetHealthTrackers}
-            onWaiting={() => monitorStreamHealthState("Network connection buffering...")}
-            onStalled={() => monitorStreamHealthState("Data feed lagging...")}
-            onError={() => monitorStreamHealthState("Broadcast feed completely lost.", true)}
-          />
-        ) : (
-          <iframe src={channel.url} className="w-full h-full border-0" allow="autoplay; fullscreen" allowFullScreen />
-        )}
+        {/* VIEWPORT FRAME SECTION */}
+        <div className="flex-1 w-full h-full relative overflow-hidden">
+          {youtubeId ? (
+            <iframe
+              src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&mute=1&modestbranding=1&rel=0`}
+              className="w-full h-full border-0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
+          ) : isM3U8 || isVideoFile ? (
+            <video
+              ref={videoRef}
+              className="w-full h-full object-contain"
+              playsInline
+              muted={isMuted}
+              onPlaying={resetHealthTrackers}
+              onWaiting={() => monitorStreamHealthState("Network connection buffering...")}
+              onStalled={() => monitorStreamHealthState("Data feed lagging...")}
+              onError={() => monitorStreamHealthState("Broadcast feed completely lost.", true)}
+            />
+          ) : (
+            <iframe src={channel.url} className="w-full h-full border-0" allow="autoplay; fullscreen" allowFullScreen />
+          )}
 
-        {/* ERROR OVERLAY */}
-        {playbackError && !youtubeId && (
-          <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50 animate-fade-in">
-            <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
-            <h3 className="text-sm font-semibold text-slate-100">Signal Disrupted</h3>
-            <p className="text-xs text-slate-400 mt-1 max-w-xs">{playbackError}</p>
-            {isRecovering && (
-              <div className="mt-4 flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
-                <RefreshCw className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
-                <span className="text-[10px] font-bold text-slate-300 font-sans uppercase">Switching CDN Paths...</span>
+          {/* ERROR MONITOR OVERLAY WITH REFRESH BUTTON */}
+          {playbackError && !youtubeId && (
+            <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50 animate-fade-in">
+              <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
+              <h3 className="text-sm font-semibold text-slate-100">Signal Disrupted</h3>
+              <p className="text-xs text-slate-400 mt-1 max-w-xs">{playbackError}</p>
+              
+              <div className="flex items-center gap-3 mt-5">
+                <button
+                  onClick={handleReloadStream}
+                  className="flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg transition-all"
+                >
+                  <RefreshCw className={`w-3.5 h-3.5 ${isReloading ? "animate-spin" : ""}`} />
+                  Retry Connection
+                </button>
               </div>
-            )}
+
+              {isRecovering && (
+                <div className="mt-4 flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
+                  <RefreshCw className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
+                  <span className="text-[10px] font-bold text-slate-300 font-sans uppercase">Switching CDN Paths...</span>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* UNIFIED INTEGRATED CONTROLS EXPANSION BAR */}
+        {(isM3U8 || isVideoFile) && !youtubeId && (
+          <div className={`w-full p-3 border-t flex items-center justify-between gap-4 transition-all z-40 select-none ${
+            theme === "light" ? "bg-white border-slate-200" : "bg-slate-900 border-slate-800"
+          }`}>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={togglePlay}
+                className={`p-2 rounded-lg transition-all border ${
+                  theme === "light" 
+                    ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
+                    : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
+                }`}
+              >
+                {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
+              </button>
+              
+              <button
+                onClick={toggleMute}
+                className={`p-2 rounded-lg transition-all border ${
+                  theme === "light" 
+                    ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
+                    : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
+                }`}
+              >
+                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+              </button>
+
+              {/* INTEGRATED MANUAL RELOAD BUTTON */}
+              <button
+                onClick={handleReloadStream}
+                title="Reload Stream Buffer"
+                className={`p-2 rounded-lg transition-all border ${
+                  theme === "light" 
+                    ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
+                    : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
+                }`}
+              >
+                <RefreshCw className={`w-4 h-4 ${isReloading ? "animate-spin" : ""}`} />
+              </button>
+            </div>
+
+            <div className="flex items-center gap-2 flex-1 max-w-xs">
+              <span className="text-[10px] font-bold tracking-wider text-slate-400 font-sans uppercase">VOL</span>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.05"
+                value={isMuted ? 0 : volume}
+                onChange={handleVolumeChange}
+                className="w-full h-1 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+              />
+            </div>
+
+            <div>
+              <button
+                onClick={toggleFullscreen}
+                className={`p-2 rounded-lg transition-all border ${
+                  theme === "light" 
+                    ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
+                    : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
+                }`}
+              >
+                {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
         )}
       </div>
 
-      {/* EXTERNAL CONTROL PANEL BLOCK CONTAINER */}
-      {(isM3U8 || isVideoFile) && !youtubeId && (
-        <div className={`p-3 rounded-xl border flex items-center justify-between gap-4 transition-all shadow-xs ${
-          theme === "light" ? "bg-white border-slate-200" : "bg-slate-900 border-slate-800"
-        }`}>
-          <div className="flex items-center gap-2">
-            <button
-              onClick={togglePlay}
-              className={`p-2 rounded-lg transition-all border ${
-                theme === "light" 
-                  ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
-                  : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
-              }`}
-            >
-              {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
-            </button>
-            
-            <button
-              onClick={toggleMute}
-              className={`p-2 rounded-lg transition-all border ${
-                theme === "light" 
-                  ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
-                  : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
-              }`}
-            >
-              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-            </button>
-          </div>
-
-          <div className="flex items-center gap-2 flex-1 max-w-xs">
-            <span className="text-[10px] font-bold tracking-wider text-slate-400 font-sans uppercase">VOL</span>
-            <input
-              type="range"
-              min="0"
-              max="1"
-              step="0.05"
-              value={isMuted ? 0 : volume}
-              onChange={handleVolumeChange}
-              className="w-full h-1 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
-            />
-          </div>
-        </div>
-      )}
-
-      {/* Channel Information Footer */}
+      {/* Channel Information Summary Card Footer */}
       <div className={`border rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
         theme === "light" ? "bg-slate-50 border-slate-200" : "bg-slate-900 border-slate-850"
       }`}>
