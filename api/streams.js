@@ -307,6 +307,18 @@ const staticStreams = [
     lon: 58.3794,
   },
   {
+    id: "sports-telemundo-52",
+    name: "Telemundo 52 Sports",
+    url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Telemundo_logo_2018.svg/1920px-Telemundo_logo_2018.svg.png",
+    status: "online",
+    lat: 34.0522, // Los Angeles, California, USA
+    lon: -118.2437,
+  },
+  {
     id: "sports-bein-fr",
     name: "Bein Sports France",
     url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
