@@ -95,11 +95,13 @@ export default function VideoPlayer({
       hlsRef.current = null;
     }
 
-    // Determine if it's a website or an m3u8 stream
-    const isWebsite = channel.url.startsWith("http") && 
-                      !channel.url.includes(".m3u8") && 
-                      !channel.url.includes(".mp4") && 
-                      !channel.url.includes(".m4s");
+    // --- STREAM FORMAT DETECTOR (FIXED) ---
+    // Cleans query parameters only for parsing the extension, leaving channel.url completely original.
+    const cleanUrlPath = channel.url.split('?')[0].toLowerCase();
+    const isM3U8 = cleanUrlPath.includes(".m3u8");
+    const isVideoFile = cleanUrlPath.includes(".mp4") || cleanUrlPath.includes(".m4s");
+
+    const isWebsite = channel.url.startsWith("http") && !isM3U8 && !isVideoFile;
 
     setLevels([]);
     setCurrentLevel(-1);
@@ -114,7 +116,7 @@ export default function VideoPlayer({
     measureStreamLatency(channel.url);
 
     // Initialize Hls.js if supported
-    if (Hls.isSupported() && (channel.url.endsWith(".m3u8") || !video.canPlayType("application/vnd.apple.mpegurl"))) {
+    if (Hls.isSupported() && (isM3U8 || !video.canPlayType("application/vnd.apple.mpegurl"))) {
       const hls = new Hls({
         enableWorker: true,
         lowLatencyMode: true,
@@ -125,7 +127,7 @@ export default function VideoPlayer({
       });
 
       hlsRef.current = hls;
-      hls.loadSource(channel.url);
+      hls.loadSource(channel.url); // Original unmodified formatting
       hls.attachMedia(video);
 
       hls.on(Hls.Events.MANIFEST_PARSED, (event, data) => {
@@ -138,7 +140,6 @@ export default function VideoPlayer({
         video.play().then(() => {
           setIsPlaying(true);
         }).catch(() => {
-          // Playback blocked by browser autoplay policy, keep paused but ready
           setIsPlaying(false);
         });
       });
@@ -165,7 +166,7 @@ export default function VideoPlayer({
         }
       });
     } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      // Native support (Safari / iOS)
+      // Native support (Safari / iOS) - completely preserves original URL format
       video.src = channel.url;
       video.addEventListener("canplay", () => {
         video.play().then(() => {
@@ -233,7 +234,6 @@ export default function VideoPlayer({
     healingStatusRef.current = "healing";
 
     try {
-      // Call automated self-healing
       const response = await onReportBrokenRef.current(currentChannel.url);
       
       if (response.success && response.backupAvailable && response.backups.length > 0) {
@@ -241,7 +241,7 @@ export default function VideoPlayer({
         backupsFoundRef.current = response.backups;
         setHealingStatus("healed");
         healingStatusRef.current = "healed";
-        setCountdownSec(5); // Start counting down from 5 seconds
+        setCountdownSec(5);
       } else {
         setHealingStatus("failed");
         healingStatusRef.current = "failed";
@@ -385,7 +385,6 @@ export default function VideoPlayer({
           setIsFullscreen(true);
         }).catch((err: any) => {
           console.error("Fullscreen request failed:", err);
-          // Fallback to video fullscreen for iOS
           if (video && (video as any).webkitEnterFullscreen) {
             (video as any).webkitEnterFullscreen();
           }
@@ -407,7 +406,6 @@ export default function VideoPlayer({
     }
   };
 
-  // Keep fullscreen state synced when user hits ESC
   useEffect(() => {
     const handleFsChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -435,9 +433,13 @@ export default function VideoPlayer({
     );
   }
 
+  // Determine parsing elements to correctly choose iframe or video rendering
+  const cleanUrlPath = channel.url.split('?')[0].toLowerCase();
+  const isM3U8 = cleanUrlPath.includes(".m3u8");
+  const isVideoFile = cleanUrlPath.includes(".mp4") || cleanUrlPath.includes(".m4s");
+
   return (
     <div className="flex flex-col gap-4">
-      {/* Container holding video and controls */}
       <div
         ref={containerRef}
         onClick={handleContainerClick}
@@ -447,8 +449,7 @@ export default function VideoPlayer({
           theme === "light" ? "border-slate-200" : "border-slate-850"
         }`}
       >
-        {/* Video Element or Iframe */}
-        {channel.url.startsWith("http") && !channel.url.includes(".m3u8") && !channel.url.includes(".mp4") && !channel.url.includes(".m4s") ? (
+        {channel.url.startsWith("http") && !isM3U8 && !isVideoFile ? (
           <iframe
             src={channel.url}
             className="w-full h-full border-0"
@@ -464,14 +465,10 @@ export default function VideoPlayer({
           />
         )}
 
-        {/* Scanlines / Dark Control Vignette overlay */}
         <div className="absolute inset-0 pointer-events-none bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
-        
-        {/* RECOVERING / SIGNAL LOST SIMPLE AND BEAUTIFUL OVERLAY */}
         {streamError && (
           <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-20">
-            {/* Spinning/pulsing minimalistic status circle */}
             <div className="relative mb-6 flex items-center justify-center">
               <span className="absolute inline-flex h-16 w-16 rounded-full border border-rose-500/20 animate-ping"></span>
               <span className="absolute inline-flex h-12 w-12 rounded-full border border-rose-500/40 animate-pulse"></span>
@@ -487,7 +484,6 @@ export default function VideoPlayer({
               The broadcast is offline or experiencing connection issues.
             </p>
 
-            {/* Seamless, beautiful, clean loader */}
             <div className="mt-6 flex flex-col items-center gap-2">
               <div className="flex gap-1.5 justify-center">
                 <span className="w-2 h-2 rounded-full bg-emerald-500 animate-[bounce_0.6s_infinite_100ms]" />
@@ -499,7 +495,6 @@ export default function VideoPlayer({
               </span>
             </div>
 
-            {/* If alternate channel is acquired, show an elegant notification */}
             {healingStatus === "healed" && backupsFound.length > 0 && (
               <div className="mt-5 max-w-sm w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-center shadow-lg animate-fade-in">
                 <div className="flex items-center justify-center gap-1.5 text-xs text-emerald-400 font-semibold mb-1">
@@ -525,12 +520,10 @@ export default function VideoPlayer({
           </div>
         )}
 
-        {/* Custom Controller Overlay - shows on hover or focus, or if showControls is true */}
         <div className={`absolute bottom-0 inset-x-0 bg-gradient-to-t from-slate-950/95 via-slate-950/70 to-transparent p-4 flex flex-col gap-3 transition-opacity duration-300 ${
           showControls || !isPlaying ? "opacity-100" : "opacity-0 group-hover:opacity-100"
         }`}>
           
-          {/* Progress / Stream Duration Line (Interactive Live Seeker) */}
           <div className="flex items-center gap-3">
             <div className="flex-grow flex items-center relative group/seek">
               <input
@@ -559,7 +552,6 @@ export default function VideoPlayer({
           </div>
 
           <div className="flex items-center justify-between gap-4">
-            {/* Play/Pause & Volume */}
             <div className="flex items-center gap-3">
               <button
                 onClick={togglePlay}
@@ -595,14 +587,11 @@ export default function VideoPlayer({
               </div>
             </div>
 
-            {/* Displaying name inside controller bar */}
             <div className="hidden md:flex flex-col text-right truncate max-w-md">
               <span className="text-xs text-slate-100 font-semibold truncate">{channel.name}</span>
             </div>
 
-            {/* Right side controls */}
             <div className="flex items-center gap-2 relative">
-              {/* Quality / Modes Selector */}
               {levels.length > 0 && (
                 <div className="relative">
                   <button
@@ -664,7 +653,6 @@ export default function VideoPlayer({
         </div>
       </div>
 
-      {/* Information row about stream */}
       <div className={`border rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
         theme === "light"
           ? "bg-slate-50 border-slate-200"
@@ -712,7 +700,6 @@ export default function VideoPlayer({
           </div>
         </div>
 
-        {/* Actions bar */}
         <div className="flex items-center gap-2">
           {healingStatus === "healed" && (
             <div className="text-[11px] text-emerald-600 dark:text-emerald-400 bg-emerald-500/5 border border-emerald-500/10 px-3 py-1.5 rounded-xl flex items-center gap-1.5 font-sans font-medium">
