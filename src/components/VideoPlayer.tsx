@@ -11,7 +11,7 @@ interface VideoPlayerProps {
 
 // Pure synchronous selector function to eliminate state lag on mount
 const getPlayerStrategy = (channel: StreamChannel | null) => {
-  if (!channel) return { isYoutube: false, isEmbedOnly: false, useNativeVideo: false, cleanUrl: "" };
+  if (!channel) return { isYoutube: false, isEmbedOnly: false, isProtectedEmbed: false, useNativeVideo: false, cleanUrl: "" };
 
   const url = channel.url;
   const urlToCheck = url.split('?')[0].toLowerCase();
@@ -20,14 +20,19 @@ const getPlayerStrategy = (channel: StreamChannel | null) => {
   const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
   const match = url.match(regExp);
   const youtubeId = (match && match[2].length === 11) ? match[2] : null;
-  if (youtubeId) return { isYoutube: true, isEmbedOnly: false, useNativeVideo: false, cleanUrl: youtubeId };
+  if (youtubeId) return { isYoutube: true, isEmbedOnly: false, isProtectedEmbed: false, useNativeVideo: false, cleanUrl: youtubeId };
 
-  // 2. Original Embed Only (Turkmenistan Sports / Rigid CORS domains)
-  if (url.includes("online.tm") || url.includes("alpha.tv.online.tm")) {
-    return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
+  // 2. WAKEMAID Pop-up Shield Interception Matcher
+  if (url.includes("wakemaid.net")) {
+    return { isYoutube: false, isEmbedOnly: false, isProtectedEmbed: true, useNativeVideo: false, cleanUrl: url };
   }
 
-  // 3. Native Stream Check (.m3u8, .mp4)
+  // 3. Original Embed Only (Turkmenistan Sports / Rigid CORS domains)
+  if (url.includes("online.tm") || url.includes("alpha.tv.online.tm")) {
+    return { isYoutube: false, isEmbedOnly: true, isProtectedEmbed: false, useNativeVideo: false, cleanUrl: url };
+  }
+
+  // 4. Native Stream Check (.m3u8, .mp4)
   const isStream = urlToCheck.includes(".m3u8") || url.toLowerCase().includes("m3u8") || 
                    urlToCheck.includes(".mp4") || urlToCheck.includes(".m4s");
                    
@@ -36,11 +41,11 @@ const getPlayerStrategy = (channel: StreamChannel | null) => {
     if (url.startsWith("http://") && window.location.protocol === "https:") {
       finalUrl = `https://cors-anywhere.herokuapp.com/${url}`;
     }
-    return { isYoutube: false, isEmbedOnly: false, useNativeVideo: true, cleanUrl: finalUrl };
+    return { isYoutube: false, isEmbedOnly: false, isProtectedEmbed: false, useNativeVideo: true, cleanUrl: finalUrl };
   }
 
   // Fallback to iframe embed for unknown strings
-  return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
+  return { isYoutube: false, isEmbedOnly: true, isProtectedEmbed: false, useNativeVideo: false, cleanUrl: url };
 };
 
 export default function VideoPlayer({
@@ -184,7 +189,7 @@ export default function VideoPlayer({
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
     if (strategy.useNativeVideo) {
-      setIsLoading(true); // Only show spinner on direct native codecs (.m3u8)
+      setIsLoading(true); 
       const video = videoRef.current;
       if (video) {
         video.src = strategy.cleanUrl;
@@ -278,6 +283,16 @@ export default function VideoPlayer({
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
+          ) : strategy.isProtectedEmbed ? (
+            /* WAKEMAID SECURED FRAME INTERCEPTOR */
+            <iframe
+              src={strategy.cleanUrl}
+              className="w-full h-full border-0 bg-black"
+              /* allow-popups and allow-popups-to-escape-sandbox are omitted here to completely block popups */
+              sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
+              allow="autoplay; fullscreen; picture-in-picture"
+              allowFullScreen
+            />
           ) : strategy.useNativeVideo ? (
             <video
               ref={videoRef}
@@ -291,7 +306,7 @@ export default function VideoPlayer({
               onError={() => monitorStreamHealthState("Broadcast feed completely lost.", true)}
             />
           ) : (
-            /* ORIGINAL EMBED FALLBACK INTERFACE (LOADS INSTANTLY VIA NATIVE PLAYER CANVAS) */
+            /* STANDARD BASE EMBED FALLBACK */
             <iframe 
               src={strategy.cleanUrl} 
               className="w-full h-full border-0 bg-black" 
@@ -308,7 +323,7 @@ export default function VideoPlayer({
                 Connecting To Live Feed
               </h3>
               <p className="text-[11px] text-slate-400 mt-2 max-w-xs leading-relaxed font-sans px-4">
-                Establishing secure stream... Please wait, some channels may take up to 15 seconds to safely sync data.
+                Establishing secure stream link... Please wait, some international channels may take up to 15 seconds to safely sync data.
               </p>
             </div>
           )}
