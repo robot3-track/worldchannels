@@ -45,11 +45,10 @@ export default function VideoPlayer({
     setShowControls(true);
     if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
 
-    // Only auto-hide if we are actively in fullscreen mode
     if (isFullscreen) {
       controlsTimeoutRef.current = setTimeout(() => {
         setShowControls(false);
-      }, 2500); // Hide after 2.5 seconds of stillness
+      }, 2500); 
     }
   };
 
@@ -164,10 +163,8 @@ export default function VideoPlayer({
     if (isM3U8 || isVideoFile) {
       let finalUrl = channel.url;
 
-      // SPECIFIC TURKMENISTAN SPORT / CH004 CORS AGGRESSIVE BYPASS FIX
       if (channel.url.includes("online.tm") || channel.url.includes("alpha.tv.online.tm")) {
         console.warn("Known rigid CORS domain tracked. Appending dedicated proxy wrapper layers.");
-        // Uses AllOrigins open hex wrapper to scrub cross-origin parameters cleanly
         finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(channel.url)}`;
       } else if (channel.url.startsWith("http://") && window.location.protocol === "https:") {
         finalUrl = `https://cors-anywhere.herokuapp.com/${channel.url}`;
@@ -191,16 +188,18 @@ export default function VideoPlayer({
     };
   }, []);
 
-  // Safety stream check monitor logic
+  // Safety stream check monitor logic - MODIFIED TO EXTEND TIMEOUT TOLERANCE
   const monitorStreamHealthState = (errorMessage: string, criticalLevel = false) => {
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
-    const safetyBufferWindow = criticalLevel ? 2500 : 7000;
+    // Extended buffer windows: 6 seconds for complete network drops, 15 seconds for stalling/buffering
+    const safetyBufferWindow = criticalLevel ? 6000 : 15000;
 
     failureTimerRef.current = setTimeout(() => {
       const video = videoRef.current;
       if (!video || !channel) return;
 
+      // Skip the down state if the player has successfully gathered enough render data or resumed playing
       if (video.readyState >= 2 && !video.paused && video.networkState !== HTMLMediaElement.NETWORK_NO_SOURCE) {
         return; 
       }
@@ -310,7 +309,7 @@ export default function VideoPlayer({
           )}
         </div>
 
-        {/* UNIFIED INTEGRATED CONTROLS EXPANSION BAR - WITH SMART AUTO HIDE IN FULLSCREEN */}
+        {/* UNIFIED INTEGRATED CONTROLS EXPANSION BAR */}
         {(isM3U8 || isVideoFile) && !youtubeId && (
           <div className={`w-full p-3 border-t flex items-center justify-between gap-4 select-none transition-all duration-300 ${
             isFullscreen 
