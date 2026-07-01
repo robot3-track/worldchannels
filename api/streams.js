@@ -309,7 +309,7 @@ const staticStreams = [
   {
     id: "sports-directv",
     name: "DirectTV Sports",
-    url: "https://turneven.net/e/1ne7hjpb0myy",
+    url: "https://wakemaid.net/e/jmbhwj8q9yd17",
     category: "sports",
     category: "world cup",
     country: "TM",
