@@ -27,7 +27,8 @@ export default function VideoPlayer({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
 
-  // Failure tracking metrics
+  // States for Loading and Errors
+  const [isLoading, setIsLoading] = useState(false);
   const [playbackError, setPlaybackError] = useState<string | null>(null);
   const [isRecovering, setIsRecovering] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
@@ -58,6 +59,7 @@ export default function VideoPlayer({
     if (!video || !channel) return;
 
     setIsReloading(true);
+    setIsLoading(true); // Fire up the loader display
     setPlaybackError(null);
     setIsRecovering(false);
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
@@ -145,16 +147,23 @@ export default function VideoPlayer({
     };
   }, []);
 
-  // Channel processing loop with dynamic proxy configurations for hard CORS streams
+  // Channel processing loop
   useEffect(() => {
     if (!channel) return;
 
     setPlaybackError(null);
     setIsRecovering(false);
+    setIsLoading(true); // Flag initial compilation loading layer instantly
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
     const video = videoRef.current;
-    if (!video) return;
+    if (!video) {
+      // If it's a YouTube embed or website iframe, we don't need the custom loader hanging permanently
+      if (getYouTubeId(channel.url) || (!channel.url.includes("m3u8") && !channel.url.includes(".mp4"))) {
+        setIsLoading(false);
+      }
+      return;
+    }
 
     const urlToCheck = channel.url.split('?')[0].toLowerCase();
     const isM3U8 = urlToCheck.includes(".m3u8") || channel.url.toLowerCase().includes("m3u8");
@@ -164,7 +173,6 @@ export default function VideoPlayer({
       let finalUrl = channel.url;
 
       if (channel.url.includes("online.tm") || channel.url.includes("alpha.tv.online.tm")) {
-        console.warn("Known rigid CORS domain tracked. Appending dedicated proxy wrapper layers.");
         finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(channel.url)}`;
       } else if (channel.url.startsWith("http://") && window.location.protocol === "https:") {
         finalUrl = `https://cors-anywhere.herokuapp.com/${channel.url}`;
@@ -179,6 +187,8 @@ export default function VideoPlayer({
           console.log("Auto-play tracking deferred:", err);
           setIsPlaying(false);
         });
+    } else {
+      setIsLoading(false);
     }
   }, [channel?.id, channel?.url]);
 
@@ -188,22 +198,21 @@ export default function VideoPlayer({
     };
   }, []);
 
-  // Safety stream check monitor logic - MODIFIED TO EXTEND TIMEOUT TOLERANCE
+  // Safety stream check monitor logic
   const monitorStreamHealthState = (errorMessage: string, criticalLevel = false) => {
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
-    // Extended buffer windows: 6 seconds for complete network drops, 15 seconds for stalling/buffering
     const safetyBufferWindow = criticalLevel ? 6000 : 15000;
 
     failureTimerRef.current = setTimeout(() => {
       const video = videoRef.current;
       if (!video || !channel) return;
 
-      // Skip the down state if the player has successfully gathered enough render data or resumed playing
       if (video.readyState >= 2 && !video.paused && video.networkState !== HTMLMediaElement.NETWORK_NO_SOURCE) {
         return; 
       }
 
+      setIsLoading(false);
       setPlaybackError(errorMessage);
       setIsRecovering(true);
 
@@ -225,6 +234,7 @@ export default function VideoPlayer({
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
     setPlaybackError(null);
     setIsRecovering(false);
+    setIsLoading(false); // Successfully playing -> hide loader completely
     setIsPlaying(true);
   };
 
@@ -274,12 +284,26 @@ export default function VideoPlayer({
               playsInline
               muted={isMuted}
               onPlaying={resetHealthTrackers}
+              onCanPlay={() => setIsLoading(false)} // Clear loader once first segment chunks arrive
               onWaiting={() => monitorStreamHealthState("Network connection buffering...")}
               onStalled={() => monitorStreamHealthState("Data feed lagging...")}
               onError={() => monitorStreamHealthState("Broadcast feed completely lost.", true)}
             />
           ) : (
             <iframe src={channel.url} className="w-full h-full border-0" allow="autoplay; fullscreen" allowFullScreen />
+          )}
+
+          {/* INITIAL FEED LOADING TRANSITION & DISCLAIMER LAYERING */}
+          {isLoading && !playbackError && (
+            <div className="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 text-center z-40 transition-opacity duration-300">
+              <RefreshCw className="w-8 h-8 text-emerald-400 animate-spin mb-4" />
+              <h3 className="text-sm font-semibold text-slate-200 tracking-wide">
+                Connecting To Live Feed
+              </h3>
+              <p className="text-[11px] text-slate-400 mt-2 max-w-xs leading-relaxed font-sans px-4">
+                Establishing secure stream link... Please wait, some international channels may take up to 15 seconds to safely sync data.
+              </p>
+            </div>
           )}
 
           {/* ERROR MONITOR OVERLAY WITH REFRESH BUTTON */}
