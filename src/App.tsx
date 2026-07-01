@@ -261,12 +261,12 @@ export default function App() {
               {theme === "light" ? (
                 <>
                   <Moon className="w-3.5 h-3.5 text-indigo-600" />
-                  <span>LIGHT MODE</span>
+                  <span>SWITCH TO DARK MODE</span>
                 </>
               ) : (
                 <>
                   <Sun className="w-3.5 h-3.5 text-amber-500" />
-                  <span>DARK MODE</span>
+                  <span>SWITCH TO LIGHT MODE</span>
                 </>
               )}
             </button>
