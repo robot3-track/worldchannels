@@ -308,7 +308,7 @@ export default function VideoPlayer({
                 Connecting To Live Feed
               </h3>
               <p className="text-[11px] text-slate-400 mt-2 max-w-xs leading-relaxed font-sans px-4">
-                Establishing secure stream link... Please wait, some international channels may take up to 15 seconds to safely sync data.
+                Establishing secure stream... Please wait, some channels may take up to 15 seconds to safely sync data.
               </p>
             </div>
           )}
