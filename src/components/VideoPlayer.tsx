@@ -1,5 +1,5 @@
-import React, { useEffect, useRef } from "react";
-import { Tv, CheckCircle } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Tv, AlertTriangle, RefreshCw } from "lucide-react";
 import { StreamChannel } from "../types";
 
 interface VideoPlayerProps {
@@ -16,48 +16,72 @@ export default function VideoPlayer({
   theme
 }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
+  
+  // Local states for error management
+  const [playbackError, setPlaybackError] = useState<string | null>(null);
+  const [isRecovering, setIsRecovering] = useState(false);
 
   // Initialize and assign source directly to the native video element
   useEffect(() => {
-    if (!channel || !videoRef.current) return;
+    if (!channel) return;
+
+    // Reset error states on channel switch
+    setPlaybackError(null);
+    setIsRecovering(false);
+
+    const video = videoRef.current;
+    if (!video) return;
 
     const cleanUrlPath = channel.url.split('?')[0].toLowerCase();
     const isM3U8 = cleanUrlPath.includes(".m3u8");
     const isVideoFile = cleanUrlPath.includes(".mp4") || cleanUrlPath.includes(".m4s");
 
-    // Let the browser load the source string natively with its original parameters intact
     if (isM3U8 || isVideoFile) {
-      videoRef.current.src = channel.url;
-      videoRef.current.load();
+      let finalUrl = channel.url;
+
+      // HTTP to HTTPS mixed content mitigation proxy fallback
+      if (channel.url.startsWith("http://") && window.location.protocol === "https:") {
+        console.warn("Mixed content detected. Routing plain HTTP stream via SSL proxy fallback.");
+        finalUrl = `https://cors-anywhere.herokuapp.com/${channel.url}`;
+      }
+
+      video.src = finalUrl;
+      video.load();
       
-      // Auto-play handling when channel changes
-      videoRef.current.play().catch((err) => {
-        console.log("Autoplay blocked or stream requires user interaction:", err);
+      video.play().catch((err) => {
+        console.log("Autoplay blocked or stream interaction required:", err);
       });
     }
   }, [channel?.id, channel?.url]);
 
-  // Handle native video error reporting
+  // Handle native video element playback errors
   const handleNativeError = () => {
     if (!channel) return;
-    console.warn("Native video playback encountered an error. Attempting stream self-healing...");
+    
+    setPlaybackError("Broadcast Signal Lost or Blocked by Cross-Origin Security.");
+    setIsRecovering(true);
+
+    console.warn("Native video playback encountered an error. Attempting self-healing trigger...");
+    
     onReportBroken(channel.url).then((response) => {
       if (response.success && response.backupAvailable && response.backups.length > 0) {
-        // Automatically switch to top backup if available
+        // Automatically route to top backup stream
         onSelectBackup(response.backups[0]);
+      } else {
+        setIsRecovering(false);
+        setPlaybackError("The broadcast is currently offline. No alternative backup paths located.");
       }
     }).catch((err) => {
       console.error("Stream recovery failed:", err);
+      setIsRecovering(false);
+      setPlaybackError("Failed to verify alternative connection parameters.");
     });
   };
 
-  // Render idle receiver state if no channel selected
   if (!channel) {
     return (
       <div className={`w-full aspect-video border rounded-2xl flex flex-col items-center justify-center p-6 text-center shadow-xs relative overflow-hidden transition-all ${
-        theme === "light"
-          ? "bg-slate-50 border-slate-200 text-slate-500"
-          : "bg-slate-950 border-slate-800 text-slate-400"
+        theme === "light" ? "bg-slate-50 border-slate-200 text-slate-500" : "bg-slate-950 border-slate-800 text-slate-400"
       }`}>
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_center,rgba(16,185,129,0.02)_0%,transparent_70%)]" />
         <Tv className="w-10 h-10 text-slate-400 mb-4 animate-pulse" />
@@ -81,6 +105,7 @@ export default function VideoPlayer({
       <div className={`w-full aspect-video bg-black rounded-2xl overflow-hidden relative shadow-lg border ${
         theme === "light" ? "border-slate-200" : "border-slate-850"
       }`}>
+        
         {channel.url.startsWith("http") && !isM3U8 && !isVideoFile ? (
           /* Standard Site / Iframe Stream Wrapper */
           <iframe
@@ -90,7 +115,7 @@ export default function VideoPlayer({
             allowFullScreen
           />
         ) : (
-          /* Native Engine Video Element with Original Controls Overlay */
+          /* Native Engine Video Element */
           <video
             ref={videoRef}
             className="w-full h-full object-contain"
@@ -98,15 +123,42 @@ export default function VideoPlayer({
             autoPlay
             playsInline
             onError={handleNativeError}
+            onStalled={handleNativeError}
           />
+        )}
+
+        {/* ELEGANT WARNING OVERLAY LAYER */}
+        {playbackError && (
+          <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50 animate-fade-in">
+            <div className="relative mb-4 flex items-center justify-center">
+              <span className="absolute inline-flex h-12 w-12 rounded-full border border-rose-500/30 animate-ping"></span>
+              <div className="relative w-10 h-10 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
+                <AlertTriangle className="w-5 h-5 text-rose-500" />
+              </div>
+            </div>
+
+            <h3 className="text-sm font-semibold text-slate-100 tracking-tight">
+              Playback Interrupted
+            </h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-xs leading-relaxed font-sans px-2">
+              {playbackError}
+            </p>
+
+            {isRecovering && (
+              <div className="mt-4 flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full shadow-md">
+                <RefreshCw className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
+                <span className="text-[10px] font-bold tracking-wide text-slate-300 font-sans uppercase">
+                  Searching index backups...
+                </span>
+              </div>
+            )}
+          </div>
         )}
       </div>
 
       {/* Channel Summary Info Bar */}
       <div className={`border rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
-        theme === "light"
-          ? "bg-slate-50 border-slate-200"
-          : "bg-slate-900 border-slate-850"
+        theme === "light" ? "bg-slate-50 border-slate-200" : "bg-slate-900 border-slate-850"
       }`}>
         <div className="flex items-start gap-3">
           <div className={`w-12 h-12 rounded-lg overflow-hidden border flex items-center justify-center flex-shrink-0 shadow-sm ${
@@ -127,9 +179,7 @@ export default function VideoPlayer({
             )}
           </div>
           <div>
-            <h3 className={`text-sm font-semibold ${theme === "light" ? "text-slate-800" : "text-slate-100"}`}>
-              {channel.name}
-            </h3>
+            <h3 className={`text-sm font-semibold ${theme === "light" ? "text-slate-800" : "text-slate-100"}`}>{channel.name}</h3>
             <div className="flex items-center flex-wrap gap-2 mt-1.5">
               <span className={`text-[10px] font-sans px-2.5 py-0.5 rounded-full border ${
                 theme === "light" ? "bg-white text-slate-600 border-slate-200" : "bg-slate-950 text-slate-400 border-slate-800"
