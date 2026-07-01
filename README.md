@@ -10,7 +10,7 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 - **Real-Time Health Monitoring**: Automatic background verification of stream uptime and latency.
 - **Themed UI**: Elegant Dark and Light modes for optimized viewing in any environment.
 
-![Livestream Center](Screenshot%202026-06-24%20214809.png)
+![Livestream Center](Screenshot%202026-06-30%20201430.png)
 
 ## 2026 World Cup Broadcasters
 
