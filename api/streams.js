@@ -951,6 +951,18 @@ const staticStreams = [
     lat: 10.8231, // Ho Chi Minh City
     lon: 106.6297,
   },
+  {
+    id: "country-vn-colatv-alt3",
+    name: "Cola TV Vietnam (Server 3)",
+    url: "https://live05.meung.app/live/08552895.m3u8", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
   // --- NORTH KOREA ---
   {
     id: "country-kp-kctv",
