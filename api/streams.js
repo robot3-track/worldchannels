@@ -307,18 +307,6 @@ const staticStreams = [
     lon: 58.3794,
   },
   {
-    id: "sports-directv",
-    name: "DirectTV Sports",
-    url: "https://wakemaid.net/e/jmbhwj8q9yd17",
-    category: "sports",
-    category: "world cup",
-    country: "TM",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/d/db/DirecTV_2021.svg/revision/latest?cb=20210803065300",
-    status: "online",
-    lat: 38.9697, // Ashgabat, Turkmenistan
-    lon: 58.3794,
-  },
-  {
     id:"news-telemundo-52",
     name: "Telemundo 52",
     url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
