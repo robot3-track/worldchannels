@@ -307,6 +307,18 @@ const staticStreams = [
     lon: 58.3794,
   },
   {
+    id: "sports-turkmenistan-alt",
+    name: "Turkmenistan Sports Backup [720p]",
+    url: "https://alpha.tv.online.tm/hls/ch004.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TM",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/b/be/Turkmenistan_Sport.png/revision/latest?cb=20211225160814",
+    status: "online",
+    lat: 38.9697, // Ashgabat, Turkmenistan
+    lon: 58.3794,
+  },
+  {
     id:"news-telemundo-52",
     name: "Telemundo 52",
     url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
