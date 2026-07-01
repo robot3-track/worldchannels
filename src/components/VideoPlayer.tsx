@@ -9,6 +9,40 @@ interface VideoPlayerProps {
   theme: "light" | "dark";
 }
 
+// Pure synchronous selector function to eliminate state lag on mount
+const getPlayerStrategy = (channel: StreamChannel | null) => {
+  if (!channel) return { isYoutube: false, isEmbedOnly: false, useNativeVideo: false, cleanUrl: "" };
+
+  const url = channel.url;
+  const urlToCheck = url.split('?')[0].toLowerCase();
+  
+  // 1. YouTube Identification
+  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  const youtubeId = (match && match[2].length === 11) ? match[2] : null;
+  if (youtubeId) return { isYoutube: true, isEmbedOnly: false, useNativeVideo: false, cleanUrl: youtubeId };
+
+  // 2. Original Embed Only (Turkmenistan Sports / Rigid CORS domains)
+  if (url.includes("online.tm") || url.includes("alpha.tv.online.tm")) {
+    return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
+  }
+
+  // 3. Native Stream Check (.m3u8, .mp4)
+  const isStream = urlToCheck.includes(".m3u8") || url.toLowerCase().includes("m3u8") || 
+                   urlToCheck.includes(".mp4") || urlToCheck.includes(".m4s");
+                   
+  if (isStream) {
+    let finalUrl = url;
+    if (url.startsWith("http://") && window.location.protocol === "https:") {
+      finalUrl = `https://cors-anywhere.herokuapp.com/${url}`;
+    }
+    return { isYoutube: false, isEmbedOnly: false, useNativeVideo: true, cleanUrl: finalUrl };
+  }
+
+  // Fallback to iframe embed for unknown strings
+  return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
+};
+
 export default function VideoPlayer({
   channel,
   onReportBroken,
@@ -33,13 +67,8 @@ export default function VideoPlayer({
   const [isRecovering, setIsRecovering] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
 
-  // Helper function to extract YouTube IDs
-  const getYouTubeId = (url: string): string | null => {
-    if (!url) return null;
-    const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-    const match = url.match(regExp);
-    return (match && match[2].length === 11) ? match[2] : null;
-  };
+  // Instant layout calculation
+  const strategy = getPlayerStrategy(channel);
 
   // Fullscreen controls auto-hide mouse tracker
   const handleMouseMove = () => {
@@ -56,7 +85,7 @@ export default function VideoPlayer({
   // Force Reload Stream Action
   const handleReloadStream = () => {
     const video = videoRef.current;
-    if (!video || !channel) return;
+    if (!video || !strategy.useNativeVideo) return;
 
     setIsReloading(true);
     setIsLoading(true); 
@@ -76,15 +105,14 @@ export default function VideoPlayer({
           setIsPlaying(true);
           setIsReloading(false);
         })
-        .catch((err) => {
-          console.log("Reload auto-play blocked, waiting for interaction:", err);
+        .catch(() => {
           setIsPlaying(false);
           setIsReloading(false);
         });
-    }, 200);
+    }, 50);
   };
 
-  // Sync controls back to the standard video elements
+  // Synchronous Media Element Controls
   const togglePlay = () => {
     if (!videoRef.current) return;
     if (isPlaying) {
@@ -147,47 +175,28 @@ export default function VideoPlayer({
     };
   }, []);
 
-  // Determine media player delivery strategies based on domain footprints
-  const isTurkmenistanSports = channel ? (channel.url.includes("online.tm") || channel.url.includes("alpha.tv.online.tm")) : false;
-  const youtubeId = channel ? getYouTubeId(channel.url) : null;
-  const urlToCheck = channel ? channel.url.split('?')[0].toLowerCase() : "";
-  
-  // Explicitly push Turkmenistan domains away from our HTML5 video tag engine
-  const useNativeVideoElement = channel && !isTurkmenistanSports && !youtubeId && (
-    urlToCheck.includes(".m3u8") || channel.url.toLowerCase().includes("m3u8") ||
-    urlToCheck.includes(".mp4") || urlToCheck.includes(".m4s")
-  );
-
-  // Channel processing loop
+  // Direct Stream Binding Pipeline
   useEffect(() => {
     if (!channel) return;
 
     setPlaybackError(null);
     setIsRecovering(false);
-    setIsLoading(true); 
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
-    const video = videoRef.current;
-    
-    if (useNativeVideoElement && video) {
-      let finalUrl = channel.url;
-      if (channel.url.startsWith("http://") && window.location.protocol === "https:") {
-        finalUrl = `https://cors-anywhere.herokuapp.com/${channel.url}`;
+    if (strategy.useNativeVideo) {
+      setIsLoading(true); // Only show spinner on direct native codecs (.m3u8)
+      const video = videoRef.current;
+      if (video) {
+        video.src = strategy.cleanUrl;
+        video.load();
+        video.play()
+          .then(() => setIsPlaying(true))
+          .catch(() => setIsPlaying(false));
       }
-
-      video.src = finalUrl;
-      video.load();
-      video.play()
-        .then(() => setIsPlaying(true))
-        .catch((err) => {
-          console.log("Auto-play tracking deferred:", err);
-          setIsPlaying(false);
-        });
     } else {
-      // If using original frame embeds (YouTube or Turkmenistan Sports), clear standard loading state
       setIsLoading(false);
     }
-  }, [channel?.id, channel?.url, useNativeVideoElement]);
+  }, [channel?.id, strategy.cleanUrl, strategy.useNativeVideo]);
 
   useEffect(() => {
     return () => {
@@ -262,14 +271,14 @@ export default function VideoPlayer({
         
         {/* VIEWPORT FRAME SECTION */}
         <div className="flex-1 w-full h-full relative overflow-hidden">
-          {youtubeId ? (
+          {strategy.isYoutube ? (
             <iframe
-              src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&mute=1&modestbranding=1&rel=0`}
+              src={`https://www.youtube-nocookie.com/embed/${strategy.cleanUrl}?autoplay=1&mute=1&modestbranding=1&rel=0`}
               className="w-full h-full border-0"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
-          ) : useNativeVideoElement ? (
+          ) : strategy.useNativeVideo ? (
             <video
               ref={videoRef}
               className="w-full h-full object-contain"
@@ -282,9 +291,9 @@ export default function VideoPlayer({
               onError={() => monitorStreamHealthState("Broadcast feed completely lost.", true)}
             />
           ) : (
-            /* ORIGINAL EMBED FALLBACK FOR TURKMENISTAN SPORTS & CUSTOM PLATFORMS */
+            /* ORIGINAL EMBED FALLBACK INTERFACE (LOADS INSTANTLY VIA NATIVE PLAYER CANVAS) */
             <iframe 
-              src={channel.url} 
+              src={strategy.cleanUrl} 
               className="w-full h-full border-0 bg-black" 
               allow="autoplay; fullscreen; picture-in-picture" 
               allowFullScreen 
@@ -305,8 +314,8 @@ export default function VideoPlayer({
           )}
 
           {/* ERROR MONITOR OVERLAY WITH REFRESH BUTTON */}
-          {playbackError && !youtubeId && useNativeVideoElement && (
-            <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50 animate-fade-in">
+          {playbackError && strategy.useNativeVideo && (
+            <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50">
               <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
               <h3 className="text-sm font-semibold text-slate-100">Signal Disrupted</h3>
               <p className="text-xs text-slate-400 mt-1 max-w-xs">{playbackError}</p>
@@ -332,7 +341,7 @@ export default function VideoPlayer({
         </div>
 
         {/* UNIFIED INTEGRATED CONTROLS EXPANSION BAR */}
-        {useNativeVideoElement && (
+        {strategy.useNativeVideo && (
           <div className={`w-full p-3 border-t flex items-center justify-between gap-4 select-none transition-all duration-300 ${
             isFullscreen 
               ? `absolute bottom-0 left-0 right-0 bg-slate-950/90 border-slate-800 text-white backdrop-blur-sm transform ${
