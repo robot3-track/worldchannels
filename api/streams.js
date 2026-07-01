@@ -906,8 +906,20 @@ const staticStreams = [
   },
   {
     id: "country-vn-colatv-alt",
-    name: "Cola TV Vietnam (Backup)",
+    name: "Cola TV Vietnam (Server 1)",
     url: "https://live05.apusport.com/live/78905744.m3u8", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "country-vn-colatv-alt2",
+    name: "Cola TV Vietnam (Server 2)",
+    url: "https://live05.koepgd.app/live/14830711.m3u8", // M3U8 Link
     category: "sports",
     category: "world cup",
     country: "VN",
