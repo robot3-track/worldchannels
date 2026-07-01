@@ -295,6 +295,18 @@ const staticStreams = [
     lon: 13.0550,
   },
   {
+    id: "sports-antenasport",
+    name: "Antena Sport",
+    url: "https://stream1.antenaplay.ro/as/asrolive1/playlist.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IT",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/3/35/Antena_2022.svg/revision/latest?cb=20230131220040",
+    status: "online",
+    lat: 41.8719, // Rome, Italy
+    lon: 12.5674,
+  },
+  {
     id: "sports-turkmenistan",
     name: "Turkmenistan Sports",
     url: "https://alpha.tv.online.tm/legacyhls/ch004_720/index.m3u8",
@@ -317,18 +329,6 @@ const staticStreams = [
     status: "online",
     lat: 38.9697, // Ashgabat, Turkmenistan
     lon: 58.3794,
-  },
-  {
-    id: "sports-antenasport",
-    name: "Antena Sport",
-    url: "https://stream1.antenaplay.ro/as/asrolive1/playlist.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "IT",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/3/35/Antena_2022.svg/revision/latest?cb=20230131220040",
-    status: "online",
-    lat: 41.8719, // Rome, Italy
-    lon: 12.5674,
   },
   {
     id:"news-telemundo-52",
