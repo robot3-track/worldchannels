@@ -319,6 +319,18 @@ const staticStreams = [
     lon: 58.3794,
   },
   {
+    id: "sports-antenasport",
+    name: "Antena Sport",
+    url: "https://stream1.antenaplay.ro/as/asrolive1/playlist.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IT",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/3/35/Antena_2022.svg/revision/latest?cb=20230131220040",
+    status: "online",
+    lat: 41.8719, // Rome, Italy
+    lon: 12.5674,
+  },
+  {
     id:"news-telemundo-52",
     name: "Telemundo 52",
     url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
