@@ -9,7 +9,6 @@ interface VideoPlayerProps {
   theme: "light" | "dark";
 }
 
-// Pure synchronous selector function to eliminate state lag on mount
 const getPlayerStrategy = (channel: StreamChannel | null) => {
   if (!channel) return { isYoutube: false, isEmbedOnly: false, isProtectedEmbed: false, useNativeVideo: false, cleanUrl: "" };
 
@@ -22,7 +21,7 @@ const getPlayerStrategy = (channel: StreamChannel | null) => {
   const youtubeId = (match && match[2].length === 11) ? match[2] : null;
   if (youtubeId) return { isYoutube: true, isEmbedOnly: false, isProtectedEmbed: false, useNativeVideo: false, cleanUrl: youtubeId };
 
-  // 2. WAKEMAID Pop-up Shield Interception Matcher
+  // 2. Pop-up Shield Interception Matcher (wakemaid.net and related streams)
   if (url.includes("wakemaid.net")) {
     return { isYoutube: false, isEmbedOnly: false, isProtectedEmbed: true, useNativeVideo: false, cleanUrl: url };
   }
@@ -44,7 +43,6 @@ const getPlayerStrategy = (channel: StreamChannel | null) => {
     return { isYoutube: false, isEmbedOnly: false, isProtectedEmbed: false, useNativeVideo: true, cleanUrl: finalUrl };
   }
 
-  // Fallback to iframe embed for unknown strings
   return { isYoutube: false, isEmbedOnly: true, isProtectedEmbed: false, useNativeVideo: false, cleanUrl: url };
 };
 
@@ -59,23 +57,19 @@ export default function VideoPlayer({
   const failureTimerRef = useRef<any | null>(null);
   const controlsTimeoutRef = useRef<any | null>(null);
   
-  // Controls state managers
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true); 
   const [volume, setVolume] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
 
-  // States for Loading and Errors
   const [isLoading, setIsLoading] = useState(false);
   const [playbackError, setPlaybackError] = useState<string | null>(null);
   const [isRecovering, setIsRecovering] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
 
-  // Instant layout calculation
   const strategy = getPlayerStrategy(channel);
 
-  // Fullscreen controls auto-hide mouse tracker
   const handleMouseMove = () => {
     setShowControls(true);
     if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
@@ -87,7 +81,6 @@ export default function VideoPlayer({
     }
   };
 
-  // Force Reload Stream Action
   const handleReloadStream = () => {
     const video = videoRef.current;
     if (!video || !strategy.useNativeVideo) return;
@@ -117,7 +110,6 @@ export default function VideoPlayer({
     }, 50);
   };
 
-  // Synchronous Media Element Controls
   const togglePlay = () => {
     if (!videoRef.current) return;
     if (isPlaying) {
@@ -180,7 +172,6 @@ export default function VideoPlayer({
     };
   }, []);
 
-  // Direct Stream Binding Pipeline
   useEffect(() => {
     if (!channel) return;
 
@@ -203,13 +194,6 @@ export default function VideoPlayer({
     }
   }, [channel?.id, strategy.cleanUrl, strategy.useNativeVideo]);
 
-  useEffect(() => {
-    return () => {
-      if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
-    };
-  }, []);
-
-  // Safety stream check monitor logic
   const monitorStreamHealthState = (errorMessage: string, criticalLevel = false) => {
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
@@ -264,7 +248,6 @@ export default function VideoPlayer({
   return (
     <div className="flex flex-col gap-4">
       
-      {/* INTEGRATED MASTER PLAYER CONTAINER */}
       <div 
         ref={containerRef}
         onMouseMove={handleMouseMove}
@@ -274,7 +257,6 @@ export default function VideoPlayer({
         style={{ cursor: showControls ? "default" : "none" }}
       >
         
-        {/* VIEWPORT FRAME SECTION */}
         <div className="flex-1 w-full h-full relative overflow-hidden">
           {strategy.isYoutube ? (
             <iframe
@@ -284,11 +266,9 @@ export default function VideoPlayer({
               allowFullScreen
             />
           ) : strategy.isProtectedEmbed ? (
-            /* WAKEMAID SECURED FRAME INTERCEPTOR */
             <iframe
               src={strategy.cleanUrl}
               className="w-full h-full border-0 bg-black"
-              /* allow-popups and allow-popups-to-escape-sandbox are omitted here to completely block popups */
               sandbox="allow-scripts allow-same-origin allow-forms allow-presentation"
               allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
@@ -306,7 +286,6 @@ export default function VideoPlayer({
               onError={() => monitorStreamHealthState("Broadcast feed completely lost.", true)}
             />
           ) : (
-            /* STANDARD BASE EMBED FALLBACK */
             <iframe 
               src={strategy.cleanUrl} 
               className="w-full h-full border-0 bg-black" 
@@ -315,7 +294,6 @@ export default function VideoPlayer({
             />
           )}
 
-          {/* INITIAL FEED LOADING TRANSITION & DISCLAIMER LAYERING */}
           {isLoading && !playbackError && (
             <div className="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 text-center z-40 transition-opacity duration-300">
               <RefreshCw className="w-8 h-8 text-emerald-400 animate-spin mb-4" />
@@ -328,7 +306,6 @@ export default function VideoPlayer({
             </div>
           )}
 
-          {/* ERROR MONITOR OVERLAY WITH REFRESH BUTTON */}
           {playbackError && strategy.useNativeVideo && (
             <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50">
               <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
@@ -355,7 +332,6 @@ export default function VideoPlayer({
           )}
         </div>
 
-        {/* UNIFIED INTEGRATED CONTROLS EXPANSION BAR */}
         {strategy.useNativeVideo && (
           <div className={`w-full p-3 border-t flex items-center justify-between gap-4 select-none transition-all duration-300 ${
             isFullscreen 
@@ -431,7 +407,6 @@ export default function VideoPlayer({
         )}
       </div>
 
-      {/* Channel Information Summary Card Footer */}
       <div className={`border rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
         theme === "light" ? "bg-slate-50 border-slate-200" : "bg-slate-900 border-slate-850"
       }`}>
