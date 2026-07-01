@@ -54,14 +54,26 @@ export default function VideoPlayer({
     }
   }, [channel?.id, channel?.url]);
 
-  // Handle native video element playback errors
+  // Precise error handling verification
   const handleNativeError = () => {
-    if (!channel) return;
+    const video = videoRef.current;
+    if (!channel || !video) return;
+
+    // Ignore temporary stalls if the video has already loaded metadata or has data buffered
+    if (video.readyState >= 2 && video.networkState !== HTMLMediaElement.NETWORK_NO_SOURCE) {
+      console.log("Ignored temporary video element stutter/stall event because stream is still alive.");
+      return;
+    }
+
+    // Double check HTML5 video error code asset availability
+    if (video.error) {
+      console.error("Confirmed fatal native video error code:", video.error.code);
+    }
     
     setPlaybackError("Broadcast Signal Lost or Blocked by Cross-Origin Security.");
     setIsRecovering(true);
 
-    console.warn("Native video playback encountered an error. Attempting self-healing trigger...");
+    console.warn("Native video playback encountered a confirmed error. Attempting self-healing trigger...");
     
     onReportBroken(channel.url).then((response) => {
       if (response.success && response.backupAvailable && response.backups.length > 0) {
@@ -76,6 +88,12 @@ export default function VideoPlayer({
       setIsRecovering(false);
       setPlaybackError("Failed to verify alternative connection parameters.");
     });
+  };
+
+  // Clear errors cleanly if the video successfully starts playing past stutters
+  const handleOnPlaying = () => {
+    setPlaybackError(null);
+    setIsRecovering(false);
   };
 
   if (!channel) {
@@ -123,11 +141,11 @@ export default function VideoPlayer({
             autoPlay
             playsInline
             onError={handleNativeError}
-            onStalled={handleNativeError}
+            onPlaying={handleOnPlaying} // Clears false alarms once playback resumes
           />
         )}
 
-        {/* ELEGANT WARNING OVERLAY LAYER */}
+        {/* WARNING OVERLAY LAYER */}
         {playbackError && (
           <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50 animate-fade-in">
             <div className="relative mb-4 flex items-center justify-center">
