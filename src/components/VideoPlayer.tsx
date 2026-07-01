@@ -18,12 +18,14 @@ export default function VideoPlayer({
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const failureTimerRef = useRef<any | null>(null);
+  const controlsTimeoutRef = useRef<any | null>(null);
   
   // Controls state managers
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true); 
   const [volume, setVolume] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
+  const [showControls, setShowControls] = useState(true);
 
   // Failure tracking metrics
   const [playbackError, setPlaybackError] = useState<string | null>(null);
@@ -38,6 +40,19 @@ export default function VideoPlayer({
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
+  // Fullscreen controls auto-hide mouse tracker
+  const handleMouseMove = () => {
+    setShowControls(true);
+    if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
+
+    // Only auto-hide if we are actively in fullscreen mode
+    if (isFullscreen) {
+      controlsTimeoutRef.current = setTimeout(() => {
+        setShowControls(false);
+      }, 2500); // Hide after 2.5 seconds of stillness
+    }
+  };
+
   // Force Reload Stream Action
   const handleReloadStream = () => {
     const video = videoRef.current;
@@ -48,12 +63,10 @@ export default function VideoPlayer({
     setIsRecovering(false);
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
-    // Re-assign source to kick the browser network layer into re-fetching shards
     const currentSrc = video.src;
     video.src = "";
     video.load();
     
-    // Add a tiny buffer delay before resetting the link to clear cached failures
     setTimeout(() => {
       video.src = currentSrc;
       video.load();
@@ -70,7 +83,7 @@ export default function VideoPlayer({
     }, 200);
   };
 
-  // Sync execution triggers manually back to standard video element references
+  // Sync controls back to the standard video elements
   const togglePlay = () => {
     if (!videoRef.current) return;
     if (isPlaying) {
@@ -108,21 +121,32 @@ export default function VideoPlayer({
         .catch((err) => console.error("Fullscreen request blocked:", err));
     } else {
       document.exitFullscreen()
-        .then(() => setIsFullscreen(false))
+        .then(() => {
+          setIsFullscreen(false);
+          setShowControls(true);
+        })
         .catch((err) => console.error("Exit fullscreen error:", err));
     }
   };
 
   useEffect(() => {
     const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement);
+      const activeFS = !!document.fullscreenElement;
+      setIsFullscreen(activeFS);
+      if (!activeFS) {
+        setShowControls(true);
+        if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
+      }
     };
 
     document.addEventListener("fullscreenchange", handleFullscreenChange);
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange);
+    return () => {
+      document.removeEventListener("fullscreenchange", handleFullscreenChange);
+      if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
+    };
   }, []);
 
-  // Channel processing loop runtime configuration
+  // Channel processing loop with dynamic proxy configurations for hard CORS streams
   useEffect(() => {
     if (!channel) return;
 
@@ -139,7 +163,13 @@ export default function VideoPlayer({
 
     if (isM3U8 || isVideoFile) {
       let finalUrl = channel.url;
-      if (channel.url.startsWith("http://") && window.location.protocol === "https:") {
+
+      // SPECIFIC TURKMENISTAN SPORT / CH004 CORS AGGRESSIVE BYPASS FIX
+      if (channel.url.includes("online.tm") || channel.url.includes("alpha.tv.online.tm")) {
+        console.warn("Known rigid CORS domain tracked. Appending dedicated proxy wrapper layers.");
+        // Uses AllOrigins open hex wrapper to scrub cross-origin parameters cleanly
+        finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(channel.url)}`;
+      } else if (channel.url.startsWith("http://") && window.location.protocol === "https:") {
         finalUrl = `https://cors-anywhere.herokuapp.com/${channel.url}`;
       }
 
@@ -149,7 +179,7 @@ export default function VideoPlayer({
       video.play()
         .then(() => setIsPlaying(true))
         .catch((err) => {
-          console.log("Auto-play context loop deferred until user interaction occurs:", err);
+          console.log("Auto-play tracking deferred:", err);
           setIsPlaying(false);
         });
     }
@@ -161,11 +191,11 @@ export default function VideoPlayer({
     };
   }, []);
 
-  // Precise safety verification pipeline monitor
+  // Safety stream check monitor logic
   const monitorStreamHealthState = (errorMessage: string, criticalLevel = false) => {
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
-    const safetyBufferWindow = criticalLevel ? 2000 : 6000;
+    const safetyBufferWindow = criticalLevel ? 2500 : 7000;
 
     failureTimerRef.current = setTimeout(() => {
       const video = videoRef.current;
@@ -222,9 +252,11 @@ export default function VideoPlayer({
       {/* INTEGRATED MASTER PLAYER CONTAINER */}
       <div 
         ref={containerRef}
-        className={`w-full flex flex-col bg-black relative shadow-lg border overflow-hidden ${
+        onMouseMove={handleMouseMove}
+        className={`w-full flex flex-col bg-black relative shadow-lg border overflow-hidden transition-all duration-300 group ${
           isFullscreen ? "h-screen w-screen" : "aspect-video"
         } ${theme === "light" ? "border-slate-200" : "border-slate-850"}`}
+        style={{ cursor: showControls ? "default" : "none" }}
       >
         
         {/* VIEWPORT FRAME SECTION */}
@@ -278,16 +310,22 @@ export default function VideoPlayer({
           )}
         </div>
 
-        {/* UNIFIED INTEGRATED CONTROLS EXPANSION BAR */}
+        {/* UNIFIED INTEGRATED CONTROLS EXPANSION BAR - WITH SMART AUTO HIDE IN FULLSCREEN */}
         {(isM3U8 || isVideoFile) && !youtubeId && (
-          <div className={`w-full p-3 border-t flex items-center justify-between gap-4 transition-all z-40 select-none ${
-            theme === "light" ? "bg-white border-slate-200" : "bg-slate-900 border-slate-800"
-          }`}>
+          <div className={`w-full p-3 border-t flex items-center justify-between gap-4 select-none transition-all duration-300 ${
+            isFullscreen 
+              ? `absolute bottom-0 left-0 right-0 bg-slate-950/90 border-slate-800 text-white backdrop-blur-sm transform ${
+                  showControls ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
+                }` 
+              : theme === "light" 
+                ? "bg-white border-slate-200" 
+                : "bg-slate-900 border-slate-800"
+          } z-40`}>
             <div className="flex items-center gap-2">
               <button
                 onClick={togglePlay}
                 className={`p-2 rounded-lg transition-all border ${
-                  theme === "light" 
+                  theme === "light" && !isFullscreen
                     ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
                     : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
                 }`}
@@ -298,7 +336,7 @@ export default function VideoPlayer({
               <button
                 onClick={toggleMute}
                 className={`p-2 rounded-lg transition-all border ${
-                  theme === "light" 
+                  theme === "light" && !isFullscreen
                     ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
                     : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
                 }`}
@@ -306,12 +344,11 @@ export default function VideoPlayer({
                 {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
               </button>
 
-              {/* INTEGRATED MANUAL RELOAD BUTTON */}
               <button
                 onClick={handleReloadStream}
                 title="Reload Stream Buffer"
                 className={`p-2 rounded-lg transition-all border ${
-                  theme === "light" 
+                  theme === "light" && !isFullscreen
                     ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
                     : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
                 }`}
@@ -337,7 +374,7 @@ export default function VideoPlayer({
               <button
                 onClick={toggleFullscreen}
                 className={`p-2 rounded-lg transition-all border ${
-                  theme === "light" 
+                  theme === "light" && !isFullscreen
                     ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
                     : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
                 }`}
