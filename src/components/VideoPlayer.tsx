@@ -59,7 +59,7 @@ export default function VideoPlayer({
     if (!video || !channel) return;
 
     setIsReloading(true);
-    setIsLoading(true); // Fire up the loader display
+    setIsLoading(true); 
     setPlaybackError(null);
     setIsRecovering(false);
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
@@ -147,40 +147,36 @@ export default function VideoPlayer({
     };
   }, []);
 
+  // Determine media player delivery strategies based on domain footprints
+  const isTurkmenistanSports = channel ? (channel.url.includes("online.tm") || channel.url.includes("alpha.tv.online.tm")) : false;
+  const youtubeId = channel ? getYouTubeId(channel.url) : null;
+  const urlToCheck = channel ? channel.url.split('?')[0].toLowerCase() : "";
+  
+  // Explicitly push Turkmenistan domains away from our HTML5 video tag engine
+  const useNativeVideoElement = channel && !isTurkmenistanSports && !youtubeId && (
+    urlToCheck.includes(".m3u8") || channel.url.toLowerCase().includes("m3u8") ||
+    urlToCheck.includes(".mp4") || urlToCheck.includes(".m4s")
+  );
+
   // Channel processing loop
   useEffect(() => {
     if (!channel) return;
 
     setPlaybackError(null);
     setIsRecovering(false);
-    setIsLoading(true); // Flag initial compilation loading layer instantly
+    setIsLoading(true); 
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
     const video = videoRef.current;
-    if (!video) {
-      // If it's a YouTube embed or website iframe, we don't need the custom loader hanging permanently
-      if (getYouTubeId(channel.url) || (!channel.url.includes("m3u8") && !channel.url.includes(".mp4"))) {
-        setIsLoading(false);
-      }
-      return;
-    }
-
-    const urlToCheck = channel.url.split('?')[0].toLowerCase();
-    const isM3U8 = urlToCheck.includes(".m3u8") || channel.url.toLowerCase().includes("m3u8");
-    const isVideoFile = urlToCheck.includes(".mp4") || urlToCheck.includes(".m4s");
-
-    if (isM3U8 || isVideoFile) {
+    
+    if (useNativeVideoElement && video) {
       let finalUrl = channel.url;
-
-      if (channel.url.includes("online.tm") || channel.url.includes("alpha.tv.online.tm")) {
-        finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(channel.url)}`;
-      } else if (channel.url.startsWith("http://") && window.location.protocol === "https:") {
+      if (channel.url.startsWith("http://") && window.location.protocol === "https:") {
         finalUrl = `https://cors-anywhere.herokuapp.com/${channel.url}`;
       }
 
       video.src = finalUrl;
       video.load();
-      
       video.play()
         .then(() => setIsPlaying(true))
         .catch((err) => {
@@ -188,9 +184,10 @@ export default function VideoPlayer({
           setIsPlaying(false);
         });
     } else {
+      // If using original frame embeds (YouTube or Turkmenistan Sports), clear standard loading state
       setIsLoading(false);
     }
-  }, [channel?.id, channel?.url]);
+  }, [channel?.id, channel?.url, useNativeVideoElement]);
 
   useEffect(() => {
     return () => {
@@ -234,7 +231,7 @@ export default function VideoPlayer({
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
     setPlaybackError(null);
     setIsRecovering(false);
-    setIsLoading(false); // Successfully playing -> hide loader completely
+    setIsLoading(false); 
     setIsPlaying(true);
   };
 
@@ -249,11 +246,6 @@ export default function VideoPlayer({
       </div>
     );
   }
-
-  const youtubeId = getYouTubeId(channel.url);
-  const urlToCheck = channel.url.split('?')[0].toLowerCase();
-  const isM3U8 = urlToCheck.includes(".m3u8") || channel.url.toLowerCase().includes("m3u8");
-  const isVideoFile = urlToCheck.includes(".mp4") || urlToCheck.includes(".m4s");
 
   return (
     <div className="flex flex-col gap-4">
@@ -277,20 +269,26 @@ export default function VideoPlayer({
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
             />
-          ) : isM3U8 || isVideoFile ? (
+          ) : useNativeVideoElement ? (
             <video
               ref={videoRef}
               className="w-full h-full object-contain"
               playsInline
               muted={isMuted}
               onPlaying={resetHealthTrackers}
-              onCanPlay={() => setIsLoading(false)} // Clear loader once first segment chunks arrive
+              onCanPlay={() => setIsLoading(false)} 
               onWaiting={() => monitorStreamHealthState("Network connection buffering...")}
               onStalled={() => monitorStreamHealthState("Data feed lagging...")}
               onError={() => monitorStreamHealthState("Broadcast feed completely lost.", true)}
             />
           ) : (
-            <iframe src={channel.url} className="w-full h-full border-0" allow="autoplay; fullscreen" allowFullScreen />
+            /* ORIGINAL EMBED FALLBACK FOR TURKMENISTAN SPORTS & CUSTOM PLATFORMS */
+            <iframe 
+              src={channel.url} 
+              className="w-full h-full border-0 bg-black" 
+              allow="autoplay; fullscreen; picture-in-picture" 
+              allowFullScreen 
+            />
           )}
 
           {/* INITIAL FEED LOADING TRANSITION & DISCLAIMER LAYERING */}
@@ -307,7 +305,7 @@ export default function VideoPlayer({
           )}
 
           {/* ERROR MONITOR OVERLAY WITH REFRESH BUTTON */}
-          {playbackError && !youtubeId && (
+          {playbackError && !youtubeId && useNativeVideoElement && (
             <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50 animate-fade-in">
               <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
               <h3 className="text-sm font-semibold text-slate-100">Signal Disrupted</h3>
@@ -334,7 +332,7 @@ export default function VideoPlayer({
         </div>
 
         {/* UNIFIED INTEGRATED CONTROLS EXPANSION BAR */}
-        {(isM3U8 || isVideoFile) && !youtubeId && (
+        {useNativeVideoElement && (
           <div className={`w-full p-3 border-t flex items-center justify-between gap-4 select-none transition-all duration-300 ${
             isFullscreen 
               ? `absolute bottom-0 left-0 right-0 bg-slate-950/90 border-slate-800 text-white backdrop-blur-sm transform ${
