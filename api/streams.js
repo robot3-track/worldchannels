@@ -307,9 +307,20 @@ const staticStreams = [
     lon: 58.3794,
   },
   {
-    id: "sports-telemundo-52",
-    name: "Telemundo 52 Sports",
+    id:"news-telemundo-52",
+    name: "Telemundo 52",
     url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
+    category: "news",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Telemundo_logo_2018.svg/1920px-Telemundo_logo_2018.svg.png",
+    status: "online",
+    lat: 34.0522, // Los Angeles, California, USA
+    lon: -118.2437,
+  },
+  {
+    id: "sports-telemundo-analysis",
+    name: "Telemundo Sports Analysis",
+    url: "https://d1rqgw5gocwo9i.cloudfront.net/10009/99951459/hls/master.m3u8?ads.xumo_channelId=99951459&ads.asnw=169843&ads.afid=442535792&ads.sfid=23780352&ads.caid=telemundodeportesahora_linear&ads.csid=xumo_",
     category: "sports",
     category: "world cup",
     country: "US",
