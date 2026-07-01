@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Tv, AlertTriangle, RefreshCw } from "lucide-react";
+import { Tv, AlertTriangle, RefreshCw, Play, Pause, Volume2, VolumeX } from "lucide-react";
 import { StreamChannel } from "../types";
 
 interface VideoPlayerProps {
@@ -16,14 +16,18 @@ export default function VideoPlayer({
   theme
 }: VideoPlayerProps) {
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  // Using generic window.setTimeout layout type instead of Node namespace
   const failureTimerRef = useRef<any | null>(null);
   
-  // Player state trackers
+  // External control states
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isMuted, setIsMuted] = useState(true); // Default muted to ensure browser auto-play passes restrictions
+  const [volume, setVolume] = useState(1);
+
+  // Failure tracking states
   const [playbackError, setPlaybackError] = useState<string | null>(null);
   const [isRecovering, setIsRecovering] = useState(false);
 
-  // Helper function to extract a clean YouTube Video ID from any structure
+  // Helper function to extract YouTube IDs
   const getYouTubeId = (url: string): string | null => {
     if (!url) return null;
     const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
@@ -31,11 +35,39 @@ export default function VideoPlayer({
     return (match && match[2].length === 11) ? match[2] : null;
   };
 
-  // Channel initialization logic
+  // Sync state values directly back to video ref manually on change
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play().then(() => setIsPlaying(true)).catch(() => {});
+    }
+  };
+
+  const toggleMute = () => {
+    if (!videoRef.current) return;
+    const newMuteState = !isMuted;
+    videoRef.current.muted = newMuteState;
+    setIsMuted(newMuteState);
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!videoRef.current) return;
+    const newVol = parseFloat(e.target.value);
+    videoRef.current.volume = newVol;
+    setVolume(newVol);
+    if (newVol > 0 && isMuted) {
+      videoRef.current.muted = false;
+      setIsMuted(false);
+    }
+  };
+
+  // Channel processing runtime
   useEffect(() => {
     if (!channel) return;
 
-    // Reset error flags instantly on channel swap
     setPlaybackError(null);
     setIsRecovering(false);
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
@@ -49,42 +81,45 @@ export default function VideoPlayer({
 
     if (isM3U8 || isVideoFile) {
       let finalUrl = channel.url;
-
-      // Handle Mixed Content Blockers safely via SSL proxy
       if (channel.url.startsWith("http://") && window.location.protocol === "https:") {
-        console.warn("Mixed Content protection applied. Intercepting plain HTTP route.");
         finalUrl = `https://cors-anywhere.herokuapp.com/${channel.url}`;
       }
 
       video.src = finalUrl;
       video.load();
-      video.play().catch((err) => {
-        console.log("Autoplay context initialization deferred:", err);
-      });
+      
+      // Auto-play hook execution loop (Starts muted automatically)
+      video.play()
+        .then(() => {
+          setIsPlaying(true);
+        })
+        .catch((err) => {
+          console.log("Auto-play tracking blocked or restricted by platform policies:", err);
+          setIsPlaying(false);
+        });
     }
   }, [channel?.id, channel?.url]);
 
-  // Cleanup timers on unmount
   useEffect(() => {
     return () => {
       if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
     };
   }, []);
 
-  // Graceful failure tracking engine
-  const triggerStreamAnalysis = (errorMessage: string) => {
-    // Clear any existing tracking loops before spinning up a new check
+  // Multi-tier Intelligent Fallback verification engine
+  const monitorStreamHealthState = (errorMessage: string, criticalLevel = false) => {
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
-    // Give the engine a safe window to buffer or re-fetch chunk segments
+    // Critical failures (like Network missing source) fail faster, stutters get a longer timeline window
+    const safetyBufferWindow = criticalLevel ? 2000 : 6000;
+
     failureTimerRef.current = setTimeout(() => {
       const video = videoRef.current;
       if (!video || !channel) return;
 
-      // If the player cleared up and successfully buffered data, skip the error layout
-      if (video.readyState >= 2 && !video.paused) {
-        console.log("Stream validation verified: Playback recovered smoothly.");
-        return;
+      // Ensure data buffers are completely stalled and execution has truly dropped
+      if (video.readyState >= 2 && !video.paused && video.networkState !== HTMLMediaElement.NETWORK_NO_SOURCE) {
+        return; 
       }
 
       setPlaybackError(errorMessage);
@@ -95,23 +130,20 @@ export default function VideoPlayer({
           onSelectBackup(response.backups[0]);
         } else {
           setIsRecovering(false);
-          setPlaybackError("This feed is currently offline. No backup paths responded.");
+          setPlaybackError("The transmission is currently down. No online secondary routes found.");
         }
-      }).catch((err) => {
-        console.error("Self-healing script error:", err);
+      }).catch(() => {
         setIsRecovering(false);
-        setPlaybackError("Broadcast offline. Connection validation timeout.");
+        setPlaybackError("Broadcast connection timeout.");
       });
-    }, 4500); // 4.5 second buffer safety padding window
+    }, safetyBufferWindow);
   };
 
-  // Clear pending validation triggers if frames play smoothly
-  const clearValidationChecks = () => {
-    if (failureTimerRef.current) {
-      clearTimeout(failureTimerRef.current);
-    }
+  const resetHealthTrackers = () => {
+    if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
     setPlaybackError(null);
     setIsRecovering(false);
+    setIsPlaying(true);
   };
 
   if (!channel) {
@@ -121,12 +153,11 @@ export default function VideoPlayer({
       }`}>
         <Tv className="w-10 h-10 text-slate-400 mb-4 animate-pulse" />
         <p className="text-sm font-semibold">Broadcast Feed Receiver Idle</p>
-        <p className="text-xs text-slate-500 mt-1 max-w-xs">Select a channel to tune in.</p>
+        <p className="text-xs text-slate-500 mt-1 max-w-xs">Select an option on the network index to track a live feed.</p>
       </div>
     );
   }
 
-  // Parse current configuration properties
   const youtubeId = getYouTubeId(channel.url);
   const urlToCheck = channel.url.split('?')[0].toLowerCase();
   const isM3U8 = urlToCheck.includes(".m3u8") || channel.url.toLowerCase().includes("m3u8");
@@ -140,57 +171,88 @@ export default function VideoPlayer({
       }`}>
         
         {youtubeId ? (
-          /* YouTube Render Layout Engine */
           <iframe
-            src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&modestbranding=1&rel=0`}
+            src={`https://www.youtube-nocookie.com/embed/${youtubeId}?autoplay=1&mute=1&modestbranding=1&rel=0`}
             className="w-full h-full border-0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
           />
         ) : isM3U8 || isVideoFile ? (
-          /* Native Stream Delivery Frame Engine */
           <video
             ref={videoRef}
             className="w-full h-full object-contain"
-            controls
-            autoPlay
             playsInline
-            onPlaying={clearValidationChecks}
-            onWaiting={() => triggerStreamAnalysis("Stream is buffering or stuttering...")}
-            onError={() => triggerStreamAnalysis("Broadcast Signal Lost or Blocked by Security Policies.")}
+            muted={isMuted} // Mute explicitly paired to passing standard modern browser context blockers
+            onPlaying={resetHealthTrackers}
+            onWaiting={() => monitorStreamHealthState("Network connection buffering...")}
+            onStalled={() => monitorStreamHealthState("Data feed lagging...")}
+            onError={() => monitorStreamHealthState("Broadcast feed completely lost.", true)}
           />
         ) : (
-          /* Generic Standard Website Fallback Frame */
-          <iframe
-            src={channel.url}
-            className="w-full h-full border-0"
-            allow="autoplay; fullscreen; picture-in-picture"
-            allowFullScreen
-          />
+          <iframe src={channel.url} className="w-full h-full border-0" allow="autoplay; fullscreen" allowFullScreen />
         )}
 
-        {/* TIME DEBOUNCED WARNING OVERLAY */}
+        {/* ERROR OVERLAY */}
         {playbackError && !youtubeId && (
           <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50 animate-fade-in">
-            <div className="relative mb-4 flex items-center justify-center">
-              <span className="absolute inline-flex h-12 w-12 rounded-full border border-rose-500/30 animate-ping" />
-              <div className="relative w-10 h-10 rounded-full bg-rose-500/10 border border-rose-500/20 flex items-center justify-center">
-                <AlertTriangle className="w-5 h-5 text-rose-500" />
-              </div>
-            </div>
-            <h3 className="text-sm font-semibold text-slate-100">Playback Interrupted</h3>
-            <p className="text-xs text-slate-400 mt-1 max-w-xs leading-relaxed">{playbackError}</p>
+            <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
+            <h3 className="text-sm font-semibold text-slate-100">Signal Disrupted</h3>
+            <p className="text-xs text-slate-400 mt-1 max-w-xs">{playbackError}</p>
             {isRecovering && (
-              <div className="mt-4 flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full shadow-md">
+              <div className="mt-4 flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
                 <RefreshCw className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
-                <span className="text-[10px] font-bold text-slate-300 font-sans uppercase">Searching Index Backups...</span>
+                <span className="text-[10px] font-bold text-slate-300 font-sans uppercase">Switching CDN Paths...</span>
               </div>
             )}
           </div>
         )}
       </div>
 
-      {/* Metadata Interface Footer */}
+      {/* EXTERNAL CONTROL PANEL BLOCK CONTAINER */}
+      {(isM3U8 || isVideoFile) && !youtubeId && (
+        <div className={`p-3 rounded-xl border flex items-center justify-between gap-4 transition-all shadow-xs ${
+          theme === "light" ? "bg-white border-slate-200" : "bg-slate-900 border-slate-800"
+        }`}>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={togglePlay}
+              className={`p-2 rounded-lg transition-all border ${
+                theme === "light" 
+                  ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
+                  : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
+              }`}
+            >
+              {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
+            </button>
+            
+            <button
+              onClick={toggleMute}
+              className={`p-2 rounded-lg transition-all border ${
+                theme === "light" 
+                  ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
+                  : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
+              }`}
+            >
+              {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
+            </button>
+          </div>
+
+          <div className="flex items-center gap-2 flex-1 max-w-xs">
+            <span className="text-[10px] font-bold tracking-wider text-slate-400 font-sans uppercase">VOL</span>
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value={isMuted ? 0 : volume}
+              onChange={handleVolumeChange}
+              className="w-full h-1 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+            />
+          </div>
+        </div>
+      )}
+
+      {/* Channel Information Footer */}
       <div className={`border rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
         theme === "light" ? "bg-slate-50 border-slate-200" : "bg-slate-900 border-slate-850"
       }`}>
