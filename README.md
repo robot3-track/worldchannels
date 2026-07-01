@@ -16,10 +16,13 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 
 Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. Key partners include:
 
+*   **Telemundo 52 Sports**: Official Spanish broadcaster in the United States.
+*   **Turkmenistan Sports**: Official broadcaster for Turkmenistan, providing SD coverage of all tournament matches.
 *   **Arena Sport 1 Premium**: Official broadcaster for the Balkans, providing ultra-high-definition coverage of all tournament matches.
-*   **ColaTV Vietnam**: A premium regional hub specializing in Asian market sports feeds and international football.
-*   **TSN Sports**: Official Broadcaster in Canada.
-*   DISCLAIMIR: Note that we only provide legal sources. any copyright interferences are taken down (ex. FS1)
+*   Update as of July 1st. Unfortuantely, it has been known that Arena Sport 1 Premium is down. Updates to come.
+*   **ColaTV Vietnam Servers 1-3**: A premium regional hub with multiple servers specializing in Asian market sports feeds and international football.
+*   **TSN Sports**: Official Broadcaster for Canada, providing HD coverage of all tournament matches.
+*   DISCLAIMIER: Note that we only provide legal sources. any copyright interferences are taken down (ex. FS1)
 
 ## Technical Infrastructure
 
