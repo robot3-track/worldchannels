@@ -16,7 +16,7 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 
 Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. Key partners include:
 
-*   **Telemundo 52 Sports**: Official Spanish broadcaster in the United States.
+*   **Antena Sports**: Official Broadcaster for Italy, providing HD coverage of all tournament matches and match analysis.
 *   **Turkmenistan Sports**: Official broadcaster for Turkmenistan, providing SD coverage of all tournament matches.
 *   **Arena Sport 1 Premium**: Official broadcaster for the Balkans, providing ultra-high-definition coverage of all tournament matches.
 *   Update as of July 1st. Unfortuantely, it has been known that Arena Sport 1 Premium is down. Updates to come.
