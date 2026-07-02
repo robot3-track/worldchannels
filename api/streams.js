@@ -307,6 +307,18 @@ const staticStreams = [
     lon: 12.5674,
   },
   {
+    id: "sports-bein-georgia",
+    name: "Setanta Sports 1",
+    url: "https://tbs01-edge17.itdc.ge/setanta_georgia/index.m3u8?token=a3zYI02DjgAIOYYSeIBsvC6b8GZ0rRwLyTJJMMLpZD-q_0x9MvAbInAq2ir2bkj_teYa6MRAyLQrTgopph2ELANthTHUaiNFZTlpoALm-RIb-42xcsOCXxFYLknXM_iwBbdtNyt3LbhWqmjn21BPWzOEU9P1V6n92LfpMFOowbS8s4c9TmKEb_q8ONnNA7zpaychwN97FAYzUpx2ajA6CMVs4GkvBIsHIwicgYZBDRnDR8uk7EmF9cgjjzOvbqJ-k2kheumZMys0EJq-muBNbw**",
+    category: "sports",
+    category: "world cup",
+    country: "GE",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ef/Setanta_Sports_2023.svg/revision/latest/scale-to-width-down/78?cb=20230804042115",
+    status: "online",
+    lat: 41.7151, // Tbilisi, Georgia
+    lon: 44.8271,
+  },
+  {
     id:"news-telemundo-52",
     name: "Telemundo 52",
     url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
@@ -484,6 +496,17 @@ const staticStreams = [
     category: "sports",
     country: "IT",
     logo: "https://static.wikia.nocookie.net/logopedia/images/7/7a/TR_TV.png/revision/latest?cb=20250116224024",
+    status: "online",
+    lat: 44.4949, // Bologna, Italy
+    lon: 11.3426,
+  },
+  {
+    id: "sports-star-india",
+    name: "Star Sports India",
+    url: "https://starsportshindiii.pages.dev/index.m3u8", // TRTV working server
+    category: "sports",
+    country: "IN",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/7/79/Star_Sports_2017.jpeg/revision/latest/scale-to-width-down/63?cb=20240321103043",
     status: "online",
     lat: 44.4949, // Bologna, Italy
     lon: 11.3426,
