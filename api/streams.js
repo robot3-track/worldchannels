@@ -354,6 +354,18 @@ const staticStreams = [
     lon: -118.2437,
   },
   {
+    id: "sports-tudn-2",
+    name: "TUDN 2",
+    url: "https://streaming.alwaysdata.net/tudn.php",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Telemundo_logo_2018.svg/1920px-Telemundo_logo_2018.svg.png",
+    status: "online",
+    lat: 25.826725, // Florida, US
+    lon: -80.314954, 
+  },
+  {
     id: "sports-bein-fr",
     name: "Bein Sports France",
     url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
@@ -364,6 +376,18 @@ const staticStreams = [
     status: "online",
     lat: 48.8566, // Paris, France
     lon: 2.3522,
+  },
+  {
+    id: "country-it-rai-1",
+    name: "Rai 1 Italy HD",
+    url: "https://dash2.antik.sk/live/test_rai_uno_tizen/playlist.m3u8",
+    category: "world cup",
+    category: "sports",
+    country: "IT",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f7/Rai_1_2016.svg/revision/latest?cb=20190913200441",
+    status: "online",
+    lat: 41.9028,
+    lon: 12.4964,
   },
   {
     id: "news-euro",
@@ -381,7 +405,19 @@ const staticStreams = [
     name: "TSN (Canada Streaming)", 
     url: "https://602.formaturamaxi.com.br/tsn.m3u8", 
     isEmbed: false, // Set to false since this is a direct .mpd stream manifest link, not an iframe embed page
-    category: "world cup", 
+    category: "sports", 
+    country: "CA", 
+    logo: "https://static.wikia.nocookie.net/logopedia/images/b/b6/Tsn1hd.png/revision/latest?cb=20150709183637", 
+    status: "online", 
+    lat: 56.130366,
+    lon: -106.346771,
+  },
+  { 
+    id: "sports-tsn-8", 
+    name: "TSN THE OCHO (Canada Streaming)", 
+    url: "https://d3pnbvng3bx2nj.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-rds8g35qfqrnv/TSN_The_Ocho.m3u8", 
+    isEmbed: false, // Set to false since this is a direct .mpd stream manifest link, not an iframe embed page
+    category: "sports", 
     country: "CA", 
     logo: "https://static.wikia.nocookie.net/logopedia/images/b/b6/Tsn1hd.png/revision/latest?cb=20150709183637", 
     status: "online", 
@@ -398,6 +434,17 @@ const staticStreams = [
     status: "online",
     lat: 40.7128, // New York City, US (FuboTV HQ)
     lon: -74.0060,
+  },
+  {
+    id:"sports-iraqia",
+    name: "Al Iraqia Sports",
+    url: "https://imn-live.esite-lab.com/hls/iraqia-sports-1.m3u8", // High quality, stable Al Iraqia Sports stream
+    category: "sports",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/9/92/Al_Iraqiya_Arabic_logo.jpg/revision/latest?cb=20241204022751",
+    status: "online",
+    lat: 33.3152, // Baghdad, Iraq (Al Iraqia HQ)
+    lon: 44.3661,
   },
   {
     id:"news-cctv-4",
@@ -818,6 +865,17 @@ const staticStreams = [
     lon: -77.0369,
   },
   {
+    id: "news-univision",
+    name: "Univision News",
+    url: "https://linear-254.frequency.stream/mt/studio/254/hls/master/playlist_1280x720.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/d/d3/Univision_2013.svg/revision/latest?cb=20231205002848",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
     id: "sports-tnt-1",
     name: "TNT Sports 1",
     url: "https://cc-zv5hyc9jj47n5.akamaized.net/ogc/nsprt/nsprt_1080p.m3u8",
@@ -1011,28 +1069,7 @@ const staticStreams = [
     lat: 39.0392, // Pyongyang, North Korea
     lon: 125.7625,
   },
-  {
-    id: "country-it-rai-1",
-    name: "Rai 1 Italy HD",
-    url: "https://raivideo.akamaized.net/hls/live/2042731/rai1/index.m3u8",
-    category: "country",
-    country: "IT",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f7/Rai_1_2016.svg/revision/latest?cb=20190913200441",
-    status: "online",
-    lat: 41.9028,
-    lon: 12.4964,
-  },
-  {
-    id: "country-it-rai-2",
-    name: "Rai 2 Italy HD",
-    url: "https://raivideo.akamaized.net/hls/live/2042732/rai2/index.m3u8",
-    category: "country",
-    country: "IT",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f7/Rai_1_2016.svg/revision/latest?cb=20190913200441",
-    status: "online",
-    lat: 45.4642, // Milan
-    lon: 9.1900,
-  },
+
   // --- JAPAN ---
   {
     id: "country-jp-nhk-world-eng",
