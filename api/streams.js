@@ -423,6 +423,18 @@ const staticStreams = [
     lat: 56.130366,
     lon: -106.346771,
   },
+  { 
+    id: "sports-caze-tv", 
+    name: "Caze TV (Brazil Streaming)", 
+    url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/Caze_TV.m3u8", 
+    isEmbed: false, // Set to false since this is a direct .mpd stream manifest link, not an iframe embed page
+    category: "sports", 
+    country: "BR", 
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/e9/CazeTV2022.svg/revision/latest?cb=20250319222352", 
+    status: "online", 
+    lat: -14.2350,
+    lon: -51.9253,
+  },
   {
     id:"sports-fubotv-sports",
     name: "Fubo Sports Network",
