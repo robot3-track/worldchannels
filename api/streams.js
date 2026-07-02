@@ -360,7 +360,7 @@ const staticStreams = [
     category: "sports",
     category: "world cup",
     country: "US",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Telemundo_logo_2018.svg/1920px-Telemundo_logo_2018.svg.png",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f6/TUDN.svg/revision/latest?cb=20230127192854",
     status: "online",
     lat: 25.826725, // Florida, US
     lon: -80.314954, 
@@ -382,7 +382,6 @@ const staticStreams = [
     name: "Rai 1 Italy HD",
     url: "https://dash2.antik.sk/live/test_rai_uno_tizen/playlist.m3u8",
     category: "world cup",
-    category: "sports",
     country: "IT",
     logo: "https://static.wikia.nocookie.net/logopedia/images/f/f7/Rai_1_2016.svg/revision/latest?cb=20190913200441",
     status: "online",
@@ -449,7 +448,7 @@ const staticStreams = [
   {
     id:"news-cctv-4",
     name: "CCTV 4",
-    url: "https://hc9lby9bzw8zcar.wcetv.com/hls/cctv4.m3u8", // High quality, stable Fubo Sports Network stream
+    url: "https://hc9lby9bzw8zcar.wcetv.com/hls/cctv4.m3u8", // High quality, CCTV 4 stream from WCETV (China Central Television International Channel)
     category: "news",
     country: "CN",
     logo: "https://static.wikia.nocookie.net/logopedia/images/1/11/CCTV-4_%E4%B8%AD%E6%96%87%E5%9B%BD%E9%99%85.svg/revision/latest/scale-to-width-down/1000?cb=20230517084450",
