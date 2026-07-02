@@ -308,7 +308,7 @@ const staticStreams = [
   },
   {
     id: "sports-turkmenistan",
-    name: "Turkmenistan Sports",
+    name: "Turkmenistan Sports WARNING - FALSE UNSECURE",
     url: "https://alpha.tv.online.tm/legacyhls/ch004_720/index.m3u8",
     category: "sports",
     category: "world cup",
@@ -320,7 +320,7 @@ const staticStreams = [
   },
   {
     id: "sports-turkmenistan-alt",
-    name: "Turkmenistan Sports Backup [720p]",
+    name: "Turkmenistan Sports Backup WARNING - FALSE UNSECURE",
     url: "https://alpha.tv.online.tm/hls/ch004.m3u8",
     category: "sports",
     category: "world cup",
