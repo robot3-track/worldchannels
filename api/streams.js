@@ -319,6 +319,18 @@ const staticStreams = [
     lon: 44.8271,
   },
   {
+    id: "sports-somoy-tv",
+    name: "Somoy TV (Bangladesh)",
+    url: "https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "BD",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/SOMOY_TV_Logo.svg/500px-SOMOY_TV_Logo.svg.png",
+    status: "online",
+    lat: 23.6850, // Dhaka, Bangladesh
+    lon: 90.3563,
+  },
+  {
     id:"news-telemundo-52",
     name: "Telemundo 52",
     url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
@@ -717,7 +729,7 @@ const staticStreams = [
   {
     id: "cam-us-telemundo",
     name: "Live Telemundo Security Cam",
-    url: "https://content.uplynk.com/channel/b6a96ed39d694ae1b738faa98cf7dd3f.m3u8", // Red Bull Sports feed used as stable backup
+    url: "https://content.uplynk.com/channel/b6a96ed39d694ae1b738faa98cf7dd3f.m3u8", 
     category: "sports",
     country: "US",
     logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
@@ -771,6 +783,17 @@ const staticStreams = [
     lon: 54.3773,
   },
   {
+    id: "news-sky-australia",
+    name: "Sky News Australia",
+    url: "https://skynewsau-live.akamaized.net/hls/live/2002691/skynewsau-extra3/master.m3u8",
+    category: "news",
+    country: "AU",
+    logo: "https://www.skynews.com.au/wp-content/themes/newscorpau-news-dna/dist/images/logos/skynews.svg",
+    status: "online",
+    lat: -33.8688, // Sydney, Australia
+    lon: 151.2093,
+  },
+  {
     id: "news-trtworld",
     name: "TRT World English",
     url: "https://tv-trtworld.medya.trt.com.tr/master.m3u8",
@@ -791,6 +814,17 @@ const staticStreams = [
     status: "online",
     lat: 48.8566, // Paris, France
     lon: 2.3522,
+  },
+  {
+    id: "news-korea-kbs",
+    name: "KBS World",
+    url: "https://www.youtube.com/embed/xyxs3KJJay0?si=u7bXWAgzaWQt4KNX&amp;controls=0",
+    category: "news",
+    country: "KR",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/6/63/KBS_World_2009.svg/revision/latest/scale-to-width-down/250?cb=20230831105001",
+    status: "online",
+    lat: 37.5665, // Seoul, South Korea
+    lon: 126.9780,
   },
   {
     id: "news-aljazeera",
