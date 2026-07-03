@@ -331,6 +331,18 @@ const staticStreams = [
     lon: 24.9384,
   },
   {
+    id: "sports-mtv-3",
+    name: "MTV 3 (Finland Backup)",
+    url: "https://live-fi.tvkaista.net/mtv3/live.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "FI",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MTV3_Logo_2022.svg/330px-MTV3_Logo_2022.svg.png",
+    status: "online",
+    lat: 60.1699, // Helsinki, Finland
+    lon: 24.9384,
+  },
+  {
     id: "sports-bein-fr",
     name: "Bein Sports France",
     url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
@@ -343,7 +355,7 @@ const staticStreams = [
     lon: 2.3522,
   },
   {
-    id: "sports-bein-georgia",
+    id: "sports-setanta-1",
     name: "Setanta Sports 1",
     url: "https://tbs01-edge11.itdc.ge/setanta_georgia/index.m3u8?token=8Akjf5YD0wdJioyVNygm_2YbEXJxIR_9C2se4JGWtqc8oZmZ7-DhjYzFIZzfUAKIZszjFWUeOHv6MTVfwwQqAF30Ezm8L9vtqFDHEn2KaxTN1DkYWKESs6VlS_YS2uJK14avt__MWUL6kGB7f7o1m6IwgwD1Aw7nyvYFyekKAcwhnxqBTSZX3XskcfyMWwKTeXf9lCr2K_8Fffe_nCk_UzBE2j6xPunDP6gMgDWePm0Y73evebDREgf2lBXSX9W1McdU1ofdJQ7oarT9sgqrIA**",
     category: "sports",
@@ -355,7 +367,7 @@ const staticStreams = [
     lon: 44.8271,
   },
   {
-    id: "sports-bein-georgia",
+    id: "sports-setanta-2",
     name: "Setanta Sports 2",
     url: "https://tbs01-edge17.itdc.ge/setanta_sports_plus_georgia/tracks-v1a1/mono.m3u8?token=0ZpzQY3wH84wUZRHnf59yyEh2P07cUvEDnM7qrium6KROSocR-KclvqS5K5G65rQDWUkO4E84WbH-wK-Dv7uttoJYu7GMMG8cJwpLT0O8QlhIeD0hwRyVxHUO7M1rjsS93Hebs095rZdkCQWm3ZOMB0P6ffGeHmWyvoI22jwuxjZg8OlnZ0d5Sc3V9Kn4D1RcxSq8Rg-C9EROQAOobvrwLWmdvg3z1IV2My7TZZk-bCRuUWRMVz8ludRMrsK-4TmmY_0PrFvF2tLEEN8SG_zvmwiA8UTbHh0x0qMspovT6k%2A",
     category: "sports",
