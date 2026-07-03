@@ -307,18 +307,6 @@ const staticStreams = [
     lon: 12.5674,
   },
   {
-    id: "sports-bein-georgia",
-    name: "Setanta Sports 1",
-    url: "https://tbs01-edge17.itdc.ge/setanta_georgia/index.m3u8?token=a3zYI02DjgAIOYYSeIBsvC6b8GZ0rRwLyTJJMMLpZD-q_0x9MvAbInAq2ir2bkj_teYa6MRAyLQrTgopph2ELANthTHUaiNFZTlpoALm-RIb-42xcsOCXxFYLknXM_iwBbdtNyt3LbhWqmjn21BPWzOEU9P1V6n92LfpMFOowbS8s4c9TmKEb_q8ONnNA7zpaychwN97FAYzUpx2ajA6CMVs4GkvBIsHIwicgYZBDRnDR8uk7EmF9cgjjzOvbqJ-k2kheumZMys0EJq-muBNbw**",
-    category: "sports",
-    category: "world cup",
-    country: "GE",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ef/Setanta_Sports_2023.svg/revision/latest/scale-to-width-down/78?cb=20230804042115",
-    status: "online",
-    lat: 41.7151, // Tbilisi, Georgia
-    lon: 44.8271,
-  },
-  {
     id: "sports-somoy-tv",
     name: "Somoy TV (Bangladesh)",
     url: "https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8",
@@ -468,6 +456,18 @@ const staticStreams = [
     status: "online", 
     lat: -14.2350,
     lon: -51.9253,
+  },
+  {
+    id: "sports-bein-georgia",
+    name: "Setanta Sports 1",
+    url: "https://tbs01-edge17.itdc.ge/setanta_georgia/index.m3u8?token=a3zYI02DjgAIOYYSeIBsvC6b8GZ0rRwLyTJJMMLpZD-q_0x9MvAbInAq2ir2bkj_teYa6MRAyLQrTgopph2ELANthTHUaiNFZTlpoALm-RIb-42xcsOCXxFYLknXM_iwBbdtNyt3LbhWqmjn21BPWzOEU9P1V6n92LfpMFOowbS8s4c9TmKEb_q8ONnNA7zpaychwN97FAYzUpx2ajA6CMVs4GkvBIsHIwicgYZBDRnDR8uk7EmF9cgjjzOvbqJ-k2kheumZMys0EJq-muBNbw**",
+    category: "sports",
+    category: "world cup",
+    country: "GE",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ef/Setanta_Sports_2023.svg/revision/latest/scale-to-width-down/78?cb=20230804042115",
+    status: "online",
+    lat: 41.7151, // Tbilisi, Georgia
+    lon: 44.8271,
   },
   { 
     id: "newss-sabc-tv", 
