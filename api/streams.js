@@ -320,8 +320,8 @@ const staticStreams = [
   },
   {
     id: "sports-mtv-3",
-    name: "MTV 3 (Finland) [Give around 1 minute to load]",
-    url: "https://live-fi.tvkaista.net/mtv3/live.m3u8",
+    name: "MTV 3 (Finland)",
+    url: "https://www.tvkaista.org/mtv3/suora",
     category: "sports",
     category: "world cup",
     country: "FI",
