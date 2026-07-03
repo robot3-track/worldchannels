@@ -445,6 +445,18 @@ const staticStreams = [
     lat: -14.2350,
     lon: -51.9253,
   },
+  { 
+    id: "newss-sabc-tv", 
+    name: "SABC News (South Africa Streaming)", 
+    url: "https://sabconetanw.cdn.mangomolo.com/news/smil:news.stream.smil/chunklist_b250000_t64MjQwcA==.m3u8", 
+    isEmbed: false, // Set to false since this is a direct .mpd stream manifest link, not an iframe embed page
+    category: "news", 
+    country: "ZA", 
+    logo: "https://static.wikia.nocookie.net/logopedia/images/2/2d/Snapshot_314.PNG/revision/latest?cb=20230710211237", 
+    status: "online", 
+    lat: -30.5595,
+    lon: 22.9375,
+  },
   {
     id:"sports-fubotv-sports",
     name: "Fubo Sports Network",
