@@ -331,6 +331,18 @@ const staticStreams = [
     lon: 24.9384,
   },
   {
+    id: "sports-bein-fr",
+    name: "Bein Sports France",
+    url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
     id:"news-telemundo-52",
     name: "Telemundo 52",
     url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
@@ -352,18 +364,6 @@ const staticStreams = [
     status: "online",
     lat: 34.0522, // Los Angeles, California, USA
     lon: -118.2437,
-  },
-  {
-    id: "sports-bein-fr",
-    name: "Bein Sports France",
-    url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
-    category: "sports",
-    category: "world cup",
-    country: "FR",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
-    status: "online",
-    lat: 48.8566, // Paris, France
-    lon: 2.3522,
   },
   {
     id: "sports-tvri-sport",
