@@ -1306,6 +1306,7 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/categories/movies.m3u", category: "freetv" },
       { url: "https://iptv-org.github.io/iptv/categories/general.m3u", category: "country" },
       { url: "https://iptv-org.github.io/iptv/categories/music.m3u", category: "music"},
+      { url: "http://bo50uarv.megogo.xyz/iptv/7V87U4BYW3GNVQ/9094/index.m3u", category: "world cup" },
       { url: "https://iptv-org.github.io/iptv/countries/jp.m3u", category: "country", country: "JP" },
       { url: "https://iptv-org.github.io/iptv/countries/kr.m3u", category: "country", country: "KR" },
       { url: "https://iptv-org.github.io/iptv/countries/vn.m3u", category: "country", country: "VN" },
