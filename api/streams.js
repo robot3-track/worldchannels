@@ -342,18 +342,6 @@ const staticStreams = [
     lon: -118.2437,
   },
   {
-    id: "sports-tudn-2",
-    name: "TUDN 2",
-    url: "https://streaming.alwaysdata.net/tudn.php",
-    category: "sports",
-    category: "world cup",
-    country: "US",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f6/TUDN.svg/revision/latest?cb=20230127192854",
-    status: "online",
-    lat: 25.826725, // Florida, US
-    lon: -80.314954, 
-  },
-  {
     id: "sports-bein-fr",
     name: "Bein Sports France",
     url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
@@ -364,6 +352,29 @@ const staticStreams = [
     status: "online",
     lat: 48.8566, // Paris, France
     lon: 2.3522,
+  },
+  {
+    id: "sports-tvri-sport",
+    name: "TVRI Sport",
+    url: "https://tvr-sport.lg.mncdn.com/tvrsport/smil:tvrsport.smil/chunklist_b5160000.m3u8",
+    category: "sports",
+    country: "RO",
+    logo: "https://tvrinasional.wordpress.com/wp-content/uploads/2019/11/cropped-png-small-white.png",
+    status: "online",
+    lat: 44.4268, // Bucharest, Romania
+    lon: 26.1025,
+  },
+  {
+    id: "sports-tudn-2",
+    name: "TUDN 2",
+    url: "https://streaming.alwaysdata.net/tudn.php",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f6/TUDN.svg/revision/latest?cb=20230127192854",
+    status: "online",
+    lat: 25.826725, // Florida, US
+    lon: -80.314954, 
   },
   {
     id: "country-it-rai-1",
@@ -398,6 +409,17 @@ const staticStreams = [
     status: "online", 
     lat: 56.130366,
     lon: -106.346771,
+  },
+  {
+    id: "sports-dazn-ringside",
+    name: "DAZN Ringside",
+    url: "https://aegis-cloudfront-1.tubi.video/bfad29e2-5bee-44f3-8256-127324e8b106/playlist.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/0/09/DAZN_LOGO.png",
+    status: "online",
+    lat: 40.7128, // New York City, US (DAZN HQ)
+    lon: -74.0060,
   },
   { 
     id: "sports-tsn-8", 
