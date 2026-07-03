@@ -19,6 +19,7 @@ Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. 
 *   **Antena Sports**: Official Broadcaster for Italy, providing HD coverage of all tournament matches and match analysis.
 *   **Setanta Sports Georgia**: Official Broadcaster for Georgia, providing HD coverage of all tournament matches.
 *   **Somoy TV Bangladesh**: Official Broadcaster for Bangladesh.
+*   **MTV 3 Finland**: Official Broadcaster for Finland.
 *   **Turkmenistan Sports**: Official broadcaster for Turkmenistan, providing SD coverage of all tournament matches.
 *   **Arena Sport 1 Premium**: Official broadcaster for the Balkans, providing ultra-high-definition coverage of all tournament matches.
 *   Update as of July 1st. Unfortuantely, it has been known that Arena Sport 1 Premium is down. Updates to come.

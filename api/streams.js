@@ -331,6 +331,18 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
+    id: "sports-mtv-3",
+    name: "MTV 3 (Finland)",
+    url: "https://live-fi.tvkaista.net/mtv3/live.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "FI",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MTV3_Logo_2022.svg/330px-MTV3_Logo_2022.svg.png",
+    status: "online",
+    lat: 60.1699, // Helsinki, Finland
+    lon: 24.9384,
+  },
+  {
     id:"news-telemundo-52",
     name: "Telemundo 52",
     url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
