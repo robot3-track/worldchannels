@@ -469,6 +469,18 @@ const staticStreams = [
     lat: 41.7151, // Tbilisi, Georgia
     lon: 44.8271,
   },
+  {
+    id: "sports-bein-georgia",
+    name: "Setanta Sports 2",
+    url: "https://tbs01-edge17.itdc.ge/setanta_sports_plus_georgia/tracks-v1a1/mono.m3u8?token=0ZpzQY3wH84wUZRHnf59yyEh2P07cUvEDnM7qrium6KROSocR-KclvqS5K5G65rQDWUkO4E84WbH-wK-Dv7uttoJYu7GMMG8cJwpLT0O8QlhIeD0hwRyVxHUO7M1rjsS93Hebs095rZdkCQWm3ZOMB0P6ffGeHmWyvoI22jwuxjZg8OlnZ0d5Sc3V9Kn4D1RcxSq8Rg-C9EROQAOobvrwLWmdvg3z1IV2My7TZZk-bCRuUWRMVz8ludRMrsK-4TmmY_0PrFvF2tLEEN8SG_zvmwiA8UTbHh0x0qMspovT6k%2A",
+    category: "sports",
+    category: "world cup",
+    country: "GE",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ef/Setanta_Sports_2023.svg/revision/latest/scale-to-width-down/78?cb=20230804042115",
+    status: "online",
+    lat: 41.7151, // Tbilisi, Georgia
+    lon: 44.8271,
+  },
   { 
     id: "newss-sabc-tv", 
     name: "SABC News (South Africa Streaming)", 
