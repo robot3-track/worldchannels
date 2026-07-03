@@ -63,7 +63,7 @@ const countryCoords = {
 // Regional Cities for location resolution
 const regionalCities = [
     { keys: ["sacramento"], lat: 38.5816, lon: -121.4944, country: "US" },
-    { keys: ["american", "america", "us news", "usa ", "fox news", "cnn news", "msnbc", "fox sports", "fox sports 2", "fox sports 1", "nhra tv"], lat: 37.0902, lon: -95.7129, country: "US" },
+    { keys: ["american", "america", "us news", "usa ", "fox news", "cnn america", "msnbc", "fox sports", "fox sports 2", "fox sports 1", "nhra tv"], lat: 37.0902, lon: -95.7129, country: "US" },
     { keys: ["los angeles", "la tv", "kcbs", "ktla", "kcal", "kabc", "knbc"], lat: 34.0522, lon: -118.2437, country: "US" },
     { keys: ["san francisco", "kpix", "kqed", "kgo", "bay area"], lat: 37.7749, lon: -122.4194, country: "US" },
     { keys: ["new york", "nyc", "wabc", "wnyw", "wcbs", "wnbc", "pix11", "overtime", "big civic"], lat: 40.7128, lon: -74.0060, country: "US" },
@@ -1018,6 +1018,17 @@ const staticStreams = [
     status: "online",
     lat: 39.9334, // Ankara, Turkey
     lon: 32.8597,
+  },
+  {
+    id: "country-id-cnn",
+    name: "CNN Indonesia",
+    url: "https://live.cnnindonesia.com/livecnn/smil:cnntv.smil/chunklist_w909769083_b384000_sleng.m3u8",
+    category: "country",
+    country: "ID",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/CNN_Logo_%282014%29.svg/1920px-CNN_Logo_%282014%29.svg.png",
+    status: "online",
+    lat: -6.2088, // Jakarta, Indonesia
+    lon: 106.8456,
   },
   {
     id: "country-id-tvrf",
