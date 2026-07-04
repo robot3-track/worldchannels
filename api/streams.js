@@ -532,6 +532,18 @@ const staticStreams = [
     lon: -80.314954, 
   },
   {
+    id: "sports-newworld-africa",
+    name: "New World Africa TV",
+    url: "https://hls.newworldtv.com/nw-info/video/live.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TD",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Logo-New-World-TV-01-1.png/1920px-Logo-New-World-TV-01-1.png?_=20220804085243",
+    status: "online",
+    lat: 12.1348, // N'Djamena, Chad
+    lon: 15.0557,
+  },
+  {
     id: "country-it-rai-1",
     name: "Rai 1 Italy HD",
     url: "https://dash2.antik.sk/live/test_rai_uno_tizen/playlist.m3u8",
