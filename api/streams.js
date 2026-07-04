@@ -343,7 +343,7 @@ const staticStreams = [
     lon: 24.9384,
   },
   {
-    id: "sports-mtv-3",
+    id: "sports-mtv-backup",
     name: "MTV 3 (Finland Backup)",
     url: "https://live-fi.tvkaista.net/mtv3/live.m3u8",
     category: "sports",
