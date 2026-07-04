@@ -343,6 +343,18 @@ const staticStreams = [
     lon: 24.9384,
   },
   {
+    id: "sports-tsn-4",
+    name: "TSN 4 (Canada)",
+    url: "https://vidara.so/e/q7lTSVY6e6uH",
+    category: "sports",
+    category: "world cup",
+    country: "CA",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4b/Tsn4hd.png/revision/latest?cb=20150709184509",
+    status: "online",
+    lat: 45.4215, // Ottawa, Canada
+    lon: -75.6972,
+  },
+  {
     id: "sports-bein-fr",
     name: "Bein Sports France",
     url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
@@ -400,6 +412,66 @@ const staticStreams = [
     status: "online",
     lat: 38.9697, // Ashgabat, Turkmenistan
     lon: 58.3794,
+  },
+  {
+    id: "country-vn-colatv",
+    name: "Cola TV Vietnam (Web)",
+    url: "https://colatv.live", // Main site URL
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "country-vn-colatv-alt",
+    name: "Cola TV Vietnam (Server 1)",
+    url: "https://live05.apusport.com/live/78905744.m3u8", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "country-vn-colatv-alt2",
+    name: "Cola TV Vietnam (Server 2)",
+    url: "https://live05.koepgd.app/live/14830711.m3u8", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "country-vn-colatv-alt3",
+    name: "Cola TV Vietnam (Server 3)",
+    url: "https://live05.meung.app/live/08552895.m3u8", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "country-vn-colatv-alt4",
+    name: "Cola TV Vietnam (Server 4)",
+    url: "https://live05.meung.app/live/90865415.m3u8'", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
   },
   {
     id:"news-telemundo-52",
@@ -1145,66 +1217,6 @@ const staticStreams = [
     lon: 37.6173,
   },
   // --- VIETNAM ---
-  {
-    id: "country-vn-colatv",
-    name: "Cola TV Vietnam (Web)",
-    url: "https://colatv.live", // Main site URL
-    category: "sports",
-    category: "world cup",
-    country: "VN",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
-    status: "online",
-    lat: 10.8231, // Ho Chi Minh City
-    lon: 106.6297,
-  },
-  {
-    id: "country-vn-colatv-alt",
-    name: "Cola TV Vietnam (Server 1)",
-    url: "https://live05.apusport.com/live/78905744.m3u8", // M3U8 Link
-    category: "sports",
-    category: "world cup",
-    country: "VN",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
-    status: "online",
-    lat: 10.8231, // Ho Chi Minh City
-    lon: 106.6297,
-  },
-  {
-    id: "country-vn-colatv-alt2",
-    name: "Cola TV Vietnam (Server 2)",
-    url: "https://live05.koepgd.app/live/14830711.m3u8", // M3U8 Link
-    category: "sports",
-    category: "world cup",
-    country: "VN",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
-    status: "online",
-    lat: 10.8231, // Ho Chi Minh City
-    lon: 106.6297,
-  },
-  {
-    id: "country-vn-colatv-alt3",
-    name: "Cola TV Vietnam (Server 3)",
-    url: "https://live05.meung.app/live/08552895.m3u8", // M3U8 Link
-    category: "sports",
-    category: "world cup",
-    country: "VN",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
-    status: "online",
-    lat: 10.8231, // Ho Chi Minh City
-    lon: 106.6297,
-  },
-  {
-    id: "country-vn-colatv-alt4",
-    name: "Cola TV Vietnam (Server 4)",
-    url: "https://live05.meung.app/live/90865415.m3u8'", // M3U8 Link
-    category: "sports",
-    category: "world cup",
-    country: "VN",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
-    status: "online",
-    lat: 10.8231, // Ho Chi Minh City
-    lon: 106.6297,
-  },
   // --- NORTH KOREA ---
   {
     id: "country-kp-kctv",
