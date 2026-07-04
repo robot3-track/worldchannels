@@ -331,6 +331,18 @@ const staticStreams = [
     lon: -75.6972,
   },
   {
+    id: "sports-tsn-backup",
+    name: "TSN 4 (Canada Backup)",
+    url: "https://ok.ru/videoembed/15663653461565",
+    category: "sports",
+    category: "world cup",
+    country: "CA",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4b/Tsn4hd.png/revision/latest?cb=20150709184509",
+    status: "online",
+    lat: 45.4215, // Ottawa, Canada
+    lon: -75.6972,
+  },
+  {
     id: "sports-mtv-3",
     name: "MTV 3 (Finland)",
     url: "https://www.tvkaista.org/mtv3/suora",
