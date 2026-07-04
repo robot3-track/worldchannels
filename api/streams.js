@@ -474,7 +474,7 @@ const staticStreams = [
     lon: -75.6972,
   },
   {
-    id: "sports-tsn-4",
+    id: "sports-tsn-backup",
     name: "TSN 4 (Canada Backup)",
     url: "https://ok.ru/videoembed/15900812975843?nochat=1",
     category: "sports",
