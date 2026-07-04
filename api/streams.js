@@ -474,6 +474,18 @@ const staticStreams = [
     lon: -75.6972,
   },
   {
+    id: "sports-tsn-4",
+    name: "TSN 4 (Canada Backup)",
+    url: "https://ok.ru/videoembed/15900812975843?nochat=1",
+    category: "sports",
+    category: "world cup",
+    country: "CA",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4b/Tsn4hd.png/revision/latest?cb=20150709184509",
+    status: "online",
+    lat: 45.4215, // Ottawa, Canada
+    lon: -75.6972,
+  },
+  {
     id: "sports-dazn-germany",
     name: "Dazn Germany",
     url: "https://40c455b7f9fb68e414d2892a742d5165.dyndivision.net/e/7i33b46zuhctk", // M3U8 Link
