@@ -464,7 +464,7 @@ const staticStreams = [
   {
     id: "country-vn-colatv-alt4",
     name: "Cola TV Vietnam (Server 4)",
-    url: "https://live05.meung.app/live/90865415.m3u8'", // M3U8 Link
+    url: "https://live05.meung.app/live/90865415.m3u8", // M3U8 Link
     category: "sports",
     category: "world cup",
     country: "VN",
@@ -472,6 +472,18 @@ const staticStreams = [
     status: "online",
     lat: 10.8231, // Ho Chi Minh City
     lon: 106.6297,
+  },
+  {
+    id: "sports-dazn-germany",
+    name: "Dazn Germany",
+    url: "https://40c455b7f9fb68e414d2892a742d5165.dyndivision.net/e/7i33b46zuhctk", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "DE",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/1/18/DAZN_1_2024.svg/revision/latest?cb=20240713213358",
+    status: "online",
+    lat: 52.5200, // Berlin, Germany
+    lon: 13.4050,
   },
   {
     id:"news-telemundo-52",
