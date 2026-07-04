@@ -556,7 +556,7 @@ const staticStreams = [
   { 
     id: "sports-tsn-1", 
     name: "TSN (Canada Streaming)", 
-    url: "https://602.formaturamaxi.com.br/tsn.m3u8", 
+    url: "https://0641f04819ba65abc131cc0ef9c096e6.dyndivision.net/e/9pn3i1loesyis", 
     isEmbed: false, // Set to false since this is a direct .mpd stream manifest link, not an iframe embed page
     category: "sports", 
     country: "CA", 
