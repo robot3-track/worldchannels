@@ -319,6 +319,18 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
+    id: "sports-tsn-4",
+    name: "TSN 4 (Canada)",
+    url: "https://vidara.so/e/q7lTSVY6e6uH",
+    category: "sports",
+    category: "world cup",
+    country: "CA",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4b/Tsn4hd.png/revision/latest?cb=20150709184509",
+    status: "online",
+    lat: 45.4215, // Ottawa, Canada
+    lon: -75.6972,
+  },
+  {
     id: "sports-mtv-3",
     name: "MTV 3 (Finland)",
     url: "https://www.tvkaista.org/mtv3/suora",
@@ -341,18 +353,6 @@ const staticStreams = [
     status: "online",
     lat: 60.1699, // Helsinki, Finland
     lon: 24.9384,
-  },
-  {
-    id: "sports-tsn-4",
-    name: "TSN 4 (Canada)",
-    url: "https://vidara.so/e/q7lTSVY6e6uH",
-    category: "sports",
-    category: "world cup",
-    country: "CA",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4b/Tsn4hd.png/revision/latest?cb=20150709184509",
-    status: "online",
-    lat: 45.4215, // Ottawa, Canada
-    lon: -75.6972,
   },
   {
     id: "sports-bein-fr",
