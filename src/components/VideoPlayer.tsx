@@ -32,6 +32,11 @@ const getPlayerStrategy = (channel: StreamChannel | null) => {
     return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
   }
 
+  // 2. Original Embed Only (Finland / Rigid CORS domains)
+  if (url.includes("tvkaista.net") || url.includes("live-fi.tvkaista.net") || url.includes("live-fi")) {
+    return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
+  }
+
   // 3. Native Stream Check (.m3u8, .mp4)
   const isStream = urlToCheck.includes(".m3u8") || url.toLowerCase().includes("m3u8") || 
                    urlToCheck.includes(".mp4") || urlToCheck.includes(".m4s");
