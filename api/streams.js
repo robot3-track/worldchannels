@@ -788,7 +788,7 @@ const staticStreams = [
   {
     id: "sports-fifaplus",
     name: "FIFA+ Live",
-    url: "https://a62dad94.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0ZJRkFQbHVzRW5nbGlzaF9ITFM/playlist.m3u8", // High quality official stable FIFA+ live channel stream
+    url: "https://www.youtube.com/embed/live_stream?channel=UCYiGK8hGLxqHn9uGjFk3p7g", // High quality official stable FIFA+ live channel stream
     category: "sports",
     country: "Global",
     logo: "https://static.wikia.nocookie.net/logopedia/images/1/1c/FIFA.svg/revision/latest/scale-to-width-down/200?cb=20220919201858",
