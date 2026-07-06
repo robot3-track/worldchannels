@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Tv, AlertTriangle, RefreshCw, Play, Pause, Volume2, VolumeX, Maximize, Minimize } from "lucide-react";
 import { StreamChannel } from "../types";
 
@@ -9,7 +9,16 @@ interface VideoPlayerProps {
   theme: "light" | "dark";
 }
 
-// Pure synchronous selector function to eliminate state lag on mount
+// Global lookup table for O(1) matching checks instead of running multiple sequential .includes() iterations
+const EMBED_ONLY_DOMAINS = [
+  "online.tm", "alpha.tv.online.tm",
+  "thebosstv.com", "live.thebosstv.com",
+  "tvkaista.net", "live-fi.tvkaista.net", "live-fi"
+];
+
+// Reusable regex compiled once out-of-scope to avoid layout instantiation costs
+const YOUTUBE_REGEX = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+
 const getPlayerStrategy = (channel: StreamChannel | null) => {
   if (!channel) return { isYoutube: false, isEmbedOnly: false, useNativeVideo: false, cleanUrl: "" };
 
@@ -17,27 +26,17 @@ const getPlayerStrategy = (channel: StreamChannel | null) => {
   const urlToCheck = url.split('?')[0].toLowerCase();
   
   // 1. YouTube Identification
-  const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  const match = url.match(regExp);
+  const match = url.match(YOUTUBE_REGEX);
   const youtubeId = (match && match[2].length === 11) ? match[2] : null;
   if (youtubeId) return { isYoutube: true, isEmbedOnly: false, useNativeVideo: false, cleanUrl: youtubeId };
 
-  // 2. Original Embed Only (Turkmenistan Sports / Rigid CORS domains)
-  if (url.includes("online.tm") || url.includes("alpha.tv.online.tm")) {
+  // 2. High-Performance Static Embed Domain Verification via .some() shortcutting
+  const matchesEmbedOnly = EMBED_ONLY_DOMAINS.some(domain => url.includes(domain));
+  if (matchesEmbedOnly) {
     return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
   }
 
-  // 2. Original Embed Only (Somoy Sports / Rigid CORS domains)
-  if (url.includes("thebosstv.com") || url.includes("live.thebosstv.com")) {
-    return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
-  }
-
-  // 2. Original Embed Only (Finland / Rigid CORS domains)
-  if (url.includes("tvkaista.net") || url.includes("live-fi.tvkaista.net") || url.includes("live-fi")) {
-    return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
-  }
-
-  // 3. Native Stream Check (.m3u8, .mp4)
+  // 3. Native Stream Check (.m3u8, .mp4, .m4s)
   const isStream = urlToCheck.includes(".m3u8") || url.toLowerCase().includes("m3u8") || 
                    urlToCheck.includes(".mp4") || urlToCheck.includes(".m4s");
                    
@@ -77,8 +76,8 @@ export default function VideoPlayer({
   const [isRecovering, setIsRecovering] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
 
-  // Instant layout calculation
-  const strategy = getPlayerStrategy(channel);
+  // CRITICAL FIX: Memoize Strategy Layout parsing calculations to lift weight off main rendering loop
+  const strategy = useMemo(() => getPlayerStrategy(channel), [channel?.id, channel?.url]);
 
   // Fullscreen controls auto-hide mouse tracker
   const handleMouseMove = () => {
