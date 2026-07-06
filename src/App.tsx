@@ -494,11 +494,11 @@ export default function App() {
                 <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
                   <li className="flex items-center gap-1.5">
                     <span className="text-emerald-500 text-[9px] font-bold">●</span>
-                    <span>Arena Sport 1 Premium (Balkans)</span>
+                    <span>Antena Sports (Italy)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="text-emerald-500 text-[9px] font-bold">●</span>
-                    <span>Fox Sports 1 (United States)</span>
+                    <span>Somoy TV (Bangladesh)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="text-emerald-500 text-[9px] font-bold">●</span>
@@ -506,7 +506,27 @@ export default function App() {
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="text-emerald-500 text-[9px] font-bold">●</span>
-                    <span>beIN SPORTS (Global Hub)</span>
+                    <span>beIN SPORTS (France)</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>Turkmenistan Sports (Turkmenistan)</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>Setanta Sports (Georgia)</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>TSN Sports (Canada)</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>MTV3 (Finland)</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>YLE2 TV (Finland)</span>
                   </li>
                 </ul>
               </div>
