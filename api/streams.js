@@ -757,7 +757,7 @@ const staticStreams = [
     name: "Al Iraqia Sports",
     url: "https://imn-live.esite-lab.com/hls/iraqia-sports-1.m3u8", // High quality, stable Al Iraqia Sports stream
     category: "sports",
-    country: "US",
+    country: "IQ",
     logo: "https://static.wikia.nocookie.net/logopedia/images/9/92/Al_Iraqiya_Arabic_logo.jpg/revision/latest?cb=20241204022751",
     status: "online",
     lat: 33.3152, // Baghdad, Iraq (Al Iraqia HQ)
