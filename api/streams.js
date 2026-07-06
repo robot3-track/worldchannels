@@ -544,6 +544,17 @@ const staticStreams = [
     lon: -80.314954, 
   },
   {
+    id: "sport-vtv-1",
+    name: "VTV1 (Vietnam)",
+    url: "https://cdn-live.vtv.vn/Me_-WD3x20rKXBRMMXoDCQ/1783306094/live/vtv1/master.m3u8", // M3U8 Link
+    category: "news",
+    country: "VN",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/1/17/VTV1_2013.png?_=20160731043825",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
     id: "sports-newworld-africa",
     name: "New World Africa TV",
     url: "https://hls.newworldtv.com/nw-info/video/live.m3u8",
