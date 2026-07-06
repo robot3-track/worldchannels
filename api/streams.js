@@ -343,6 +343,18 @@ const staticStreams = [
     lon: 24.9384,
   },
   {
+    id: "sports-bein-fr",
+    name: "Bein Sports France",
+    url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
     id: "sports-mtv-3",
     name: "MTV 3 (Finland)",
     url: "https://www.tvkaista.org/mtv3/suora",
@@ -365,41 +377,6 @@ const staticStreams = [
     status: "online",
     lat: 60.1699, // Helsinki, Finland
     lon: 24.9384,
-  },
-  {
-    id: "sports-bein-fr",
-    name: "Bein Sports France",
-    url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
-    category: "sports",
-    category: "world cup",
-    country: "FR",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
-    status: "online",
-    lat: 48.8566, // Paris, France
-    lon: 2.3522,
-  },
-  {
-    id: "sports-setanta-1",
-    name: "Setanta Sports 1",
-    url: "https://tbs01-edge11.itdc.ge/setanta_georgia/index.m3u8?token=8Akjf5YD0wdJioyVNygm_2YbEXJxIR_9C2se4JGWtqc8oZmZ7-DhjYzFIZzfUAKIZszjFWUeOHv6MTVfwwQqAF30Ezm8L9vtqFDHEn2KaxTN1DkYWKESs6VlS_YS2uJK14avt__MWUL6kGB7f7o1m6IwgwD1Aw7nyvYFyekKAcwhnxqBTSZX3XskcfyMWwKTeXf9lCr2K_8Fffe_nCk_UzBE2j6xPunDP6gMgDWePm0Y73evebDREgf2lBXSX9W1McdU1ofdJQ7oarT9sgqrIA**",
-    category: "sports",
-    category: "world cup",
-    country: "GE",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ef/Setanta_Sports_2023.svg/revision/latest/scale-to-width-down/78?cb=20230804042115",
-    status: "online",
-    lat: 41.7151, // Tbilisi, Georgia
-    lon: 44.8271,
-  },
-  {
-    id: "sports-setanta-2",
-    name: "Setanta Sports 2",
-    url: "https://tbs01-edge17.itdc.ge/setanta_sports_plus_georgia/tracks-v1a1/mono.m3u8?token=0ZpzQY3wH84wUZRHnf59yyEh2P07cUvEDnM7qrium6KROSocR-KclvqS5K5G65rQDWUkO4E84WbH-wK-Dv7uttoJYu7GMMG8cJwpLT0O8QlhIeD0hwRyVxHUO7M1rjsS93Hebs095rZdkCQWm3ZOMB0P6ffGeHmWyvoI22jwuxjZg8OlnZ0d5Sc3V9Kn4D1RcxSq8Rg-C9EROQAOobvrwLWmdvg3z1IV2My7TZZk-bCRuUWRMVz8ludRMrsK-4TmmY_0PrFvF2tLEEN8SG_zvmwiA8UTbHh0x0qMspovT6k%2A",
-    category: "sports",
-    country: "GE",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ef/Setanta_Sports_2023.svg/revision/latest/scale-to-width-down/78?cb=20230804042115",
-    status: "online",
-    lat: 41.7151, // Tbilisi, Georgia
-    lon: 44.8271,
   },
   {
     id: "sports-turkmenistan",
@@ -508,6 +485,29 @@ const staticStreams = [
     status: "online",
     lat: 45.4215, // Ottawa, Canada
     lon: -75.6972,
+  },
+  {
+    id: "sports-setanta-1",
+    name: "Setanta Sports 1",
+    url: "https://tbs01-edge11.itdc.ge/setanta_georgia/index.m3u8?token=8Akjf5YD0wdJioyVNygm_2YbEXJxIR_9C2se4JGWtqc8oZmZ7-DhjYzFIZzfUAKIZszjFWUeOHv6MTVfwwQqAF30Ezm8L9vtqFDHEn2KaxTN1DkYWKESs6VlS_YS2uJK14avt__MWUL6kGB7f7o1m6IwgwD1Aw7nyvYFyekKAcwhnxqBTSZX3XskcfyMWwKTeXf9lCr2K_8Fffe_nCk_UzBE2j6xPunDP6gMgDWePm0Y73evebDREgf2lBXSX9W1McdU1ofdJQ7oarT9sgqrIA**",
+    category: "sports",
+    category: "world cup",
+    country: "GE",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ef/Setanta_Sports_2023.svg/revision/latest/scale-to-width-down/78?cb=20230804042115",
+    status: "online",
+    lat: 41.7151, // Tbilisi, Georgia
+    lon: 44.8271,
+  },
+  {
+    id: "sports-setanta-2",
+    name: "Setanta Sports 2",
+    url: "https://tbs01-edge17.itdc.ge/setanta_sports_plus_georgia/tracks-v1a1/mono.m3u8?token=0ZpzQY3wH84wUZRHnf59yyEh2P07cUvEDnM7qrium6KROSocR-KclvqS5K5G65rQDWUkO4E84WbH-wK-Dv7uttoJYu7GMMG8cJwpLT0O8QlhIeD0hwRyVxHUO7M1rjsS93Hebs095rZdkCQWm3ZOMB0P6ffGeHmWyvoI22jwuxjZg8OlnZ0d5Sc3V9Kn4D1RcxSq8Rg-C9EROQAOobvrwLWmdvg3z1IV2My7TZZk-bCRuUWRMVz8ludRMrsK-4TmmY_0PrFvF2tLEEN8SG_zvmwiA8UTbHh0x0qMspovT6k%2A",
+    category: "sports",
+    country: "GE",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/ef/Setanta_Sports_2023.svg/revision/latest/scale-to-width-down/78?cb=20230804042115",
+    status: "online",
+    lat: 41.7151, // Tbilisi, Georgia
+    lon: 44.8271,
   },
   {
     id: "sports-dazn-germany",
