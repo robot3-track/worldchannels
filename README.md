@@ -18,6 +18,7 @@ Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. 
 
 *   **Antena Sports**: Official Broadcaster for Italy, providing HD coverage of all tournament matches and match analysis.
 *   **Somoy TV Bangladesh**: Official Broadcaster for Bangladesh.
+*   **YLE2 TV Finland**: Official Broadcaster for Finland.
 *   **MTV 3 Finland**: Official Broadcaster for Finland.
 *   **TSN Sports**: Official Broadcaster for Canada, providing HD coverage of all tournament matches.
 *   **Turkmenistan Sports**: Official broadcaster for Turkmenistan, providing SD coverage of all tournament matches.
