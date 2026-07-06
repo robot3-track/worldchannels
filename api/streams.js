@@ -325,7 +325,7 @@ const staticStreams = [
     category: "sports",
     category: "world cup",
     country: "FI",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MTV3_Logo_2022.svg/330px-MTV3_Logo_2022.svg.png",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f5/Yle-tv2-hd.png/revision/latest?cb=20140523095509",
     status: "online",
     lat: 60.1699, // Helsinki, Finland
     lon: 24.9384,
@@ -337,7 +337,7 @@ const staticStreams = [
     category: "sports",
     category: "world cup",
     country: "FI",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MTV3_Logo_2022.svg/330px-MTV3_Logo_2022.svg.png",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f5/Yle-tv2-hd.png/revision/latest?cb=20140523095509",
     status: "online",
     lat: 60.1699, // Helsinki, Finland
     lon: 24.9384,
