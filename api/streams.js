@@ -319,6 +319,30 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
+    id: "sports-yle-tv2",
+    name: "YLE TV2 (Finland)",
+    url: "https://live-fi.tvkaista.net/yle-tv2/live.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "FI",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MTV3_Logo_2022.svg/330px-MTV3_Logo_2022.svg.png",
+    status: "online",
+    lat: 60.1699, // Helsinki, Finland
+    lon: 24.9384,
+  },
+  {
+    id: "sports-yle-tvbackup",
+    name: "YLE TV2 (Finland Backup)",
+    url: "https://www.tvkaista.org/yle-tv2/suora",
+    category: "sports",
+    category: "world cup",
+    country: "FI",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MTV3_Logo_2022.svg/330px-MTV3_Logo_2022.svg.png",
+    status: "online",
+    lat: 60.1699, // Helsinki, Finland
+    lon: 24.9384,
+  },
+  {
     id: "sports-mtv-3",
     name: "MTV 3 (Finland)",
     url: "https://www.tvkaista.org/mtv3/suora",
