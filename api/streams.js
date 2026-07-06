@@ -487,6 +487,42 @@ const staticStreams = [
     lon: -75.6972,
   },
   {
+    id: "sports-alkass-1",
+    name: "Al Kass 1",
+    url: "https://liveeu-gcp.alkassdigital.net/alkass1-p/main.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "QA",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg/500px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg.png",
+    status: "online",
+    lat: 25.2769, // Doha, Qatar
+    lon: 51.5380,
+  },
+  {
+    id: "sports-alkass-2",
+    name: "Al Kass 2",
+    url: "https://liveeu-gcp.alkassdigital.net/alkass2-p/main.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "QA",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg/500px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg.png",
+    status: "online",
+    lat: 25.2769, // Doha, Qatar
+    lon: 51.5380,
+  },
+  {
+    id: "sports-alkass-4",
+    name: "Al Kass 4",
+    url: "https://liveeu-gcp.alkassdigital.net/alkass2-p/main.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "QA",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg/500px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg.png",
+    status: "online",
+    lat: 25.2769, // Doha, Qatar
+    lon: 51.5380,
+  },
+  {
     id: "sports-setanta-1",
     name: "Setanta Sports 1",
     url: "https://tbs01-edge11.itdc.ge/setanta_georgia/index.m3u8?token=8Akjf5YD0wdJioyVNygm_2YbEXJxIR_9C2se4JGWtqc8oZmZ7-DhjYzFIZzfUAKIZszjFWUeOHv6MTVfwwQqAF30Ezm8L9vtqFDHEn2KaxTN1DkYWKESs6VlS_YS2uJK14avt__MWUL6kGB7f7o1m6IwgwD1Aw7nyvYFyekKAcwhnxqBTSZX3XskcfyMWwKTeXf9lCr2K_8Fffe_nCk_UzBE2j6xPunDP6gMgDWePm0Y73evebDREgf2lBXSX9W1McdU1ofdJQ7oarT9sgqrIA**",
