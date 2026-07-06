@@ -578,6 +578,40 @@ const staticStreams = [
     lon: 12.4964,
   },
   {
+    id: "sports-trt-1",
+    name: "TRT1 (Turkey)",
+    url: "https://trt.daioncdn.net/trt-1/master_1080p.m3u8?&sid=6mxtrw74fwk5&app=ed3904e8-737b-4a5e-856a-1b0d7a0a94e2&ce=2", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/e/e8/TRT_T%C3%BCrk_logosu.png",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
+  },
+  {
+    id: "news-trt-tv",
+    name: "TRT Turk (Turkey)",
+    url: "https://tv-trtturk.medya.trt.com.tr/master.m3u8", // M3U8 Link
+    category: "news",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/e/e8/TRT_T%C3%BCrk_logosu.png",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
+  },
+  {
+    id: "news-tv-100",
+    name: "TV100 Turkey",
+    url: "https://tv100-live.daioncdn.net/tv100/tv100_1080p.m3u8", // M3U8 Link
+    category: "news",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/e/e8/TRT_T%C3%BCrk_logosu.png",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
+  },
+  {
     id: "news-euro",
     name: "EuroNews",
     url: "https://live-manifest.production-public.tubi.io/live/c841471d-dc14-43fb-9ba5-c266e7edcce4/playlist.m3u8",
