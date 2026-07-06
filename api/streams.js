@@ -319,30 +319,6 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
-    id: "sports-yle-tv2",
-    name: "YLE TV2 (Finland)",
-    url: "https://live-fi.tvkaista.net/yle-tv2/live.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "FI",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f5/Yle-tv2-hd.png/revision/latest?cb=20140523095509",
-    status: "online",
-    lat: 60.1699, // Helsinki, Finland
-    lon: 24.9384,
-  },
-  {
-    id: "sports-yle-tvbackup",
-    name: "YLE TV2 (Finland Backup)",
-    url: "https://www.tvkaista.org/yle-tv2/suora",
-    category: "sports",
-    category: "world cup",
-    country: "FI",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f5/Yle-tv2-hd.png/revision/latest?cb=20140523095509",
-    status: "online",
-    lat: 60.1699, // Helsinki, Finland
-    lon: 24.9384,
-  },
-  {
     id: "sports-bein-fr",
     name: "Bein Sports France",
     url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
@@ -461,6 +437,30 @@ const staticStreams = [
     status: "online",
     lat: 10.8231, // Ho Chi Minh City
     lon: 106.6297,
+  },
+  {
+    id: "sports-yle-tv2",
+    name: "YLE TV2 (Finland)",
+    url: "https://live-fi.tvkaista.net/yle-tv2/live.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "FI",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f5/Yle-tv2-hd.png/revision/latest?cb=20140523095509",
+    status: "online",
+    lat: 60.1699, // Helsinki, Finland
+    lon: 24.9384,
+  },
+  {
+    id: "sports-yle-tvbackup",
+    name: "YLE TV2 (Finland Backup)",
+    url: "https://www.tvkaista.org/yle-tv2/suora",
+    category: "sports",
+    category: "world cup",
+    country: "FI",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f5/Yle-tv2-hd.png/revision/latest?cb=20140523095509",
+    status: "online",
+    lat: 60.1699, // Helsinki, Finland
+    lon: 24.9384,
   },
   {
     id: "sports-tsn-4",
