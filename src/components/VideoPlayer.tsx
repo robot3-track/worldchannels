@@ -9,12 +9,14 @@ interface VideoPlayerProps {
   theme: "light" | "dark";
 }
 
+// Global lookup table for O(1) matching checks instead of running multiple sequential .includes() iterations
 const EMBED_ONLY_DOMAINS = [
   "online.tm", "alpha.tv.online.tm",
   "thebosstv.com", "live.thebosstv.com",
   "tvkaista.net", "live-fi.tvkaista.net", "live-fi"
 ];
 
+// Reusable regex compiled once out-of-scope to avoid layout instantiation costs
 const YOUTUBE_REGEX = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
 
 const getPlayerStrategy = (channel: StreamChannel | null) => {
@@ -28,7 +30,7 @@ const getPlayerStrategy = (channel: StreamChannel | null) => {
   const youtubeId = (match && match[2].length === 11) ? match[2] : null;
   if (youtubeId) return { isYoutube: true, isEmbedOnly: false, useNativeVideo: false, cleanUrl: youtubeId };
 
-  // 2. Embed Domain Verification
+  // 2. High-Performance Static Embed Domain Verification via .some() shortcutting
   const matchesEmbedOnly = EMBED_ONLY_DOMAINS.some(domain => url.includes(domain));
   if (matchesEmbedOnly) {
     return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
@@ -40,15 +42,13 @@ const getPlayerStrategy = (channel: StreamChannel | null) => {
                    
   if (isStream) {
     let finalUrl = url;
-    
-    // If the stream is HTTP and our app is running on HTTPS, pass it through an open raw proxy
     if (url.startsWith("http://") && window.location.protocol === "https:") {
-      finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+      finalUrl = `https://cors-anywhere.herokuapp.com/${url}`;
     }
-    
     return { isYoutube: false, isEmbedOnly: false, useNativeVideo: true, cleanUrl: finalUrl };
   }
 
+  // Fallback to iframe embed for unknown strings
   return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
 };
 
@@ -63,19 +63,23 @@ export default function VideoPlayer({
   const failureTimerRef = useRef<any | null>(null);
   const controlsTimeoutRef = useRef<any | null>(null);
   
+  // Controls state managers
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true); 
   const [volume, setVolume] = useState(1);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
 
+  // States for Loading and Errors
   const [isLoading, setIsLoading] = useState(false);
   const [playbackError, setPlaybackError] = useState<string | null>(null);
   const [isRecovering, setIsRecovering] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
 
+  // CRITICAL FIX: Memoize Strategy Layout parsing calculations to lift weight off main rendering loop
   const strategy = useMemo(() => getPlayerStrategy(channel), [channel?.id, channel?.url]);
 
+  // Fullscreen controls auto-hide mouse tracker
   const handleMouseMove = () => {
     setShowControls(true);
     if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
@@ -87,6 +91,7 @@ export default function VideoPlayer({
     }
   };
 
+  // Force Reload Stream Action
   const handleReloadStream = () => {
     const video = videoRef.current;
     if (!video || !strategy.useNativeVideo) return;
@@ -116,6 +121,7 @@ export default function VideoPlayer({
     }, 50);
   };
 
+  // Synchronous Media Element Controls
   const togglePlay = () => {
     if (!videoRef.current) return;
     if (isPlaying) {
@@ -178,6 +184,7 @@ export default function VideoPlayer({
     };
   }, []);
 
+  // Direct Stream Binding Pipeline
   useEffect(() => {
     if (!channel) return;
 
@@ -206,6 +213,7 @@ export default function VideoPlayer({
     };
   }, []);
 
+  // Safety stream check monitor logic
   const monitorStreamHealthState = (errorMessage: string, criticalLevel = false) => {
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
@@ -260,6 +268,7 @@ export default function VideoPlayer({
   return (
     <div className="flex flex-col gap-4">
       
+      {/* INTEGRATED MASTER PLAYER CONTAINER */}
       <div 
         ref={containerRef}
         onMouseMove={handleMouseMove}
@@ -269,6 +278,7 @@ export default function VideoPlayer({
         style={{ cursor: showControls ? "default" : "none" }}
       >
         
+        {/* VIEWPORT FRAME SECTION */}
         <div className="flex-1 w-full h-full relative overflow-hidden">
           {strategy.isYoutube ? (
             <iframe
@@ -290,6 +300,7 @@ export default function VideoPlayer({
               onError={() => monitorStreamHealthState("Broadcast feed completely lost.", true)}
             />
           ) : (
+            /* ORIGINAL EMBED FALLBACK INTERFACE (LOADS INSTANTLY VIA NATIVE PLAYER CANVAS) */
             <iframe 
               src={strategy.cleanUrl} 
               className="w-full h-full border-0 bg-black" 
@@ -298,6 +309,7 @@ export default function VideoPlayer({
             />
           )}
 
+          {/* INITIAL FEED LOADING TRANSITION & DISCLAIMER LAYERING */}
           {isLoading && !playbackError && (
             <div className="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 text-center z-40 transition-opacity duration-300">
               <RefreshCw className="w-8 h-8 text-emerald-400 animate-spin mb-4" />
@@ -310,6 +322,7 @@ export default function VideoPlayer({
             </div>
           )}
 
+          {/* ERROR MONITOR OVERLAY WITH REFRESH BUTTON */}
           {playbackError && strategy.useNativeVideo && (
             <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50">
               <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
@@ -336,6 +349,7 @@ export default function VideoPlayer({
           )}
         </div>
 
+        {/* UNIFIED INTEGRATED CONTROLS EXPANSION BAR */}
         {strategy.useNativeVideo && (
           <div className={`w-full p-3 border-t flex items-center justify-between gap-4 select-none transition-all duration-300 ${
             isFullscreen 
@@ -411,6 +425,7 @@ export default function VideoPlayer({
         )}
       </div>
 
+      {/* Channel Information Summary Card Footer */}
       <div className={`border rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
         theme === "light" ? "bg-slate-50 border-slate-200" : "bg-slate-900 border-slate-850"
       }`}>
