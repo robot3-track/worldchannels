@@ -344,8 +344,8 @@ const staticStreams = [
   },
   {
     id: "sports-mono-max3",
-    name: "MonoMax TV 3 (Thailand)",
-    url: "https://yyi7tewa2x.3ppnkog.com/xstream/monomax-3/playlist.m3u8",
+    name: "MonoMax TV 6 (Thailand)",
+    url: "https://yyi7tewa2x.3ppnkog.com/xstream/monomax-6/playlist.m3u8",
     category: "sports",
     category: "world cup",
     country: "TH",
@@ -489,7 +489,7 @@ const staticStreams = [
   {
     id: "sports-tsn-4",
     name: "TSN 4 (Canada)",
-    url: "https://ok.ru/videoembed/15021756259888",
+    url: "https://ok.ru/videoembed/15749722742334",
     category: "sports",
     category: "world cup",
     country: "CA",
