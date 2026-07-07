@@ -40,10 +40,12 @@ const getPlayerStrategy = (channel: StreamChannel | null) => {
                    
   if (isStream) {
     let finalUrl = url;
-    // Upgrade insecure HTTP to HTTPS securely if running on HTTPS to prevent Mixed Content
+    
+    // If the stream is HTTP and our app is running on HTTPS, pass it through an open raw proxy
     if (url.startsWith("http://") && window.location.protocol === "https:") {
-      finalUrl = url.replace("http://", "https://");
+      finalUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
     }
+    
     return { isYoutube: false, isEmbedOnly: false, useNativeVideo: true, cleanUrl: finalUrl };
   }
 
