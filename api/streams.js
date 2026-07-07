@@ -546,6 +546,18 @@ const staticStreams = [
     lon: 44.8271,
   },
   {
+    id: "sports-ct-sport",
+    name: "CT Sport (Czheca Republic)",
+    url: "http://88.212.15.19/live/test_ctsport_25p/playlist.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "CZ",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/0/05/%C4%8CT_Sport_HD_%282013%29.svg/revision/latest?cb=20200324181009",
+    status: "online",
+    lat: 50.0755, // Prague, Czech Republic
+    lon: 14.4378,
+  },
+  {
     id: "sports-dazn-germany",
     name: "Dazn Germany",
     url: "https://40c455b7f9fb68e414d2892a742d5165.dyndivision.net/e/7i33b46zuhctk", // M3U8 Link
