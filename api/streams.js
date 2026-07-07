@@ -1127,7 +1127,7 @@ const staticStreams = [
   {
     id: "news-france24",
     name: "France 24 English",
-    url: "https://www.youtube.com/embed/HvZt-nh9sGg?si=65pWG4eDUOL3JQ3h&amp;controls=0",
+    url: "https://live.france24.com/hls/live/2037179-b/F24_FR_HI_HLS/master_5000.m3u8",
     category: "news",
     country: "FR",
     logo: "https://upload.wikimedia.org/wikipedia/commons/c/c1/France_24_logo_%282013%29.svg",
