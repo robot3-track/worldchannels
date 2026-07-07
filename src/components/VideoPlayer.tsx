@@ -13,7 +13,7 @@ interface VideoPlayerProps {
 const EMBED_ONLY_DOMAINS = [
   "online.tm", "alpha.tv.online.tm",
   "thebosstv.com", "live.thebosstv.com",
-  "tvkaista.net", "live-fi.tvkaista.net", "live-fi"
+  "tvkaista.net", "live-fi.tvkaista.net", "live-fi", "futbol9865.ultratv13.workers.dev", "ultratv13.workers.dev"
 ];
 
 // Reusable regex compiled once out-of-scope to avoid layout instantiation costs
