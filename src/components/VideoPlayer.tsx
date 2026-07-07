@@ -43,6 +43,7 @@ const getPlayerStrategy = (channel: StreamChannel | null) => {
   if (isStream) {
     let finalUrl = url;
     if (url.startsWith("http://") && window.location.protocol === "https:") {
+      // Keep your exact requested proxy target
       finalUrl = `https://cors-anywhere.herokuapp.com/${url}`;
     }
     return { isYoutube: false, isEmbedOnly: false, useNativeVideo: true, cleanUrl: finalUrl };
@@ -293,6 +294,10 @@ export default function VideoPlayer({
               className="w-full h-full object-contain"
               playsInline
               muted={isMuted}
+              /* FIX: Forces browser to dispatch 'Origin' headers inside media layout frames,
+                satisfying the cors-anywhere middleware requirements.
+              */
+              crossOrigin="anonymous" 
               onPlaying={resetHealthTrackers}
               onCanPlay={() => setIsLoading(false)} 
               onWaiting={() => monitorStreamHealthState("Network connection buffering...")}
