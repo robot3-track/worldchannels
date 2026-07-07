@@ -355,6 +355,18 @@ const staticStreams = [
     lon: 100.9925,
   },
   {
+    id: "sports-dsports-2",
+    name: "DSports 2 HD (Argentina)",
+    url: "https://futbol9865.ultratv13.workers.dev/deportivo111/95.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "AR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/8/83/DSports2.png?_=20221114223109",
+    status: "online",
+    lat: -34.6037, // Buenos Aires, Argentina
+    lon: -58.3816,
+  },
+  {
     id: "sports-mtv-3",
     name: "MTV 3 (Finland)",
     url: "https://www.tvkaista.org/mtv3/suora",
