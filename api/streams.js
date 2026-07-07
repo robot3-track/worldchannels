@@ -295,6 +295,18 @@ const staticStreams = [
     lon: 13.0550,
   },
   {
+    id: "sports-bein-fr",
+    name: "Bein Sports France",
+    url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
     id: "sports-antenasport",
     name: "Antena Sport",
     url: "https://stream1.antenaplay.ro/as/asrolive1/playlist.m3u8",
@@ -317,18 +329,6 @@ const staticStreams = [
     status: "online",
     lat: 23.6850, // Dhaka, Bangladesh
     lon: 90.3563,
-  },
-  {
-    id: "sports-bein-fr",
-    name: "Bein Sports France",
-    url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
-    category: "sports",
-    category: "world cup",
-    country: "FR",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
-    status: "online",
-    lat: 48.8566, // Paris, France
-    lon: 2.3522,
   },
   {
     id: "sports-mtv-3",
