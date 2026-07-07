@@ -331,8 +331,20 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
-    id: "sports-mono-max",
+    id: "sports-mono-max1",
     name: "MonoMax TV (Thailand)",
+    url: "https://yyi7tewa2x.3ppnkog.com/xstream/monomax-1/playlist.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TH",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/3/35/MonomaxSportsTV-logo.png/revision/latest?cb=20260611164039",
+    status: "online",
+    lat: 15.8700, // Thailand
+    lon: 100.9925,
+  },
+  {
+    id: "sports-mono-max3",
+    name: "MonoMax TV 3 (Thailand)",
     url: "https://yyi7tewa2x.3ppnkog.com/xstream/monomax-3/playlist.m3u8",
     category: "sports",
     category: "world cup",
