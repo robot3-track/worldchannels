@@ -514,7 +514,7 @@ const staticStreams = [
   {
     id: "sports-tsn-backup",
     name: "TSN 4 (Canada Backup)",
-    url: "https://vidara.so/e/Y6tqChzz4Jbs",
+    url: "https://tapnixlive.click/fifa-2026-today/",
     category: "sports",
     category: "world cup",
     country: "CA",
