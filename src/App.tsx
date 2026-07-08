@@ -502,6 +502,14 @@ export default function App() {
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>CazeTV (Brazil)</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>CT Sport (Czech)</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
                     <span>ColaTV (Premium Asia Feed)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
