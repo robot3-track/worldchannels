@@ -582,7 +582,7 @@ const staticStreams = [
   {
     id: "sports-ct-sport",
     name: "CT Sport (Czheca Republic)",
-    url: "https://sport.ceskatelevize.cz/live#broadcastservice",
+    url: "https://mxnticek.eu/sktv/stream.php?x=CTsport",
     category: "sports",
     category: "world cup",
     country: "CZ",
