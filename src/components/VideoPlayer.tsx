@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Tv, AlertTriangle, RefreshCw, Play, Pause, Volume2, VolumeX, Maximize, Minimize } from "lucide-react";
+import Hls from "hls.js";
 import { StreamChannel } from "../types";
 
 interface VideoPlayerProps {
@@ -9,7 +10,6 @@ interface VideoPlayerProps {
   theme: "light" | "dark";
 }
 
-// Global lookup table for O(1) matching checks instead of running multiple sequential .includes() iterations
 const EMBED_ONLY_DOMAINS = [
   "online.tm", "alpha.tv.online.tm",
   "thebosstv.com", "live.thebosstv.com",
@@ -17,41 +17,37 @@ const EMBED_ONLY_DOMAINS = [
   "antenaplay.ro", "stream1.antenaplay"
 ];
 
-// Reusable regex compiled once out-of-scope to avoid layout instantiation costs
 const YOUTUBE_REGEX = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
 
 const getPlayerStrategy = (channel: StreamChannel | null) => {
-  if (!channel) return { isYoutube: false, isEmbedOnly: false, useNativeVideo: false, cleanUrl: "" };
+  if (!channel) return { isYoutube: false, isEmbedOnly: false, useNativeVideo: false, cleanUrl: "", isHttpProxy: false };
 
   const url = channel.url;
   const urlToCheck = url.split('?')[0].toLowerCase();
   
-  // 1. YouTube Identification
   const match = url.match(YOUTUBE_REGEX);
   const youtubeId = (match && match[2].length === 11) ? match[2] : null;
-  if (youtubeId) return { isYoutube: true, isEmbedOnly: false, useNativeVideo: false, cleanUrl: youtubeId };
+  if (youtubeId) return { isYoutube: true, isEmbedOnly: false, useNativeVideo: false, cleanUrl: youtubeId, isHttpProxy: false };
 
-  // 2. High-Performance Static Embed Domain Verification via .some() shortcutting
   const matchesEmbedOnly = EMBED_ONLY_DOMAINS.some(domain => url.includes(domain));
   if (matchesEmbedOnly) {
-    return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
+    return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url, isHttpProxy: false };
   }
 
-  // 3. Native Stream Check (.m3u8, .mp4, .m4s)
   const isStream = urlToCheck.includes(".m3u8") || url.toLowerCase().includes("m3u8") || 
                    urlToCheck.includes(".mp4") || urlToCheck.includes(".m4s");
                    
   if (isStream) {
     let finalUrl = url;
+    let isHttpProxy = false;
     if (url.startsWith("http://") && window.location.protocol === "https:") {
-      // Keep your exact requested proxy target
       finalUrl = `https://cors-anywhere.herokuapp.com/${url}`;
+      isHttpProxy = true;
     }
-    return { isYoutube: false, isEmbedOnly: false, useNativeVideo: true, cleanUrl: finalUrl };
+    return { isYoutube: false, isEmbedOnly: false, useNativeVideo: true, cleanUrl: finalUrl, isHttpProxy };
   }
 
-  // Fallback to iframe embed for unknown strings
-  return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url };
+  return { isYoutube: false, isEmbedOnly: true, useNativeVideo: false, cleanUrl: url, isHttpProxy: false };
 };
 
 export default function VideoPlayer({
@@ -64,6 +60,7 @@ export default function VideoPlayer({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const failureTimerRef = useRef<any | null>(null);
   const controlsTimeoutRef = useRef<any | null>(null);
+  const hlsRef = useRef<Hls | null>(null);
   
   // Controls state managers
   const [isPlaying, setIsPlaying] = useState(false);
@@ -78,10 +75,9 @@ export default function VideoPlayer({
   const [isRecovering, setIsRecovering] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
 
-  // CRITICAL FIX: Memoize Strategy Layout parsing calculations to lift weight off main rendering loop
-  const strategy = useMemo(() => getPlayerStrategy(channel), [channel?.id, channel?.url]);
+  // OPTIMIZATION: Only recalculate strategy when the channel ID changes to stabilize renders
+  const strategy = useMemo(() => getPlayerStrategy(channel), [channel?.id]);
 
-  // Fullscreen controls auto-hide mouse tracker
   const handleMouseMove = () => {
     setShowControls(true);
     if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
@@ -93,7 +89,59 @@ export default function VideoPlayer({
     }
   };
 
-  // Force Reload Stream Action
+  const cleanUpHls = () => {
+    if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
+    }
+  };
+
+  const initPlayer = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    setIsLoading(true);
+    cleanUpHls();
+
+    // Setup streaming pipeline using hls.js for HLS sources
+    if (strategy.cleanUrl.includes(".m3u8") || strategy.cleanUrl.includes("m3u8")) {
+      if (Hls.isSupported()) {
+        const hls = new Hls({
+          xhrSetup: (xhr) => {
+            // Injects the custom layout headers into segment requests to satisfy the proxy rules
+            if (strategy.isHttpProxy) {
+              xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+            }
+          }
+        });
+
+        hlsRef.current = hls;
+        hls.loadSource(strategy.cleanUrl);
+        hls.attachMedia(video);
+
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+        });
+
+        hls.on(Hls.Events.ERROR, (_, data) => {
+          if (data.fatal) {
+            monitorStreamHealthState("Media streaming engine encountered data synchronization faults.", true);
+          }
+        });
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        // Native browser engine fallback (Safari)
+        video.src = strategy.cleanUrl;
+        video.load();
+        video.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+      }
+    } else {
+      // Standard static video format fallbacks (.mp4, etc.)
+      video.src = strategy.cleanUrl;
+      video.load();
+      video.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+    }
+  };
+
   const handleReloadStream = () => {
     const video = videoRef.current;
     if (!video || !strategy.useNativeVideo) return;
@@ -104,26 +152,16 @@ export default function VideoPlayer({
     setIsRecovering(false);
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
-    const currentSrc = video.src;
+    cleanUpHls();
     video.src = "";
     video.load();
     
     setTimeout(() => {
-      video.src = currentSrc;
-      video.load();
-      video.play()
-        .then(() => {
-          setIsPlaying(true);
-          setIsReloading(false);
-        })
-        .catch(() => {
-          setIsPlaying(false);
-          setIsReloading(false);
-        });
+      initPlayer();
+      setIsReloading(false);
     }, 50);
   };
 
-  // Synchronous Media Element Controls
   const togglePlay = () => {
     if (!videoRef.current) return;
     if (isPlaying) {
@@ -186,7 +224,7 @@ export default function VideoPlayer({
     };
   }, []);
 
-  // Direct Stream Binding Pipeline
+  // Sync stream when the structural strategy or core channel shifts
   useEffect(() => {
     if (!channel) return;
 
@@ -195,27 +233,16 @@ export default function VideoPlayer({
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
     if (strategy.useNativeVideo) {
-      setIsLoading(true); 
-      const video = videoRef.current;
-      if (video) {
-        video.src = strategy.cleanUrl;
-        video.load();
-        video.play()
-          .then(() => setIsPlaying(true))
-          .catch(() => setIsPlaying(false));
-      }
+      initPlayer();
     } else {
       setIsLoading(false);
     }
-  }, [channel?.id, strategy.cleanUrl, strategy.useNativeVideo]);
 
-  useEffect(() => {
     return () => {
-      if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
+      cleanUpHls();
     };
-  }, []);
+  }, [channel?.id, strategy.useNativeVideo]);
 
-  // Safety stream check monitor logic
   const monitorStreamHealthState = (errorMessage: string, criticalLevel = false) => {
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
@@ -269,8 +296,6 @@ export default function VideoPlayer({
 
   return (
     <div className="flex flex-col gap-4">
-      
-      {/* INTEGRATED MASTER PLAYER CONTAINER */}
       <div 
         ref={containerRef}
         onMouseMove={handleMouseMove}
@@ -279,8 +304,6 @@ export default function VideoPlayer({
         } ${theme === "light" ? "border-slate-200" : "border-slate-850"}`}
         style={{ cursor: showControls ? "default" : "none" }}
       >
-        
-        {/* VIEWPORT FRAME SECTION */}
         <div className="flex-1 w-full h-full relative overflow-hidden">
           {strategy.isYoutube ? (
             <iframe
@@ -295,9 +318,6 @@ export default function VideoPlayer({
               className="w-full h-full object-contain"
               playsInline
               muted={isMuted}
-              /* FIX: Forces browser to dispatch 'Origin' headers inside media layout frames,
-                satisfying the cors-anywhere middleware requirements.
-              */
               crossOrigin="anonymous" 
               onPlaying={resetHealthTrackers}
               onCanPlay={() => setIsLoading(false)} 
@@ -306,7 +326,6 @@ export default function VideoPlayer({
               onError={() => monitorStreamHealthState("Broadcast feed completely lost.", true)}
             />
           ) : (
-            /* ORIGINAL EMBED FALLBACK INTERFACE (LOADS INSTANTLY VIA NATIVE PLAYER CANVAS) */
             <iframe 
               src={strategy.cleanUrl} 
               className="w-full h-full border-0 bg-black" 
@@ -315,7 +334,6 @@ export default function VideoPlayer({
             />
           )}
 
-          {/* INITIAL FEED LOADING TRANSITION & DISCLAIMER LAYERING */}
           {isLoading && !playbackError && (
             <div className="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 text-center z-40 transition-opacity duration-300">
               <RefreshCw className="w-8 h-8 text-emerald-400 animate-spin mb-4" />
@@ -323,12 +341,11 @@ export default function VideoPlayer({
                 Connecting To Live Feed
               </h3>
               <p className="text-[11px] text-slate-400 mt-2 max-w-xs leading-relaxed font-sans px-4">
-                Establishing secure stream link... Please wait, some international channels may take up to 15 seconds to safely sync data.
+                Establishing secure stream link... Please wait.
               </p>
             </div>
           )}
 
-          {/* ERROR MONITOR OVERLAY WITH REFRESH BUTTON */}
           {playbackError && strategy.useNativeVideo && (
             <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50">
               <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
@@ -344,18 +361,10 @@ export default function VideoPlayer({
                   Retry Connection
                 </button>
               </div>
-
-              {isRecovering && (
-                <div className="mt-4 flex items-center gap-2 bg-slate-900 border border-slate-800 px-3 py-1.5 rounded-full">
-                  <RefreshCw className="w-3.5 h-3.5 text-emerald-400 animate-spin" />
-                  <span className="text-[10px] font-bold text-slate-300 font-sans uppercase">Switching CDN Paths...</span>
-                </div>
-              )}
             </div>
           )}
         </div>
 
-        {/* UNIFIED INTEGRATED CONTROLS EXPANSION BAR */}
         {strategy.useNativeVideo && (
           <div className={`w-full p-3 border-t flex items-center justify-between gap-4 select-none transition-all duration-300 ${
             isFullscreen 
@@ -367,39 +376,9 @@ export default function VideoPlayer({
                 : "bg-slate-900 border-slate-800"
           } z-40`}>
             <div className="flex items-center gap-2">
-              <button
-                onClick={togglePlay}
-                className={`p-2 rounded-lg transition-all border ${
-                  theme === "light" && !isFullscreen
-                    ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
-                    : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
-                }`}
-              >
-                {isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}
-              </button>
-              
-              <button
-                onClick={toggleMute}
-                className={`p-2 rounded-lg transition-all border ${
-                  theme === "light" && !isFullscreen
-                    ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
-                    : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
-                }`}
-              >
-                {isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}
-              </button>
-
-              <button
-                onClick={handleReloadStream}
-                title="Reload Stream Buffer"
-                className={`p-2 rounded-lg transition-all border ${
-                  theme === "light" && !isFullscreen
-                    ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
-                    : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
-                }`}
-              >
-                <RefreshCw className={`w-4 h-4 ${isReloading ? "animate-spin" : ""}`} />
-              </button>
+              <button onClick={togglePlay} className="p-2 rounded-lg border">{isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}</button>
+              <button onClick={toggleMute} className="p-2 rounded-lg border">{isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}</button>
+              <button onClick={handleReloadStream} className="p-2 rounded-lg border"><RefreshCw className="w-4 h-4" /></button>
             </div>
 
             <div className="flex items-center gap-2 flex-1 max-w-xs">
@@ -416,22 +395,12 @@ export default function VideoPlayer({
             </div>
 
             <div>
-              <button
-                onClick={toggleFullscreen}
-                className={`p-2 rounded-lg transition-all border ${
-                  theme === "light" && !isFullscreen
-                    ? "bg-slate-50 hover:bg-slate-100 border-slate-200 text-slate-700" 
-                    : "bg-slate-950 hover:bg-slate-850 border-slate-800 text-slate-300"
-                }`}
-              >
-                {isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}
-              </button>
+              <button onClick={toggleFullscreen} className="p-2 rounded-lg border">{isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}</button>
             </div>
           </div>
         )}
       </div>
 
-      {/* Channel Information Summary Card Footer */}
       <div className={`border rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
         theme === "light" ? "bg-slate-50 border-slate-200" : "bg-slate-900 border-slate-850"
       }`}>
