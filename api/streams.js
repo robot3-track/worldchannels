@@ -342,17 +342,18 @@ const staticStreams = [
     lat: 15.8700, // Thailand
     lon: 100.9925,
   },
-  {
-    id: "sports-mono-max3",
-    name: "MonoMax TV 6 (Thailand)",
-    url: "https://yyi7tewa2x.3ppnkog.com/xstream/monomax-6/playlist.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "TH",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/3/35/MonomaxSportsTV-logo.png/revision/latest?cb=20260611164039",
-    status: "online",
-    lat: 15.8700, // Thailand
-    lon: 100.9925,
+  { 
+    id: "sports-caze-tv", 
+    name: "Caze TV (Brazil Streaming)", 
+    url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/Caze_TV.m3u8", 
+    isEmbed: false,
+    category: "sports", 
+    cateogry: "world cup",
+    country: "BR", 
+    logo: "https://static.wikia.nocookie.net/logopedia/images/e/e9/CazeTV2022.svg/revision/latest?cb=20250319222352", 
+    status: "online", 
+    lat: -14.2350,
+    lon: -51.9253,
   },
   {
     id: "sports-dsports-2",
@@ -527,7 +528,6 @@ const staticStreams = [
     name: "Al Kass 1",
     url: "https://liveeu-gcp.alkassdigital.net/alkass1-p/main.m3u8",
     category: "sports",
-    category: "world cup",
     country: "QA",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg/500px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg.png",
     status: "online",
@@ -539,7 +539,6 @@ const staticStreams = [
     name: "Al Kass 2",
     url: "https://liveeu-gcp.alkassdigital.net/alkass2-p/main.m3u8",
     category: "sports",
-    category: "world cup",
     country: "QA",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg/500px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg.png",
     status: "online",
@@ -551,7 +550,6 @@ const staticStreams = [
     name: "Al Kass 4",
     url: "https://liveeu-gcp.alkassdigital.net/alkass2-p/main.m3u8",
     category: "sports",
-    category: "world cup",
     country: "QA",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg/500px-%D8%B4%D8%B9%D8%A7%D8%B1_%D9%82%D9%86%D9%88%D8%A7%D8%AA_%D8%A7%D9%84%D9%83%D8%A7%D8%B3_%D8%A7%D9%84%D8%B1%D9%8A%D8%A7%D8%B6%D9%8A%D8%A9.svg.png",
     status: "online",
@@ -561,7 +559,7 @@ const staticStreams = [
   {
     id: "sports-setanta-1",
     name: "Setanta Sports 1",
-    url: "https://tbs01-edge11.itdc.ge/setanta_georgia/index.m3u8?token=8Akjf5YD0wdJioyVNygm_2YbEXJxIR_9C2se4JGWtqc8oZmZ7-DhjYzFIZzfUAKIZszjFWUeOHv6MTVfwwQqAF30Ezm8L9vtqFDHEn2KaxTN1DkYWKESs6VlS_YS2uJK14avt__MWUL6kGB7f7o1m6IwgwD1Aw7nyvYFyekKAcwhnxqBTSZX3XskcfyMWwKTeXf9lCr2K_8Fffe_nCk_UzBE2j6xPunDP6gMgDWePm0Y73evebDREgf2lBXSX9W1McdU1ofdJQ7oarT9sgqrIA**",
+    url: "https://tbs01-edge11.itdc.ge/setanta_georgia/index.m3u8?token=_JVEmQ5eRIpXYSIDu8IEhkdFz1nCabXVmcDkNCQuRwDB0gq8G3xWwqbLdFdlQakHQdonx3lBdWtITWvwn07jDt0jp3IOlmQa1u56q-ZBVZSsQrBYnxuQtH-QRjhBlNoSGcbwK5Lc4mhsyUMou4VdsMaBrIvGO1uQVnXzpDKut3jrtC-yJwgJGTaur6NAg9xeQyHqAMejvLK9UDcguGN02l75qGtn03dw3P51t944XvtxTxOm5oR6tgpui8813DagKuni83j6cbNUp9UzXBN7wg**",
     category: "sports",
     category: "world cup",
     country: "GE",
@@ -572,8 +570,8 @@ const staticStreams = [
   },
   {
     id: "sports-setanta-2",
-    name: "Setanta Sports 2",
-    url: "https://tbs01-edge17.itdc.ge/setanta_sports_plus_georgia/tracks-v1a1/mono.m3u8?token=0ZpzQY3wH84wUZRHnf59yyEh2P07cUvEDnM7qrium6KROSocR-KclvqS5K5G65rQDWUkO4E84WbH-wK-Dv7uttoJYu7GMMG8cJwpLT0O8QlhIeD0hwRyVxHUO7M1rjsS93Hebs095rZdkCQWm3ZOMB0P6ffGeHmWyvoI22jwuxjZg8OlnZ0d5Sc3V9Kn4D1RcxSq8Rg-C9EROQAOobvrwLWmdvg3z1IV2My7TZZk-bCRuUWRMVz8ludRMrsK-4TmmY_0PrFvF2tLEEN8SG_zvmwiA8UTbHh0x0qMspovT6k%2A",
+    name: "Setanta Sports Plus Backup",
+    url: "https://tbs01-edge11.itdc.ge/setanta_sports_plus_georgia/index.m3u8?token=_JVEmQ5eRIpXYSIDu8IEhkdFz1nCabXVmcDkNCQuRwDB0gq8G3xWwqbLdFdlQakHQdonx3lBdWtITWvwn07jDt0jp3IOlmQa1u56q-ZBVZSsQrBYnxuQtH-QRjhBlNoSGcbwK5Lc4mhsyUMou4VdsMaBrIvGO1uQVnXzpDKut3jrtC-yJwgJGTaur6NAg9xeQyHqAMejvLK9UDcguGN02l75qGtn03dw3P51t944XvtxTxOm5oR6tgpui8813DagKuni83j6cbNUp9UzXBN7wg**",
     category: "sports",
     country: "GE",
     logo: "https://static.wikia.nocookie.net/logopedia/images/e/ef/Setanta_Sports_2023.svg/revision/latest/scale-to-width-down/78?cb=20230804042115",
@@ -584,7 +582,7 @@ const staticStreams = [
   {
     id: "sports-ct-sport",
     name: "CT Sport (Czheca Republic)",
-    url: "http://88.212.15.19/live/test_ctsport_25p/playlist.m3u8",
+    url: "https://sport.ceskatelevize.cz/live#broadcastservice",
     category: "sports",
     category: "world cup",
     country: "CZ",
@@ -592,18 +590,6 @@ const staticStreams = [
     status: "online",
     lat: 50.0755, // Prague, Czech Republic
     lon: 14.4378,
-  },
-  {
-    id: "sports-dazn-germany",
-    name: "Dazn Germany",
-    url: "https://40c455b7f9fb68e414d2892a742d5165.dyndivision.net/e/7i33b46zuhctk", // M3U8 Link
-    category: "sports",
-    category: "world cup",
-    country: "DE",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/1/18/DAZN_1_2024.svg/revision/latest?cb=20240713213358",
-    status: "online",
-    lat: 52.5200, // Berlin, Germany
-    lon: 13.4050,
   },
   {
     id:"news-telemundo-52",
@@ -652,17 +638,6 @@ const staticStreams = [
     lon: -80.314954, 
   },
   {
-    id: "sport-vtv-1",
-    name: "VTV1 (Vietnam)",
-    url: "https://cdn-live.vtv.vn/Me_-WD3x20rKXBRMMXoDCQ/1783306094/live/vtv1/master.m3u8", // M3U8 Link
-    category: "news",
-    country: "VN",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/1/17/VTV1_2013.png?_=20160731043825",
-    status: "online",
-    lat: 10.8231, // Ho Chi Minh City
-    lon: 106.6297,
-  },
-  {
     id: "sports-newworld-africa",
     name: "New World Africa TV",
     url: "https://hls.newworldtv.com/nw-info/video/live.m3u8",
@@ -690,7 +665,6 @@ const staticStreams = [
     name: "TRT1 (Turkey)",
     url: "https://trt.daioncdn.net/trt-1/master_1080p.m3u8?&sid=6mxtrw74fwk5&app=ed3904e8-737b-4a5e-856a-1b0d7a0a94e2&ce=2", // M3U8 Link
     category: "sports",
-    category: "world cup",
     country: "TR",
     logo: "https://upload.wikimedia.org/wikipedia/commons/e/e8/TRT_T%C3%BCrk_logosu.png",
     status: "online",
@@ -764,18 +738,6 @@ const staticStreams = [
     status: "online", 
     lat: 56.130366,
     lon: -106.346771,
-  },
-  { 
-    id: "sports-caze-tv", 
-    name: "Caze TV (Brazil Streaming)", 
-    url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/Caze_TV.m3u8", 
-    isEmbed: false, // Set to false since this is a direct .mpd stream manifest link, not an iframe embed page
-    category: "sports", 
-    country: "BR", 
-    logo: "https://static.wikia.nocookie.net/logopedia/images/e/e9/CazeTV2022.svg/revision/latest?cb=20250319222352", 
-    status: "online", 
-    lat: -14.2350,
-    lon: -51.9253,
   },
   { 
     id: "newss-sabc-tv", 
