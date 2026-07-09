@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { Tv, AlertTriangle, RefreshCw, Play, Pause, Volume2, VolumeX, Maximize, Minimize } from "lucide-react";
+import { Tv, AlertTriangle, RefreshCw, Play, Pause, Volume2, VolumeX, Maximize, Minimize, Video, Square, Download, Clock } from "lucide-react";
 import Hls from "hls.js";
 import { StreamChannel } from "../types";
 
@@ -62,6 +62,12 @@ export default function VideoPlayer({
   const controlsTimeoutRef = useRef<any | null>(null);
   const hlsRef = useRef<Hls | null>(null);
   
+  // Recording Core References
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const recordedChunksRef = useRef<Blob[]>([]);
+  const recordingTimeoutRef = useRef<any | null>(null);
+  const countdownIntervalRef = useRef<any | null>(null);
+
   // Controls state managers
   const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(true); 
@@ -75,7 +81,13 @@ export default function VideoPlayer({
   const [isRecovering, setIsRecovering] = useState(false);
   const [isReloading, setIsReloading] = useState(false);
 
-  // OPTIMIZATION: Only recalculate strategy when the channel ID changes to stabilize renders
+  // Recording State Managers
+  const [isRecording, setIsRecording] = useState(false);
+  const [recordDuration, setRecordDuration] = useState<number>(30); // defaults to 30 seconds
+  const [timeLeft, setTimeLeft] = useState<number>(0);
+  const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+  const [showRecordPanel, setShowRecordPanel] = useState(false);
+
   const strategy = useMemo(() => getPlayerStrategy(channel), [channel?.id]);
 
   const handleMouseMove = () => {
@@ -102,13 +114,12 @@ export default function VideoPlayer({
 
     setIsLoading(true);
     cleanUpHls();
+    stopRecording(); // Reset recording states if channel flips
 
-    // Setup streaming pipeline using hls.js for HLS sources
     if (strategy.cleanUrl.includes(".m3u8") || strategy.cleanUrl.includes("m3u8")) {
       if (Hls.isSupported()) {
         const hls = new Hls({
           xhrSetup: (xhr) => {
-            // Injects the custom layout headers into segment requests to satisfy the proxy rules
             if (strategy.isHttpProxy) {
               xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
             }
@@ -129,17 +140,94 @@ export default function VideoPlayer({
           }
         });
       } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-        // Native browser engine fallback (Safari)
         video.src = strategy.cleanUrl;
         video.load();
         video.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
       }
     } else {
-      // Standard static video format fallbacks (.mp4, etc.)
       video.src = strategy.cleanUrl;
       video.load();
       video.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
     }
+  };
+
+  // RECORDING IMPLEMENTATION SUITE
+  const startRecording = () => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Capture the current stream layout context from the video element
+    // Fallbacks provided for broader browser compatibility (Firefox uses mozCaptureStream)
+    const stream = (video as any).captureStream ? (video as any).captureStream() : (video as any).mozCaptureStream ? (video as any).mozCaptureStream() : null;
+    
+    if (!stream) {
+      alert("Stream capture is not supported by your current browser configuration.");
+      return;
+    }
+
+    recordedChunksRef.current = [];
+    setDownloadUrl(null);
+
+    // Pick best container mime-type supported natively
+    let options = { mimeType: "video/webm;codecs=vp9,opus" };
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      options = { mimeType: "video/webm;codecs=vp8,opus" };
+    }
+    if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+      options = { mimeType: "video/webm" };
+    }
+
+    try {
+      const recorder = new MediaRecorder(stream, options);
+      mediaRecorderRef.current = recorder;
+
+      recorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          recordedChunksRef.current.push(event.data);
+        }
+      };
+
+      recorder.onstop = () => {
+        const blob = new Blob(recordedChunksRef.current, { type: "video/webm" });
+        const url = URL.createObjectURL(blob);
+        setDownloadUrl(url);
+        setIsRecording(false);
+        setTimeLeft(0);
+      };
+
+      // Start recording data in chunks
+      recorder.start(1000);
+      setIsRecording(true);
+      setTimeLeft(recordDuration);
+
+      // Manage the visual numerical countdown timer clock
+      countdownIntervalRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(countdownIntervalRef.current);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      // Force auto-stop processing when timing window expires
+      recordingTimeoutRef.current = setTimeout(() => {
+        stopRecording();
+      }, recordDuration * 1000);
+
+    } catch (err) {
+      console.error("Recording runtime allocation failed:", err);
+      alert("Failed to initialize system recorder pipeline.");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== "inactive") {
+      mediaRecorderRef.current.stop();
+    }
+    if (recordingTimeoutRef.current) clearTimeout(recordingTimeoutRef.current);
+    if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
   };
 
   const handleReloadStream = () => {
@@ -153,6 +241,7 @@ export default function VideoPlayer({
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
     cleanUpHls();
+    stopRecording();
     video.src = "";
     video.load();
     
@@ -224,12 +313,12 @@ export default function VideoPlayer({
     };
   }, []);
 
-  // Sync stream when the structural strategy or core channel shifts
   useEffect(() => {
     if (!channel) return;
 
     setPlaybackError(null);
     setIsRecovering(false);
+    setDownloadUrl(null);
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
 
     if (strategy.useNativeVideo) {
@@ -240,6 +329,8 @@ export default function VideoPlayer({
 
     return () => {
       cleanUpHls();
+      if (recordingTimeoutRef.current) clearTimeout(recordingTimeoutRef.current);
+      if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
     };
   }, [channel?.id, strategy.useNativeVideo]);
 
@@ -259,6 +350,7 @@ export default function VideoPlayer({
       setIsLoading(false);
       setPlaybackError(errorMessage);
       setIsRecovering(true);
+      stopRecording();
 
       onReportBroken(channel.url).then((response) => {
         if (response.success && response.backupAvailable && response.backups.length > 0) {
@@ -363,6 +455,14 @@ export default function VideoPlayer({
               </div>
             </div>
           )}
+
+          {/* RECORDING RUNTIME HUD OVERLAY */}
+          {isRecording && (
+            <div className="absolute top-4 left-4 z-40 flex items-center gap-2 bg-rose-600 border border-rose-500 shadow-lg px-3 py-1.5 rounded-lg animate-pulse text-white font-medium text-xs">
+              <div className="w-2 h-2 rounded-full bg-white animate-ping" />
+              <span>REC {timeLeft}s</span>
+            </div>
+          )}
         </div>
 
         {strategy.useNativeVideo && (
@@ -379,6 +479,15 @@ export default function VideoPlayer({
               <button onClick={togglePlay} className="p-2 rounded-lg border">{isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}</button>
               <button onClick={toggleMute} className="p-2 rounded-lg border">{isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}</button>
               <button onClick={handleReloadStream} className="p-2 rounded-lg border"><RefreshCw className="w-4 h-4" /></button>
+              
+              {/* TRIGGER CONSOLE BUTTON FOR DVR SETTINGS */}
+              <button 
+                onClick={() => setShowRecordPanel(!showRecordPanel)} 
+                className={`p-2 rounded-lg border transition-all ${showRecordPanel || isRecording ? "bg-rose-500/20 border-rose-500 text-rose-500" : ""}`}
+                title="DVR Recording Setup"
+              >
+                <Video className="w-4 h-4" />
+              </button>
             </div>
 
             <div className="flex items-center gap-2 flex-1 max-w-xs">
@@ -400,6 +509,68 @@ export default function VideoPlayer({
           </div>
         )}
       </div>
+
+      {/* EXPANDABLE STREAM RECORDING INTERFACE PANEL */}
+      {showRecordPanel && strategy.useNativeVideo && (
+        <div className={`border rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
+          theme === "light" ? "bg-slate-50 border-slate-200 text-slate-700" : "bg-slate-900 border-slate-850 text-slate-300"
+        }`}>
+          <div className="flex items-center gap-3">
+            <Clock className="w-5 h-5 text-slate-400" />
+            <div>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">DVR Stream Capture</h4>
+              <p className="text-xs text-slate-500 mt-0.5">Record a snippet directly onto your local file system storage context.</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 flex-wrap">
+            {!isRecording ? (
+              <>
+                <select 
+                  value={recordDuration} 
+                  onChange={(e) => { setRecordDuration(Number(e.target.value)); setDownloadUrl(null); }}
+                  className={`text-xs p-2 rounded-lg border focus:outline-none ${
+                    theme === "light" ? "bg-white border-slate-200 text-slate-800" : "bg-slate-950 border-slate-800 text-slate-100"
+                  }`}
+                >
+                  <option value={10}>10 Seconds</option>
+                  <option value={30}>30 Seconds</option>
+                  <option value={60}>1 Minute</option>
+                  <option value={180}>3 Minutes</option>
+                  <option value={300}>5 Minutes</option>
+                </select>
+                <button
+                  onClick={startRecording}
+                  disabled={!isPlaying}
+                  className="flex items-center gap-2 text-xs font-semibold px-4 py-2 bg-rose-600 hover:bg-rose-500 disabled:bg-slate-400 text-white rounded-lg transition-all shadow-xs"
+                >
+                  <Video className="w-3.5 h-3.5" />
+                  Capture Sequence
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={stopRecording}
+                className="flex items-center gap-2 text-xs font-semibold px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-lg transition-all"
+              >
+                <Square className="w-3.5 h-3.5 fill-current text-rose-500" />
+                Halt Recording ({timeLeft}s left)
+              </button>
+            )}
+
+            {downloadUrl && !isRecording && (
+              <a
+                href={downloadUrl}
+                download={`${channel.name.replace(/\s+/g, "_")}_Recording.webm`}
+                className="flex items-center gap-2 text-xs font-semibold px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-all shadow-xs animate-bounce"
+              >
+                <Download className="w-3.5 h-3.5" />
+                Download Video File
+              </a>
+            )}
+          </div>
+        </div>
+      )}
 
       <div className={`border rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
         theme === "light" ? "bg-slate-50 border-slate-200" : "bg-slate-900 border-slate-850"
