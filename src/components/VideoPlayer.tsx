@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
 import { Tv, AlertTriangle, RefreshCw, Play, Pause, Volume2, VolumeX, Maximize, Minimize, Video, Square, Download, Clock } from "lucide-react";
-import Hls from "hls.js";
 import { StreamChannel } from "../types";
 
 interface VideoPlayerProps {
@@ -60,7 +59,8 @@ export default function VideoPlayer({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const failureTimerRef = useRef<any | null>(null);
   const controlsTimeoutRef = useRef<any | null>(null);
-  const hlsRef = useRef<Hls | null>(null);
+  // Store the HLS instance type loosely since we import it dynamically now
+  const hlsRef = useRef<any | null>(null);
   
   // Recording Core References
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
@@ -88,10 +88,13 @@ export default function VideoPlayer({
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [showRecordPanel, setShowRecordPanel] = useState(false);
 
-  const strategy = useMemo(() => getPlayerStrategy(channel), [channel?.id]);
+  // Included URL dependency to ensure backup feeds correctly switch streams
+  const strategy = useMemo(() => getPlayerStrategy(channel), [channel?.id, channel?.url]);
 
   const handleMouseMove = () => {
-    setShowControls(true);
+    // Optimization: Only call state update if controls are currently hidden to prevent React thrashing
+    if (!showControls) setShowControls(true);
+    
     if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
 
     if (isFullscreen) {
@@ -108,41 +111,49 @@ export default function VideoPlayer({
     }
   };
 
-  const initPlayer = () => {
+  const initPlayer = async () => {
     const video = videoRef.current;
     if (!video) return;
 
     setIsLoading(true);
     cleanUpHls();
-    stopRecording(); // Reset recording states if channel flips
+    stopRecording(); 
 
     if (strategy.cleanUrl.includes(".m3u8") || strategy.cleanUrl.includes("m3u8")) {
-      if (Hls.isSupported()) {
-        const hls = new Hls({
-          xhrSetup: (xhr) => {
-            if (strategy.isHttpProxy) {
-              xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+      try {
+        // FAST INITIAL LOAD FIX: Dynamically import HLS logic only when a raw stream is executed.
+        // Prevents the main application bundle from blocking on mount.
+        const Hls = (await import("hls.js")).default;
+        
+        if (Hls.isSupported()) {
+          const hls = new Hls({
+            xhrSetup: (xhr) => {
+              if (strategy.isHttpProxy) {
+                xhr.setRequestHeader("X-Requested-With", "XMLHttpRequest");
+              }
             }
-          }
-        });
+          });
 
-        hlsRef.current = hls;
-        hls.loadSource(strategy.cleanUrl);
-        hls.attachMedia(video);
+          hlsRef.current = hls;
+          hls.loadSource(strategy.cleanUrl);
+          hls.attachMedia(video);
 
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+          });
+
+          hls.on(Hls.Events.ERROR, (_, data) => {
+            if (data.fatal) {
+              monitorStreamHealthState("Media streaming engine encountered data synchronization faults.", true);
+            }
+          });
+        } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+          video.src = strategy.cleanUrl;
+          video.load();
           video.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
-        });
-
-        hls.on(Hls.Events.ERROR, (_, data) => {
-          if (data.fatal) {
-            monitorStreamHealthState("Media streaming engine encountered data synchronization faults.", true);
-          }
-        });
-      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
-        video.src = strategy.cleanUrl;
-        video.load();
-        video.play().then(() => setIsPlaying(true)).catch(() => setIsPlaying(false));
+        }
+      } catch (err) {
+        console.error("Failed to dynamically allocate HLS streaming engine", err);
       }
     } else {
       video.src = strategy.cleanUrl;
@@ -156,8 +167,6 @@ export default function VideoPlayer({
     const video = videoRef.current;
     if (!video) return;
 
-    // Capture the current stream layout context from the video element
-    // Fallbacks provided for broader browser compatibility (Firefox uses mozCaptureStream)
     const stream = (video as any).captureStream ? (video as any).captureStream() : (video as any).mozCaptureStream ? (video as any).mozCaptureStream() : null;
     
     if (!stream) {
@@ -168,7 +177,6 @@ export default function VideoPlayer({
     recordedChunksRef.current = [];
     setDownloadUrl(null);
 
-    // Pick best container mime-type supported natively
     let options = { mimeType: "video/webm;codecs=vp9,opus" };
     if (!MediaRecorder.isTypeSupported(options.mimeType)) {
       options = { mimeType: "video/webm;codecs=vp8,opus" };
@@ -195,12 +203,10 @@ export default function VideoPlayer({
         setTimeLeft(0);
       };
 
-      // Start recording data in chunks
       recorder.start(1000);
       setIsRecording(true);
       setTimeLeft(recordDuration);
 
-      // Manage the visual numerical countdown timer clock
       countdownIntervalRef.current = setInterval(() => {
         setTimeLeft((prev) => {
           if (prev <= 1) {
@@ -211,7 +217,6 @@ export default function VideoPlayer({
         });
       }, 1000);
 
-      // Force auto-stop processing when timing window expires
       recordingTimeoutRef.current = setTimeout(() => {
         stopRecording();
       }, recordDuration * 1000);
@@ -332,7 +337,8 @@ export default function VideoPlayer({
       if (recordingTimeoutRef.current) clearTimeout(recordingTimeoutRef.current);
       if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
     };
-  }, [channel?.id, strategy.useNativeVideo]);
+  // Ensure strategy.cleanUrl is attached here so it re-mounts when a backup is triggered
+  }, [channel?.id, strategy.cleanUrl, strategy.useNativeVideo]);
 
   const monitorStreamHealthState = (errorMessage: string, criticalLevel = false) => {
     if (failureTimerRef.current) clearTimeout(failureTimerRef.current);
