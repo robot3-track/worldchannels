@@ -655,6 +655,18 @@ const staticStreams = [
     lon: 51.3890,
   },
   {
+    id: "sports-bein-turkey",
+    name: "Bein Sports Turkey",
+    url: "https://ua.online24.pm/play/1103/350B326FB34F4B8/video.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
+  },
+  {
     id: "sports-setanta-1",
     name: "Setanta Sports 1",
     url: "https://tbs01-edge11.itdc.ge/setanta_georgia/index.m3u8?token=_JVEmQ5eRIpXYSIDu8IEhkdFz1nCabXVmcDkNCQuRwDB0gq8G3xWwqbLdFdlQakHQdonx3lBdWtITWvwn07jDt0jp3IOlmQa1u56q-ZBVZSsQrBYnxuQtH-QRjhBlNoSGcbwK5Lc4mhsyUMou4VdsMaBrIvGO1uQVnXzpDKut3jrtC-yJwgJGTaur6NAg9xeQyHqAMejvLK9UDcguGN02l75qGtn03dw3P51t944XvtxTxOm5oR6tgpui8813DagKuni83j6cbNUp9UzXBN7wg**",
