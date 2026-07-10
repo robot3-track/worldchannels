@@ -418,6 +418,30 @@ const staticStreams = [
     lon: 24.9384,
   },
   {
+    id: "sports-bein-iran",
+    name: "Bein Sports Iran",
+    url: "https://edge22.776740.ir.cdn.ir/hls2/sport.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
+    id: "sports-bein-turkey",
+    name: "Bein Sports Turkey",
+    url: "https://ua.online24.pm/play/1103/350B326FB34F4B8/video.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
+  },
+  {
     id: "sports-turkmenistan",
     name: "Turkmenistan Sports",
     url: "https://alpha.tv.online.tm/legacyhls/ch004_720/index.m3u8",
@@ -641,30 +665,6 @@ const staticStreams = [
     status: "online",
     lat: -23.5505, // São Paulo, Brazil
     lon: -46.6333,
-  },
-  {
-    id: "sports-bein-iran",
-    name: "Bein Sports Iran",
-    url: "https://edge22.776740.ir.cdn.ir/hls2/sport.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "IR",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
-    status: "online",
-    lat: 35.6892, // Tehran, Iran
-    lon: 51.3890,
-  },
-  {
-    id: "sports-bein-turkey",
-    name: "Bein Sports Turkey",
-    url: "https://ua.online24.pm/play/1103/350B326FB34F4B8/video.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "TR",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
-    status: "online",
-    lat: 39.9334, // Ankara, Turkey
-    lon: 32.8597,
   },
   {
     id: "sports-setanta-1",
