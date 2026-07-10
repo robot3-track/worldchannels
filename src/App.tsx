@@ -388,7 +388,7 @@ export default function App() {
                       theme === "light" ? "bg-white border-zinc-300 text-zinc-700" : "bg-neutral-950 border-neutral-800 text-neutral-400"
                     }`}>
                       <span className="w-1 h-1 bg-emerald-500 animate-pulse" />
-                      <span className="uppercase tracking-wider">DECK_ENGAGED</span>
+                      <span className="uppercase tracking-wider">Live</span>
                     </div>
                   )}
                 </div>
