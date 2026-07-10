@@ -593,18 +593,6 @@ const staticStreams = [
     lon: 44.8271,
   },
   {
-    id: "sports-ct-sport",
-    name: "CT Sport (Czheca Republic)",
-    url: "https://tbd",
-    category: "sports",
-    category: "world cup",
-    country: "CZ",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/0/05/%C4%8CT_Sport_HD_%282013%29.svg/revision/latest?cb=20200324181009",
-    status: "online",
-    lat: 50.0755, // Prague, Czech Republic
-    lon: 14.4378,
-  },
-  {
     id:"news-telemundo-52",
     name: "Telemundo 52",
     url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
@@ -628,8 +616,8 @@ const staticStreams = [
     lon: -118.2437,
   },
   {
-    id: "sports-tvri-sport",
-    name: "TVRI Sport",
+    id: "sports-tvr-sport",
+    name: "TVR Sport",
     url: "https://tvr-sport.lg.mncdn.com/tvrsport/smil:tvrsport.smil/chunklist_b5160000.m3u8",
     category: "sports",
     country: "RO",
@@ -637,6 +625,17 @@ const staticStreams = [
     status: "online",
     lat: 44.4268, // Bucharest, Romania
     lon: 26.1025,
+  },
+  {
+    id: "sports-ct-sport",
+    name: "HT Spor TV (Turkeye)",
+    url: "https://ciner.daioncdn.net/ht-spor/ht-spor.m3u8?app=web",
+    category: "sports",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/0/01/Ht-spor-buyuk.webp",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
   },
   {
     id: "sports-tudn-2",
