@@ -643,6 +643,18 @@ const staticStreams = [
     lon: -46.6333,
   },
   {
+    id: "sports-bein-iran",
+    name: "Bein Sports Iran",
+    url: "https://edge22.776740.ir.cdn.ir/hls2/sport.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
     id: "sports-setanta-1",
     name: "Setanta Sports 1",
     url: "https://tbs01-edge11.itdc.ge/setanta_georgia/index.m3u8?token=_JVEmQ5eRIpXYSIDu8IEhkdFz1nCabXVmcDkNCQuRwDB0gq8G3xWwqbLdFdlQakHQdonx3lBdWtITWvwn07jDt0jp3IOlmQa1u56q-ZBVZSsQrBYnxuQtH-QRjhBlNoSGcbwK5Lc4mhsyUMou4VdsMaBrIvGO1uQVnXzpDKut3jrtC-yJwgJGTaur6NAg9xeQyHqAMejvLK9UDcguGN02l75qGtn03dw3P51t944XvtxTxOm5oR6tgpui8813DagKuni83j6cbNUp9UzXBN7wg**",
