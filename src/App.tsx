@@ -544,6 +544,18 @@ export default function App() {
                     <span className="text-emerald-500 text-[9px] font-bold">●</span>
                     <span>DSports 2 HD (Argentina)</span>
                   </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>IRIB TV3 (Iran)</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>Telemundo Sports (Puerto Rico)</span>
+                  </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>TSports (Bangladesh)</span>
+                  </li>
                 </ul>
               </div>
               
