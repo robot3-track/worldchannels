@@ -18,12 +18,11 @@ export default async function handler(request, response) {
       const isHttps = streamUrl.startsWith("https");
       const client = isHttps ? https : http;
       
-      // Determine if this is a direct video stream file or an iframe/embed page
       const urlLowerCase = streamUrl.split('?')[0].toLowerCase();
-      const isDirectStream = urlLowerCase.includes(".m3u8") || 
-                             urlLowerCase.includes(".m3u") || 
-                             urlLowerCase.includes(".mp4") || 
-                             urlLowerCase.includes(".ts");
+      const hasMediaExtension = urlLowerCase.includes(".m3u8") || 
+                                urlLowerCase.includes(".m3u") || 
+                                urlLowerCase.includes(".mp4") || 
+                                urlLowerCase.includes(".ts");
 
       const req = client.get(streamUrl, { 
         timeout: 4000,
@@ -32,33 +31,47 @@ export default async function handler(request, response) {
           'Accept': '*/*'
         }
       }, (res) => {
-        // 1. Basic HTTP status code check (must be 2xx or 3xx)
+        // 1. Basic HTTP status code check (must be 200-399)
         const validStatus = res.statusCode && res.statusCode >= 200 && res.statusCode < 400;
         if (!validStatus) {
           req.destroy();
           return resolve(false);
         }
 
-        // 2. IFRAME / EMBED PATH: If it's not a direct media stream, assume it's an embed page.
-        // As long as the HTTP status is valid, we mark it online and don't inspect the HTML.
-        if (!isDirectStream) {
-          req.destroy();
-          return resolve(true);
-        }
-
-        // 3. DIRECT STREAM PATH: Strict validation for .m3u8 / .m3u files
         const contentType = (res.headers['content-type'] || '').toLowerCase();
-        if (contentType.includes('text/html')) {
-          // A real .m3u8 file shouldn't return text/html; this is likely an error webpage
+
+        // 2. Reject JSON API Errors (Common for expired IPTV accounts)
+        if (contentType.includes('application/json')) {
           req.destroy();
           return resolve(false);
         }
 
+        // 3. Handle HTML pages (Embeds vs. Error Pages)
+        if (contentType.includes('text/html')) {
+          if (hasMediaExtension) {
+            // It asked for a media file but got a webpage. This is a dead link/error page.
+            req.destroy();
+            return resolve(false);
+          } else {
+            // It asked for an extensionless URL and got a webpage. Trust it as a valid Iframe embed.
+            req.destroy();
+            return resolve(true);
+          }
+        }
+
+        // 4. Handle Binary Video Streams (.ts, .mp4)
+        // These won't have #EXTM3U text inside them, so if the server returns this type, it's online.
+        if (contentType.includes('video/') || contentType.includes('application/octet-stream')) {
+          req.destroy();
+          return resolve(true);
+        }
+
+        // 5. Handle M3U/M3U8 Playlists (application/x-mpegurl, audio/mpegurl, text/plain)
+        // We must verify the actual text payload to ensure it's not a disguised empty file.
         let rawData = '';
         res.on('data', (chunk) => {
           rawData += chunk.toString('utf8');
           
-          // Check the first ~512 bytes for valid HLS/M3U playlist tags
           if (rawData.length >= 512) {
             req.destroy();
             const isValidPlaylist = rawData.includes('#EXTM3U') || rawData.includes('#EXTINF');
