@@ -556,6 +556,10 @@ export default function App() {
                     <span className="text-emerald-500 text-[9px] font-bold">●</span>
                     <span>TSports (Bangladesh)</span>
                   </li>
+                  <li className="flex items-center gap-1.5">
+                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span>DDSports (India)</span>
+                  </li>
                 </ul>
               </div>
               

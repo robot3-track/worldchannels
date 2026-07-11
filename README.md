@@ -20,6 +20,7 @@ Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. 
 *   **Somoy TV Bangladesh**: Official Broadcaster for Bangladesh.
 *   **Telemundo Peurto Rico**: Official Broadcaster for Peurto Rico.
 *   **TSports Bangladesh**: Another Official Broadcaster for Bangladesh
+*   **DDSports India** Official Broadcaster for India.
 *   **IRIB TV3 Iran**: Official Broadcaster for Iran.
 *   **MonoMax TV Thailand**: Official Broadcaster for Thailand.
 *   **Caze TV Brazil**: Official Broadcaster for Brazil.

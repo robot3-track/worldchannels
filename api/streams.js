@@ -488,9 +488,9 @@ const staticStreams = [
     lon: -51.9253,
   },
   { 
-    id: "sports-caze-720", 
-    name: "Caze TV 720p (Brazil Streaming)", 
-    url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/720p-vtt/index.m3u8", 
+    id: "sports-caze-1080", 
+    name: "Caze TV 1080p (Brazil Streaming)", 
+    url: "https://dfr80qz435crc.cloudfront.net/MNOP/Amagi/Caze/Caze_TV_BR/1080p-vtt/index.m3u8?ROGERIOTORRES", 
     isEmbed: false,
     category: "sports", 
     category: "world cup",
@@ -712,6 +712,30 @@ const staticStreams = [
     status: "online",
     lat: 41.7151, // Tbilisi, Georgia
     lon: 44.8271,
+  },
+  {
+    id: "sports-dd-india",
+    name: "DD Sports India",
+    url: "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IN",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/16/DD_Sports_logo.svg/960px-DD_Sports_logo.svg.png",
+    status: "online",
+    lat: 28.6139, // New Delhi, India
+    lon: 77.2090,
+  },
+  {
+    id: "sports-us-telemundo2",
+    name: "Telemundo Sports",
+    url: "https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
+    status: "online",
+    lat: 25.7617,
+    lon: -80.1918
   },
   {
     id: "sports-setanta-2",
@@ -1166,8 +1190,9 @@ const staticStreams = [
   {
     id: "sports-us-telemundo",
     name: "Telemundo Sports",
-    url: "http://ikitv.exid.me/play/live.php?mac=00:1A:79:18:15:1D&stream=934970&extension=m3u8",
+    url: "https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8",
     category: "sports",
+    category: "world cup",
     country: "US",
     logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
     status: "online",
