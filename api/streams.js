@@ -760,6 +760,18 @@ const staticStreams = [
     lon: 44.8271,
   },
   {
+    id: "sports-mono-sport",
+    name: "MonoSport (Thailand)",
+    url: "https://live-us1.thaimomo.com/live-as/chmono29-2/chunklist_w275341469.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TH",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/3/35/MonomaxSportsTV-logo.png/revision/latest?cb=20260611164039",
+    status: "offline",
+    lat: 15.8700, // Thailand
+    lon: 100.9925,
+  },
+  {
     id:"news-telemundo-52",
     name: "Telemundo 52",
     url: "https://nbculocallive.akamaized.net/hls/live/2037084/losangeles/stream6/master.m3u8",
