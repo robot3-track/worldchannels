@@ -633,8 +633,8 @@ const staticStreams = [
   },
   {
     id: "sports-tsn-4",
-    name: "TSN 4 (Canada)",
-    url: "https://ok.ru/videoembed/15059747937840",
+    name: "TSN 1 (Canada)",
+    url: "https://raw.githubusercontent.com/kusnadipepenk/ntn/refs/heads/master/tsn1.m3u8",
     category: "sports",
     category: "world cup",
     country: "CA",
@@ -644,9 +644,9 @@ const staticStreams = [
     lon: -75.6972,
   },
   {
-    id: "sports-tsn-backup",
-    name: "TSN 4 (Canada Backup)",
-    url: "https://vidara.so/e/Y6tqChzz4Jbs",
+    id: "sports-tsn-4",
+    name: "TSN 4 (Canada)",
+    url: "https://vidara.so/e/8jEtL66DX0xs",
     category: "sports",
     category: "world cup",
     country: "CA",
