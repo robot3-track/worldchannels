@@ -338,7 +338,7 @@ const staticStreams = [
     category: "world cup",
     country: "TH",
     logo: "https://static.wikia.nocookie.net/logopedia/images/3/35/MonomaxSportsTV-logo.png/revision/latest?cb=20260611164039",
-    status: "online",
+    status: "offline",
     lat: 15.8700, // Thailand
     lon: 100.9925,
   },
