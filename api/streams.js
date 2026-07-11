@@ -562,6 +562,41 @@ const staticStreams = [
     lon: 106.6297,
   },
   {
+    id: "sports-socolive",
+    name: "Socolive (Vietnam)",
+    url: "https://pull.niues.live/live/stream-343500_lhd.m3u8?auth_key=1782978143-0-0-27b2fc9b491f1b06385322936d9acf1f", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKjOxMwd4UoJlZSwEH-XKUnPLmbIIJ0TKn9pUmdYzu-7qEpyJ54r5XRTuo&s=10",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "sports-socolive",
+    name: "Socolive Server 2 (Vietnam)",
+    url: "https://pull.niues.live/live/stream-133277_lsd.m3u8?auth_key=1782978143-0-0-a84c97ad125b0dce3a8110eb2c2d7390", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKjOxMwd4UoJlZSwEH-XKUnPLmbIIJ0TKn9pUmdYzu-7qEpyJ54r5XRTuo&s=10",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "sports-nba-cola",
+    name: "Cola Live NBA (Vietnam)",
+    url: "https://live05.grita.app/live/19919577.m3u8", // M3U8 Link
+    category: "sports",
+    country: "VN",
+    logo: "https://cdn.mos.cms.futurecdn.net/96UrEmW9kMVR2AeK35apbG.jpg",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
     id: "sports-yle-tv2",
     name: "YLE TV2 (Finland)",
     url: "https://live-fi.tvkaista.net/yle-tv2/live.m3u8",
