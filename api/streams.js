@@ -586,6 +586,17 @@ const staticStreams = [
     lon: 106.6297,
   },
   {
+    id: "sports-nba-channel",
+    name: "NBA Channel (US)",
+    url: "https://amg00556-amg00556c3-firetv-us-6060.playouts.now.amagi.tv/playlist.m3u8", // M3U8 Link
+    category: "sports",
+    country: "US",
+    logo: "https://cdn.mos.cms.futurecdn.net/96UrEmW9kMVR2AeK35apbG.jpg",
+    status: "online",
+    lat: 38.9072, // Washington, D.C.
+    lon: -77.0369,
+  },
+  {
     id: "sports-nba-cola",
     name: "Cola Live NBA (Vietnam)",
     url: "https://live05.grita.app/live/19919577.m3u8", // M3U8 Link
