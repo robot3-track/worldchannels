@@ -369,6 +369,18 @@ const staticStreams = [
   {
     id: "sports-dsports-2",
     name: "DSports 2 HD (Argentina)",
+    url: "https://s2.bufaloweb.com/bufalo9/index.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "AR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/8/83/DSports2.png?_=20221114223109",
+    status: "online",
+    lat: -34.6037, // Buenos Aires, Argentina
+    lon: -58.3816,
+  },
+  {
+    id: "sports-dsports-backup",
+    name: "DSports 2 HD Backup (Argentina)",
     url: "https://futbol9865.ultratv13.workers.dev/deportivo111/95.m3u8",
     category: "sports",
     category: "world cup",
@@ -862,11 +874,21 @@ const staticStreams = [
     lon: 32.8597,
   },
   {
+    id: "sports-tudn-1",
+    name: "TUDN 1",
+    url: "https://streaming-live-fcdn.api.prd.univisionnow.com/tudn/tudn.isml/hls/tudn.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f6/TUDN.svg/revision/latest?cb=20230127192854",
+    status: "online",
+    lat: 25.826725, // Florida, US
+    lon: -80.314954, 
+  },
+  {
     id: "sports-tudn-2",
     name: "TUDN 2",
     url: "https://streaming.alwaysdata.net/tudn.php",
     category: "sports",
-    category: "world cup",
     country: "US",
     logo: "https://static.wikia.nocookie.net/logopedia/images/f/f6/TUDN.svg/revision/latest?cb=20230127192854",
     status: "online",
@@ -918,6 +940,72 @@ const staticStreams = [
     status: "online",
     lat: 12.1348, // N'Djamena, Chad
     lon: 15.0557,
+  },
+  {
+    id: "sports-espn-2us",
+    name: "ESPN 2 (US)",
+    url: "https://s2.bufaloweb.com/bufalo4/index.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://images.seeklogo.com/logo-png/4/1/espn-2-logo-png_seeklogo-49202.png",
+    status: "online",
+    lat: 40.7128, // New York City, US
+    lon: -74.0060,
+  },
+  {
+    id: "sports-espn-3us",
+    name: "ESPN 3 (US)",
+    url: "https://s2.bufaloweb.com/bufalo5/index.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://images.seeklogo.com/logo-png/4/1/espn-2-logo-png_seeklogo-49202.png",
+    status: "online",
+    lat: 40.7128, // New York City, US
+    lon: -74.0060,
+  },
+  {
+    id: "sports-espn-4us",
+    name: "ESPN 4 (US)",
+    url: "https://s2.bufaloweb.com/bufalo6/index.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://images.seeklogo.com/logo-png/4/1/espn-2-logo-png_seeklogo-49202.png",
+    status: "online",
+    lat: 40.7128, // New York City, US
+    lon: -74.0060,
+  },
+  {
+    id: "sports-espn-5us",
+    name: "ESPN 5 (US)",
+    url: "https://s2.bufaloweb.com/bufalo7/index.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://images.seeklogo.com/logo-png/4/1/espn-2-logo-png_seeklogo-49202.png",
+    status: "online",
+    lat: 40.7128, // New York City, US
+    lon: -74.0060,
+  },
+  {
+    id: "sports-espn-6us",
+    name: "ESPN 6 (US)",
+    url: "https://s2.bufaloweb.com/bufalo8/index.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://images.seeklogo.com/logo-png/4/1/espn-2-logo-png_seeklogo-49202.png",
+    status: "online",
+    lat: 40.7128, // New York City, US
+    lon: -74.0060,
+  },
+    {
+    id: "sports-espn-6us",
+    name: "ESPN 7 (US)",
+    url: "https://s2.bufaloweb.com/bufalo9/index.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://images.seeklogo.com/logo-png/4/1/espn-2-logo-png_seeklogo-49202.png",
+    status: "online",
+    lat: 40.7128, // New York City, US
+    lon: -74.0060,
   },
   {
     id: "sports-espn-2",
@@ -1079,6 +1167,17 @@ const staticStreams = [
     id:"sports-fubotv-sports",
     name: "Fubo Sports Network",
     url: "https://live-manifest.production-public.tubi.io/live/d8c035df-1076-4aa6-8628-da2ec80781f9/playlist.m3u8", // High quality, stable Fubo Sports Network stream
+    category: "sports",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/1/1e/2023-fubotv-new-logo-design-2-520x321.png/revision/latest?cb=20230519120710",
+    status: "online",
+    lat: 40.7128, // New York City, US (FuboTV HQ)
+    lon: -74.0060,
+  },
+  {
+    id:"sports-fubotv-backup",
+    name: "Fubo Sports Network",
+    url: "https://ad993ce7.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/TEdfRnVib1Nwb3J0c05ldHdvcmtfSExT/playlist.m3u8", // High quality, stable Fubo Sports Network stream
     category: "sports",
     country: "US",
     logo: "https://static.wikia.nocookie.net/logopedia/images/1/1e/2023-fubotv-new-logo-design-2-520x321.png/revision/latest?cb=20230519120710",
@@ -1295,6 +1394,17 @@ const staticStreams = [
     status: "online",
     lat: -33.4489, // Santiago, Chile
     lon: -70.6693,
+  },
+  {
+    id: "sports-tnt-sport1",
+    name: "TNT Sports 1",
+    url: "https://bl.rutube.ru/livestream/3aa782bace452e7c4b9f81d767512147/index.m3u8?s=pXrTdWNG4s0INeKOsblzrA&e=2074182240&scheme=https8",
+    category: "sports",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/5/56/TNT_Sports_US_2023.svg/revision/latest?cb=20250831005248",
+    status: "online",
+    lat: 40.7128, // New York City, US
+    lon: -74.0060,
   },
   {
     id: "sports-arenasport1",
