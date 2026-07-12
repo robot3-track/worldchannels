@@ -862,6 +862,18 @@ const staticStreams = [
     lon: -80.314954, 
   },
   {
+    id: "sports-winsport-plus",
+    name: "Winsport Plus (Colombia)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/126.m3u8p",
+    category: "sports",
+    category: "world cup",
+    country: "CO",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Win_Sports%2B_logo.svg/3840px-Win_Sports%2B_logo.svg.png",
+    status: "online",
+    lat: 4.5709, // Colombia
+    lon: -74.2973, 
+  },
+  {
     id: "sports-newworld-africa",
     name: "New World Africa TV",
     url: "https://hls.newworldtv.com/nw-info/video/live.m3u8",
