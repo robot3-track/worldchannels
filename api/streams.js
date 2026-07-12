@@ -864,7 +864,7 @@ const staticStreams = [
   {
     id: "sports-winsport-plus",
     name: "Winsport Plus (Colombia)",
-    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/126.m3u8p",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/126.m3u8",
     category: "sports",
     category: "world cup",
     country: "CO",
