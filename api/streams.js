@@ -379,18 +379,6 @@ const staticStreams = [
     lon: -58.3816,
   },
   {
-    id: "sports-dsports-backup",
-    name: "DSports 2 HD Backup (Argentina)",
-    url: "https://futbol9865.ultratv13.workers.dev/deportivo111/95.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "AR",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/8/83/DSports2.png?_=20221114223109",
-    status: "online",
-    lat: -34.6037, // Buenos Aires, Argentina
-    lon: -58.3816,
-  },
-  {
     id: "sports-mtv-3",
     name: "MTV 3 (Finland)",
     url: "https://www.tvkaista.org/mtv3/suora",
@@ -437,6 +425,18 @@ const staticStreams = [
     status: "online",
     lat: 39.9334, // Ankara, Turkey
     lon: 32.8597,
+  },
+  {
+    id: "sports-qazaqstan",
+    name: "Qazaqstan Sports",
+    url: "https://stream.qaztv.kz/live/stream9/index.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "KZ",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQj_ccV6kSCrhDyj8C76j_feKig0a7wdC46zOKhg3c0WCrvaJVr0rGO_Xcp&s=10",
+    status: "online",
+    lat: 51.1605, // Astana, Kazakhstan
+    lon: 71.4704,
   },
   {
     id: "sports-turkmenistan",
@@ -620,6 +620,18 @@ const staticStreams = [
     status: "online",
     lat: 10.8231, // Ho Chi Minh City
     lon: 106.6297,
+  },
+  {
+    id: "sports-dsports-backup",
+    name: "DSports 2 HD Backup (Argentina)",
+    url: "https://futbol9865.ultratv13.workers.dev/deportivo111/95.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "AR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/8/83/DSports2.png?_=20221114223109",
+    status: "online",
+    lat: -34.6037, // Buenos Aires, Argentina
+    lon: -58.3816,
   },
   {
     id: "sports-nba-channel",
@@ -863,10 +875,23 @@ const staticStreams = [
     lon: 26.1025,
   },
   {
-    id: "sports-ct-sport",
+    id: "sports-hr-sport",
     name: "HT Spor TV (Turkey)",
+    url: "https://ciner-live.ercdn.net/htspor/htspor_1080p.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/0/01/Ht-spor-buyuk.webp",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,https://ekoltv-live.ercdn.net/ekolsport/ekolsport.m3u8
+  },
+  {
+    id: "sports-hrbackup-sport",
+    name: "HT Spor TV Backup (Turkey)",
     url: "https://ciner.daioncdn.net/ht-spor/ht-spor.m3u8?app=web",
     category: "sports",
+    category: "world cup",
     country: "TR",
     logo: "https://upload.wikimedia.org/wikipedia/commons/0/01/Ht-spor-buyuk.webp",
     status: "online",
