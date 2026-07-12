@@ -1184,17 +1184,6 @@ const staticStreams = [
     lon: -118.2437,
   },
   {
-    id: "sports-tycsports-usa",
-    name: "TyC Sports USA",
-    url: "http://playcom.trapemn.tv:1935/transcoderip/tycsports.stream/playlist.m3u8", // High quality TyC Sports USA stream feed
-    category: "sports",
-    country: "US",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/b/b5/Tycsports2026.svg/revision/latest?cb=20260602013902",
-    status: "online",
-    lat: 40.7128, // New York, NY
-    lon: -74.0060,
-  },
-  {
     id: "sports-plutotv-deportes",
     name: "Pluto TV Deportes",
     url: "https://jmp2.uk/plu-5dcde07af1c85b0009b18651.m3u8", // High quality Pluto TV Deportes live stream
