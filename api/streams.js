@@ -331,6 +331,18 @@ const staticStreams = [
     lon: -58.3816,
   },
   {
+    id: "sports-toffee-tv",
+    name: "Toffee TV (Bangladesh)",
+    url: "https://s2.bufaloweb.com/bufalo9/tracks-v4a1/mono.ts.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "BD",
+    logo: "https://play-lh.googleusercontent.com/UqkSOn7d1WntmCHXSTJcpOr2b_cnR27YGoYB36JOwDgn-TQv5fzteiPZfDmTQHTWOOg4B2YB1DMSTCH80O_KXdM",
+    status: "online",
+    lat: 23.6850, // Dhaka, Bangladesh
+    lon: 90.3563,
+  },
+  {
     id: "sports-somoy-tv",
     name: "Somoy TV (Bangladesh)",
     url: "https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8",
