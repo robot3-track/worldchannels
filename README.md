@@ -18,6 +18,7 @@ Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. 
 
 *   **Antena Sports**: Official Broadcaster for Italy, providing HD coverage of all tournament matches and match analysis.
 *   **Somoy TV Bangladesh**: Official Broadcaster for Bangladesh.
+*   **TYC Sports Argentina**: Official Broadcaster for Argentina.
 *   **Telemundo Peurto Rico**: Official Broadcaster for Peurto Rico.
 *   **TSports Bangladesh**: Another Official Broadcaster for Bangladesh
 *   **DDSports India** Official Broadcaster for India.
@@ -39,7 +40,7 @@ Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. 
 
 *   **NBA Channel**: Official Free Broadcaster of the NBA (US).
 *   **Cola TV NBA**: Official Broadcaster of the NBA (Vietnam)
-*   DISCLAIMIER: Note that we only provide legal sources. any copyright interferences are taken down (ex. NBATV)
+*   DISCLAIMIER: Note that we only provide legal sources. any copyright interferences are taken down (ex. YOUTUBETV)
 
 ## Technical Infrastructure
 

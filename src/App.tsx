@@ -558,7 +558,7 @@ export default function App() {
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="text-emerald-500 text-[9px] font-bold">●</span>
-                    <span>DDSports (India)</span>
+                    <span>TYC Sports (Argentina)</span>
                   </li>
                 </ul>
               </div>

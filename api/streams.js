@@ -319,6 +319,18 @@ const staticStreams = [
     lon: 12.5674,
   },
   {
+    id: "sports-tyc-sports",
+    name: "TYC Sports (Argentina)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/8631.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "AR",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScKJf0nmlb78uuc6GWqRj2GARu9CxqRKvksb5q9VuA9Q&s",
+    status: "online",
+    lat: -34.6037, // Buenos Aires, Argentina
+    lon: -58.3816,
+  },
+  {
     id: "sports-somoy-tv",
     name: "Somoy TV (Bangladesh)",
     url: "https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8",
@@ -597,6 +609,17 @@ const staticStreams = [
     lon: -77.0369,
   },
   {
+    id: "sports-nba-channel2",
+    name: "NBA Channel Server 2 (US)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/402.m3u8", // M3U8 Link
+    category: "sports",
+    country: "US",
+    logo: "https://cdn.mos.cms.futurecdn.net/96UrEmW9kMVR2AeK35apbG.jpg",
+    status: "online",
+    lat: 38.9072, // Washington, D.C.
+    lon: -77.0369,
+  },
+  {
     id: "sports-nba-cola",
     name: "Cola Live NBA (Vietnam)",
     url: "https://live05.grita.app/live/19919577.m3u8", // M3U8 Link
@@ -713,6 +736,17 @@ const staticStreams = [
     lon: -46.6333,
   },
   {
+    id:"sports-latino-fox",
+    name: "Latino Fox Sports (US)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/113.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/Fox_Sports_logo.jpg/250px-Fox_Sports_logo.jpg",
+    status: "offline",
+    lat: 25.7617, // Miami, Florida
+    lon: -80.1918,
+  },
+  {
     id: "sports-setanta-1",
     name: "Setanta Sports 1",
     url: "https://tbs01-edge11.itdc.ge/setanta_georgia/index.m3u8?token=_JVEmQ5eRIpXYSIDu8IEhkdFz1nCabXVmcDkNCQuRwDB0gq8G3xWwqbLdFdlQakHQdonx3lBdWtITWvwn07jDt0jp3IOlmQa1u56q-ZBVZSsQrBYnxuQtH-QRjhBlNoSGcbwK5Lc4mhsyUMou4VdsMaBrIvGO1uQVnXzpDKut3jrtC-yJwgJGTaur6NAg9xeQyHqAMejvLK9UDcguGN02l75qGtn03dw3P51t944XvtxTxOm5oR6tgpui8813DagKuni83j6cbNUp9UzXBN7wg**",
@@ -729,7 +763,6 @@ const staticStreams = [
     name: "DD Sports India",
     url: "https://d3qs3d2rkhfqrt.cloudfront.net/out/v1/b17adfe543354fdd8d189b110617cddd/index.m3u8",
     category: "sports",
-    category: "world cup",
     country: "IN",
     logo: "https://upload.wikimedia.org/wikipedia/en/thumb/1/16/DD_Sports_logo.svg/960px-DD_Sports_logo.svg.png",
     status: "online",
@@ -839,6 +872,39 @@ const staticStreams = [
     status: "online",
     lat: 12.1348, // N'Djamena, Chad
     lon: 15.0557,
+  },
+  {
+    id: "sports-espn-2",
+    name: "ESPN 2 (AR)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/449.m3u8",
+    category: "sports",
+    country: "AR",
+    logo: "https://images.seeklogo.com/logo-png/4/1/espn-2-logo-png_seeklogo-49202.png",
+    status: "online",
+    lat: -34.6037, // Buenos Aires, Argentina
+    lon: -58.3816,
+  },
+  {
+    id: "sports-espn-vivo",
+    name: "ESPN VIVO (AR)",
+    url: "https://lb1new.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/107.m3u8?token=TRdbUxIKFF8SDAgIUAcEDgIFB1ULAgoHV1YGVwdRBFYHBlUFVVIOAwQaFRpCFkdTU1g5DF0RCANUVRgQFhVREWlcVxBbQARHHBpNUVwHFwwCGUQVUFcQCEZRAwRQUAZbFBkRVxkWUxdeWVVnVQdDX1FQRF9XRl5eSEBbXDwCUQ5XW1cQW0AGRxwaUEtBQA9YR1kKSRtRW0YWA0BXQVwWUQ4DABBNQFUKRVZNSkhADxRnZkRJG1ZKRgEMR1sMCBZZFFgAR1lAGkdZS2ZKVBFBRFdUCwBLEQgQVEAYEA4HTDxVWl1cBAFCDF9WShoLQAUUHhcLCldaRl0WPURbB0QOQQcGBgdSQEs=",
+    category: "sports",
+    country: "AR",
+    logo: "https://images.seeklogo.com/logo-png/4/1/espn-2-logo-png_seeklogo-49202.png",
+    status: "online",
+    lat: -34.6037, // Buenos Aires, Argentina
+    lon: -58.3816,
+  },
+  {
+    id: "sports-dazn-f1",
+    name: "DAZN F1",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/374.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/0/09/DAZN_LOGO.png",
+    status: "online",
+    lat: 40.7128, // New York City, US (DAZN HQ)
+    lon: -74.0060,
   },
   {
     id: "country-it-rai-1",
@@ -1072,6 +1138,17 @@ const staticStreams = [
     status: "online",
     lat: 25.826725, // Florida, US
     lon: -80.314954,
+  },
+  {
+    id: "sports-n-beinsportsxtra",
+    name: "beIN SPORTS Xtra (Mexico)",
+    url: "https://bein-esp-xumo.amagi.tv/playlist.m3u8",
+    category: "sports",
+    country: "MX",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/b/b6/Xtra.png/revision/latest?cb=20201108180634",
+    status: "online",
+    lat: 19.4326, // Mexico City, Mexico
+    lon: -99.1332,
   },
   {
     id:"sports-bbc-topgear",
