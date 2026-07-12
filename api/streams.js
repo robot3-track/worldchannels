@@ -632,7 +632,7 @@ const staticStreams = [
     lon: 24.9384,
   },
   {
-    id: "sports-tsn-4",
+    id: "sports-tsn-1",
     name: "TSN 1 (Canada)",
     url: "https://raw.githubusercontent.com/kusnadipepenk/ntn/refs/heads/master/tsn1.m3u8",
     category: "sports",
@@ -894,18 +894,6 @@ const staticStreams = [
     status: "online",
     lat: 51.5074, // London, UK (EuroNews HQ)
     lon: -0.1278,
-  },
-  { 
-    id: "sports-tsn-1", 
-    name: "TSN (Canada Streaming)", 
-    url: "https://vsd166.okcdn.ru/hls/18461272115939.m3u8/sig/WtxcKhT9D5U/expires/1783285690020/srcIp/172.58.115.100/urls/178.237.23.89/clientType/0/srcAg/CHROME/mid/15900812975843/video.m3u8?p", 
-    isEmbed: false, // Set to false since this is a direct .mpd stream manifest link, not an iframe embed page
-    category: "sports", 
-    country: "CA", 
-    logo: "https://static.wikia.nocookie.net/logopedia/images/b/b6/Tsn1hd.png/revision/latest?cb=20150709183637", 
-    status: "online", 
-    lat: 56.130366,
-    lon: -106.346771,
   },
   {
     id: "sports-dazn-ringside",
