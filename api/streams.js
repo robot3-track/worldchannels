@@ -874,6 +874,28 @@ const staticStreams = [
     lon: -74.2973, 
   },
   {
+    id: "sports-eurosport-1",
+    name: "Eurosport 1",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/618.m3u8",
+    category: "sports",
+    country: "FR",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrEw0Gi7blnjYB9-nsfck7oQjKnjzI2Mcujok_Y9iVpQ&s",
+    status: "online",
+    lat: 46.2276, // France
+    lon: 2.2137,
+  },
+  {
+    id: "sports-eurosport-2",
+    name: "Eurosport 2",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/619.m3u8",
+    category: "sports",
+    country: "FR",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSrEw0Gi7blnjYB9-nsfck7oQjKnjzI2Mcujok_Y9iVpQ&s",
+    status: "online",
+    lat: 46.2276, // France
+    lon: 2.2137,
+  },
+  {
     id: "sports-newworld-africa",
     name: "New World Africa TV",
     url: "https://hls.newworldtv.com/nw-info/video/live.m3u8",
@@ -1250,6 +1272,17 @@ const staticStreams = [
     status: "online",
     lat: 39.9042, // Beijing, China
     lon: 116.4074,
+  },
+  {
+    id: "sports-tnt-chile",
+    name: "TNT Sports Chile",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/462.m3u8",
+    category: "sports",
+    country: "CL",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/5/56/TNT_Sports_US_2023.svg/revision/latest?cb=20250831005248",
+    status: "online",
+    lat: -33.4489, // Santiago, Chile
+    lon: -70.6693,
   },
   {
     id: "sports-arenasport1",
