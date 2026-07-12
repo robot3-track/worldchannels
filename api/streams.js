@@ -929,10 +929,21 @@ const staticStreams = [
     lon: -102.5528,
   },
   {
+    id: "sports-xtrma-sports",
+    name: "XTRMA CNA Sports TV",
+    url: "https://stmv6.voxtvhd.com.br/cnardeportes/cnardeportes/playlist.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/b/b6/Xtra.png/revision/latest?cb=20201108180634",
+    status: "online",
+    lat: 40.7128, // New York City, US
+    lon: -74.0060,
+  },
+  {
     id: "country-it-rai-1",
     name: "Rai 1 Italy HD",
     url: "https://dash2.antik.sk/live/test_rai_uno_tizen/playlist.m3u8",
-    category: "world cup",
+    category: "sports",
     country: "IT",
     logo: "https://static.wikia.nocookie.net/logopedia/images/f/f7/Rai_1_2016.svg/revision/latest?cb=20190913200441",
     status: "online",
