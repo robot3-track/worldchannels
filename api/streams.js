@@ -907,6 +907,28 @@ const staticStreams = [
     lon: -74.0060,
   },
   {
+    id: "sports-team-usa",
+    name: "Team USA Sports",
+    url: "https://amg01416-amg01416c4-firetv-us-4522.playouts.now.amagi.tv/playlist.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://www.trendsinternational.com/media/catalog/product/cache/5fb323206e711af980740cf91a7c422a/p/o/poster25292.jpgg",
+    status: "online",
+    lat: 40.7128, // New York City, US
+    lon: -74.0060,
+  },
+  {
+    id: "sports-aym-sports",
+    name: "AYM Sports",
+    url: "https://aym-as.otteravision.com/aym/as/as.m3u8",
+    category: "sports",
+    country: "MX",
+    logo: "https://pbs.twimg.com/profile_images/2014443059170189312/YAQSLtyI_400x400.jpg",
+    status: "online",
+    lat: 23.6345, // Mexico
+    lon: -102.5528,
+  },
+  {
     id: "country-it-rai-1",
     name: "Rai 1 Italy HD",
     url: "https://dash2.antik.sk/live/test_rai_uno_tizen/playlist.m3u8",
