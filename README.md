@@ -35,6 +35,12 @@ Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. 
 *   **ColaTV Vietnam Servers 1-3**: A premium regional hub with multiple servers specializing in Asian market sports feeds and international football.
 *   DISCLAIMIER: Note that we only provide legal sources. any copyright interferences are taken down (ex. FS1)
 
+## NBA Broadcasters
+
+*   **NBA Channel**: Official Free Broadcaster of the NBA (US).
+*   **Cola TV NBA**: Official Broadcaster of the NBA (Vietnam)
+*   DISCLAIMIER: Note that we only provide legal sources. any copyright interferences are taken down (ex. NBATV)
+
 ## Technical Infrastructure
 
 The application utilizes a Node.js backend to scrape, validate, and serve thousands of streaming endpoints. It features:

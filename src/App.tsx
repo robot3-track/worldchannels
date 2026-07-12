@@ -572,11 +572,11 @@ export default function App() {
                 <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
                   <li className="flex items-center gap-1.5">
                     <span className="text-indigo-500 text-[9px] font-bold">●</span>
-                    <span>Sky Sports PL (Premier League)</span>
+                    <span>Antena Sport (Italy)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="text-indigo-500 text-[9px] font-bold">●</span>
-                    <span>DAZN 1 Germany (Bundesliga)</span>
+                    <span>bEIN Sports Xtra (France)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="text-indigo-500 text-[9px] font-bold">●</span>
@@ -593,24 +593,20 @@ export default function App() {
                 <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b ${
                   theme === "light" ? "text-zinc-400 border-zinc-200" : "text-neutral-600 border-neutral-900"
                 }`}>
-                  Regional Sport Providers
+                  National Basketball Association (NBA) Coverage
                 </h4>
                 <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
                   <li className="flex items-center gap-1.5">
                     <span className="text-amber-500 text-[9px] font-bold">●</span>
-                    <span>VTV5 (ASEAN Sports Coverage)</span>
+                    <span>The NBA Channel</span>
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="text-amber-500 text-[9px] font-bold">●</span>
-                    <span>Bahrain Sports 1 & 2 (ME Finals)</span>
+                    <span>Cola TV NBA Server 1</span>
                   </li>
                   <li className="flex items-center gap-1.5">
                     <span className="text-amber-500 text-[9px] font-bold">●</span>
-                    <span>NHK News (Pacific Highlights)</span>
-                  </li>
-                  <li className="flex items-center gap-1.5">
-                    <span className="text-amber-500 text-[9px] font-bold">●</span>
-                    <span>KSA Sports (Arab Gulf Cup)</span>
+                    <span>Cola TV NBA Server 2</span>
                   </li>
                 </ul>
               </div>
