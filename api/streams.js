@@ -1168,7 +1168,7 @@ const staticStreams = [
   {
     id: "sports-lequipe",
     name: "L'Equipe TV (FR)",
-    url: "https://viamotionhsi.netplus.ch/live/eds/lequipe21/browser-HLS8/lequipe21.m3u8", // Direct stable L'Equipe TV feed
+    url: "https://dq37unyetkpcz.cloudfront.net/v1/master/3722c60a815c199d9c0ef36c5b73da68a62b09d1/cc-m04j89j7k5gtp/LEquipe_FR.m3u8?ads.device_did=%7BPSID%7D&ads.device_dnt=%7BTARGETOPT%7D&ads.app_domain=%7BAPP_DOMAIN%7D&ads.app_name=%7BAPP_NAME%7D&ads.consent=%7BTC_STRING%7D&ads.ssai_vendor=SSSLIVE&ads.service_id=FR200016Y5", // Direct stable L'Equipe TV feed
     category: "sports",
     country: "FR",
     logo: "https://i.ibb.co/KXhYwm0/lequipe.png",
