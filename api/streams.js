@@ -357,7 +357,7 @@ const staticStreams = [
   {
     id: "sports-mono-max1",
     name: "MonoMax TV (Thailand)",
-    url: "https://yyi7tewa2x.3ppnkog.com/xstream/monomax-1/playlist.m3u8",
+    url: "https://love.jco5sjujta.workers.dev:443/lx-origin/th-monomax01_720/chunks.m3u8",
     category: "sports",
     category: "world cup",
     country: "TH",
@@ -884,7 +884,7 @@ const staticStreams = [
     logo: "https://upload.wikimedia.org/wikipedia/commons/0/01/Ht-spor-buyuk.webp",
     status: "online",
     lat: 39.9334, // Ankara, Turkey
-    lon: 32.8597,https://ekoltv-live.ercdn.net/ekolsport/ekolsport.m3u8
+    lon: 32.8597,
   },
   {
     id: "sports-hrbackup-sport",
