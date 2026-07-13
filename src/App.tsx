@@ -322,7 +322,7 @@ export default function App() {
           <div className="flex items-center gap-2.5">
             <Info className="w-3.5 h-3.5 flex-shrink-0 text-amber-500" />
             <p className="uppercase font-medium">
-              Notification: Map rendering relies on broadcast satellite coordinates. If channels are missing, 
+              Map rendering relies on broadcast satellite coordinates. If channels are missing, 
               <button onClick={() => window.location.reload()} className="mx-1 underline hover:text-amber-600 font-bold cursor-pointer">REFRESH</button> 
               to reload broadcast data.
             </p>
@@ -354,8 +354,8 @@ export default function App() {
             <h3 className={`text-xs font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
               Loading World Channels..
             </h3>
-            <p className={`text-[11px] mt-1.5 max-w-xs mx-auto uppercase tracking-wide leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
-              Opening packages, establishing satellite links, and syncing channel telemetry. Please wait while the system boots up.
+            <p className={`text-[16px] mt-1.5 max-w-xs mx-auto uppercase tracking-wide leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
+              Opening packages, establishing satellite links, and syncing channel statuses. Please wait while the system boots up.
             </p>
           </div>
         ) : (
