@@ -379,6 +379,18 @@ const staticStreams = [
     lon: -58.3816,
   },
   {
+    id: "sports-wc-26",
+    name: "WC26 TV",
+    url: "https://biostartvworld.pages.dev/api/fifa-world-cup-2026.m3u8?key=aHR0cHM6Ly9kZnI4MHF6NDM1Y3JjLmNsb3VkZnJvbnQubmV0L01OT1AvQW1hZ2kvQ2F6ZS9DYXplX1RWX0JSLzEwODBwLXZ0dC9pbmRleC5tM3U4",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyVpt98pKn91BVoSdP5DFhMnLDtVzeRIXOmgVOJ3obgw&s",
+    status: "online",
+    lat: 38.9072, // Washington, D.C., USA
+    lon: -77.0369,
+  },
+  {
     id: "sports-mtv-3",
     name: "MTV 3 (Finland)",
     url: "https://www.tvkaista.org/mtv3/suora",
