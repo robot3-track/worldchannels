@@ -451,6 +451,18 @@ const staticStreams = [
     lon: 71.4704,
   },
   {
+    id: "sports-tsports",
+    name: "T Sports (Bangladesh)",
+    url: "https://biostartvworld.pages.dev/api/t-sports.m3u8?key=aHR0cHM6Ly90di5ocmR2eS5kcGRucy5vcmcvc3RyZWFtL2hscy9jaDAxLm0zdTg",
+    category: "sports",
+    category: "world cup",
+    country: "BD",
+    logo: "https://tvassets.roarzone.net/images/102.png",
+    status: "online",
+    lat: 23.6850, // Dhaka, Bangladesh
+    lon: 90.3563,
+  },
+  {
     id: "sports-turkmenistan",
     name: "Turkmenistan Sports",
     url: "https://alpha.tv.online.tm/legacyhls/ch004_720/index.m3u8",
