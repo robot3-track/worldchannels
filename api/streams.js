@@ -392,7 +392,7 @@ const staticStreams = [
   },
   {
     id: "sports-wc-26",
-    name: "WC26 TV",
+    name: "Caze TV Low Quality",
     url: "https://biostartvworld.pages.dev/api/fifa-world-cup-2026.m3u8?key=aHR0cHM6Ly9kZnI4MHF6NDM1Y3JjLmNsb3VkZnJvbnQubmV0L01OT1AvQW1hZ2kvQ2F6ZS9DYXplX1RWX0JSLzEwODBwLXZ0dC9pbmRleC5tM3U4",
     category: "sports",
     category: "world cup",
