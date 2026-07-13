@@ -452,8 +452,32 @@ const staticStreams = [
   },
   {
     id: "sports-bein-iranbackup",
-    name: "Bein Sports Iran Backup",
+    name: "Bein Sports Iran Server 2",
     url: "https://edge22.776740.ir.cdn.ir/hls2/bein1.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
+    id: "sports-bein-iran3",
+    name: "Bein Sports Iran Server 3",
+    url: "https://cp11.adabmedia.com/hls2/sport.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
+    id: "sports-bein-iran4",
+    name: "Bein Sports Iran Server 4",
+    url: "https://cp11.adabmedia.com/hls2/bein1.m3u8",
     category: "sports",
     category: "world cup",
     country: "IR",
