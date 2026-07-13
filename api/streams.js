@@ -427,9 +427,33 @@ const staticStreams = [
     lon: 24.9384,
   },
   {
+    id: "sports-fussball-tv",
+    name: "Fussball.tv Germany",
+    url: "https://edge22.776740.ir.cdn.ir/hls2/rasf1.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "DE",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw9VZ8bEqurIwz9f7lT5x_qoGTG1ARebF-BHwjFua8Pw&s=10",
+    status: "online",
+    lat: 48.1351, // Munich, Germany
+    lon: 11.5820,
+  },
+  {
     id: "sports-bein-iran",
     name: "Bein Sports Iran",
     url: "https://edge22.776740.ir.cdn.ir/hls2/sport.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
+    id: "sports-bein-iranbackup",
+    name: "Bein Sports Iran Backup",
+    url: "https://edge22.776740.ir.cdn.ir/hls2/bein1.m3u8",
     category: "sports",
     category: "world cup",
     country: "IR",
