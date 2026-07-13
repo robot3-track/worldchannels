@@ -547,6 +547,30 @@ const staticStreams = [
     lon: 46.6753,
   },
   {
+    id: "sports-zee-bangla",
+    name: "Zee Bangla India",
+    url: "https://d1g8wgjurz8via.cloudfront.net/bpk-tv/ColorsHD/default/Zeebanglahd.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IN",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Z_Bangla_logo.jpg/250px-Z_Bangla_logo.jpg",
+    status: "online",
+    lat: 28.6139, // New Delhi, India
+    lon: 77.2090,
+  },
+  { 
+    id: "sports-tv-2",
+    name: "TV 2",
+    url: "https://tv.cdn.xsg.ge/gpb-2tv/tracks-v1a1/mono.ts.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IN",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Z_Bangla_logo.jpg/250px-Z_Bangla_logo.jpg",
+    status: "online",
+    lat: 28.6139, // New Delhi, India
+    lon: 77.2090,
+  },
+  {
     id:"sports-telemundo-wc",
     name: "Telemundo Sports (Peurto Rico)",
     url: "https://nbculocallive.akamaized.net/hls/live/2037499/puertorico/stream1/master.m3u8",
@@ -557,6 +581,18 @@ const staticStreams = [
     status: "offline",
     lat: 18.2208, // San Juan, Puerto Rico
     lon: -66.5901,
+  },
+  {
+    id:"sports-telemundo-wcus",
+    name: "Telemundo Sports (US)",
+    url: "https://tda-nnaa-drct-pa6dy.fast.nbcuni.com/live/master_2.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Telemundo_logo_2018.svg/1920px-Telemundo_logo_2018.svg.png",
+    status: "offline",
+    lat: 34.0522, // Los Angeles, California, USA
+    lon: -118.2437,
   },
   {
     id: "sports-t-sport",
@@ -716,6 +752,42 @@ const staticStreams = [
     status: "online",
     lat: -34.6037, // Buenos Aires, Argentina
     lon: -58.3816,
+  },
+  {
+    id:"sports-trt-1turkey",
+    name: "TRT 1 Turkey",
+    url: "https://andro.evrenesoglu57.click/checklist/androstreamlivetrt1.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/0/01/Ht-spor-buyuk.webp",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
+  },
+  {
+    id:"sports-itv-uk",
+    name: "ITV UK",
+    url: "https://andro.evrenesoglu57.click/checklist/androstreamliveexn4.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "UK",
+    logo: "https://upload.wikimedia.org/wikipedia/en/0/0b/ITV_plc_2025_logo.svg",
+    status: "online",
+    lat: 51.5074, // London, UK (EuroNews HQ)
+    lon: -0.1278,
+  },
+  {
+    id:"sports-mashun-sports",
+    name: "Mashun Sports",
+    url: "https://andro.226503.xyz/checklist/androstreamlivebs1.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "BD",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT67eUWpdx84zCtzVQJQ4XlpJDZZYIco3gAgRn8ye0L1A&s",
+    status: "offline",
+    lat: 23.6850, // Dhaka, Bangladesh
+    lon: 90.3563,
   },
   {
     id: "sports-nba-channel",
