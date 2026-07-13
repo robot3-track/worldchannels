@@ -1214,6 +1214,17 @@ const staticStreams = [
     lon: -0.1278,
   },
   {
+    id: "news-accu-weather",
+    name: "AccuWeather News",
+    url: "https://cdn-ue1-prod.tsv2.amagi.tv/linear/amg00684-accuweather-accuweather-plex/playlist.m3u8",
+    category: "news",
+    country: "US",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTFCFacZGll-M8iq9GYdcQ9gZbIz6qYaru8hzXm9Ns72Q&s",
+    status: "online",
+    lat: 40.7128, // New York City, US (AccuWeather HQ)
+    lon: -74.0060,
+  },
+  {
     id: "sports-dazn-ringside",
     name: "DAZN Ringside",
     url: "https://aegis-cloudfront-1.tubi.video/bfad29e2-5bee-44f3-8256-127324e8b106/playlist.m3u8",
