@@ -622,9 +622,21 @@ const staticStreams = [
     lon: 106.6297,
   },
   {
-    id: "sports-socolive",
+    id: "sports-socolive-2",
     name: "Socolive Server 2 (Vietnam)",
     url: "https://pull.niues.live/live/stream-133277_lsd.m3u8?auth_key=1782978143-0-0-a84c97ad125b0dce3a8110eb2c2d7390", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRKjOxMwd4UoJlZSwEH-XKUnPLmbIIJ0TKn9pUmdYzu-7qEpyJ54r5XRTuo&s=10",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "sports-socolive-3",
+    name: "Socolive Server 3 (Vietnam)",
+    url: "https://biostartvworld.pages.dev/api/fifa-world-cup.m3u8?key=aHR0cHM6Ly9wdWxsLm5pdWVzLmxpdmUvbGl2ZS9zdHJlYW0tOTkxMjA5MV9sc2QubTN1OD9hdXRoX2tleT0xNzgzNDQyNzgzLTAtMC03MmViMmM5YjlmY2IzMjk4YWUzODZiNzllNWM4Yjk5Ng", // M3U8 Link
     category: "sports",
     category: "world cup",
     country: "VN",
@@ -2006,7 +2018,8 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/ch.m3u", category: "country", country: "CH" },
       { url: "https://iptv-org.github.io/iptv/countries/kp.m3u", category: "country", country: "KP" },
       { url: "https://ncdn.telewebion.ir/faratar/live/playlist.m3u8", category: "world cup", country: "IR" },
-      { url: "https://iptv-org.github.io/iptv/index.m3u", category: "general"}
+      { url: "https://iptv-org.github.io/iptv/index.m3u", category: "general"},
+      { url: "https://biostartvworld.pages.dev/biostartvworld.m3u?ch=btv&play=aHR0cHM6Ly90di5iZXlvbmR0YXhjb25zdWx0YW50cy5jb20vYXBpL3Byb3h5P3VybD1odHRwOi8vMTk4LjE5NS4yMzkuNTA6ODA5NS9idHYvdHJhY2tzLXYxYTEvbW9uby5tM3U4&ext=.m3u8", category: "world cup" }
     ];
 
     const m3uResults = await Promise.all(sources.map(src => downloadM3U(src.url).then(data => parseM3U(data, src.category))));
