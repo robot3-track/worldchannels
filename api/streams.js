@@ -307,6 +307,18 @@ const staticStreams = [
     lon: 2.3522,
   },
   {
+    id: "sports-bein-frbackup",
+    name: "Bein Sports France (Backup)",
+    url: "https://biostartvworld.pages.dev/api/bein-sports.m3u8?key=aHR0cHM6Ly8xbnlhbGVyLnN0cmVhbWhvc3RpbmdjZG4udG9wL3N0cmVhbS8yMy9pbmRleC5tM3U4",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
     id: "sports-antenasport",
     name: "Antena Sport",
     url: "https://stream1.antenaplay.ro/as/asrolive1/playlist.m3u8",
@@ -418,6 +430,18 @@ const staticStreams = [
     id: "sports-bein-iran",
     name: "Bein Sports Iran",
     url: "https://edge22.776740.ir.cdn.ir/hls2/sport.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
+    id: "sports-bein-iranbackup",
+    name: "Bein Sports Iran (Backup)",
+    url: "https://biostartvworld.pages.dev/api/bein-sports-fifa.m3u8?key=aHR0cHM6Ly9jcDExLmFkYWJtZWRpYS5jb20vaGxzMi9zcG9ydC5tM3U4P25vY2FjaGU9MTc4MjA1NzIxNDQ2MA",
     category: "sports",
     category: "world cup",
     country: "IR",
@@ -2031,7 +2055,7 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/kp.m3u", category: "country", country: "KP" },
       { url: "https://ncdn.telewebion.ir/faratar/live/playlist.m3u8", category: "world cup", country: "IR" },
       { url: "https://iptv-org.github.io/iptv/index.m3u", category: "general"},
-      { url: "https://biostartvworld.pages.dev/biostartvworld.m3u?ch=btv&play=aHR0cHM6Ly90di5iZXlvbmR0YXhjb25zdWx0YW50cy5jb20vYXBpL3Byb3h5P3VybD1odHRwOi8vMTk4LjE5NS4yMzkuNTA6ODA5NS9idHYvdHJhY2tzLXYxYTEvbW9uby5tM3U4&ext=.m3u8", category: "world cup" }
+      { url: "https://biostartvworld.pages.dev/biostartvworld.m3u?ch=btv&play=aHR0cHM6Ly90di5iZXlvbmR0YXhjb25zdWx0YW50cy5jb20vYXBpL3Byb3h5P3VybD1odHRwOi8vMTk4LjE5NS4yMzkuNTA6ODA5NS9idHYvdHJhY2tzLXYxYTEvbW9uby5tM3U4&ext=.m3u8", category: "general" }
     ];
 
     const m3uResults = await Promise.all(sources.map(src => downloadM3U(src.url).then(data => parseM3U(data, src.category))));
