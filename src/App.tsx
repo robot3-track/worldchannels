@@ -200,33 +200,27 @@ export default function App() {
   return (
     <div className={`min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300 selection:bg-emerald-500/20 selection:text-emerald-500 ${
       theme === "light"
-        ? "bg-slate-50 text-slate-800"
-        : "bg-[#020617] text-slate-100"
+        ? "bg-[#faf9f6] text-zinc-900"
+        : "bg-[#0d0e12] text-neutral-100"
     }`}>
-      {/* Premium ambient gradient background */}
-      <div className={`absolute inset-0 pointer-events-none transition-opacity duration-500 ${
-        theme === "light"
-          ? "bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.02)_0%,transparent_50%)]"
-          : "bg-[radial-gradient(circle_at_top,rgba(16,185,129,0.03)_0%,transparent_50%)]"
-      }`} />
-
       {/* Header / Top Navigation Bar */}
-      <header className={`border-b backdrop-blur-md sticky top-0 z-50 transition-all duration-300 font-sans ${
+      <header className={`border-b-2 sticky top-0 z-50 transition-all duration-300 font-sans ${
         theme === "light"
-          ? "border-zinc-300/80 bg-[#faf9f6]/90"
-          : "border-neutral-900 bg-[#0d0e12]/90"
+          ? "border-zinc-900 bg-[#faf9f6]"
+          : "border-neutral-800 bg-[#0d0e12]"
       }`}>
         <div className="max-w-7xl mx-auto px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-4">
           
           {/* Logo Brand / Hardware Plate */}
           <div className="flex items-center gap-3">
             <div className="relative">
-              <div className="absolute inset-0 bg-indigo-500 rounded-none blur-md opacity-10 animate-pulse" />
-              <div className={`w-9 h-9 border flex items-center justify-center relative rounded-none ${
-                theme === "light" ? "bg-white border-zinc-300" : "bg-neutral-950 border-neutral-800"
+              <div className={`w-10 h-10 border-2 flex items-center justify-center relative rounded-none ${
+                theme === "light" 
+                  ? "bg-white border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" 
+                  : "bg-neutral-950 border-neutral-800 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.5)]"
               }`}>
                 <Globe className={`w-4 h-4 text-indigo-500 ${loading ? 'animate-spin' : ''}`} style={!loading ? { animation: 'none' } : undefined} />
-                <span className="absolute top-0 left-0 text-[6px] font-mono text-zinc-400 p-0.5 leading-none">SYS</span>
+                <span className="absolute top-0 left-0 text-[6px] font-mono text-zinc-400 dark:text-neutral-500 p-0.5 leading-none">SYS</span>
               </div>
             </div>
             
@@ -235,7 +229,7 @@ export default function App() {
                 <h1 className={`text-sm font-black uppercase tracking-tight ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
                   World Channels
                 </h1>
-                <span className="text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 border border-emerald-500/20">
+                <span className="text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 border border-emerald-500/20 rounded-none">
                   Live
                 </span>
               </div>
@@ -251,31 +245,31 @@ export default function App() {
             {/* System Mode Switch (Theme Toggle) */}
             <button
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className={`px-2.5 py-2 border text-[10px] font-bold uppercase transition-all active:scale-98 cursor-pointer flex items-center gap-2 ${
+              className={`px-2.5 py-2 border-2 text-[10px] font-bold uppercase transition-all active:translate-y-0.5 cursor-pointer flex items-center gap-2 rounded-none ${
                 theme === "light"
-                  ? "bg-white border-zinc-300 text-zinc-800 hover:bg-zinc-50 hover:border-zinc-400"
-                  : "bg-neutral-950 border-neutral-800 text-neutral-400 hover:border-neutral-700 hover:text-neutral-200"
+                  ? "bg-white border-zinc-900 text-zinc-800 hover:bg-zinc-50 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]"
+                  : "bg-neutral-950 border-neutral-800 text-neutral-400 hover:border-neutral-700 hover:text-neutral-200 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.2)]"
               }`}
               title={theme === "light" ? "Switch to Dark Operations" : "Switch to Light Operations"}
             >
               {theme === "light" ? (
                 <>
                   <Moon className="w-3.5 h-3.5 text-indigo-600" />
-                  <span>SWITCH TO DARK MODE</span>
+                  <span>DARK MODE</span>
                 </>
               ) : (
                 <>
                   <Sun className="w-3.5 h-3.5 text-amber-500" />
-                  <span>SWITCH TO LIGHT MODE</span>
+                  <span>LIGHT MODE</span>
                 </>
               )}
             </button>
 
             {/* Signal Metrics Block */}
-            <div className={`flex items-center gap-3 px-3 py-2 border tracking-tight text-[11px] ${
+            <div className={`flex items-center gap-3 px-3 py-2 border-2 tracking-tight text-[11px] rounded-none ${
               theme === "light"
-                ? "bg-white border-zinc-300 text-zinc-600"
-                : "bg-neutral-950 border-neutral-800 text-neutral-400"
+                ? "bg-white border-zinc-900 text-zinc-600 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]"
+                : "bg-neutral-950 border-neutral-800 text-neutral-400 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.2)]"
             }`}>
               <div className="flex items-center gap-1.5">
                 <span className="font-bold">FEEDS: <span className={theme === "light" ? "text-zinc-900" : "text-neutral-100"}>{stats.total}</span></span>
@@ -284,9 +278,9 @@ export default function App() {
               <div className={`h-3 w-px ${theme === "light" ? "bg-zinc-200" : "bg-neutral-800"}`} />
               
               <div className="flex items-center gap-1.5">
-                <span className="relative flex h-1.5 w-1.5">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+                <span className="relative flex h-1.5 w-1.5 rounded-none">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-none bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-none h-1.5 w-1.5 bg-emerald-500" />
                 </span>
                 <span className="font-bold">LIVE: <span className="text-emerald-600 dark:text-emerald-400">{stats.online}</span></span>
               </div>
@@ -314,10 +308,10 @@ export default function App() {
       <main className="flex-grow max-w-7xl w-full mx-auto px-6 py-6 md:py-8 flex flex-col gap-6 z-10 font-sans">
         
         {/* Hardware Status & Telemetry Sync Warning */}
-        <div className={`p-3 border text-[11px] font-mono tracking-tight transition-all duration-150 ${
+        <div className={`p-3 border-2 text-[11px] font-mono tracking-tight transition-all duration-150 rounded-none ${
           theme === "light" 
-            ? "bg-amber-500/10 border-amber-500/30 text-amber-900" 
-            : "bg-amber-950/20 border-amber-900/40 text-amber-400"
+            ? "bg-amber-100 border-zinc-900 text-amber-950 shadow-[3px_3px_0px_0px_rgba(24,24,27,1)]" 
+            : "bg-[#1c140d] border-neutral-800 text-amber-400 shadow-[3px_3px_0px_0px_rgba(99,102,241,0.1)]"
         }`}>
           <div className="flex items-center gap-2.5">
             <Info className="w-3.5 h-3.5 flex-shrink-0 text-amber-500" />
@@ -331,14 +325,14 @@ export default function App() {
 
         {/* Connection Failure Display */}
         {error && (
-          <div className="bg-rose-500/5 border-2 border-rose-500/30 p-4 flex items-center justify-between gap-4 text-xs font-mono text-rose-600 dark:text-rose-400">
+          <div className="bg-rose-500/5 border-2 border-rose-500/30 p-4 flex items-center justify-between gap-4 text-xs font-mono text-rose-600 dark:text-rose-400 rounded-none">
             <div className="flex items-center gap-3">
               <CloudLightning className="w-4 h-4 text-rose-500" />
               <span className="font-bold uppercase">[LINK_FAILURE]: {error}</span>
             </div>
             <button
               onClick={fetchStreams}
-              className="bg-rose-500/10 hover:bg-rose-500/20 border border-rose-500/30 text-rose-600 dark:text-rose-400 px-3 py-2 text-[10px] font-bold uppercase transition-all active:scale-98"
+              className="bg-rose-500/10 hover:bg-rose-500/20 border-2 border-rose-500/30 text-rose-600 dark:text-rose-400 px-3 py-2 text-[10px] font-bold uppercase transition-all active:scale-98 rounded-none"
             >
               Retry Connection
             </button>
@@ -348,13 +342,13 @@ export default function App() {
         {loading && streams.length === 0 ? (
           <div className="flex-grow flex flex-col items-center justify-center py-28 text-center font-mono">
             <div className="relative mb-6">
-              <div className="w-12 h-12 border-2 border-indigo-500 border-r-transparent animate-spin" />
+              <div className="w-12 h-12 border-2 border-indigo-500 border-r-transparent animate-spin rounded-none" />
               <Globe className="w-5 h-5 text-indigo-500 absolute inset-0 m-auto" />
             </div>
             <h3 className={`text-xs font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
               Loading World Channels..
             </h3>
-            <p className={`text-[16px] mt-1.5 max-w-xs mx-auto uppercase tracking-wide leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
+            <p className={`text-[12px] mt-2 max-w-xs mx-auto uppercase tracking-wide leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
               Opening packages, establishing satellite links, and syncing channel statuses. Please wait while the system boots up.
             </p>
           </div>
@@ -376,18 +370,18 @@ export default function App() {
               
               {/* Left Side: Advanced Streaming Deck */}
               <div id="live-player-section" className="lg:col-span-8 flex flex-col gap-4 scroll-mt-24">
-                <div className="flex items-end justify-between pb-1.5 border-b border-zinc-200 dark:border-neutral-800">
+                <div className="flex items-end justify-between pb-1.5 border-b-2 border-zinc-900 dark:border-neutral-850">
                   <div className="flex items-center gap-2">
-                    <Tv className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-800" : "text-neutral-400"}`} />
+                    <Tv className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-850" : "text-neutral-400"}`} />
                     <h2 className={`text-xs font-black uppercase tracking-tight ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
                       Broadcast Monitoring Monitor
                     </h2>
                   </div>
                   {selectedChannel && (
-                    <div className={`text-[9px] font-mono font-bold px-2 py-0.5 border flex items-center gap-1.5 ${
-                      theme === "light" ? "bg-white border-zinc-300 text-zinc-700" : "bg-neutral-950 border-neutral-800 text-neutral-400"
+                    <div className={`text-[9px] font-mono font-bold px-2 py-0.5 border-2 rounded-none flex items-center gap-1.5 ${
+                      theme === "light" ? "bg-white border-zinc-900 text-zinc-700" : "bg-neutral-950 border-neutral-800 text-neutral-400"
                     }`}>
-                      <span className="w-1 h-1 bg-emerald-500 animate-pulse" />
+                      <span className="w-1 h-1 bg-emerald-500 animate-pulse rounded-none" />
                       <span className="uppercase tracking-wider">Live</span>
                     </div>
                   )}
@@ -417,15 +411,17 @@ export default function App() {
         )}
 
         {/* Feature Explanatory Block - System Diagnostic Overview */}
-        <section className={`grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 border-t pt-6 pb-4 font-mono ${
-          theme === "light" ? "border-zinc-300/80" : "border-neutral-900"
+        <section className={`grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 border-t-2 pt-6 pb-4 font-mono ${
+          theme === "light" ? "border-zinc-900" : "border-neutral-800"
         }`}>
           
-          <div className={`border p-5 flex flex-col gap-3 transition-all ${
-            theme === "light" ? "bg-white border-zinc-200" : "bg-neutral-950/40 border-neutral-900"
+          <div className={`border-2 p-5 flex flex-col gap-3 transition-all rounded-none ${
+            theme === "light" 
+              ? "bg-white border-zinc-900 shadow-[3px_3px_0px_0px_rgba(24,24,27,1)]" 
+              : "bg-neutral-950/40 border-neutral-800 shadow-[3px_3px_0px_0px_rgba(99,102,241,0.1)]"
           }`}>
             <div className="flex items-center gap-2.5">
-              <div className={`w-6 h-6 border flex items-center justify-center ${theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"}`}>
+              <div className={`w-6 h-6 border-2 flex items-center justify-center rounded-none ${theme === "light" ? "bg-zinc-100 border-zinc-900" : "bg-neutral-900 border-neutral-800"}`}>
                 <Zap className="w-3.5 h-3.5 text-indigo-500" />
               </div>
               <h4 className={`text-[11px] font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}>
@@ -437,11 +433,13 @@ export default function App() {
             </p>
           </div>
 
-          <div className={`border p-5 flex flex-col gap-3 transition-all ${
-            theme === "light" ? "bg-white border-zinc-200" : "bg-neutral-950/40 border-neutral-900"
+          <div className={`border-2 p-5 flex flex-col gap-3 transition-all rounded-none ${
+            theme === "light" 
+              ? "bg-white border-zinc-900 shadow-[3px_3px_0px_0px_rgba(24,24,27,1)]" 
+              : "bg-neutral-950/40 border-neutral-800 shadow-[3px_3px_0px_0px_rgba(99,102,241,0.1)]"
           }`}>
             <div className="flex items-center gap-2.5">
-              <div className={`w-6 h-6 border flex items-center justify-center ${theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"}`}>
+              <div className={`w-6 h-6 border-2 flex items-center justify-center rounded-none ${theme === "light" ? "bg-zinc-100 border-zinc-900" : "bg-neutral-900 border-neutral-800"}`}>
                 <Compass className="w-3.5 h-3.5 text-indigo-500" />
               </div>
               <h4 className={`text-[11px] font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}>
@@ -453,11 +451,13 @@ export default function App() {
             </p>
           </div>
 
-          <div className={`border p-5 flex flex-col gap-3 transition-all ${
-            theme === "light" ? "bg-white border-zinc-200" : "bg-neutral-950/40 border-neutral-900"
+          <div className={`border-2 p-5 flex flex-col gap-3 transition-all rounded-none ${
+            theme === "light" 
+              ? "bg-white border-zinc-900 shadow-[3px_3px_0px_0px_rgba(24,24,27,1)]" 
+              : "bg-neutral-950/40 border-neutral-800 shadow-[3px_3px_0px_0px_rgba(99,102,241,0.1)]"
           }`}>
             <div className="flex items-center gap-2.5">
-              <div className={`w-6 h-6 border flex items-center justify-center ${theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"}`}>
+              <div className={`w-6 h-6 border-2 flex items-center justify-center rounded-none ${theme === "light" ? "bg-zinc-100 border-zinc-900" : "bg-neutral-900 border-neutral-800"}`}>
                 <SlidersHorizontal className="w-3.5 h-3.5 text-indigo-500" />
               </div>
               <h4 className={`text-[11px] font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}>
@@ -471,13 +471,13 @@ export default function App() {
         </section>
         
         {/* Streaming Partners / Network Relay Routing Matrix */}
-        <section className={`mt-8 border-t pt-6 pb-8 font-mono ${
-          theme === "light" ? "border-zinc-300/80" : "border-neutral-900"
+        <section className={`mt-8 border-t-2 pt-6 pb-8 font-mono ${
+          theme === "light" ? "border-zinc-900" : "border-neutral-800"
         }`}>
           <div className="flex flex-col md:flex-row items-start justify-between gap-8">
             <div className="md:w-1/3">
               <h3 className={`text-xs font-black uppercase tracking-tight mb-2 ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
-                Featured: World Cup 2026 Broadcast Partners
+                Featured: Sports Broadcast Partners
               </h3>
               <p className={`text-[11px] font-sans leading-relaxed font-medium ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}`}>
                 Operational connections verified across tournament relays. Satellite streams link dynamically to upstream edge routes to handle priority sports delivery matrices.
@@ -486,126 +486,126 @@ export default function App() {
             
             <div className="flex-1 grid grid-cols-1 sm:grid-cols-3 gap-6 w-full text-[11px]">
               <div>
-                <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b ${
-                  theme === "light" ? "text-zinc-400 border-zinc-200" : "text-neutral-600 border-neutral-900"
+                <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b-2 ${
+                  theme === "light" ? "text-zinc-500 border-zinc-900" : "text-neutral-500 border-neutral-800"
                 }`}>
-                  Providers
+                  Soccer Providers
                 </h4>
                 <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>Antena Sports (Italy)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>Somoy TV (Bangladesh)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>CazeTV (Brazil)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>CT Sport (Czech)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>ColaTV (Premium Asia Feed)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>beIN SPORTS (France)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>Turkmenistan Sports (Turkmenistan)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>Setanta Sports (Georgia)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>TSN Sports (Canada)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>MTV3 (Finland)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>YLE2 TV (Finland)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>MonoMax TV (Thailand)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>DSports 2 HD (Argentina)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>IRIB TV3 (Iran)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>Telemundo Sports (Puerto Rico)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>TSports (Bangladesh)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-emerald-500 text-[9px] font-bold">●</span>
+                    <span className="text-emerald-500 text-[9px] font-bold">■</span>
                     <span>TYC Sports (Argentina)</span>
                   </li>
                 </ul>
               </div>
               
               <div>
-                <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b ${
-                  theme === "light" ? "text-zinc-400 border-zinc-200" : "text-neutral-600 border-neutral-900"
+                <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b-2 ${
+                  theme === "light" ? "text-zinc-500 border-zinc-900" : "text-neutral-500 border-neutral-800"
                 }`}>
                   European League Providers
                 </h4>
                 <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-indigo-500 text-[9px] font-bold">●</span>
+                    <span className="text-indigo-500 text-[9px] font-bold">■</span>
                     <span>Antena Sport (Italy)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-indigo-500 text-[9px] font-bold">●</span>
+                    <span className="text-indigo-500 text-[9px] font-bold">■</span>
                     <span>bEIN Sports Xtra (France)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-indigo-500 text-[9px] font-bold">●</span>
+                    <span className="text-indigo-500 text-[9px] font-bold">■</span>
                     <span>RTVE (La Liga Highlights)</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-indigo-500 text-[9px] font-bold">●</span>
+                    <span className="text-indigo-500 text-[9px] font-bold">■</span>
                     <span>L'Equipe TV (Ligue 1 & More)</span>
                   </li>
                 </ul>
               </div>
               
               <div>
-                <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b ${
-                  theme === "light" ? "text-zinc-400 border-zinc-200" : "text-neutral-600 border-neutral-900"
+                <h4 className={`text-[10px] font-bold uppercase tracking-wider mb-2.5 pb-1 border-b-2 ${
+                  theme === "light" ? "text-zinc-500 border-zinc-900" : "text-neutral-500 border-neutral-800"
                 }`}>
-                  National Basketball Association (NBA) Coverage
+                  Basketball Coverage
                 </h4>
                 <ul className={`space-y-1.5 font-semibold ${theme === "light" ? "text-zinc-700" : "text-neutral-300"}`}>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-amber-500 text-[9px] font-bold">●</span>
+                    <span className="text-amber-500 text-[9px] font-bold">■</span>
                     <span>The NBA Channel</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-amber-500 text-[9px] font-bold">●</span>
+                    <span className="text-amber-500 text-[9px] font-bold">■</span>
                     <span>Cola TV NBA Server 1</span>
                   </li>
                   <li className="flex items-center gap-1.5">
-                    <span className="text-amber-500 text-[9px] font-bold">●</span>
+                    <span className="text-amber-500 text-[9px] font-bold">■</span>
                     <span>Cola TV NBA Server 2</span>
                   </li>
                 </ul>
@@ -616,10 +616,10 @@ export default function App() {
       </main>
 
       {/* Footer */}
-      <footer className={`border-t py-4 text-xs z-10 relative transition-all font-mono tracking-tight ${
+      <footer className={`border-t-2 py-4 text-xs z-10 relative transition-all font-mono tracking-tight ${
         theme === "light"
-          ? "border-zinc-300/80 bg-[#faf9f6] text-zinc-600"
-          : "border-neutral-900 bg-[#0d0e12] text-neutral-500"
+          ? "border-zinc-900 bg-[#faf9f6] text-zinc-600"
+          : "border-neutral-800 bg-[#0d0e12] text-neutral-500"
       }`}>
         <div className="max-w-7xl mx-auto px-6 flex flex-col sm:flex-row items-center justify-between gap-4">
           
@@ -630,7 +630,7 @@ export default function App() {
             </span>
             <span className="opacity-30 hidden sm:inline">|</span>
             <span>&copy; {new Date().getFullYear()}</span>
-            <span>By Yohan Chang [MHS 2029]. We ensure that all channels are legitimate and legal. Any channels conflicting with copyright are taken down.</span>
+            <span>By Y. Chang [MHS 2029]. Licensed stream nodes protected.</span>
           </div>
 
           {/* Right: Technical Diagnostic Metrics */}
@@ -640,14 +640,14 @@ export default function App() {
               <span className={theme === "light" ? "text-zinc-800" : "text-neutral-300"}>Live</span>
             </div>
             
-            <div className={`px-2 py-0.5 border flex items-center gap-2 ${
+            <div className={`px-2 py-0.5 border-2 flex items-center gap-2 rounded-none ${
               theme === "light" 
-                ? "bg-white border-zinc-300 text-emerald-700" 
-                : "bg-neutral-950 border-neutral-800 text-emerald-400"
+                ? "bg-white border-zinc-900 text-emerald-700 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" 
+                : "bg-neutral-950 border-neutral-800 text-emerald-400 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.2)]"
             }`}>
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
+              <span className="relative flex h-1.5 w-1.5 rounded-none">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-none bg-emerald-400 opacity-75" />
+                <span className="relative inline-flex rounded-none h-1.5 w-1.5 bg-emerald-500" />
               </span>
               <span className="text-[10px] uppercase tracking-wider font-bold">Secure Browser</span>
             </div>
