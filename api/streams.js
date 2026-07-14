@@ -1741,6 +1741,39 @@ const staticStreams = [
     lon: -74.0060,
   },
   {
+    id: "country-us-disneyjr",
+    name: "Disney Jr. US",
+    url: "https://s2.bufaloweb.com/bufalo21/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/48/DisneyJr3Dver.png/revision/latest?cb=20240601030018",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-disneyjr",
+    name: "Disney Jr. US (Server 2)",
+    url: "https://s2.bufaloweb.com/bufalo19/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/48/DisneyJr3Dver.png/revision/latest?cb=20240601030018",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-natgeo",
+    name: "Nat Geo (US)",
+    url: "https://s2.bufaloweb.com/bufalo29/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://www.greyboxcreative.com/wp-content/uploads/2020/01/National-Geographic-logo.jpg",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
     id: "sports-arenasport1",
     name: "Arena Sport 1 Premium",
     url: "https://nl1.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
@@ -1982,39 +2015,6 @@ const staticStreams = [
   },
 
   // --- COUNTRY PUBLIC TV CHANNELS (Category: country, Country: US, UK, AU, CA, etc.) ---
-  {
-    id: "country-us-disneyjr",
-    name: "Disney Jr. US",
-    url: "https://s2.bufaloweb.com/bufalo21/index.m3u8",
-    category: "country",
-    country: "US",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/4/48/DisneyJr3Dver.png/revision/latest?cb=20240601030018",
-    status: "online",
-    lat: 38.9072, // Washington D.C., US
-    lon: -77.0369,
-  },
-  {
-    id: "country-us-disneyjr",
-    name: "Disney Jr. US (Server 2)",
-    url: "https://s2.bufaloweb.com/bufalo19/index.m3u8",
-    category: "country",
-    country: "US",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/4/48/DisneyJr3Dver.png/revision/latest?cb=20240601030018",
-    status: "online",
-    lat: 38.9072, // Washington D.C., US
-    lon: -77.0369,
-  },
-  {
-    id: "country-us-natgeo",
-    name: "Nat Geo (US)",
-    url: "https://s2.bufaloweb.com/bufalo29/index.m3u8",
-    category: "country",
-    country: "US",
-    logo: "https://www.greyboxcreative.com/wp-content/uploads/2020/01/National-Geographic-logo.jpg",
-    status: "online",
-    lat: 38.9072, // Washington D.C., US
-    lon: -77.0369,
-  },
   {
     id: "country-us-pbs",
     name: "PBS Kids US",
