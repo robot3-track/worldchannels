@@ -12,6 +12,11 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 
 ![Livestream Center](Screenshot%202026-06-30%20201430.png)
 
+## Kids Channels
+*  **Nickelodeon US**: Official Nickeloden Kids Channel 24/7
+*  **PBS Kids**: Official PBS Kids Channel 24/7
+*  **Disney Jr**: Official Disney Jr. Channel 24/7
+
 ## 2026 World Cup Broadcasters
 
 Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. Key partners include:

@@ -1792,7 +1792,7 @@ const staticStreams = [
     category: "world cup",
     country: "RS",
     logo: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Arena_Sport_1_Premium_%282021%2C_short%29.svg/revision/latest?cb=20221111214150",
-    status: "online",
+    status: "offline",
     lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
     lon: 20.4573,
   },
@@ -1804,7 +1804,7 @@ const staticStreams = [
     country: "RS",
     category: "world cup",
     logo: "https://static.wikia.nocookie.net/logopedia/images/e/e0/Arena_Sport_1_Premium_%282021%2C_short%29.svg/revision/latest?cb=20221111214150",
-    status: "online",
+    status: "offline",
     lat: 44.7872, // Belgrade, Serbia (Arena Sport HQ)
     lon: 20.4573,
   },
