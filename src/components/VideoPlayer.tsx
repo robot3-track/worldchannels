@@ -60,7 +60,6 @@ export default function VideoPlayer({
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const failureTimerRef = useRef<any | null>(null);
   const controlsTimeoutRef = useRef<any | null>(null);
-  // Store the HLS instance type loosely since we import it dynamically now
   const hlsRef = useRef<any | null>(null);
   
   // Recording Core References
@@ -84,18 +83,15 @@ export default function VideoPlayer({
 
   // Recording State Managers
   const [isRecording, setIsRecording] = useState(false);
-  const [recordDuration, setRecordDuration] = useState<number>(30); // defaults to 30 seconds
+  const [recordDuration, setRecordDuration] = useState<number>(30); 
   const [timeLeft, setTimeLeft] = useState<number>(0);
   const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
   const [showRecordPanel, setShowRecordPanel] = useState(false);
 
-  // Included URL dependency to ensure backup feeds correctly switch streams
   const strategy = useMemo(() => getPlayerStrategy(channel), [channel?.id, channel?.url]);
 
   const handleMouseMove = () => {
-    // Optimization: Only call state update if controls are currently hidden to prevent React thrashing
     if (!showControls) setShowControls(true);
-    
     if (controlsTimeoutRef.current) clearTimeout(controlsTimeoutRef.current);
 
     if (isFullscreen) {
@@ -122,10 +118,7 @@ export default function VideoPlayer({
 
     if (strategy.cleanUrl.includes(".m3u8") || strategy.cleanUrl.includes("m3u8")) {
       try {
-        // FAST INITIAL LOAD FIX: Dynamically import HLS logic only when a raw stream is executed.
-        // Prevents the main application bundle from blocking on mount.
         const Hls = (await import("hls.js")).default;
-        
         if (Hls.isSupported()) {
           const hls = new Hls({
             xhrSetup: (xhr) => {
@@ -163,7 +156,6 @@ export default function VideoPlayer({
     }
   };
 
-  // RECORDING IMPLEMENTATION SUITE
   const startRecording = () => {
     const video = videoRef.current;
     if (!video) return;
@@ -338,7 +330,6 @@ export default function VideoPlayer({
       if (recordingTimeoutRef.current) clearTimeout(recordingTimeoutRef.current);
       if (countdownIntervalRef.current) clearInterval(countdownIntervalRef.current);
     };
-  // Ensure strategy.cleanUrl is attached here so it re-mounts when a backup is triggered
   }, [channel?.id, strategy.cleanUrl, strategy.useNativeVideo]);
 
   const monitorStreamHealthState = (errorMessage: string, criticalLevel = false) => {
@@ -383,24 +374,31 @@ export default function VideoPlayer({
 
   if (!channel) {
     return (
-      <div className={`w-full aspect-video border rounded-2xl flex flex-col items-center justify-center p-6 text-center transition-all ${
-        theme === "light" ? "bg-slate-50 border-slate-200 text-slate-500" : "bg-slate-950 border-slate-800 text-slate-400"
+      <div className={`w-full aspect-video border rounded-none flex flex-col items-center justify-center p-6 text-center transition-all ${
+        theme === "light" 
+          ? "bg-[#faf9f6] border-zinc-300/80 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)] text-zinc-500" 
+          : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.2)] text-neutral-400"
       }`}>
-        <Tv className="w-10 h-10 text-slate-400 mb-4 animate-pulse" />
-        <p className="text-sm font-semibold">Broadcast Feed Receiver Idle</p>
-        <p className="text-xs text-slate-500 mt-1 max-w-xs">Select a feed channel on the navigation index array.</p>
+        <Tv className="w-10 h-10 text-zinc-400 mb-4 animate-pulse" />
+        <p className="text-xs font-black tracking-tight uppercase font-mono">Broadcast Receiver Idle</p>
+        <p className="text-[10px] text-zinc-500 dark:text-neutral-500 mt-1 max-w-xs font-mono">Select a feed channel on the navigation index array.</p>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col gap-4">
+      {/* Video Box Container */}
       <div 
         ref={containerRef}
         onMouseMove={handleMouseMove}
-        className={`w-full flex flex-col bg-black relative shadow-lg border overflow-hidden transition-all duration-300 group ${
+        className={`w-full flex flex-col bg-black relative border rounded-none overflow-hidden transition-all duration-300 group ${
           isFullscreen ? "h-screen w-screen" : "aspect-video"
-        } ${theme === "light" ? "border-slate-200" : "border-slate-850"}`}
+        } ${
+          theme === "light" 
+            ? "border-zinc-900 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]" 
+            : "border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.2)]"
+        }`}
         style={{ cursor: showControls ? "default" : "none" }}
       >
         <div className="flex-1 w-full h-full relative overflow-hidden">
@@ -434,27 +432,31 @@ export default function VideoPlayer({
           )}
 
           {isLoading && !playbackError && (
-            <div className="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center p-6 text-center z-40 transition-opacity duration-300">
-              <RefreshCw className="w-8 h-8 text-emerald-400 animate-spin mb-4" />
-              <h3 className="text-sm font-semibold text-slate-200 tracking-wide">
+            <div className="absolute inset-0 bg-[#0d0e12] flex flex-col items-center justify-center p-6 text-center z-40 transition-opacity duration-300">
+              <RefreshCw className="w-8 h-8 text-indigo-400 animate-spin mb-4" />
+              <h3 className="text-xs font-black tracking-wide uppercase font-mono text-neutral-200">
                 Connecting To Live Feed
               </h3>
-              <p className="text-[11px] text-slate-400 mt-2 max-w-xs leading-relaxed font-sans px-4">
+              <p className="text-[10px] text-neutral-500 mt-2 max-w-xs leading-relaxed font-mono px-4">
                 Establishing secure stream link... Please wait.
               </p>
             </div>
           )}
 
           {playbackError && strategy.useNativeVideo && (
-            <div className="absolute inset-0 bg-slate-950/95 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-50">
+            <div className="absolute inset-0 bg-[#0d0e12]/95 backdrop-blur-sm flex flex-col items-center justify-center p-6 text-center z-50">
               <AlertTriangle className="w-8 h-8 text-rose-500 mb-2" />
-              <h3 className="text-sm font-semibold text-slate-100">Signal Disrupted</h3>
-              <p className="text-xs text-slate-400 mt-1 max-w-xs">{playbackError}</p>
+              <h3 className="text-xs font-black tracking-wide uppercase font-mono text-neutral-100">Signal Disrupted</h3>
+              <p className="text-[10px] text-neutral-500 font-mono mt-1 max-w-xs">{playbackError}</p>
               
               <div className="flex items-center gap-3 mt-5">
                 <button
                   onClick={handleReloadStream}
-                  className="flex items-center gap-2 px-4 py-2 text-xs font-semibold bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 rounded-lg transition-all"
+                  className={`flex items-center gap-2 px-4 py-2 text-xs font-bold font-mono uppercase border rounded-none transition-all ${
+                    theme === "light"
+                      ? "bg-white border-zinc-900 text-zinc-900 hover:bg-zinc-50"
+                      : "bg-neutral-950 border-neutral-800 text-neutral-200 hover:border-neutral-700"
+                  }`}
                 >
                   <RefreshCw className={`w-3.5 h-3.5 ${isReloading ? "animate-spin" : ""}`} />
                   Retry Connection
@@ -465,8 +467,8 @@ export default function VideoPlayer({
 
           {/* RECORDING RUNTIME HUD OVERLAY */}
           {isRecording && (
-            <div className="absolute top-4 left-4 z-40 flex items-center gap-2 bg-rose-600 border border-rose-500 shadow-lg px-3 py-1.5 rounded-lg animate-pulse text-white font-medium text-xs">
-              <div className="w-2 h-2 rounded-full bg-white animate-ping" />
+            <div className="absolute top-4 left-4 z-40 flex items-center gap-2 bg-rose-600 border border-rose-500 px-3 py-1.5 rounded-none animate-pulse text-white font-mono text-[10px] font-bold uppercase tracking-wider">
+              <div className="w-2 h-2 rounded-none bg-white animate-ping" />
               <span>REC {timeLeft}s</span>
             </div>
           )}
@@ -475,22 +477,28 @@ export default function VideoPlayer({
         {strategy.useNativeVideo && (
           <div className={`w-full p-3 border-t flex items-center justify-between gap-4 select-none transition-all duration-300 ${
             isFullscreen 
-              ? `absolute bottom-0 left-0 right-0 bg-slate-950/90 border-slate-800 text-white backdrop-blur-sm transform ${
+              ? `absolute bottom-0 left-0 right-0 bg-[#0d0e12]/95 border-neutral-800 text-white backdrop-blur-sm transform ${
                   showControls ? "translate-y-0 opacity-100" : "translate-y-full opacity-0"
                 }` 
               : theme === "light" 
-                ? "bg-white border-slate-200" 
-                : "bg-slate-900 border-slate-800"
+                ? "bg-white border-zinc-200" 
+                : "bg-neutral-950 border-neutral-900"
           } z-40`}>
-            <div className="flex items-center gap-2">
-              <button onClick={togglePlay} className="p-2 rounded-lg border">{isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}</button>
-              <button onClick={toggleMute} className="p-2 rounded-lg border">{isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}</button>
-              <button onClick={handleReloadStream} className="p-2 rounded-lg border"><RefreshCw className="w-4 h-4" /></button>
+            <div className="flex items-center gap-1.5">
+              <button onClick={togglePlay} className={`p-2 rounded-none border transition-all ${theme === "light" ? "border-zinc-200 hover:border-zinc-400 bg-white" : "border-neutral-900 hover:border-neutral-700 bg-neutral-950"}`}>{isPlaying ? <Pause className="w-4 h-4 fill-current" /> : <Play className="w-4 h-4 fill-current" />}</button>
+              <button onClick={toggleMute} className={`p-2 rounded-none border transition-all ${theme === "light" ? "border-zinc-200 hover:border-zinc-400 bg-white" : "border-neutral-900 hover:border-neutral-700 bg-neutral-950"}`}>{isMuted ? <VolumeX className="w-4 h-4" /> : <Volume2 className="w-4 h-4" />}</button>
+              <button onClick={handleReloadStream} className={`p-2 rounded-none border transition-all ${theme === "light" ? "border-zinc-200 hover:border-zinc-400 bg-white" : "border-neutral-900 hover:border-neutral-700 bg-neutral-950"}`}>{<RefreshCw className="w-4 h-4" />}</button>
               
-              {/* TRIGGER CONSOLE BUTTON FOR DVR SETTINGS */}
+              {/* DVR SETUP TRIGGER BUTTON */}
               <button 
                 onClick={() => setShowRecordPanel(!showRecordPanel)} 
-                className={`p-2 rounded-lg border transition-all ${showRecordPanel || isRecording ? "bg-rose-500/20 border-rose-500 text-rose-500" : ""}`}
+                className={`p-2 rounded-none border transition-all ${
+                  showRecordPanel || isRecording 
+                    ? "bg-rose-600 border-rose-600 text-white" 
+                    : theme === "light" 
+                    ? "border-zinc-200 hover:border-zinc-400 bg-white" 
+                    : "border-neutral-900 hover:border-neutral-700 bg-neutral-950 text-neutral-400"
+                }`}
                 title="DVR Recording Setup"
               >
                 <Video className="w-4 h-4" />
@@ -498,7 +506,7 @@ export default function VideoPlayer({
             </div>
 
             <div className="flex items-center gap-2 flex-1 max-w-xs">
-              <span className="text-[10px] font-bold tracking-wider text-slate-400 font-sans uppercase">VOL</span>
+              <span className="text-[10px] font-black tracking-widest text-zinc-400 dark:text-neutral-500 font-mono uppercase">VOL</span>
               <input
                 type="range"
                 min="0"
@@ -506,27 +514,29 @@ export default function VideoPlayer({
                 step="0.05"
                 value={isMuted ? 0 : volume}
                 onChange={handleVolumeChange}
-                className="w-full h-1 bg-slate-200 dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-500"
+                className="w-full h-1 bg-zinc-200 dark:bg-neutral-800 rounded-none appearance-none cursor-pointer accent-indigo-500"
               />
             </div>
 
             <div>
-              <button onClick={toggleFullscreen} className="p-2 rounded-lg border">{isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}</button>
+              <button onClick={toggleFullscreen} className={`p-2 rounded-none border transition-all ${theme === "light" ? "border-zinc-200 hover:border-zinc-400 bg-white" : "border-neutral-900 hover:border-neutral-700 bg-neutral-950"}`}>{isFullscreen ? <Minimize className="w-4 h-4" /> : <Maximize className="w-4 h-4" />}</button>
             </div>
           </div>
         )}
       </div>
 
-      {/* EXPANDABLE STREAM RECORDING INTERFACE PANEL */}
+      {/* EXPANDABLE DVR STREAM RECORDING INTERFACE PANEL */}
       {showRecordPanel && strategy.useNativeVideo && (
-        <div className={`border rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
-          theme === "light" ? "bg-slate-50 border-slate-200 text-slate-700" : "bg-slate-900 border-slate-850 text-slate-300"
+        <div className={`border rounded-none p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
+          theme === "light" 
+            ? "bg-[#faf9f6] border-zinc-900 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)] text-zinc-700" 
+            : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.2)] text-neutral-300"
         }`}>
           <div className="flex items-center gap-3">
-            <Clock className="w-5 h-5 text-slate-400" />
+            <Clock className="w-5 h-5 text-zinc-400 dark:text-neutral-500" />
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400">DVR Stream Capture</h4>
-              <p className="text-xs text-slate-500 mt-0.5">Record a snippet directly onto your local file system storage context.</p>
+              <h4 className="text-xs font-black uppercase tracking-wider font-mono text-zinc-500 dark:text-neutral-400">DVR Stream Capture</h4>
+              <p className="text-[10px] text-zinc-400 dark:text-neutral-600 font-mono mt-0.5">Record a snippet directly onto your local file system storage context.</p>
             </div>
           </div>
 
@@ -536,8 +546,8 @@ export default function VideoPlayer({
                 <select 
                   value={recordDuration} 
                   onChange={(e) => { setRecordDuration(Number(e.target.value)); setDownloadUrl(null); }}
-                  className={`text-xs p-2 rounded-lg border focus:outline-none ${
-                    theme === "light" ? "bg-white border-slate-200 text-slate-800" : "bg-slate-950 border-slate-800 text-slate-100"
+                  className={`text-[10px] font-bold font-mono uppercase p-2 rounded-none border focus:outline-none cursor-pointer ${
+                    theme === "light" ? "bg-white border-zinc-200 text-zinc-800" : "bg-neutral-950 border-neutral-900 text-neutral-100"
                   }`}
                 >
                   <option value={10}>10 Seconds</option>
@@ -549,7 +559,7 @@ export default function VideoPlayer({
                 <button
                   onClick={startRecording}
                   disabled={!isPlaying}
-                  className="flex items-center gap-2 text-xs font-semibold px-4 py-2 bg-rose-600 hover:bg-rose-500 disabled:bg-slate-400 text-white rounded-lg transition-all shadow-xs"
+                  className="flex items-center gap-2 text-[10px] font-bold font-mono uppercase tracking-wider px-4 py-2 bg-rose-600 hover:bg-rose-500 disabled:bg-zinc-400 text-white rounded-none transition-all shadow-none"
                 >
                   <Video className="w-3.5 h-3.5" />
                   Capture Sequence
@@ -558,7 +568,7 @@ export default function VideoPlayer({
             ) : (
               <button
                 onClick={stopRecording}
-                className="flex items-center gap-2 text-xs font-semibold px-4 py-2 bg-slate-800 hover:bg-slate-700 text-white border border-slate-700 rounded-lg transition-all"
+                className="flex items-center gap-2 text-[10px] font-bold font-mono uppercase tracking-wider px-4 py-2 bg-neutral-900 border border-neutral-800 hover:border-neutral-700 text-white rounded-none transition-all"
               >
                 <Square className="w-3.5 h-3.5 fill-current text-rose-500" />
                 Halt Recording ({timeLeft}s left)
@@ -569,7 +579,7 @@ export default function VideoPlayer({
               <a
                 href={downloadUrl}
                 download={`${channel.name.replace(/\s+/g, "_")}_Recording.webm`}
-                className="flex items-center gap-2 text-xs font-semibold px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-all shadow-xs animate-bounce"
+                className="flex items-center gap-2 text-[10px] font-bold font-mono uppercase tracking-wider px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-none transition-all animate-bounce"
               >
                 <Download className="w-3.5 h-3.5" />
                 Download Video File
@@ -579,22 +589,27 @@ export default function VideoPlayer({
         </div>
       )}
 
-      <div className={`border rounded-xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
-        theme === "light" ? "bg-slate-50 border-slate-200" : "bg-slate-900 border-slate-850"
+      {/* METADATA BROADCAST STAT CARD */}
+      <div className={`border rounded-none p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
+        theme === "light" 
+          ? "bg-[#faf9f6] border-zinc-300/80 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]" 
+          : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.2)]"
       }`}>
         <div className="flex items-start gap-3">
-          <div className={`w-12 h-12 rounded-lg border flex items-center justify-center flex-shrink-0 shadow-sm ${
-            theme === "light" ? "bg-white border-slate-200" : "bg-slate-950 border-slate-800"
+          <div className={`w-12 h-12 rounded-none border flex items-center justify-center flex-shrink-0 shadow-none ${
+            theme === "light" ? "bg-white border-zinc-200" : "bg-neutral-950 border-neutral-900"
           }`}>
             {channel.logo ? (
               <img src={channel.logo} alt={channel.name} className="w-full h-full object-cover" referrerPolicy="no-referrer" />
             ) : (
-              <Tv className="w-5 h-5 text-slate-400" />
+              <Tv className="w-5 h-5 text-zinc-400" />
             )}
           </div>
           <div>
-            <h3 className={`text-sm font-semibold ${theme === "light" ? "text-slate-800" : "text-slate-100"}`}>{channel.name}</h3>
-            <p className="text-xs text-slate-400 mt-0.5">{channel.category} • {channel.country}</p>
+            <h3 className={`text-xs font-black font-mono uppercase ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>{channel.name}</h3>
+            <p className="text-[10px] font-medium font-mono text-zinc-400 dark:text-neutral-500 mt-0.5 uppercase tracking-wide">
+              {channel.category} <span className="text-zinc-300 dark:text-neutral-800">//</span> {channel.country}
+            </p>
           </div>
         </div>
       </div>
