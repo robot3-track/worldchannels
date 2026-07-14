@@ -17,8 +17,12 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. Key partners include:
 
 *   **Antena Sports**: Official Broadcaster for Italy, providing HD coverage of all tournament matches and match analysis.
+*   **Bein Sports 1-3 France**: Official Broadcaster for France, providing HD coverage of all 104 matches.
+*   **Bein Sports Iran**: Official Broadcaster for Iran and Middleast region
+*   **Bein Sports Turkeye**: Official Broadcaster for Turkeye
 *   **Somoy TV Bangladesh**: Official Broadcaster for Bangladesh.
 *   **TYC Sports Argentina**: Official Broadcaster for Argentina.
+*   **Qazaqstan Sport**: Official Broadcaster for Kazakhstan
 *   **Telemundo Peurto Rico**: Official Broadcaster for Peurto Rico.
 *   **TSports Bangladesh**: Another Official Broadcaster for Bangladesh
 *   **DDSports India** Official Broadcaster for India.

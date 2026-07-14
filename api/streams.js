@@ -296,7 +296,7 @@ const staticStreams = [
   },
   {
     id: "sports-bein-fr",
-    name: "Bein Sports France",
+    name: "Bein Sports 1 France",
     url: "https://ua102.online24.pm:8443/1101/video.m3u8?token=350B326FB34F4B8",
     category: "sports",
     category: "world cup",
@@ -308,7 +308,7 @@ const staticStreams = [
   },
   {
     id: "sports-bein-frbackup",
-    name: "Bein Sports France (Backup)",
+    name: "Bein Sports 1 France (Server 2)",
     url: "https://biostartvworld.pages.dev/api/bein-sports.m3u8?key=aHR0cHM6Ly8xbnlhbGVyLnN0cmVhbWhvc3RpbmdjZG4udG9wL3N0cmVhbS8yMy9pbmRleC5tM3U4",
     category: "sports",
     category: "world cup",
@@ -392,7 +392,7 @@ const staticStreams = [
   },
   {
     id: "sports-wc-26",
-    name: "Caze TV Low Quality",
+    name: "Caze TV High Quality",
     url: "https://biostartvworld.pages.dev/api/fifa-world-cup-2026.m3u8?key=aHR0cHM6Ly9kZnI4MHF6NDM1Y3JjLmNsb3VkZnJvbnQubmV0L01OT1AvQW1hZ2kvQ2F6ZS9DYXplX1RWX0JSLzEwODBwLXZ0dC9pbmRleC5tM3U4",
     category: "sports",
     category: "world cup",
@@ -437,6 +437,42 @@ const staticStreams = [
     status: "online",
     lat: 48.1351, // Munich, Germany
     lon: 11.5820,
+  },
+  {
+    id: "sports-fussball-tvbackup",
+    name: "Fussball.tv Germany Server 2",
+    url: "https://cp11.adabmedia.com/hls2/rasf1.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "DE",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw9VZ8bEqurIwz9f7lT5x_qoGTG1ARebF-BHwjFua8Pw&s=10",
+    status: "online",
+    lat: 48.1351, // Munich, Germany
+    lon: 11.5820,
+  },
+  {
+    id: "sports-bein-2fr",
+    name: "Bein Sports 2 France",
+    url: "https://ua102.online24.pm:8443/1102/video.m3u8?token=350B326FB34F4B8",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
+    id: "sports-bein-3fr",
+    name: "Bein Sports 3 France",
+    url: "https://ua102.online24.pm:8443/1103/video.m3u8?token=350B326FB34F4B8",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
   },
   {
     id: "sports-bein-iran",
@@ -557,6 +593,17 @@ const staticStreams = [
     status: "online",
     lat: 38.9697, // Ashgabat, Turkmenistan
     lon: 58.3794,
+  },
+  {
+    id: "sports-bein-4fr",
+    name: "Bein Sports 4 France",
+    url: "https://ua102.online24.pm:8443/1104/video.m3u8?token=350B326FB34F4B8",
+    category: "sports",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
   },
   {
     id: "sports-tw-sport",
