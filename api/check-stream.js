@@ -39,14 +39,21 @@ export default async function handler(request, response) {
         }
 
         const contentType = (res.headers['content-type'] || '').toLowerCase();
+        const contentLength = parseInt(res.headers['content-length'] || '-1', 10);
 
-        // 2. Reject JSON API Errors (Common for expired IPTV accounts)
+        // 2. Reject empty bodies (Common for dead or placeholder links)
+        if (contentLength === 0) {
+          req.destroy();
+          return resolve(false);
+        }
+
+        // 3. Reject JSON API Errors (Common for expired IPTV accounts)
         if (contentType.includes('application/json')) {
           req.destroy();
           return resolve(false);
         }
 
-        // 3. Handle HTML pages (Embeds vs. Error Pages)
+        // 4. Handle HTML pages (Embeds vs. Error Pages)
         if (contentType.includes('text/html')) {
           if (hasMediaExtension) {
             // It asked for a media file but got a webpage. This is a dead link/error page.
@@ -59,27 +66,39 @@ export default async function handler(request, response) {
           }
         }
 
-        // 4. Handle Binary Video Streams (.ts, .mp4)
+        // 5. Handle Binary Video Streams (.ts, .mp4)
         // These won't have #EXTM3U text inside them, so if the server returns this type, it's online.
         if (contentType.includes('video/') || contentType.includes('application/octet-stream')) {
           req.destroy();
           return resolve(true);
         }
 
-        // 5. Handle M3U/M3U8 Playlists (application/x-mpegurl, audio/mpegurl, text/plain)
-        // We must verify the actual text payload to ensure it's not a disguised empty file.
+        // 6. Handle M3U/M3U8 Playlists (application/x-mpegurl, audio/mpegurl, text/plain)
+        // Read data streams systematically to ensure valid structure
         let rawData = '';
+        let resolved = false;
+
         res.on('data', (chunk) => {
+          if (resolved) return;
           rawData += chunk.toString('utf8');
           
-          if (rawData.length >= 512) {
+          // Verify if we have a valid M3U8 structure block
+          const hasM3UTag = rawData.includes('#EXTM3U') || rawData.includes('#EXTINF');
+          
+          if (hasM3UTag) {
+            resolved = true;
             req.destroy();
-            const isValidPlaylist = rawData.includes('#EXTM3U') || rawData.includes('#EXTINF');
-            resolve(isValidPlaylist);
+            resolve(true);
+          } else if (rawData.length >= 1024) {
+            // If we've read 1KB of data and still don't have M3U tags, it's a false playlist
+            resolved = true;
+            req.destroy();
+            resolve(false);
           }
         });
 
         res.on('end', () => {
+          if (resolved) return;
           const isValidPlaylist = rawData.includes('#EXTM3U') || rawData.includes('#EXTINF');
           resolve(isValidPlaylist);
         });
