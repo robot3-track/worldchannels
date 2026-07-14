@@ -583,6 +583,18 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
+    id: "sports-winsport-plus",
+    name: "Winsport Plus (Colombia)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/126.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "CO",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Win_Sports%2B_logo.svg/3840px-Win_Sports%2B_logo.svg.png",
+    status: "online",
+    lat: 4.5709, // Colombia
+    lon: -74.2973, 
+  },
+  {
     id: "sports-turkmenistan",
     name: "Turkmenistan Sports",
     url: "https://alpha.tv.online.tm/legacyhls/ch004_720/index.m3u8",
@@ -1218,18 +1230,6 @@ const staticStreams = [
     status: "online",
     lat: 25.826725, // Florida, US
     lon: -80.314954, 
-  },
-  {
-    id: "sports-winsport-plus",
-    name: "Winsport Plus (Colombia)",
-    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/126.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "CO",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Win_Sports%2B_logo.svg/3840px-Win_Sports%2B_logo.svg.png",
-    status: "online",
-    lat: 4.5709, // Colombia
-    lon: -74.2973, 
   },
   {
     id: "sports-eurosport-1",
