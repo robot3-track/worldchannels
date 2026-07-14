@@ -355,30 +355,6 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
-    id: "sports-somoy-tv",
-    name: "Somoy TV (Bangladesh)",
-    url: "https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "BD",
-    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/SOMOY_TV_Logo.svg/500px-SOMOY_TV_Logo.svg.png",
-    status: "online",
-    lat: 23.6850, // Dhaka, Bangladesh
-    lon: 90.3563,
-  },
-  {
-    id: "sports-mono-max1",
-    name: "MonoMax TV (Thailand)",
-    url: "https://love.jco5sjujta.workers.dev:443/lx-origin/th-monomax01_720/chunks.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "TH",
-    logo: "https://static.wikia.nocookie.net/logopedia/images/3/35/MonomaxSportsTV-logo.png/revision/latest?cb=20260611164039",
-    status: "offline",
-    lat: 15.8700, // Thailand
-    lon: 100.9925,
-  },
-  {
     id: "sports-dsports-2",
     name: "DSports 2 HD (Argentina)",
     url: "https://s2.bufaloweb.com/bufalo9/index.m3u8",
@@ -427,6 +403,66 @@ const staticStreams = [
     lon: 24.9384,
   },
   {
+    id: "sports-dazn-spain",
+    name: "DAZN Spain",
+    url: "https://pub-f2987c4fc9d2450191dfee2ee8dc9f51.r2.dev/sp/index.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "ES",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/0/09/DAZN_LOGO.png",
+    status: "online",
+    lat: 40.4637, // Spain
+    lon: -3.7492,
+  },
+  {
+    id:"sports-itv-uk",
+    name: "ITV UK",
+    url: "https://andro.evrenesoglu57.click/checklist/androstreamliveexn4.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "UK",
+    logo: "https://upload.wikimedia.org/wikipedia/en/0/0b/ITV_plc_2025_logo.svg",
+    status: "online",
+    lat: 51.5074, // London, UK (EuroNews HQ)
+    lon: -0.1278,
+  },
+  {
+    id:"sports-mashun-sports",
+    name: "Mashun Sports",
+    url: "https://andro.226503.xyz/checklist/androstreamlivebs1.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "BD",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT67eUWpdx84zCtzVQJQ4XlpJDZZYIco3gAgRn8ye0L1A&s",
+    status: "online",
+    lat: 23.6850, // Dhaka, Bangladesh
+    lon: 90.3563,
+  },
+  {
+    id: "sports-persiana-sports",
+    name: "Persiana Sports Iran",
+    url: "https://edge22.776740.ir.cdn.ir/hls2/persiana.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGKhHOZXco9N2WZOzCDhYfwOjZ8bjF3j255oe8SaCAxGHEDUgFRGzglC-4&s=10",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
+    id: "sports-persiana-sports2",
+    name: "Persiana Sports Iran (Server 2)",
+    url: "https://cp11.adabmedia.com/hls2/persiana.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGKhHOZXco9N2WZOzCDhYfwOjZ8bjF3j255oe8SaCAxGHEDUgFRGzglC-4&s=10",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
     id: "sports-fussball-tv",
     name: "Fussball.tv Germany",
     url: "https://edge22.776740.ir.cdn.ir/hls2/rasf1.m3u8",
@@ -449,6 +485,18 @@ const staticStreams = [
     status: "online",
     lat: 48.1351, // Munich, Germany
     lon: 11.5820,
+  },
+  {
+    id: "sports-syria",
+    name: "Syria Sports",
+    url: "https://pub-f2987c4fc9d2450191dfee2ee8dc9f51.r2.dev/en/index.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "SY",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYUuBEtXlnSF3eSj9ampkYe5NwYPz6w0aly9BO8XxPAcYLsh1bas_YjWE&s=10",
+    status: "online",
+    lat: 34.8021, // Syria
+    lon: 38.9968,
   },
   {
     id: "sports-bein-2fr",
@@ -545,6 +593,30 @@ const staticStreams = [
     status: "online",
     lat: 39.9334, // Ankara, Turkey
     lon: 32.8597,
+  },
+  {
+    id: "sports-somoy-tv",
+    name: "Somoy TV (Bangladesh)",
+    url: "https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "BD",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/SOMOY_TV_Logo.svg/500px-SOMOY_TV_Logo.svg.png",
+    status: "online",
+    lat: 23.6850, // Dhaka, Bangladesh
+    lon: 90.3563,
+  },
+  {
+    id: "sports-mono-max1",
+    name: "MonoMax TV (Thailand)",
+    url: "https://love.jco5sjujta.workers.dev:443/lx-origin/th-monomax01_720/chunks.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TH",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/3/35/MonomaxSportsTV-logo.png/revision/latest?cb=20260611164039",
+    status: "offline",
+    lat: 15.8700, // Thailand
+    lon: 100.9925,
   },
   {
     id: "sports-qazaqstan",
@@ -835,30 +907,6 @@ const staticStreams = [
     status: "online",
     lat: 39.9334, // Ankara, Turkey
     lon: 32.8597,
-  },
-  {
-    id:"sports-itv-uk",
-    name: "ITV UK",
-    url: "https://andro.evrenesoglu57.click/checklist/androstreamliveexn4.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "UK",
-    logo: "https://upload.wikimedia.org/wikipedia/en/0/0b/ITV_plc_2025_logo.svg",
-    status: "online",
-    lat: 51.5074, // London, UK (EuroNews HQ)
-    lon: -0.1278,
-  },
-  {
-    id:"sports-mashun-sports",
-    name: "Mashun Sports",
-    url: "https://andro.226503.xyz/checklist/androstreamlivebs1.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "BD",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT67eUWpdx84zCtzVQJQ4XlpJDZZYIco3gAgRn8ye0L1A&s",
-    status: "offline",
-    lat: 23.6850, // Dhaka, Bangladesh
-    lon: 90.3563,
   },
   {
     id: "sports-nba-channel",
@@ -1493,7 +1541,7 @@ const staticStreams = [
     lon: 8.5417,
   },
   {
-    id: "sports-es-dazn",
+    id: "sports-es-daznes",
     name: "Red Bull TV Sports (ES)",
     url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8", // Red Bull TV sports stream
     category: "sports",
