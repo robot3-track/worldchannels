@@ -415,6 +415,18 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
+    id:"sports-mashun-sports2",
+    name: "Mashun Sports (Server 2)",
+    url: "https://andro.evrenesoglu57.click/checklist/receptestt.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "BD",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT67eUWpdx84zCtzVQJQ4XlpJDZZYIco3gAgRn8ye0L1A&s",
+    status: "online",
+    lat: 23.6850, // Dhaka, Bangladesh
+    lon: 90.3563,
+  },
+  {
     id: "sports-fussball-tv",
     name: "Fussball.tv Germany",
     url: "https://edge22.776740.ir.cdn.ir/hls2/rasf1.m3u8",
