@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
-import { Search, Globe, Compass, RefreshCw, Layers, Paintbrush } from "lucide-react";
+import { Search, Globe, Compass, Paintbrush } from "lucide-react";
 import { StreamChannel } from "../types";
 
 // Real-world cities distributed geographically across country boundaries
@@ -335,7 +335,7 @@ export default function WorldMap({
       iconCreateFunction: (cluster: any) => {
         const count = cluster.getChildCount();
         return L.divIcon({
-          html: `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-900 font-sans text-xs font-bold border ${theme === 'light' ? 'border-white text-white shadow-md' : 'border-indigo-400 text-indigo-100 shadow-lg shadow-indigo-500/20'} cursor-pointer"><span>${count}</span></div>`,
+          html: `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-900 font-sans text-xs font-bold border ${theme === 'light' ? 'border-zinc-900 text-white' : 'border-indigo-400 text-indigo-100'} rounded-none cursor-pointer"><span>${count}</span></div>`,
           className: 'custom-cluster-icon',
           iconSize: [32, 32]
         });
@@ -348,14 +348,14 @@ export default function WorldMap({
       const clusterLatLng = a.latlng;
 
       let listHtml = `
-        <div class="flex flex-col gap-1 max-h-[240px] overflow-y-auto pr-1 no-scrollbar min-w-[220px] font-sans text-xs p-2 ${
-          theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-200"
+        <div class="flex flex-col gap-1 max-h-[240px] overflow-y-auto pr-1 no-scrollbar min-w-[220px] font-sans text-xs p-2 rounded-none border-2 ${
+          theme === "light" ? "bg-white text-zinc-900 border-zinc-900" : "bg-neutral-950 text-neutral-200 border-neutral-800"
         }">
-          <div class="text-[10px] font-bold uppercase tracking-wider mb-2 px-1 flex justify-between border-b ${
-            theme === "light" ? "border-zinc-200 text-zinc-500" : "border-neutral-900 text-neutral-500"
-          } pb-1.5">
-            <span>Channels here</span>
-            <span class="font-bold">Total: ${markers.length}</span>
+          <div class="text-[10px] font-bold uppercase tracking-wider mb-2 px-1 flex justify-between border-b-2 ${
+            theme === "light" ? "border-zinc-900 text-zinc-500" : "border-neutral-800 text-neutral-500"
+          } pb-1.5 font-mono">
+            <span>CHANNELS AT POSITION</span>
+            <span class="font-bold">TOTAL: ${markers.length}</span>
           </div>
       `;
 
@@ -366,20 +366,20 @@ export default function WorldMap({
         const statusDot = stream.status === "online" ? "bg-emerald-500" : stream.status === "unstable" ? "bg-amber-500" : "bg-rose-500";
         
         listHtml += `
-          <div class="channel-popup-item flex items-center justify-between p-2 cursor-pointer transition-all border font-sans ${
+          <div class="channel-popup-item flex items-center justify-between p-2 cursor-pointer transition-all border-2 rounded-none font-mono ${
             theme === "light" 
-              ? "bg-zinc-50/50 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-300" 
-              : "bg-neutral-900/40 border-neutral-900 hover:bg-neutral-900/80 hover:border-neutral-800"
+              ? "bg-white border-zinc-900 hover:bg-zinc-50" 
+              : "bg-neutral-900 border-neutral-800 hover:bg-neutral-950 hover:border-neutral-700"
           } mb-1" data-id="${stream.id}">
             <div class="flex items-center gap-2 truncate">
-              <div class="w-2 h-2 rounded-full ${statusDot} flex-shrink-0"></div>
+              <div class="w-2.5 h-2.5 rounded-none ${statusDot} flex-shrink-0"></div>
               <div class="flex flex-col truncate">
-                <span class="text-xs font-semibold truncate leading-none mb-1">${stream.name}</span>
-                <span class="text-[10px] text-zinc-500 tracking-wide leading-none">Category: ${stream.category}</span>
+                <span class="text-xs font-bold truncate leading-none mb-1 uppercase">${stream.name}</span>
+                <span class="text-[9px] text-zinc-500 dark:text-neutral-500 tracking-wider uppercase leading-none">SYS: ${stream.category}</span>
               </div>
             </div>
-            <div class="flex-shrink-0 ml-2 text-indigo-500 font-bold text-xs">
-              Watch
+            <div class="flex-shrink-0 ml-2 text-indigo-500 font-black text-[10px] uppercase">
+              WATCH
             </div>
           </div>
         `;
@@ -389,7 +389,7 @@ export default function WorldMap({
 
       const popup = L.popup({
         closeButton: false,
-        className: 'custom-cluster-popup',
+        className: 'custom-cluster-popup brutalist-popup',
         offset: L.point(0, -10),
         maxWidth: 260
       })
@@ -429,7 +429,7 @@ export default function WorldMap({
         mapRef.current = null;
       }
     };
-  }, []);
+  }, [theme]);
 
   // Update dynamic map tiles when style customization changes[cite: 1]
   useEffect(() => {
@@ -473,19 +473,19 @@ export default function WorldMap({
         activeDotColorClass = "bg-rose-500";
       }
 
-      // HTML template for pulsing map nodes[cite: 1]
+      // HTML template for pulsing map nodes - Hard flat brutalist squares[cite: 1]
       const markerHtml = isActive
         ? `
         <div class="relative flex items-center justify-center">
-          <span class="absolute inline-flex h-9 w-9 rounded-full ${pingColorClass} animate-ping"></span>
-          <span class="absolute inline-flex h-6 w-6 rounded-full ${pulseRingClass} border ${pulseBorderClass}"></span>
-          <span class="relative inline-flex rounded-full h-3.5 w-3.5 ${activeDotColorClass} border-2 ${theme === "light" ? "border-white" : "border-neutral-950"} shadow-md"></span>
+          <span class="absolute inline-flex h-9 w-9 rounded-none ${pingColorClass} animate-ping"></span>
+          <span class="absolute inline-flex h-6 w-6 rounded-none ${pulseRingClass} border-2 ${pulseBorderClass}"></span>
+          <span class="relative inline-flex rounded-none h-3.5 w-3.5 ${activeDotColorClass} border-2 ${theme === "light" ? "border-zinc-900" : "border-neutral-950"} shadow-sm"></span>
         </div>
         `
         : `
         <div class="relative flex items-center justify-center">
-          <span class="absolute inline-flex h-4 w-4 rounded-full ${stream.status === 'unstable' ? 'bg-amber-500/20' : stream.status === 'offline' ? 'bg-rose-500/20' : 'bg-emerald-500/20'} animate-pulse"></span>
-          <span class="relative inline-flex rounded-full h-2.5 w-2.5 ${stream.status === 'unstable' ? 'bg-amber-500' : stream.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border ${theme === "light" ? "border-white" : "border-neutral-950"}"></span>
+          <span class="absolute inline-flex h-4 w-4 rounded-none ${stream.status === 'unstable' ? 'bg-amber-500/20' : stream.status === 'offline' ? 'bg-rose-500/20' : 'bg-emerald-500/20'} animate-pulse"></span>
+          <span class="relative inline-flex rounded-none h-2.5 w-2.5 ${stream.status === 'unstable' ? 'bg-amber-500' : stream.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border-2 ${theme === "light" ? "border-zinc-900" : "border-neutral-950"}"></span>
         </div>
         `;
 
@@ -498,29 +498,29 @@ export default function WorldMap({
 
       // Tailored minimal modern popup structure[cite: 1]
       const popupContent = `
-        <div class="p-3 font-sans text-xs ${
+        <div class="p-3 font-mono text-[11px] rounded-none border-2 ${
           theme === "light" 
-            ? "text-zinc-900 bg-white border border-zinc-200" 
-            : "text-neutral-200 bg-neutral-950 border border-neutral-900"
+            ? "text-zinc-900 bg-white border-zinc-900" 
+            : "text-neutral-200 bg-neutral-950 border-neutral-850"
         } min-w-[220px]">
-          <div class="flex items-center gap-2 border-b pb-1.5 ${theme === "light" ? "border-zinc-100" : "border-neutral-900"}">
-            <span class="w-2 h-2 rounded-full ${stream.status === 'unstable' ? 'bg-amber-500 animate-pulse' : stream.status === 'offline' ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}"></span>
+          <div class="flex items-center gap-2 border-b-2 pb-1.5 uppercase ${theme === "light" ? "border-zinc-900" : "border-neutral-850"}">
+            <span class="w-2.5 h-2.5 rounded-none ${stream.status === 'unstable' ? 'bg-amber-500 animate-pulse' : stream.status === 'offline' ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}"></span>
             <span class="font-bold truncate">${stream.name}</span>
           </div>
-          <div class="mt-2 flex justify-between items-center font-medium text-[11px] ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}">
-            <span>${cityName}</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 border ${
-              theme === "light" ? "bg-zinc-50 text-zinc-700 border-zinc-200" : "bg-neutral-900 text-neutral-300 border-neutral-800"
+          <div class="mt-2 flex justify-between items-center font-bold text-[10px] ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}">
+            <span class="uppercase">${cityName}</span>
+            <span class="text-[9px] font-black px-1.5 py-0.5 border-2 ${
+              theme === "light" ? "bg-zinc-50 text-zinc-900 border-zinc-900" : "bg-neutral-900 text-neutral-300 border-neutral-800"
             }">${stream.country}</span>
           </div>
-          <div class="text-[10px] font-bold mt-1.5 ${theme === "light" ? "text-zinc-400" : "text-neutral-500"}">
-            Source: ${stream.category}
+          <div class="text-[9px] font-bold mt-1.5 uppercase ${theme === "light" ? "text-zinc-400" : "text-neutral-500"}">
+            SYS REGISTRY: ${stream.category}
           </div>
-          <div class="mt-2.5 pt-2 border-t text-[10px] font-bold flex items-center gap-1.5 ${
-            stream.status === 'offline' ? 'text-rose-500' : stream.status === 'unstable' ? 'text-amber-500' : 'text-emerald-500'
-          } ${theme === "light" ? "border-zinc-100" : "border-neutral-900"}">
+          <div class="mt-2.5 pt-2 border-t-2 text-[9px] font-bold flex items-center gap-1.5 uppercase ${
+            stream.status === 'offline' ? 'text-rose-600' : stream.status === 'unstable' ? 'text-amber-500' : 'text-emerald-500'
+          } ${theme === "light" ? "border-zinc-900" : "border-neutral-850"}">
             <span>//</span>
-            <span>${stream.status === 'offline' ? 'Link offline, trying to reconnect' : stream.status === 'unstable' ? 'Connection unstable, may buffer' : 'Tap to start live stream'}</span>
+            <span>${stream.status === 'offline' ? 'LINK FAIL' : stream.status === 'unstable' ? 'SIGNAL UNSTABLE' : 'LAUNCH BROADCAST'}</span>
           </div>
         </div>
       `;
@@ -531,7 +531,7 @@ export default function WorldMap({
       } as any);
       
       marker.bindPopup(popupContent, {
-        className: "custom-leaflet-popup",
+        className: "custom-leaflet-popup brutalist-popup",
         closeButton: false,
         offset: [0, -6]
       });
@@ -564,37 +564,48 @@ export default function WorldMap({
   }, [activeChannel, processedStreams]);
 
   return (
-    <div className={`relative w-full border p-4 md:p-5 overflow-hidden flex flex-col gap-4 font-sans transition-all ${
+    <div className={`relative w-full border-2 p-4 md:p-5 overflow-hidden flex flex-col gap-4 font-mono transition-all rounded-none ${
       theme === "light"
-        ? "bg-white border-zinc-200 shadow-sm"
-        : "bg-[#0d0e12] border-neutral-900"
+        ? "bg-[#faf9f6] border-zinc-900 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]"
+        : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.1)]"
     }`}>
       {/* Dynamic Header[cite: 1] */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 z-10">
         <div>
           <div className="flex items-center gap-2">
             <Globe className="w-5 h-5 text-indigo-500" />
-            <h2 className={`text-base font-bold tracking-tight ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
-              World Channels
+            <h2 className={`text-sm font-black uppercase tracking-tight ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
+              Telemetry World Map
             </h2>
           </div>
-          <p className={`text-xs mt-1 leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}`}>
-            A simple global interactive player matching channels to places. Click any marker to view and play the live feed.
+          <p className={`text-[11px] font-sans mt-1 leading-relaxed font-medium ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}`}>
+            A raw global monitoring framework cataloging and rendering active streams to coordinates. Select node indicators to track video relays.
           </p>
         </div>
 
         {/* Dynamic Controls Side-by-Side[cite: 1] */}
         <div className="flex flex-wrap items-center gap-3">
-          {/* Custom Map Color Switcher[cite: 1] */}
-          <div className="flex items-center gap-1.5 border p-1 rounded-md bg-zinc-50/50 dark:bg-neutral-900/50 border-zinc-200 dark:border-neutral-800">
-            <Paintbrush className="w-3.5 h-3.5 text-indigo-500 ml-1.5" />
+          
+          {/* Custom Map Color Switcher - Fixed Light/Dark Theme dropdown config[cite: 1] */}
+          <div className={`flex items-center gap-2 border-2 px-2.5 py-1.5 rounded-none font-bold uppercase transition-all text-xs ${
+            theme === "light"
+              ? "bg-white border-zinc-900 text-zinc-800"
+              : "bg-neutral-950 border-neutral-800 text-neutral-300"
+          }`}>
+            <Paintbrush className="w-3.5 h-3.5 text-indigo-500" />
             <select
               value={currentMapStyle}
               onChange={(e) => setCurrentMapStyle(e.target.value)}
-              className="bg-transparent text-xs outline-none cursor-pointer pr-1 font-medium text-zinc-600 dark:text-neutral-300"
+              className={`bg-transparent text-[11px] font-bold uppercase outline-none cursor-pointer pr-1 ${
+                theme === "light" ? "text-zinc-900" : "text-neutral-200"
+              }`}
             >
               {mapStyles.map((style) => (
-                <option key={style.id} value={style.id} className="bg-white dark:bg-neutral-950">
+                <option 
+                  key={style.id} 
+                  value={style.id} 
+                  className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-100"}
+                >
                   {style.label}
                 </option>
               ))}
@@ -604,23 +615,23 @@ export default function WorldMap({
           {/* Search Box[cite: 1] */}
           <div className="relative w-full sm:w-64">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-              <Search className={`h-3.5 w-3.5 ${theme === "light" ? "text-zinc-400" : "text-neutral-600"}`} />
+              <Search className={`h-3.5 w-3.5 ${theme === "light" ? "text-zinc-500" : "text-neutral-600"}`} />
             </span>
             <input
               type="text"
-              className={`w-full border pl-9 pr-12 py-1.5 text-xs transition-all rounded-md ${
+              className={`w-full border-2 pl-9 pr-12 py-1.5 text-xs transition-all rounded-none uppercase font-bold tracking-tight ${
                 theme === "light"
-                  ? "bg-zinc-50 border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400"
-                  : "bg-neutral-950 border-neutral-800 text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-indigo-600"
+                  ? "bg-white border-zinc-900 text-zinc-900 placeholder-zinc-400 focus:outline-none"
+                  : "bg-neutral-950 border-neutral-800 text-neutral-200 placeholder-neutral-700 focus:outline-none"
               }`}
-              placeholder="Find by country, city, or channel name..."
+              placeholder="Query node..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery("")}
-                className="absolute inset-y-0 right-0 pr-3 flex items-center text-xs font-bold text-zinc-400 dark:text-neutral-500 hover:text-indigo-500 transition-colors cursor-pointer"
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[10px] font-bold text-zinc-500 dark:text-neutral-400 hover:text-indigo-500 transition-colors cursor-pointer uppercase"
               >
                 Clear
               </button>
@@ -630,36 +641,36 @@ export default function WorldMap({
       </div>
 
       {/* Main Interactive Map Wrapper[cite: 1] */}
-      <div className={`relative w-full h-[400px] md:h-[480px] overflow-hidden border z-0 p-1 ${
+      <div className={`relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none ${
         theme === "light" 
-          ? "bg-white border-zinc-200" 
-          : "bg-[#0d0e12] border-neutral-900"
+          ? "bg-white border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" 
+          : "bg-[#0d0e12] border-neutral-800 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.05)]"
       }`}>
         <div ref={mapContainerRef} className="w-full h-full" id="world-map-leaflet" />
       </div>
 
       {/* Legend and Scale Terminal Footer[cite: 1] */}
-      <div className={`flex flex-wrap items-center justify-between gap-3 text-xs border-t pt-3.5 ${
-        theme === "light" ? "text-zinc-500 border-zinc-200" : "text-neutral-500 border-neutral-900"
+      <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] font-bold border-t-2 pt-3.5 uppercase ${
+        theme === "light" ? "text-zinc-600 border-zinc-900" : "text-neutral-500 border-neutral-800"
       }`}>
-        <div className="flex items-center gap-4">
-          <span className="flex items-center gap-2 font-medium">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 relative flex"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /></span>
-            Active channels
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <span className="flex items-center gap-1.5 font-bold">
+            <span className="w-2 h-2 rounded-none bg-emerald-500 relative flex"><span className="animate-ping absolute inline-flex h-full w-full rounded-none bg-emerald-400 opacity-75" /></span>
+            Active links
           </span>
-          <span className="flex items-center gap-2 font-medium">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
-            Unstable connection
+          <span className="flex items-center gap-1.5 font-bold">
+            <span className="w-2 h-2 rounded-none bg-amber-500" />
+            Unstable node
           </span>
-          <span className="flex items-center gap-2 font-medium">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
-            Offline channels
+          <span className="flex items-center gap-1.5 font-bold">
+            <span className="w-2 h-2 rounded-none bg-rose-500" />
+            Terminal offline
           </span>
         </div>
         
-        <div className="flex items-center gap-1.5 font-medium">
-          <Compass className={`w-4 h-4 ${theme === "light" ? "text-zinc-400" : "text-neutral-600"}`} />
-          <span>Equirectangular Map view</span>
+        <div className="flex items-center gap-1.5 font-bold">
+          <Compass className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`} />
+          <span>EQUIRECTANGULAR SATELLITE</span>
         </div>
       </div>
     </div>
