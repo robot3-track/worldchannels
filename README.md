@@ -16,6 +16,8 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 *  **Nickelodeon US**: Official Nickeloden Kids Channel 24/7
 *  **PBS Kids**: Official PBS Kids Channel 24/7
 *  **Disney Jr**: Official Disney Jr. Channel 24/7
+*  **HBO Family**: Official HBO Family Channel
+*  **Discovery Kids**: Official Discovery Kids Channel 24/7
 
 ## 2026 World Cup Broadcasters
 

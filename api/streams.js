@@ -1785,6 +1785,50 @@ const staticStreams = [
     lon: -77.0369,
   },
   {
+    id: "country-us-hbofamily",
+    name: "HBO Family (US)",
+    url: "https://s2.bufaloweb.com/bufalo16/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/2/2f/HBO_Family_first_logo.svg/revision/latest?cb=20250815122740",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-discoverykids",
+    name: "Discovery Kids (US)",
+    url: "https://s2.bufaloweb.com/bufalo24/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjvctsx0V1-vupQ4HYFdGRTkwt08cAhOKr5I0CthspRw&s",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-hbofamily",
+    name: "HBO (US)",
+    url: "https://s2.bufaloweb.com/bufalo15/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/2/2f/HBO_Family_first_logo.svg/revision/latest?cb=20250815122740",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-history",
+    name: "History (US)",
+    url: "https://s2.bufaloweb.com/bufalo26/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/f/f5/History_Logo.svg",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
     id: "sports-arenasport1",
     name: "Arena Sport 1 Premium",
     url: "https://nl1.nghk.ai/ArenaPremium1HD/index.m3u8", // High quality, updated Arena Sport 1 Premium stream feed
