@@ -391,18 +391,6 @@ const staticStreams = [
     lon: 2.3522,
   },
   {
-    id:"sports-itv-uk",
-    name: "ITV UK",
-    url: "https://andro.evrenesoglu57.click/checklist/androstreamliveexn4.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "UK",
-    logo: "https://upload.wikimedia.org/wikipedia/en/0/0b/ITV_plc_2025_logo.svg",
-    status: "online",
-    lat: 51.5074, // London, UK (EuroNews HQ)
-    lon: -0.1278,
-  },
-  {
     id:"sports-mashun-sports",
     name: "Mashun Sports",
     url: "https://andro.226503.xyz/checklist/androstreamlivebs1.m3u8",
@@ -583,18 +571,6 @@ const staticStreams = [
     lon: 100.9925,
   },
   {
-    id: "sports-qazaqstan",
-    name: "Qazaqstan Sports",
-    url: "https://stream.qaztv.kz/live/stream9/index.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "KZ",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQj_ccV6kSCrhDyj8C76j_feKig0a7wdC46zOKhg3c0WCrvaJVr0rGO_Xcp&s=10",
-    status: "online",
-    lat: 51.1605, // Astana, Kazakhstan
-    lon: 71.4704,
-  },
-  {
     id: "sports-tsports",
     name: "T Sports (Bangladesh)",
     url: "https://biostartvworld.pages.dev/api/t-sports.m3u8?key=aHR0cHM6Ly90di5ocmR2eS5kcGRucy5vcmcvc3RyZWFtL2hscy9jaDAxLm0zdTg",
@@ -680,7 +656,7 @@ const staticStreams = [
   },
   {
     id: "sports-t-sport",
-    name: "T Sports (Bangladesh)",
+    name: "T Sports Server 2 (Bangladesh)",
     url: "https://live-aburayhan1106.telewebion.ir/ek/sport1/live/1080p/index.m3u8",
     category: "sports",
     category: "world cup",
@@ -749,6 +725,30 @@ const staticStreams = [
     status: "online",
     lat: 10.8231, // Ho Chi Minh City
     lon: 106.6297,
+  },
+  {
+    id:"sports-itv-uk",
+    name: "ITV UK",
+    url: "https://andro.evrenesoglu57.click/checklist/androstreamliveexn4.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "UK",
+    logo: "https://upload.wikimedia.org/wikipedia/en/0/0b/ITV_plc_2025_logo.svg",
+    status: "online",
+    lat: 51.5074, // London, UK (EuroNews HQ)
+    lon: -0.1278,
+  },
+  {
+    id: "sports-qazaqstan",
+    name: "Qazaqstan Sports",
+    url: "https://stream.qaztv.kz/live/stream9/index.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "KZ",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQj_ccV6kSCrhDyj8C76j_feKig0a7wdC46zOKhg3c0WCrvaJVr0rGO_Xcp&s=10",
+    status: "online",
+    lat: 51.1605, // Astana, Kazakhstan
+    lon: 71.4704,
   },
   {
     id: "sports-dazn-spain",
