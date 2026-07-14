@@ -355,6 +355,42 @@ const staticStreams = [
     lon: -58.3816,
   },
   {
+    id: "sports-bein-2fr",
+    name: "Bein Sports 2 France",
+    url: "https://ua102.online24.pm:8443/1102/video.m3u8?token=350B326FB34F4B8",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
+    id: "sports-bein-3fr",
+    name: "Bein Sports 3 France",
+    url: "https://ua102.online24.pm:8443/1103/video.m3u8?token=350B326FB34F4B8",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
+    id: "sports-bein-3fr2",
+    name: "Bein Sports 3 France (Server 2)",
+    url: "https://andro.226503.xyz/checklist/androstreamlivebs3.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
     id:"sports-itv-uk",
     name: "ITV UK",
     url: "https://andro.evrenesoglu57.click/checklist/androstreamliveexn4.m3u8",
@@ -437,30 +473,6 @@ const staticStreams = [
     status: "online",
     lat: 34.8021, // Syria
     lon: 38.9968,
-  },
-  {
-    id: "sports-bein-2fr",
-    name: "Bein Sports 2 France",
-    url: "https://ua102.online24.pm:8443/1102/video.m3u8?token=350B326FB34F4B8",
-    category: "sports",
-    category: "world cup",
-    country: "FR",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
-    status: "online",
-    lat: 48.8566, // Paris, France
-    lon: 2.3522,
-  },
-  {
-    id: "sports-bein-3fr",
-    name: "Bein Sports 3 France",
-    url: "https://ua102.online24.pm:8443/1103/video.m3u8?token=350B326FB34F4B8",
-    category: "sports",
-    category: "world cup",
-    country: "FR",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
-    status: "online",
-    lat: 48.8566, // Paris, France
-    lon: 2.3522,
   },
   {
     id: "sports-bein-iran",
@@ -1296,10 +1308,21 @@ const staticStreams = [
     lat: 40.7128, // New York City, US
     lon: -74.0060,
   },
-    {
+  {
     id: "sports-espn-6us",
     name: "ESPN 7 (US)",
     url: "https://s2.bufaloweb.com/bufalo9/index.m3u8",
+    category: "sports",
+    country: "US",
+    logo: "https://images.seeklogo.com/logo-png/4/1/espn-2-logo-png_seeklogo-49202.png",
+    status: "online",
+    lat: 40.7128, // New York City, US
+    lon: -74.0060,
+  },
+  {
+    id: "sports-espn-6us",
+    name: "ESPN 7 (US, Server 2)",
+    url: "https://s2.bufaloweb.com/bufalo12/index.m3u8",
     category: "sports",
     country: "US",
     logo: "https://images.seeklogo.com/logo-png/4/1/espn-2-logo-png_seeklogo-49202.png",
@@ -1947,17 +1970,6 @@ const staticStreams = [
     lon: 116.4074,
   },
   {
-    id: "freetv-rtdoc",
-    name: "RT Documentary",
-    url: "https://rt-doc.rttv.com/live/rt-doc/playlist.m3u8",
-    category: "freetv",
-    country: "RU",
-    logo: "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 55.7558, // Moscow, Russia
-    lon: 37.6173,
-  },
-  {
     id: "freetv-redbullsports",
     name: "Red Bull TV Live Sports 2",
     url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8",
@@ -1970,6 +1982,39 @@ const staticStreams = [
   },
 
   // --- COUNTRY PUBLIC TV CHANNELS (Category: country, Country: US, UK, AU, CA, etc.) ---
+  {
+    id: "country-us-disneyjr",
+    name: "Disney Jr. US",
+    url: "https://s2.bufaloweb.com/bufalo21/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/48/DisneyJr3Dver.png/revision/latest?cb=20240601030018",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-disneyjr",
+    name: "Disney Jr. US (Server 2)",
+    url: "https://s2.bufaloweb.com/bufalo19/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/48/DisneyJr3Dver.png/revision/latest?cb=20240601030018",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-natgeo",
+    name: "Nat Geo (US)",
+    url: "https://s2.bufaloweb.com/bufalo29/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://www.greyboxcreative.com/wp-content/uploads/2020/01/National-Geographic-logo.jpg",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
   {
     id: "country-us-pbs",
     name: "PBS Kids US",
