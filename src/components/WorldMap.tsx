@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
-import { Search, Globe, Compass, RefreshCw, Layers } from "lucide-react";
+import { Search, Globe, Compass, RefreshCw, Layers, Paintbrush } from "lucide-react";
 import { StreamChannel } from "../types";
 
 // Real-world cities distributed geographically across country boundaries
@@ -212,7 +212,7 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
     if (stream.lat && stream.lon && (stream.lat !== 0 || stream.lon !== 0)) {
       return {
         ...stream,
-        cityName: stream.cityName || "SYS_HUB",
+        cityName: stream.cityName || "stream hub",
         mappedLat: stream.lat,
         mappedLon: stream.lon
       };
@@ -244,6 +244,14 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   });
 };
 
+// Map customization styles config
+const mapStyles = [
+  { id: "light", label: "Classic Light", url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" },
+  { id: "dark", label: "Midnight Dark", url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" },
+  { id: "satellite", label: "Satellite View", url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" },
+  { id: "retro", label: "Retro Outdoors", url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" }
+];
+
 interface WorldMapProps {
   streams: StreamChannel[];
   selectedCategory: string;
@@ -260,11 +268,17 @@ export default function WorldMap({
   theme
 }: WorldMapProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [currentMapStyle, setCurrentMapStyle] = useState(theme === "light" ? "light" : "dark");
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markerGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const isInitialRenderRef = useRef(true);
+
+  // Sync component map style state with global system theme
+  useEffect(() => {
+    setCurrentMapStyle(theme === "light" ? "light" : "dark");
+  }, [theme]);
 
   // Parse telemetry streams to generate coordinates
   const processedStreams = useMemo(() => {
@@ -301,12 +315,10 @@ export default function WorldMap({
       attributionControl: false
     });
 
-    // Premium open-source sub-tiles mapped directly to studio neutrals
-    const initialTileUrl = theme === "light"
-      ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-      : "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
+    // Select tile layers safely using current chosen style state
+    const targetStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
 
-    const tileLayer = L.tileLayer(initialTileUrl, {
+    const tileLayer = L.tileLayer(targetStyle.url, {
       subdomains: "abcd",
       maxZoom: 20,
       noWrap: true,
@@ -327,9 +339,9 @@ export default function WorldMap({
       iconCreateFunction: (cluster: any) => {
         const count = cluster.getChildCount();
         return L.divIcon({
-          html: `<div class="flex items-center justify-center w-7 h-7 bg-indigo-600 dark:bg-indigo-950 font-mono text-[10px] font-bold border ${theme === 'light' ? 'border-zinc-300 text-zinc-900' : 'border-indigo-500/40 text-indigo-400'} shadow-none cursor-pointer"><span>${count}</span></div>`,
+          html: `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-900 rounded-full font-sans text-xs font-bold border ${theme === 'light' ? 'border-white text-white shadow-md' : 'border-indigo-400 text-indigo-100 shadow-lg shadow-indigo-500/20'} cursor-pointer"><span>${count}</span></div>`,
           className: 'custom-cluster-icon',
-          iconSize: [28, 28]
+          iconSize: [32, 32]
         });
       }
     }).addTo(map);
@@ -340,14 +352,14 @@ export default function WorldMap({
       const clusterLatLng = a.latlng;
 
       let listHtml = `
-        <div class="flex flex-col gap-1 max-h-[240px] overflow-y-auto pr-1 no-scrollbar min-w-[220px] font-mono text-[11px] p-2 ${
+        <div class="flex flex-col gap-1 max-h-[240px] overflow-y-auto pr-1 no-scrollbar min-w-[220px] font-sans text-xs p-2 ${
           theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-200"
         }">
           <div class="text-[10px] font-bold uppercase tracking-wider mb-2 px-1 flex justify-between border-b ${
             theme === "light" ? "border-zinc-200 text-zinc-500" : "border-neutral-900 text-neutral-500"
           } pb-1.5">
-            <span>[CLUSTER_REGISTRY]</span>
-            <span class="font-bold">[N: ${markers.length}]</span>
+            <span>Channels here</span>
+            <span class="font-bold">Total: ${markers.length}</span>
           </div>
       `;
 
@@ -358,20 +370,20 @@ export default function WorldMap({
         const statusDot = stream.status === "online" ? "bg-emerald-500" : stream.status === "unstable" ? "bg-amber-500" : "bg-rose-500";
         
         listHtml += `
-          <div class="channel-popup-item flex items-center justify-between p-2 cursor-pointer transition-all border font-mono ${
+          <div class="channel-popup-item flex items-center justify-between p-2 cursor-pointer transition-all border font-sans ${
             theme === "light" 
-              ? "bg-zinc-50/50 border-zinc-200 hover:bg-zinc-100/80 hover:border-zinc-300" 
+              ? "bg-zinc-50/50 border-zinc-200 hover:bg-zinc-100 hover:border-zinc-300" 
               : "bg-neutral-900/40 border-neutral-900 hover:bg-neutral-900/80 hover:border-neutral-800"
           } mb-1" data-id="${stream.id}">
             <div class="flex items-center gap-2 truncate">
-              <div class="w-1.5 h-1.5 ${statusDot} flex-shrink-0"></div>
+              <div class="w-2 h-2 rounded-full ${statusDot} flex-shrink-0"></div>
               <div class="flex flex-col truncate">
-                <span class="text-[11px] font-bold uppercase truncate leading-none mb-1">${stream.name}</span>
-                <span class="text-[9px] font-bold text-zinc-500 tracking-wider leading-none">TYP // ${stream.category}</span>
+                <span class="text-xs font-semibold truncate leading-none mb-1">${stream.name}</span>
+                <span class="text-[10px] text-zinc-500 tracking-wide leading-none">Category: ${stream.category}</span>
               </div>
             </div>
-            <div class="flex-shrink-0 ml-2 text-indigo-500 font-bold text-[9px] uppercase">
-              [LINK]
+            <div class="flex-shrink-0 ml-2 text-indigo-500 font-bold text-xs">
+              Watch
             </div>
           </div>
         `;
@@ -423,15 +435,14 @@ export default function WorldMap({
     };
   }, []);
 
-  // Update dynamic map tiles when theme changes
+  // Update dynamic map tiles when the selected map style customization changes
   useEffect(() => {
     if (tileLayerRef.current) {
-      const tileUrl = theme === "light"
-        ? "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
-        : "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
-      tileLayerRef.current.setUrl(tileUrl);
+      const selectedStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
+      tileLayerRef.current.setUrl(selectedStyle.url);
     }
-  }, [theme]);
+  }, [currentMapStyle]);
+
   // Update dynamic markers when selection or data changes
   useEffect(() => {
     const map = mapRef.current;
@@ -478,7 +489,7 @@ export default function WorldMap({
         : `
         <div class="relative flex items-center justify-center">
           <span class="absolute inline-flex h-4 w-4 rounded-full ${stream.status === 'unstable' ? 'bg-amber-500/20' : stream.status === 'offline' ? 'bg-rose-500/20' : 'bg-emerald-500/20'} animate-pulse"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 ${stream.status === 'unstable' ? 'bg-amber-500' : stream.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border ${theme === "light" ? "border-white" : "border-neutral-950"}"></span>
+          <span class="relative inline-flex rounded-full h-2.5 w-2.5 ${stream.status === 'unstable' ? 'bg-amber-500' : stream.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border ${theme === "light" ? "border-white" : "border-neutral-950"}"></span>
         </div>
         `;
 
@@ -491,29 +502,29 @@ export default function WorldMap({
 
       // Tailored minimal modern popup structure
       const popupContent = `
-        <div class="p-3 font-mono text-[11px] rounded-none shadow-none tracking-tight ${
+        <div class="p-3 font-sans text-xs rounded-lg shadow-lg ${
           theme === "light" 
-            ? "text-zinc-900 bg-white border border-zinc-300" 
+            ? "text-zinc-900 bg-white border border-zinc-200" 
             : "text-neutral-200 bg-neutral-950 border border-neutral-900"
         } min-w-[220px]">
           <div class="flex items-center gap-2 border-b pb-1.5 ${theme === "light" ? "border-zinc-100" : "border-neutral-900"}">
-            <span class="w-1.5 h-1.5 ${stream.status === 'unstable' ? 'bg-amber-500 animate-pulse' : stream.status === 'offline' ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}"></span>
-            <span class="font-bold tracking-tighter uppercase truncate">${stream.name}</span>
+            <span class="w-2 h-2 rounded-full ${stream.status === 'unstable' ? 'bg-amber-500 animate-pulse' : stream.status === 'offline' ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}"></span>
+            <span class="font-bold truncate">${stream.name}</span>
           </div>
-          <div class="mt-2 flex justify-between items-center font-sans font-medium text-[11px] ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}">
+          <div class="mt-2 flex justify-between items-center font-medium text-[11px] ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}">
             <span>${cityName}</span>
-            <span class="font-mono text-[9px] font-bold uppercase px-1.5 py-0.5 border ${
+            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded border ${
               theme === "light" ? "bg-zinc-50 text-zinc-700 border-zinc-200" : "bg-neutral-900 text-neutral-300 border-neutral-800"
             }">${stream.country}</span>
           </div>
-          <div class="text-[10px] uppercase font-bold tracking-wider mt-1.5 ${theme === "light" ? "text-zinc-400" : "text-neutral-500"}">
-            TYP_SRC // ${stream.category}
+          <div class="text-[10px] font-bold mt-1.5 ${theme === "light" ? "text-zinc-400" : "text-neutral-500"}">
+            Source: ${stream.category}
           </div>
           <div class="mt-2.5 pt-2 border-t text-[10px] font-bold flex items-center gap-1.5 ${
             stream.status === 'offline' ? 'text-rose-500' : stream.status === 'unstable' ? 'text-amber-500' : 'text-emerald-500'
           } ${theme === "light" ? "border-zinc-100" : "border-neutral-900"}">
             <span>//</span>
-            <span>${stream.status === 'offline' ? 'LINK_LOST_RETRY_NODE' : stream.status === 'unstable' ? 'LINK_DEGRADED_BUFFER_WARN' : 'ENGAGE_STREAM_UPLINK'}</span>
+            <span>${stream.status === 'offline' ? 'Link offline, trying to reconnect' : stream.status === 'unstable' ? 'Connection unstable, may buffer' : 'Tap to start live stream'}</span>
           </div>
         </div>
       `;
@@ -557,83 +568,102 @@ export default function WorldMap({
   }, [activeChannel, processedStreams]);
 
   return (
-    <div className={`relative w-full border p-4 md:p-5 overflow-hidden flex flex-col gap-4 font-mono transition-all rounded-none ${
+    <div className={`relative w-full border p-4 md:p-5 overflow-hidden flex flex-col gap-4 font-sans transition-all rounded-xl ${
       theme === "light"
-        ? "bg-white border-zinc-300"
+        ? "bg-white border-zinc-200 shadow-sm"
         : "bg-[#0d0e12] border-neutral-900"
     }`}>
       {/* Dynamic Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 z-10">
+      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 z-10">
         <div>
           <div className="flex items-center gap-2">
-            <Globe className="w-4 h-4 text-indigo-500" />
-            <h2 className={`text-xs font-black uppercase tracking-wider ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
-              Live Channel Global Map
+            <Globe className="w-5 h-5 text-indigo-500" />
+            <h2 className={`text-base font-bold tracking-tight ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
+              World Channels
             </h2>
           </div>
-          <p className={`text-[11px] font-sans font-medium mt-1 leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}`}>
-            Open-source geographic stream registry routing active broadcast feeds. Use navigation controls or click telemetry nodes to bind video stream decoders.
+          <p className={`text-xs mt-1 leading-relaxed ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}`}>
+            A simple global interactive player matching channels to places. Click any marker to view and play the live feed.
           </p>
         </div>
 
-        {/* Modern Search */}
-        <div className="relative w-full md:w-80">
-          <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-            <Search className={`h-3.5 w-3.5 ${theme === "light" ? "text-zinc-400" : "text-neutral-600"}`} />
-          </span>
-          <input
-            type="text"
-            className={`w-full border pl-8.5 pr-12 py-1.5 text-xs transition-all font-mono rounded-none tracking-tight uppercase ${
-              theme === "light"
-                ? "bg-zinc-50 border-zinc-300 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-zinc-400 focus:ring-0"
-                : "bg-neutral-950 border-neutral-800 text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-neutral-700 focus:ring-0"
-            }`}
-            placeholder="Filter by country, city, channel..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          {searchQuery && (
-            <button
-              onClick={() => setSearchQuery("")}
-              className="absolute inset-y-0 right-0 pr-3 flex items-center text-[10px] font-bold text-zinc-400 dark:text-neutral-500 hover:text-indigo-500 transition-colors uppercase cursor-pointer"
+        {/* Dynamic Controls Side-by-Side */}
+        <div className="flex flex-wrap items-center gap-3">
+          {/* Custom Map Color Switcher */}
+          <div className="flex items-center gap-1.5 border p-1 rounded-lg bg-zinc-50/50 dark:bg-neutral-900/50 border-zinc-200 dark:border-neutral-800">
+            <Paintbrush className="w-3.5 h-3.5 text-indigo-500 ml-1.5" />
+            <select
+              value={currentMapStyle}
+              onChange={(e) => setCurrentMapStyle(e.target.value)}
+              className="bg-transparent text-xs outline-none cursor-pointer pr-1 font-medium text-zinc-600 dark:text-neutral-300"
             >
-              [CLEAR]
-            </button>
-          )}
+              {mapStyles.map((style) => (
+                <option key={style.id} value={style.id} className="bg-white dark:bg-neutral-950">
+                  {style.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          {/* Search Box */}
+          <div className="relative w-full sm:w-64">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <Search className={`h-3.5 w-3.5 ${theme === "light" ? "text-zinc-400" : "text-neutral-600"}`} />
+            </span>
+            <input
+              type="text"
+              className={`w-full border pl-9 pr-12 py-1.5 text-xs transition-all rounded-lg ${
+                theme === "light"
+                  ? "bg-zinc-50 border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
+                  : "bg-neutral-950 border-neutral-800 text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+              }`}
+              placeholder="Find by country, city, or channel name..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-xs font-bold text-zinc-400 dark:text-neutral-500 hover:text-indigo-500 transition-colors cursor-pointer"
+              >
+                Clear
+              </button>
+            )}
+          </div>
         </div>
       </div>
-      {/* Main Interactive Map Wrapper - Satellite Geo-Scan Deck */}
-      <div className={`relative w-full h-[400px] md:h-[480px] overflow-hidden border z-0 p-1 rounded-none ${
+
+      {/* Main Interactive Map Wrapper */}
+      <div className={`relative w-full h-[400px] md:h-[480px] overflow-hidden border z-0 p-1 rounded-xl ${
         theme === "light" 
-          ? "bg-white border-zinc-300" 
+          ? "bg-white border-zinc-200" 
           : "bg-[#0d0e12] border-neutral-900"
       }`}>
-        {/* Leaflet DOM Bounding Container */}
-        <div ref={mapContainerRef} className="w-full h-full grayscale-[15%] contrast-[105%]" id="world-map-leaflet" />
+        <div ref={mapContainerRef} className="w-full h-full rounded-lg" id="world-map-leaflet" />
       </div>
 
       {/* Legend and Scale Terminal Footer */}
-      <div className={`flex flex-wrap items-center justify-between gap-3 text-[10px] uppercase font-mono border-t pt-3.5 ${
+      <div className={`flex flex-wrap items-center justify-between gap-3 text-xs border-t pt-3.5 ${
         theme === "light" ? "text-zinc-500 border-zinc-200" : "text-neutral-500 border-neutral-900"
       }`}>
         <div className="flex items-center gap-4">
-          <span className="flex items-center gap-2 font-bold">
-            <span className="w-1.5 h-1.5 bg-emerald-500 relative flex"><span className="animate-ping absolute inline-flex h-full w-full bg-emerald-400 opacity-75" /></span>
-            Channel: Live
+          <span className="flex items-center gap-2 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 relative flex"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /></span>
+            Active channels
           </span>
-          <span className="flex items-center gap-2 font-bold">
-            <span className="w-1.5 h-1.5 bg-amber-500" />
-            Channel: Unstable
+          <span className="flex items-center gap-2 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
+            Unstable connection
           </span>
-          <span className="flex items-center gap-2 font-bold">
-            <span className="w-1.5 h-1.5 bg-rose-500" />
-            Channel: Offline
+          <span className="flex items-center gap-2 font-medium">
+            <span className="w-2.5 h-2.5 rounded-full bg-rose-500" />
+            Offline channels
           </span>
         </div>
         
-        <div className="flex items-center gap-1.5 font-bold">
-          <Compass className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-400" : "text-neutral-600"}`} />
-          <span>Equirectangular Map Distortion</span>
+        <div className="flex items-center gap-1.5 font-medium">
+          <Compass className={`w-4 h-4 ${theme === "light" ? "text-zinc-400" : "text-neutral-600"}`} />
+          <span>Equirectangular Map view</span>
         </div>
       </div>
     </div>
