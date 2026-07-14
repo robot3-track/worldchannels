@@ -97,21 +97,23 @@ export default function ChannelList({
     <div className={`border p-6 flex flex-col h-[650px] relative transition-all duration-300 font-sans ${
       theme === "light"
         ? "bg-[#faf9f6] border-zinc-300/80 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]"
-        : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(255,255,255,0.05)]"
+        : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.2)]" /* Harmonized with an indigo edge glow for dark mode */
     }`}>
       
       {/* Structural Header */}
       <div className="mb-5 flex flex-col gap-4">
         <div className="flex items-end justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-neutral-800">
           <div className="flex items-center gap-2">
-            <div className={`p-1 rounded-sm ${theme === "light" ? "bg-zinc-900 text-white" : "bg-neutral-800 text-indigo-400"}`}>
+            {/* Fixed rounded corner to keep clean and sharp */}
+            <div className={`p-1 rounded-none ${theme === "light" ? "bg-zinc-900 text-white" : "bg-neutral-800 text-indigo-400"}`}>
               <Filter className="w-3.5 h-3.5" />
             </div>
             <h3 className={`text-xs font-black tracking-tight uppercase ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
               Live Channel/Broadcast List
             </h3>
           </div>
-          <span className={`text-[10px] font-mono tracking-wider px-1.5 py-0.5 rounded ${
+          {/* Fixed rounded corner to keep clean and sharp */}
+          <span className={`text-[10px] font-mono tracking-wider px-1.5 py-0.5 rounded-none ${
             theme === "light" ? "bg-zinc-200 text-zinc-700" : "bg-neutral-900 text-neutral-400"
           }`}>
             REC: {processedStreams.length} FEEDS
@@ -152,7 +154,7 @@ export default function ChannelList({
               <button
                 key={cat.value}
                 onClick={() => onChangeCategory(cat.value)}
-                className={`flex items-center justify-between px-2.5 py-1.5 text-left text-xs border transition-all duration-100 font-medium ${
+                className={`flex items-center justify-between px-2.5 py-1.5 text-left text-xs border rounded-none transition-all duration-100 font-medium ${
                   isSelected
                     ? theme === "light"
                       ? "bg-zinc-900 border-zinc-900 text-white"
@@ -166,7 +168,8 @@ export default function ChannelList({
                   <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${isSelected ? 'text-white' : 'text-zinc-400'}`} />
                   <span className="truncate text-[11px] font-bold uppercase tracking-tight">{cat.label}</span>
                 </div>
-                <span className={`text-[9px] font-mono px-1 rounded-sm ml-1 ${isSelected ? 'bg-white/20 text-white' : 'bg-zinc-100 dark:bg-neutral-900 text-zinc-500'}`}>
+                {/* Fixed rounded-sm to rounded-none */}
+                <span className={`text-[9px] font-mono px-1 rounded-none ml-1 ${isSelected ? 'bg-white/20 text-white' : 'bg-zinc-100 dark:bg-neutral-900 text-zinc-500'}`}>
                   {getCategoryCount(cat.value)}
                 </span>
               </button>
@@ -185,7 +188,7 @@ export default function ChannelList({
         <select
           value={countryFilter}
           onChange={(e) => setCountryFilter(e.target.value as CountryFilter | "all")}
-          className={`w-full border px-3 py-2 text-xs transition-all font-mono tracking-tight cursor-pointer ${
+          className={`w-full border px-3 py-2 text-xs transition-all rounded-none font-mono tracking-tight cursor-pointer ${
             theme === "light"
               ? "bg-white border-zinc-200 text-zinc-900 focus:outline-none focus:border-zinc-900"
               : "bg-neutral-950 border-neutral-900 text-neutral-300 focus:outline-none focus:border-indigo-500"
@@ -230,7 +233,7 @@ export default function ChannelList({
                 <button
                   key={stream.id}
                   onClick={() => onSelectChannel(stream)}
-                  className={`w-full text-left flex items-center justify-between p-2 border transition-all duration-150 group ${
+                  className={`w-full text-left flex items-center justify-between p-2 border rounded-none transition-all duration-150 group ${
                     isSelected
                       ? theme === "light"
                         ? "bg-white border-zinc-900 text-zinc-900 translate-x-1"
@@ -242,7 +245,7 @@ export default function ChannelList({
                 >
                   <div className="flex items-center gap-3 truncate pr-2">
                     {/* Television Box Frame */}
-                    <div className={`w-7 h-7 overflow-hidden border flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 ${
+                    <div className={`w-7 h-7 overflow-hidden border rounded-none flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 ${
                       theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"
                     }`}>
                       {stream.logo ? (
@@ -305,7 +308,7 @@ export default function ChannelList({
             {processedStreams.length > visibleLimit && (
               <button
                 onClick={() => setVisibleLimit((prev) => prev + 100)}
-                className={`w-full py-2.5 mt-2 font-mono text-[10px] font-bold uppercase tracking-wider border border-dashed transition-all duration-150 text-center
+                className={`w-full py-2.5 mt-2 font-mono text-[10px] font-bold uppercase tracking-wider border border-dashed rounded-none transition-all duration-150 text-center
                   ${theme === "light" 
                     ? "bg-zinc-50 border-zinc-300 text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900" 
                     : "bg-neutral-900/20 border-neutral-800 text-neutral-500 hover:bg-neutral-900/60 hover:text-neutral-200"
