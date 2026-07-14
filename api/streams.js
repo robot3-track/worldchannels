@@ -307,18 +307,6 @@ const staticStreams = [
     lon: 2.3522,
   },
   {
-    id: "sports-bein-frbackup",
-    name: "Bein Sports 1 France (Server 2)",
-    url: "https://biostartvworld.pages.dev/api/bein-sports.m3u8?key=aHR0cHM6Ly8xbnlhbGVyLnN0cmVhbWhvc3RpbmdjZG4udG9wL3N0cmVhbS8yMy9pbmRleC5tM3U4",
-    category: "sports",
-    category: "world cup",
-    country: "FR",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
-    status: "online",
-    lat: 48.8566, // Paris, France
-    lon: 2.3522,
-  },
-  {
     id: "sports-antenasport",
     name: "Antena Sport",
     url: "https://stream1.antenaplay.ro/as/asrolive1/playlist.m3u8",
@@ -367,54 +355,6 @@ const staticStreams = [
     lon: -58.3816,
   },
   {
-    id: "sports-wc-26",
-    name: "Caze TV High Quality",
-    url: "https://biostartvworld.pages.dev/api/fifa-world-cup-2026.m3u8?key=aHR0cHM6Ly9kZnI4MHF6NDM1Y3JjLmNsb3VkZnJvbnQubmV0L01OT1AvQW1hZ2kvQ2F6ZS9DYXplX1RWX0JSLzEwODBwLXZ0dC9pbmRleC5tM3U4",
-    category: "sports",
-    category: "world cup",
-    country: "US",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyVpt98pKn91BVoSdP5DFhMnLDtVzeRIXOmgVOJ3obgw&s",
-    status: "online",
-    lat: 38.9072, // Washington, D.C., USA
-    lon: -77.0369,
-  },
-  {
-    id: "sports-mtv-3",
-    name: "MTV 3 (Finland)",
-    url: "https://www.tvkaista.org/mtv3/suora",
-    category: "sports",
-    category: "world cup",
-    country: "FI",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MTV3_Logo_2022.svg/330px-MTV3_Logo_2022.svg.png",
-    status: "online",
-    lat: 60.1699, // Helsinki, Finland
-    lon: 24.9384,
-  },
-  {
-    id: "sports-mtv-backup",
-    name: "MTV 3 (Finland Backup)",
-    url: "https://live-fi.tvkaista.net/mtv3/live.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "FI",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MTV3_Logo_2022.svg/330px-MTV3_Logo_2022.svg.png",
-    status: "online",
-    lat: 60.1699, // Helsinki, Finland
-    lon: 24.9384,
-  },
-  {
-    id: "sports-dazn-spain",
-    name: "DAZN Spain",
-    url: "https://pub-f2987c4fc9d2450191dfee2ee8dc9f51.r2.dev/sp/index.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "ES",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/0/09/DAZN_LOGO.png",
-    status: "online",
-    lat: 40.4637, // Spain
-    lon: -3.7492,
-  },
-  {
     id:"sports-itv-uk",
     name: "ITV UK",
     url: "https://andro.evrenesoglu57.click/checklist/androstreamliveexn4.m3u8",
@@ -439,30 +379,6 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
-    id: "sports-persiana-sports",
-    name: "Persiana Sports Iran",
-    url: "https://edge22.776740.ir.cdn.ir/hls2/persiana.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "IR",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGKhHOZXco9N2WZOzCDhYfwOjZ8bjF3j255oe8SaCAxGHEDUgFRGzglC-4&s=10",
-    status: "online",
-    lat: 35.6892, // Tehran, Iran
-    lon: 51.3890,
-  },
-  {
-    id: "sports-persiana-sports2",
-    name: "Persiana Sports Iran (Server 2)",
-    url: "https://cp11.adabmedia.com/hls2/persiana.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "IR",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGKhHOZXco9N2WZOzCDhYfwOjZ8bjF3j255oe8SaCAxGHEDUgFRGzglC-4&s=10",
-    status: "online",
-    lat: 35.6892, // Tehran, Iran
-    lon: 51.3890,
-  },
-  {
     id: "sports-fussball-tv",
     name: "Fussball.tv Germany",
     url: "https://edge22.776740.ir.cdn.ir/hls2/rasf1.m3u8",
@@ -485,6 +401,30 @@ const staticStreams = [
     status: "online",
     lat: 48.1351, // Munich, Germany
     lon: 11.5820,
+  },
+  {
+    id: "sports-persiana-sports",
+    name: "Persiana Sports Iran",
+    url: "https://edge22.776740.ir.cdn.ir/hls2/persiana.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGKhHOZXco9N2WZOzCDhYfwOjZ8bjF3j255oe8SaCAxGHEDUgFRGzglC-4&s=10",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
+    id: "sports-persiana-sports2",
+    name: "Persiana Sports Iran (Server 2)",
+    url: "https://cp11.adabmedia.com/hls2/persiana.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQGKhHOZXco9N2WZOzCDhYfwOjZ8bjF3j255oe8SaCAxGHEDUgFRGzglC-4&s=10",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
   },
   {
     id: "sports-syria",
@@ -667,6 +607,138 @@ const staticStreams = [
     lon: 58.3794,
   },
   {
+    id: "sports-mtv-backup",
+    name: "MTV 3 (Finland Backup)",
+    url: "https://live-fi.tvkaista.net/mtv3/live.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "FI",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MTV3_Logo_2022.svg/330px-MTV3_Logo_2022.svg.png",
+    status: "online",
+    lat: 60.1699, // Helsinki, Finland
+    lon: 24.9384,
+  },
+  {
+    id: "sports-bein-frbackup",
+    name: "Bein Sports 1 France (Server 2)",
+    url: "https://biostartvworld.pages.dev/api/bein-sports.m3u8?key=aHR0cHM6Ly8xbnlhbGVyLnN0cmVhbWhvc3RpbmdjZG4udG9wL3N0cmVhbS8yMy9pbmRleC5tM3U4",
+    category: "sports",
+    category: "world cup",
+    country: "FR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
+    id: "sports-wc-26",
+    name: "Caze TV High Quality",
+    url: "https://biostartvworld.pages.dev/api/fifa-world-cup-2026.m3u8?key=aHR0cHM6Ly9kZnI4MHF6NDM1Y3JjLmNsb3VkZnJvbnQubmV0L01OT1AvQW1hZ2kvQ2F6ZS9DYXplX1RWX0JSLzEwODBwLXZ0dC9pbmRleC5tM3U4",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTyVpt98pKn91BVoSdP5DFhMnLDtVzeRIXOmgVOJ3obgw&s",
+    status: "online",
+    lat: 38.9072, // Washington, D.C., USA
+    lon: -77.0369,
+  },
+  {
+    id: "sports-mtv-3",
+    name: "MTV 3 (Finland)",
+    url: "https://www.tvkaista.org/mtv3/suora",
+    category: "sports",
+    category: "world cup",
+    country: "FI",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/MTV3_Logo_2022.svg/330px-MTV3_Logo_2022.svg.png",
+    status: "online",
+    lat: 60.1699, // Helsinki, Finland
+    lon: 24.9384,
+  },
+  {
+    id: "sports-t-sport",
+    name: "T Sports (Bangladesh)",
+    url: "https://live-aburayhan1106.telewebion.ir/ek/sport1/live/1080p/index.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "BD",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT67eUWpdx84zCtzVQJQ4XlpJDZZYIco3gAgRn8ye0L1A&s",
+    status: "offline",
+    lat: 23.6850, // Dhaka, Bangladesh
+    lon: 90.3563,
+  },
+  {
+    id: "sports-irib-tv3",
+    name: "IRIB TV3 (Iran)",
+    url: "https://edge22.776740.ir.cdn.ir/hls2/tv3.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "IR",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYDGZgNFhDgD7Dnipqzol2nz_MIIb2m5wmNGEVOFV8zWOZF77Th7KszIbD&s=10",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
+    id: "country-vn-colatv-alt",
+    name: "Cola TV Vietnam (Server 1)",
+    url: "https://live05.apusport.com/live/78905744.m3u8", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "country-vn-colatv-alt2",
+    name: "Cola TV Vietnam (Server 2)",
+    url: "https://live05.koepgd.app/live/14830711.m3u8", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "country-vn-colatv-alt3",
+    name: "Cola TV Vietnam (Server 3)",
+    url: "https://live05.meung.app/live/08552895.m3u8", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "country-vn-colatv-alt4",
+    name: "Cola TV Vietnam (Server 4)",
+    url: "https://live05.meung.app/live/90865415.m3u8", // M3U8 Link
+    category: "sports",
+    category: "world cup",
+    country: "VN",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
+    status: "online",
+    lat: 10.8231, // Ho Chi Minh City
+    lon: 106.6297,
+  },
+  {
+    id: "sports-dazn-spain",
+    name: "DAZN Spain",
+    url: "https://pub-f2987c4fc9d2450191dfee2ee8dc9f51.r2.dev/sp/index.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "ES",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/0/09/DAZN_LOGO.png",
+    status: "online",
+    lat: 40.4637, // Spain
+    lon: -3.7492,
+  },
+  {
     id: "sports-bein-4fr",
     name: "Bein Sports 4 France",
     url: "https://ua102.online24.pm:8443/1104/video.m3u8?token=350B326FB34F4B8",
@@ -737,30 +809,6 @@ const staticStreams = [
     lat: 34.0522, // Los Angeles, California, USA
     lon: -118.2437,
   },
-  {
-    id: "sports-t-sport",
-    name: "T Sports (Bangladesh)",
-    url: "https://live-aburayhan1106.telewebion.ir/ek/sport1/live/1080p/index.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "BD",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT67eUWpdx84zCtzVQJQ4XlpJDZZYIco3gAgRn8ye0L1A&s",
-    status: "offline",
-    lat: 23.6850, // Dhaka, Bangladesh
-    lon: 90.3563,
-  },
-  {
-    id: "sports-irib-tv3",
-    name: "IRIB TV3 (Iran)",
-    url: "https://edge22.776740.ir.cdn.ir/hls2/tv3.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "IR",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYDGZgNFhDgD7Dnipqzol2nz_MIIb2m5wmNGEVOFV8zWOZF77Th7KszIbD&s=10",
-    status: "online",
-    lat: 35.6892, // Tehran, Iran
-    lon: 51.3890,
-  },
   { 
     id: "sports-caze-tv", 
     name: "Caze TV (Brazil Streaming)", 
@@ -799,54 +847,6 @@ const staticStreams = [
     status: "online", 
     lat: -14.2350,
     lon: -51.9253,
-  },
-  {
-    id: "country-vn-colatv-alt",
-    name: "Cola TV Vietnam (Server 1)",
-    url: "https://live05.apusport.com/live/78905744.m3u8", // M3U8 Link
-    category: "sports",
-    category: "world cup",
-    country: "VN",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
-    status: "online",
-    lat: 10.8231, // Ho Chi Minh City
-    lon: 106.6297,
-  },
-  {
-    id: "country-vn-colatv-alt2",
-    name: "Cola TV Vietnam (Server 2)",
-    url: "https://live05.koepgd.app/live/14830711.m3u8", // M3U8 Link
-    category: "sports",
-    category: "world cup",
-    country: "VN",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
-    status: "online",
-    lat: 10.8231, // Ho Chi Minh City
-    lon: 106.6297,
-  },
-  {
-    id: "country-vn-colatv-alt3",
-    name: "Cola TV Vietnam (Server 3)",
-    url: "https://live05.meung.app/live/08552895.m3u8", // M3U8 Link
-    category: "sports",
-    category: "world cup",
-    country: "VN",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
-    status: "online",
-    lat: 10.8231, // Ho Chi Minh City
-    lon: 106.6297,
-  },
-  {
-    id: "country-vn-colatv-alt4",
-    name: "Cola TV Vietnam (Server 4)",
-    url: "https://live05.meung.app/live/90865415.m3u8", // M3U8 Link
-    category: "sports",
-    category: "world cup",
-    country: "VN",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQRHAMUZmC4Pd8038CRvNN4rYlfCBNUW5HYpw&s",
-    status: "online",
-    lat: 10.8231, // Ho Chi Minh City
-    lon: 106.6297,
   },
   {
     id: "sports-socolive",
