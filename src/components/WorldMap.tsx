@@ -204,7 +204,7 @@ const countryCities: Record<string, { name: string; lat: number; lon: number }[]
   ]
 };
 
-// Advanced coordinate scatter algorithm to isolate adjacent map telemetry nodes
+// Advanced coordinate scatter algorithm to isolate adjacent map telemetry nodes[cite: 1]
 const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   const countryCounts: Record<string, number> = {};
   
@@ -244,12 +244,12 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   });
 };
 
-// Map customization styles config
+// Map customization styles config - Satellite as primary default[cite: 1]
 const mapStyles = [
+  { id: "satellite", label: "Satellite View", url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" },
   { id: "light", label: "Classic Light", url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" },
   { id: "dark", label: "Midnight Dark", url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" },
-  { id: "satellite", label: "Satellite View", url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" },
-  { id: "retro", label: "Retro Outdoors", url: "https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png" }
+  { id: "retro", label: "Retro Voyager", url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" }
 ];
 
 interface WorldMapProps {
@@ -268,24 +268,20 @@ export default function WorldMap({
   theme
 }: WorldMapProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  const [currentMapStyle, setCurrentMapStyle] = useState(theme === "light" ? "light" : "dark");
+  // Set satellite view as default initial state
+  const [currentMapStyle, setCurrentMapStyle] = useState("satellite");
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markerGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const isInitialRenderRef = useRef(true);
 
-  // Sync component map style state with global system theme
-  useEffect(() => {
-    setCurrentMapStyle(theme === "light" ? "light" : "dark");
-  }, [theme]);
-
-  // Parse telemetry streams to generate coordinates
+  // Parse telemetry streams to generate coordinates[cite: 1]
   const processedStreams = useMemo(() => {
     return mapStreamsToSpannedCoordinates(streams);
   }, [streams]);
 
-  // Handle active registry search sorting flags
+  // Handle active registry search sorting flags[cite: 1]
   const filteredStreams = useMemo(() => {
     return processedStreams.filter((s) => {
       const matchCat = selectedCategory === "all" || s.category === selectedCategory;
@@ -298,7 +294,7 @@ export default function WorldMap({
     });
   }, [processedStreams, selectedCategory, searchQuery]);
 
-  // Initialize leaf matrix map onto DOM container hook
+  // Initialize leaf matrix map onto DOM container hook[cite: 1]
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
 
@@ -315,7 +311,7 @@ export default function WorldMap({
       attributionControl: false
     });
 
-    // Select tile layers safely using current chosen style state
+    // Select default satellite style initially[cite: 1]
     const targetStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
 
     const tileLayer = L.tileLayer(targetStyle.url, {
@@ -329,7 +325,7 @@ export default function WorldMap({
 
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    // Dynamic marker aggregated clusters
+    // Dynamic marker aggregated clusters[cite: 1]
     const markerGroup = (L as any).markerClusterGroup({
       showCoverageOnHover: false,
       zoomToBoundsOnClick: false, 
@@ -339,14 +335,14 @@ export default function WorldMap({
       iconCreateFunction: (cluster: any) => {
         const count = cluster.getChildCount();
         return L.divIcon({
-          html: `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-900 rounded-full font-sans text-xs font-bold border ${theme === 'light' ? 'border-white text-white shadow-md' : 'border-indigo-400 text-indigo-100 shadow-lg shadow-indigo-500/20'} cursor-pointer"><span>${count}</span></div>`,
+          html: `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-900 font-sans text-xs font-bold border ${theme === 'light' ? 'border-white text-white shadow-md' : 'border-indigo-400 text-indigo-100 shadow-lg shadow-indigo-500/20'} cursor-pointer"><span>${count}</span></div>`,
           className: 'custom-cluster-icon',
           iconSize: [32, 32]
         });
       }
     }).addTo(map);
 
-    // Render multi-stream cluster selection arrays inside popup panel overlays
+    // Render multi-stream cluster selection arrays inside popup panel overlays[cite: 1]
     markerGroup.on('clusterclick', (a: any) => {
       const markers = a.layer.getAllChildMarkers();
       const clusterLatLng = a.latlng;
@@ -401,7 +397,7 @@ export default function WorldMap({
         .setContent(listHtml)
         .openOn(map);
 
-      // Bind node relay intercept handlers across popup list structures
+      // Bind node relay intercept handlers across popup list structures[cite: 1]
       setTimeout(() => {
         const container = popup.getElement();
         if (!container) return;
@@ -435,7 +431,7 @@ export default function WorldMap({
     };
   }, []);
 
-  // Update dynamic map tiles when the selected map style customization changes
+  // Update dynamic map tiles when style customization changes[cite: 1]
   useEffect(() => {
     if (tileLayerRef.current) {
       const selectedStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
@@ -443,23 +439,23 @@ export default function WorldMap({
     }
   }, [currentMapStyle]);
 
-  // Update dynamic markers when selection or data changes
+  // Update dynamic markers when selection or data changes[cite: 1]
   useEffect(() => {
     const map = mapRef.current;
     const markerGroup = markerGroupRef.current;
     if (!map || !markerGroup) return;
 
-    // Clear old layers
+    // Clear old layers[cite: 1]
     markerGroup.clearLayers();
 
-    // Map each stream to an interactive Leaflet marker
+    // Map each stream to an interactive Leaflet marker[cite: 1]
     filteredStreams.forEach((stream) => {
       const lat = stream.mappedLat;
       const lon = stream.mappedLon;
       const cityName = stream.cityName;
       const isActive = activeChannel && activeChannel.id === stream.id;
 
-      // Ensure all classes are statically recognizable by Tailwind compiler
+      // Ensure all classes are statically recognizable by Tailwind compiler[cite: 1]
       let pingColorClass = "bg-emerald-400/40";
       let pulseRingClass = "bg-emerald-400/20";
       let pulseBorderClass = "border-emerald-400/30";
@@ -477,7 +473,7 @@ export default function WorldMap({
         activeDotColorClass = "bg-rose-500";
       }
 
-      // HTML template for pulsing map nodes
+      // HTML template for pulsing map nodes[cite: 1]
       const markerHtml = isActive
         ? `
         <div class="relative flex items-center justify-center">
@@ -500,9 +496,9 @@ export default function WorldMap({
         iconAnchor: [12, 12]
       });
 
-      // Tailored minimal modern popup structure
+      // Tailored minimal modern popup structure[cite: 1]
       const popupContent = `
-        <div class="p-3 font-sans text-xs rounded-lg shadow-lg ${
+        <div class="p-3 font-sans text-xs ${
           theme === "light" 
             ? "text-zinc-900 bg-white border border-zinc-200" 
             : "text-neutral-200 bg-neutral-950 border border-neutral-900"
@@ -513,7 +509,7 @@ export default function WorldMap({
           </div>
           <div class="mt-2 flex justify-between items-center font-medium text-[11px] ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}">
             <span>${cityName}</span>
-            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded border ${
+            <span class="text-[10px] font-bold px-1.5 py-0.5 border ${
               theme === "light" ? "bg-zinc-50 text-zinc-700 border-zinc-200" : "bg-neutral-900 text-neutral-300 border-neutral-800"
             }">${stream.country}</span>
           </div>
@@ -548,7 +544,7 @@ export default function WorldMap({
     });
   }, [filteredStreams, activeChannel, theme]);
 
-  // Dynamic camera fly-to effect on selection
+  // Dynamic camera fly-to effect on selection[cite: 1]
   useEffect(() => {
     const map = mapRef.current;
     if (!activeChannel || !map) return;
@@ -568,12 +564,12 @@ export default function WorldMap({
   }, [activeChannel, processedStreams]);
 
   return (
-    <div className={`relative w-full border p-4 md:p-5 overflow-hidden flex flex-col gap-4 font-sans transition-all rounded-xl ${
+    <div className={`relative w-full border p-4 md:p-5 overflow-hidden flex flex-col gap-4 font-sans transition-all ${
       theme === "light"
         ? "bg-white border-zinc-200 shadow-sm"
         : "bg-[#0d0e12] border-neutral-900"
     }`}>
-      {/* Dynamic Header */}
+      {/* Dynamic Header[cite: 1] */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 z-10">
         <div>
           <div className="flex items-center gap-2">
@@ -587,10 +583,10 @@ export default function WorldMap({
           </p>
         </div>
 
-        {/* Dynamic Controls Side-by-Side */}
+        {/* Dynamic Controls Side-by-Side[cite: 1] */}
         <div className="flex flex-wrap items-center gap-3">
-          {/* Custom Map Color Switcher */}
-          <div className="flex items-center gap-1.5 border p-1 rounded-lg bg-zinc-50/50 dark:bg-neutral-900/50 border-zinc-200 dark:border-neutral-800">
+          {/* Custom Map Color Switcher[cite: 1] */}
+          <div className="flex items-center gap-1.5 border p-1 rounded-md bg-zinc-50/50 dark:bg-neutral-900/50 border-zinc-200 dark:border-neutral-800">
             <Paintbrush className="w-3.5 h-3.5 text-indigo-500 ml-1.5" />
             <select
               value={currentMapStyle}
@@ -605,17 +601,17 @@ export default function WorldMap({
             </select>
           </div>
 
-          {/* Search Box */}
+          {/* Search Box[cite: 1] */}
           <div className="relative w-full sm:w-64">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <Search className={`h-3.5 w-3.5 ${theme === "light" ? "text-zinc-400" : "text-neutral-600"}`} />
             </span>
             <input
               type="text"
-              className={`w-full border pl-9 pr-12 py-1.5 text-xs transition-all rounded-lg ${
+              className={`w-full border pl-9 pr-12 py-1.5 text-xs transition-all rounded-md ${
                 theme === "light"
-                  ? "bg-zinc-50 border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400 focus:ring-1 focus:ring-indigo-400"
-                  : "bg-neutral-950 border-neutral-800 text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-indigo-600 focus:ring-1 focus:ring-indigo-600"
+                  ? "bg-zinc-50 border-zinc-200 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:border-indigo-400"
+                  : "bg-neutral-950 border-neutral-800 text-neutral-200 placeholder-neutral-600 focus:outline-none focus:border-indigo-600"
               }`}
               placeholder="Find by country, city, or channel name..."
               value={searchQuery}
@@ -633,16 +629,16 @@ export default function WorldMap({
         </div>
       </div>
 
-      {/* Main Interactive Map Wrapper */}
-      <div className={`relative w-full h-[400px] md:h-[480px] overflow-hidden border z-0 p-1 rounded-xl ${
+      {/* Main Interactive Map Wrapper[cite: 1] */}
+      <div className={`relative w-full h-[400px] md:h-[480px] overflow-hidden border z-0 p-1 ${
         theme === "light" 
           ? "bg-white border-zinc-200" 
           : "bg-[#0d0e12] border-neutral-900"
       }`}>
-        <div ref={mapContainerRef} className="w-full h-full rounded-lg" id="world-map-leaflet" />
+        <div ref={mapContainerRef} className="w-full h-full" id="world-map-leaflet" />
       </div>
 
-      {/* Legend and Scale Terminal Footer */}
+      {/* Legend and Scale Terminal Footer[cite: 1] */}
       <div className={`flex flex-wrap items-center justify-between gap-3 text-xs border-t pt-3.5 ${
         theme === "light" ? "text-zinc-500 border-zinc-200" : "text-neutral-500 border-neutral-900"
       }`}>
