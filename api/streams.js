@@ -1062,8 +1062,8 @@ const staticStreams = [
     lon: 24.9384,
   },
   {
-    id: "sports-tsn-1",
-    name: "TSN 1 (Canada)",
+    id: "sports-tsn-1backup",
+    name: "TSN 1 Server 2 (Canada)",
     url: "https://raw.githubusercontent.com/kusnadipepenk/ntn/refs/heads/master/tsn1.m3u8",
     category: "sports",
     category: "world cup",
@@ -2356,6 +2356,66 @@ const staticStreams = [
     status: "online",
     lat: 24.7136,
     lon: 46.6753,
+  },
+  {
+    id: "sports-tsn-1",
+    name: "TSN 1 (Canada)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/420.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "CA",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4b/Tsn4hd.png/revision/latest?cb=20150709184509",
+    status: "online",
+    lat: 45.4215, // Ottawa, Canada
+    lon: -75.6972,
+  },
+  {
+    id: "sports-tsn-2",
+    name: "TSN 2 (Canada)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/421.m3u88",
+    category: "sports",
+    category: "world cup",
+    country: "CA",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4b/Tsn4hd.png/revision/latest?cb=20150709184509",
+    status: "online",
+    lat: 45.4215, // Ottawa, Canada
+    lon: -75.6972,
+  },
+  {
+    id: "sports-tsn-3",
+    name: "TSN 3 (Canada)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/422.m3u88",
+    category: "sports",
+    category: "world cup",
+    country: "CA",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4b/Tsn4hd.png/revision/latest?cb=20150709184509",
+    status: "online",
+    lat: 45.4215, // Ottawa, Canada
+    lon: -75.6972,
+  },
+  {
+    id: "sports-tsn-4",
+    name: "TSN 4 (Canada)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/423.m3u88",
+    category: "sports",
+    category: "world cup",
+    country: "CA",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4b/Tsn4hd.png/revision/latest?cb=20150709184509",
+    status: "online",
+    lat: 45.4215, // Ottawa, Canada
+    lon: -75.6972,
+  },
+  {
+    id: "sports-tsn-5",
+    name: "TSN 5 (Canada)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/424.m3u88",
+    category: "sports",
+    category: "world cup",
+    country: "CA",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/4b/Tsn4hd.png/revision/latest?cb=20150709184509",
+    status: "online",
+    lat: 45.4215, // Ottawa, Canada
+    lon: -75.6972,
   },
 
   // --- INDIA ---
