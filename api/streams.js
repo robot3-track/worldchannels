@@ -355,6 +355,30 @@ const staticStreams = [
     lon: -58.3816,
   },
   {
+    id: "sports-winsport-plus",
+    name: "Winsport Plus (Colombia)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/126.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "CO",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Win_Sports%2B_logo.svg/3840px-Win_Sports%2B_logo.svg.png",
+    status: "online",
+    lat: 4.5709, // Colombia
+    lon: -74.2973, 
+  },
+  {
+    id: "sports-claro-sports",
+    name: "Claro Sports (Argentina)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/103.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "AR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/3/30/Claro_Sports_logo.svg",
+    status: "online",
+    lat: -34.6037, // Buenos Aires, Argentina
+    lon: -58.3816,
+  },
+  {
     id: "sports-bein-2fr",
     name: "Bein Sports 2 France",
     url: "https://ua102.online24.pm:8443/1102/video.m3u8?token=350B326FB34F4B8",
@@ -583,18 +607,6 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
-    id: "sports-winsport-plus",
-    name: "Winsport Plus (Colombia)",
-    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/126.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "CO",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Win_Sports%2B_logo.svg/3840px-Win_Sports%2B_logo.svg.png",
-    status: "online",
-    lat: 4.5709, // Colombia
-    lon: -74.2973, 
-  },
-  {
     id: "sports-turkmenistan",
     name: "Turkmenistan Sports",
     url: "https://alpha.tv.online.tm/legacyhls/ch004_720/index.m3u8",
@@ -737,6 +749,54 @@ const staticStreams = [
     status: "online",
     lat: 10.8231, // Ho Chi Minh City
     lon: 106.6297,
+  },
+  {
+    id: "sports-bein-turkey2",
+    name: "Bein Sports 2 Turkey",
+    url: "https://andro.okan11gote12sokan.cfd/checklist/androstreamlivebs2.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
+  },
+  {
+    id: "sports-bein-turkey3",
+    name: "Bein Sports 3 Turkey",
+    url: "https://andro.okan11gote12sokan.cfd/checklist/androstreamlivebs3.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
+  },
+  {
+    id: "sports-bein-turkey4",
+    name: "Bein Sports 4 Turkey",
+    url: "https://andro.okan11gote12sokan.cfd/checklist/androstreamlivebs4.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
+  },
+  {
+    id: "sports-bein-turkey5",
+    name: "Bein Sports 5 Turkey",
+    url: "https://andro.226503.xyz/checklist/androstreamlivebs5.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "TR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 39.9334, // Ankara, Turkey
+    lon: 32.8597,
   },
   {
     id:"sports-itv-uk",
