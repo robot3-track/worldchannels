@@ -1752,7 +1752,7 @@ const staticStreams = [
     lon: -77.0369,
   },
   {
-    id: "country-us-disneyjr",
+    id: "country-us-disneyjr2",
     name: "Disney Jr. US (Server 2)",
     url: "https://s2.bufaloweb.com/bufalo19/index.m3u8",
     category: "country",
@@ -1769,6 +1769,17 @@ const staticStreams = [
     category: "country",
     country: "US",
     logo: "https://www.greyboxcreative.com/wp-content/uploads/2020/01/National-Geographic-logo.jpg",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-nickelodeon",
+    name: "Nickelodeon (US)",
+    url: "https://s2.bufaloweb.com/bufalo20/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Nickelodeon_2023_logo_%28outline%29.svg/1280px-Nickelodeon_2023_logo_%28outline%29.svg.png",
     status: "online",
     lat: 38.9072, // Washington D.C., US
     lon: -77.0369,
