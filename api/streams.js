@@ -487,7 +487,7 @@ const staticStreams = [
     lon: 51.3890,
   },
   {
-    id: "sports-bein-iranbackup",
+    id: "sports-bein-iranbackup2",
     name: "Bein Sports Iran Server 2",
     url: "https://edge22.776740.ir.cdn.ir/hls2/bein1.m3u8",
     category: "sports",
