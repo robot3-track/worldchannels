@@ -54,10 +54,11 @@ export default function ChannelList({
     const filtered = streams.filter((stream) => {
       const matchCategory = selectedCategory === "all" || stream.category === selectedCategory;
       const matchCountry = countryFilter === "all" || stream.country === countryFilter;
+      
+      // FIX: Removed stream.category search comparison to stop global category terms from hijacking search results
       const matchSearch =
         stream.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        stream.country.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        stream.category.toLowerCase().includes(searchTerm.toLowerCase());
+        stream.country.toLowerCase().includes(searchTerm.toLowerCase());
       
       return matchCategory && matchCountry && matchSearch;
     });
@@ -97,14 +98,13 @@ export default function ChannelList({
     <div className={`border p-6 flex flex-col h-[650px] relative transition-all duration-300 font-sans ${
       theme === "light"
         ? "bg-[#faf9f6] border-zinc-300/80 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]"
-        : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.2)]" /* Harmonized with an indigo edge glow for dark mode */
+        : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.2)]"
     }`}>
       
       {/* Structural Header */}
       <div className="mb-5 flex flex-col gap-4">
         <div className="flex items-end justify-between pb-2 border-b-2 border-dashed border-zinc-300 dark:border-neutral-800">
           <div className="flex items-center gap-2">
-            {/* Fixed rounded corner to keep clean and sharp */}
             <div className={`p-1 rounded-none ${theme === "light" ? "bg-zinc-900 text-white" : "bg-neutral-800 text-indigo-400"}`}>
               <Filter className="w-3.5 h-3.5" />
             </div>
@@ -112,7 +112,6 @@ export default function ChannelList({
               Live Channel/Broadcast List
             </h3>
           </div>
-          {/* Fixed rounded corner to keep clean and sharp */}
           <span className={`text-[10px] font-mono tracking-wider px-1.5 py-0.5 rounded-none ${
             theme === "light" ? "bg-zinc-200 text-zinc-700" : "bg-neutral-900 text-neutral-400"
           }`}>
@@ -168,7 +167,6 @@ export default function ChannelList({
                   <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${isSelected ? 'text-white' : 'text-zinc-400'}`} />
                   <span className="truncate text-[11px] font-bold uppercase tracking-tight">{cat.label}</span>
                 </div>
-                {/* Fixed rounded-sm to rounded-none */}
                 <span className={`text-[9px] font-mono px-1 rounded-none ml-1 ${isSelected ? 'bg-white/20 text-white' : 'bg-zinc-100 dark:bg-neutral-900 text-zinc-500'}`}>
                   {getCategoryCount(cat.value)}
                 </span>
@@ -227,11 +225,12 @@ export default function ChannelList({
           </div>
         ) : (
           <>
-            {processedStreams.slice(0, visibleLimit).map((stream) => {
+            {/* FIX: Included array index fallback on key attribute matching to resolve render/click-freezes from duplicate IDs */}
+            {processedStreams.slice(0, visibleLimit).map((stream, idx) => {
               const isSelected = selectedChannel?.id === stream.id;
               return (
                 <button
-                  key={stream.id}
+                  key={`${stream.id}-${idx}`}
                   onClick={() => onSelectChannel(stream)}
                   className={`w-full text-left flex items-center justify-between p-2 border rounded-none transition-all duration-150 group ${
                     isSelected
