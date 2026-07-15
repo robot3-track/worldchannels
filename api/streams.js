@@ -2559,7 +2559,7 @@ export default async function handler(request, response) {
       const complianceKeys = [
         'eHh4', 'cG9ybg==', 'YWR1bHQ=', 'MTgr', 'c2V4', 
         'ZXJvdGlj', 'aGVudGFp', 'bnNmdw==', 'cGxheWJveQ==', 
-        'cmVkbGlnaHQ=', 'cGluayBv'
+        'cmVkbGlnaHQ=', 'cGluayBv', 'ZGF0aW5n', 'bmFrZWQ='
       ];
       
       for (const key of complianceKeys) {
