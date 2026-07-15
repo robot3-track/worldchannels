@@ -439,30 +439,6 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
-    id: "sports-fussball-tv",
-    name: "Fussball.tv Germany",
-    url: "https://edge22.776740.ir.cdn.ir/hls2/rasf1.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "DE",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw9VZ8bEqurIwz9f7lT5x_qoGTG1ARebF-BHwjFua8Pw&s=10",
-    status: "online",
-    lat: 48.1351, // Munich, Germany
-    lon: 11.5820,
-  },
-  {
-    id: "sports-fussball-tvbackup",
-    name: "Fussball.tv Germany Server 2",
-    url: "https://cp11.adabmedia.com/hls2/rasf1.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "DE",
-    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTw9VZ8bEqurIwz9f7lT5x_qoGTG1ARebF-BHwjFua8Pw&s=10",
-    status: "online",
-    lat: 48.1351, // Munich, Germany
-    lon: 11.5820,
-  },
-  {
     id: "sports-persiana-sports",
     name: "Persiana Sports Iran",
     url: "https://edge22.776740.ir.cdn.ir/hls2/persiana.m3u8",
