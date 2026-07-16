@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import {
   Search,
   Tv,
@@ -36,6 +36,11 @@ export default function ChannelList({
   const [countryFilter, setCountryFilter] = useState<CountryFilter | "all">("all");
   const [visibleLimit, setVisibleLimit] = useState(100);
 
+  // Keyboard navigation cursor tracker
+  const [focusedIndex, setFocusedIndex] = useState<number>(-1);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  const channelListContainerRef = useRef<HTMLDivElement>(null);
+
   // --- Local Storage State Hooks ---
   const [bookmarks, setBookmarks] = useState<string[]>(() => {
     if (typeof window !== "undefined") {
@@ -68,7 +73,6 @@ export default function ChannelList({
     if (selectedChannel) {
       setHistory((prev) => {
         const filtered = prev.filter((id) => id !== selectedChannel.id);
-        // Keep the history buffer capped at 10 items
         return [selectedChannel.id, ...filtered].slice(0, 10);
       });
     }
@@ -76,7 +80,7 @@ export default function ChannelList({
 
   // Toggle Bookmark Handler
   const toggleBookmark = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation(); // Stop from selecting the channel when clicking the star
+    e.stopPropagation();
     setBookmarks((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
@@ -85,6 +89,7 @@ export default function ChannelList({
   // Reset page pagination bounds back to default when sorting or search criteria alter
   useEffect(() => {
     setVisibleLimit(100);
+    setFocusedIndex(-1); // Reset key selection when filter changes
   }, [searchTerm, selectedCategory, countryFilter]);
 
   const categories: { value: CategoryFilter; label: string; icon: any }[] = [
@@ -111,27 +116,24 @@ export default function ChannelList({
     });
 
     return [...filtered].sort((a, b) => {
-      // 1. Sort primarily by Bookmark status (Bookmarked items rise to the top)
       const aBookmarked = bookmarks.includes(a.id) ? 1 : 0;
       const bBookmarked = bookmarks.includes(b.id) ? 1 : 0;
       if (aBookmarked !== bBookmarked) {
         return bBookmarked - aBookmarked;
       }
 
-      // 2. Sort secondarily by History (most recently played bubbles up right under bookmarks)
       const aHistoryIdx = history.indexOf(a.id);
       const bHistoryIdx = history.indexOf(b.id);
       const aHasHistory = aHistoryIdx !== -1;
       const bHasHistory = bHistoryIdx !== -1;
 
       if (aHasHistory && bHasHistory) {
-        return aHistoryIdx - bHistoryIdx; // Lower index means more recently played
+        return aHistoryIdx - bHistoryIdx;
       }
       if (aHasHistory !== bHasHistory) {
         return aHasHistory ? -1 : 1;
       }
 
-      // 3. Fallback: Sort by signal status weightings
       const weightA = a.status === "online" ? 0 : a.status === "unstable" ? 1 : 2;
       const weightB = b.status === "online" ? 0 : b.status === "unstable" ? 1 : 2;
       return weightA - weightB;
@@ -141,6 +143,77 @@ export default function ChannelList({
   const getCategoryCount = (catValue: CategoryFilter) => {
     return streams.filter(s => catValue === "all" || s.category === catValue).length;
   };
+
+  // --- Keyboard Navigation Global Event Listeners ---
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // 1. Focus Search Box on "/" Key
+      if (e.key === "/" && document.activeElement !== searchInputRef.current) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+        searchInputRef.current?.select();
+        return;
+      }
+
+      // 2. Escape to blur and reset keyboard selection focus
+      if (e.key === "Escape") {
+        searchInputRef.current?.blur();
+        setFocusedIndex(-1);
+        return;
+      }
+
+      // Check contextual state
+      const limit = Math.min(processedStreams.length, visibleLimit);
+
+      // 3. Arrow down to navigate lists
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        setFocusedIndex((prev) => {
+          const nextIdx = prev + 1;
+          const targetIdx = nextIdx < limit ? nextIdx : prev;
+          
+          // Smooth scroll container to keep keyboard selection visible
+          const activeEl = channelListContainerRef.current?.children[targetIdx + 1] as HTMLElement;
+          if (activeEl) {
+            activeEl.scrollIntoView({ block: "nearest" });
+          }
+          return targetIdx;
+        });
+      }
+
+      // 4. Arrow up to navigate lists
+      if (e.key === "ArrowUp") {
+        e.preventDefault();
+        setFocusedIndex((prev) => {
+          const nextIdx = prev - 1;
+          const targetIdx = nextIdx >= 0 ? nextIdx : prev;
+
+          const activeEl = channelListContainerRef.current?.children[targetIdx + 1] as HTMLElement;
+          if (activeEl) {
+            activeEl.scrollIntoView({ block: "nearest" });
+          }
+          return targetIdx;
+        });
+      }
+
+      // 5. Enter to select currently highlighted channel
+      if (e.key === "Enter") {
+        const isTyping = document.activeElement === searchInputRef.current;
+        
+        if (focusedIndex >= 0 && focusedIndex < limit) {
+          e.preventDefault();
+          onSelectChannel(processedStreams[focusedIndex]);
+        } else if (isTyping && processedStreams.length > 0) {
+          e.preventDefault();
+          onSelectChannel(processedStreams[0]);
+          searchInputRef.current?.blur();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [processedStreams, focusedIndex, visibleLimit, onSelectChannel]);
 
   const countriesList: { code: CountryFilter | "all"; name: string }[] = [
     { code: "all", name: "All Regions" }, { code: "US", name: "United States" },
@@ -192,8 +265,9 @@ export default function ChannelList({
             <Search className={`h-4 w-4 ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`} />
           </span>
           <input
+            ref={searchInputRef}
             type="text"
-            className={`w-full border-2 text-xs transition-all duration-150 rounded-none pl-9 pr-4 py-2.5 font-medium ${
+            className={`w-full border-2 text-xs transition-all duration-150 rounded-none pl-9 pr-12 py-2.5 font-medium ${
               theme === "light"
                 ? "bg-white border-zinc-900 text-zinc-900 placeholder-zinc-400 focus:outline-none focus:bg-zinc-50"
                 : "bg-neutral-950 border-neutral-800 text-neutral-100 placeholder-neutral-600 focus:outline-none focus:border-indigo-500"
@@ -202,6 +276,10 @@ export default function ChannelList({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
+          {/* Tactical terminal indicator for slash hotkey */}
+          <span className="absolute right-3.5 top-1/2 -translate-y-1/2 font-mono text-[9px] font-bold opacity-30 select-none pointer-events-none px-1 border border-current rounded-sm">
+            /
+          </span>
         </div>
       </div>
 
@@ -272,7 +350,10 @@ export default function ChannelList({
       </div>
 
       {/* Broadcast Feed Rows */}
-      <div className="flex-1 overflow-y-auto pr-1 space-y-1 no-scrollbar scroll-smooth">
+      <div 
+        ref={channelListContainerRef}
+        className="flex-1 overflow-y-auto pr-1 space-y-1 no-scrollbar scroll-smooth"
+      >
         <div className="flex justify-between items-center text-[9px] font-bold text-zinc-400 dark:text-neutral-600 px-1 mb-1 font-mono uppercase tracking-wider">
           <span>Station matches</span>
           <span>Sig</span>
@@ -294,24 +375,37 @@ export default function ChannelList({
           <>
             {processedStreams.slice(0, visibleLimit).map((stream, idx) => {
               const isSelected = selectedChannel?.id === stream.id;
+              const isFocused = focusedIndex === idx;
               const isBookmarked = bookmarks.includes(stream.id);
               const isRecentlyPlayed = history.includes(stream.id) && !isBookmarked;
 
               return (
                 <button
                   key={`${stream.id}-${idx}`}
-                  onClick={() => onSelectChannel(stream)}
-                  className={`w-full text-left flex items-center justify-between p-2 border rounded-none transition-all duration-150 group ${
+                  onClick={() => {
+                    onSelectChannel(stream);
+                    setFocusedIndex(idx);
+                  }}
+                  className={`w-full text-left flex items-center justify-between p-2 border rounded-none transition-all duration-150 group relative ${
                     isSelected
                       ? theme === "light"
                         ? "bg-white border-zinc-900 text-zinc-900 translate-x-1"
                         : "bg-neutral-950 border-indigo-500 text-neutral-100 translate-x-1"
+                      : isFocused
+                      ? theme === "light"
+                        ? "bg-zinc-100 border-zinc-500 text-zinc-900 translate-x-0.5"
+                        : "bg-neutral-900/60 border-indigo-700 text-neutral-200 translate-x-0.5"
                       : theme === "light"
                       ? "bg-white border-zinc-200/80 text-zinc-800 hover:bg-zinc-50 hover:border-zinc-400"
                       : "bg-neutral-950/40 border-neutral-900 text-neutral-400 hover:bg-neutral-950 hover:border-neutral-700 hover:text-neutral-200"
                   }`}
                 >
-                  <div className="flex items-center gap-3 truncate pr-2">
+                  {/* Left edge keyboard cursor block indicator */}
+                  {isFocused && (
+                    <div className="absolute left-0 top-0 bottom-0 w-1 bg-indigo-500" />
+                  )}
+
+                  <div className="flex items-center gap-3 truncate pr-2 pl-1.5">
                     {/* Television Box Frame */}
                     <div className={`w-7 h-7 overflow-hidden border rounded-none flex items-center justify-center flex-shrink-0 transition-transform group-hover:scale-105 ${
                       theme === "light" ? "bg-zinc-100 border-zinc-300" : "bg-neutral-900 border-neutral-800"
@@ -333,11 +427,9 @@ export default function ChannelList({
 
                     <div className="truncate flex flex-col justify-center">
                       <div className="flex items-center gap-1.5 truncate">
-                        {/* Bookmark Indicator (Filled Star) */}
                         {isBookmarked && (
                           <Star className="w-3 h-3 text-amber-500 fill-amber-500 flex-shrink-0" />
                         )}
-                        {/* Recently Played Indicator */}
                         {isRecentlyPlayed && (
                           <History className="w-3 h-3 text-indigo-400 flex-shrink-0" />
                         )}
