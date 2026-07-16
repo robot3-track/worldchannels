@@ -2060,17 +2060,6 @@ const staticStreams = [
     lon: 121.5654,
   },
   {
-    id: "freetv-fashion",
-    name: "Fashion TV L'Original",
-    url: "https://fash1043.cloudycdn.host/play/hls/ftv_ftv_mid_east_en/index.m3u8",
-    category: "freetv",
-    country: "Global",
-    logo: "https://images.unsplash.com/photo-1483985988355-763728e1935b?auto=format&fit=crop&w=120&h=120&q=80",
-    status: "online",
-    lat: 43.7384, // Monaco
-    lon: 7.4246,
-  },
-  {
     id: "freetv-cctv",
     name: "CCTV Français News Global",
     url: "https://news.cgtn.com/resource/live/french/cgtn-f.m3u8",
@@ -2097,7 +2086,7 @@ const staticStreams = [
   {
     id: "country-us-pbs",
     name: "PBS Kids US",
-    url: "https://pbs-kids.samsung.wurl.com/manifest/playlist.m3u8",
+    url: "https://2-fss-2.streamhoster.com/pl_140/amlst:200914-1298290/playlist.m3u8",
     category: "country",
     country: "US",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/PBS_Kids_logo_%282022%29.svg/960px-PBS_Kids_logo_%282022%29.svg.png",
