@@ -284,7 +284,7 @@ function parseM3U(data, category) {
 const staticStreams = [
   // --- SPORTS (Category: sports, Country: Global/Specific) ---
   {
-    id: "sports-redbull",
+    id: "sports-redbull-live",
     name: "Red Bull TV",
     url: "https://rbmn-live.akamaized.net/hls/live/590964/BoRB-AT/master.m3u8",
     category: "sports",
