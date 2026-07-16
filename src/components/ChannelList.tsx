@@ -9,7 +9,9 @@ import {
   SlidersHorizontal,
   ArrowRight,
   Filter,
-  Activity
+  Activity,
+  Star,
+  History
 } from "lucide-react";
 import { StreamChannel, CategoryFilter, CountryFilter } from "../types";
 
@@ -34,6 +36,52 @@ export default function ChannelList({
   const [countryFilter, setCountryFilter] = useState<CountryFilter | "all">("all");
   const [visibleLimit, setVisibleLimit] = useState(100);
 
+  // --- Local Storage State Hooks ---
+  const [bookmarks, setBookmarks] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("stream_bookmarks");
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+
+  const [history, setHistory] = useState<string[]>(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("stream_history");
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+
+  // Sync Bookmarks to LocalStorage
+  useEffect(() => {
+    localStorage.setItem("stream_bookmarks", JSON.stringify(bookmarks));
+  }, [bookmarks]);
+
+  // Sync History to LocalStorage
+  useEffect(() => {
+    localStorage.setItem("stream_history", JSON.stringify(history));
+  }, [history]);
+
+  // Track History when a channel is selected
+  useEffect(() => {
+    if (selectedChannel) {
+      setHistory((prev) => {
+        const filtered = prev.filter((id) => id !== selectedChannel.id);
+        // Keep the history buffer capped at 10 items
+        return [selectedChannel.id, ...filtered].slice(0, 10);
+      });
+    }
+  }, [selectedChannel]);
+
+  // Toggle Bookmark Handler
+  const toggleBookmark = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation(); // Stop from selecting the channel when clicking the star
+    setBookmarks((prev) =>
+      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
+    );
+  };
+
   // Reset page pagination bounds back to default when sorting or search criteria alter
   useEffect(() => {
     setVisibleLimit(100);
@@ -55,7 +103,6 @@ export default function ChannelList({
       const matchCategory = selectedCategory === "all" || stream.category === selectedCategory;
       const matchCountry = countryFilter === "all" || stream.country === countryFilter;
       
-      // FIX: Removed stream.category search comparison to stop global category terms from hijacking search results
       const matchSearch =
         stream.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
         stream.country.toLowerCase().includes(searchTerm.toLowerCase());
@@ -64,13 +111,33 @@ export default function ChannelList({
     });
 
     return [...filtered].sort((a, b) => {
+      // 1. Sort primarily by Bookmark status (Bookmarked items rise to the top)
+      const aBookmarked = bookmarks.includes(a.id) ? 1 : 0;
+      const bBookmarked = bookmarks.includes(b.id) ? 1 : 0;
+      if (aBookmarked !== bBookmarked) {
+        return bBookmarked - aBookmarked;
+      }
+
+      // 2. Sort secondarily by History (most recently played bubbles up right under bookmarks)
+      const aHistoryIdx = history.indexOf(a.id);
+      const bHistoryIdx = history.indexOf(b.id);
+      const aHasHistory = aHistoryIdx !== -1;
+      const bHasHistory = bHistoryIdx !== -1;
+
+      if (aHasHistory && bHasHistory) {
+        return aHistoryIdx - bHistoryIdx; // Lower index means more recently played
+      }
+      if (aHasHistory !== bHasHistory) {
+        return aHasHistory ? -1 : 1;
+      }
+
+      // 3. Fallback: Sort by signal status weightings
       const weightA = a.status === "online" ? 0 : a.status === "unstable" ? 1 : 2;
       const weightB = b.status === "online" ? 0 : b.status === "unstable" ? 1 : 2;
       return weightA - weightB;
     });
-  }, [streams, selectedCategory, countryFilter, searchTerm]);
+  }, [streams, selectedCategory, countryFilter, searchTerm, bookmarks, history]);
 
-  // Dynamic selector metadata counters
   const getCategoryCount = (catValue: CategoryFilter) => {
     return streams.filter(s => catValue === "all" || s.category === catValue).length;
   };
@@ -225,9 +292,11 @@ export default function ChannelList({
           </div>
         ) : (
           <>
-            {/* FIX: Included array index fallback on key attribute matching to resolve render/click-freezes from duplicate IDs */}
             {processedStreams.slice(0, visibleLimit).map((stream, idx) => {
               const isSelected = selectedChannel?.id === stream.id;
+              const isBookmarked = bookmarks.includes(stream.id);
+              const isRecentlyPlayed = history.includes(stream.id) && !isBookmarked;
+
               return (
                 <button
                   key={`${stream.id}-${idx}`}
@@ -263,15 +332,25 @@ export default function ChannelList({
                     </div>
 
                     <div className="truncate flex flex-col justify-center">
-                      <span className={`text-xs font-bold tracking-tight truncate ${
-                        isSelected
-                          ? "text-zinc-900 dark:text-indigo-400"
-                          : theme === "light"
-                          ? "text-zinc-900"
-                          : "text-neutral-300"
-                      }`}>
-                        {stream.name}
-                      </span>
+                      <div className="flex items-center gap-1.5 truncate">
+                        {/* Bookmark Indicator (Filled Star) */}
+                        {isBookmarked && (
+                          <Star className="w-3 h-3 text-amber-500 fill-amber-500 flex-shrink-0" />
+                        )}
+                        {/* Recently Played Indicator */}
+                        {isRecentlyPlayed && (
+                          <History className="w-3 h-3 text-indigo-400 flex-shrink-0" />
+                        )}
+                        <span className={`text-xs font-bold tracking-tight truncate ${
+                          isSelected
+                            ? "text-zinc-900 dark:text-indigo-400"
+                            : theme === "light"
+                            ? "text-zinc-900"
+                            : "text-neutral-300"
+                        }`}>
+                          {stream.name}
+                        </span>
+                      </div>
                       <div className="flex items-center gap-1.5 mt-0.5 text-[10px] text-zinc-400 font-mono font-medium">
                         <span className="uppercase tracking-tight">{stream.category}</span>
                         <span>//</span>
@@ -281,6 +360,19 @@ export default function ChannelList({
                   </div>
 
                   <div className="flex items-center gap-2.5 flex-shrink-0">
+                    {/* Dynamic Bookmark Hover Trigger */}
+                    <button
+                      onClick={(e) => toggleBookmark(stream.id, e)}
+                      className={`p-1 transition-colors ${
+                        isBookmarked 
+                          ? "text-amber-500 hover:text-amber-600" 
+                          : "text-zinc-300 dark:text-neutral-800 hover:text-amber-500 dark:hover:text-amber-500"
+                      }`}
+                      title={isBookmarked ? "Remove Bookmark" : "Add Bookmark"}
+                    >
+                      <Star className={`w-3.5 h-3.5 ${isBookmarked ? "fill-amber-500" : ""}`} />
+                    </button>
+
                     {/* Technical Live Status Bar */}
                     <div className="flex items-center gap-1 font-mono text-[9px] font-bold tracking-tighter">
                       <span className={
