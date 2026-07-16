@@ -471,7 +471,7 @@ const staticStreams = [
     country: "SY",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSYUuBEtXlnSF3eSj9ampkYe5NwYPz6w0aly9BO8XxPAcYLsh1bas_YjWE&s=10",
     status: "online",
-    lat: 34.8021, // Syria
+    lat: 34.8021, // Syria Location
     lon: 38.9968,
   },
   {
@@ -523,8 +523,8 @@ const staticStreams = [
     lon: 51.3890,
   },
   {
-    id: "sports-bein-iranbackup",
-    name: "Bein Sports Iran (Backup)",
+    id: "sports-bein-iran5",
+    name: "Bein Sports Iran Server 5",
     url: "https://biostartvworld.pages.dev/api/bein-sports-fifa.m3u8?key=aHR0cHM6Ly9jcDExLmFkYWJtZWRpYS5jb20vaGxzMi9zcG9ydC5tM3U4P25vY2FjaGU9MTc4MjA1NzIxNDQ2MA",
     category: "sports",
     category: "world cup",
@@ -632,7 +632,7 @@ const staticStreams = [
   },
   {
     id: "sports-wc-26",
-    name: "Caze TV High Quality",
+    name: "WC 26 Caze TV High Quality",
     url: "https://biostartvworld.pages.dev/api/fifa-world-cup-2026.m3u8?key=aHR0cHM6Ly9kZnI4MHF6NDM1Y3JjLmNsb3VkZnJvbnQubmV0L01OT1AvQW1hZ2kvQ2F6ZS9DYXplX1RWX0JSLzEwODBwLXZ0dC9pbmRleC5tM3U4",
     category: "sports",
     category: "world cup",
@@ -847,7 +847,7 @@ const staticStreams = [
   },
   { 
     id: "sports-tv-2",
-    name: "TV 2",
+    name: "TV2",
     url: "https://tv.cdn.xsg.ge/gpb-2tv/tracks-v1a1/mono.ts.m3u8",
     category: "sports",
     category: "world cup",
@@ -1885,7 +1885,7 @@ const staticStreams = [
     country: "FR",
     logo: "https://i.ibb.co/KXhYwm0/lequipe.png",
     status: "online",
-    lat: 48.8566,
+    lat: 48.8566, // Paris, France
     lon: 2.3522,
   },
   {
