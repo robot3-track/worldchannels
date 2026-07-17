@@ -72,8 +72,8 @@ Simply search for a country or channel name in the search bar, or explore the wo
 ## Try it now!
 
 Ever wondered what the other side of the globe watches? Don't need to wait anymore!
-Try it at: https://worldchannels.vercel.app
+Try it at: **https://worldchannels.vercel.app**
 
 ## Note to user:
 
-Note: Some community members have asked about World Channels and regarding the streams. Streams are fetched from legit community sources and live updated. IPTV.ORG managed by Github is a community managed repository on Github with constant checks on channels to make sure **everything is legal and safe**. Even so, as an additional measure, I do take into account to **filter out streams** that are not legal/copyrighted to **ensure that World Channels is 100% legal.** Furthermore, some premium channels give free access to some of their content, so it is normal to see a blocking page on those specific channels that state the free access will be down for a certain amount of time- until the copyrighted content is finished. This is **completely legal and is a proper process for protecting copyright throughout the countries.**
+Note: Some community members have asked about World Channels and regarding the streams. Streams are fetched from legit community sources and live updated. **IPTV.ORG** managed by Github is a community managed repository on Github with constant checks on channels to make sure **everything is legal and safe**. Even so, as an additional measure, I do take into account to **filter out streams** that are not legal/copyrighted to **ensure that World Channels is 100% legal.** Furthermore, some premium channels give free access to some of their content, so it is normal to see a blocking page on those specific channels that state the free access will be down for a certain amount of time- until the copyrighted content is finished. This is **completely legal and is a proper process for protecting copyright throughout the countries.**
