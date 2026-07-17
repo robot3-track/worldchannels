@@ -244,9 +244,14 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   });
 };
 
-// Map customization styles config - Satellite as primary default[cite: 1]
+// Map customization styles config - Satellite has an overlayUrl property assigned[cite: 1]
 const mapStyles = [
-  { id: "satellite", label: "Satellite View", url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}" },
+  { 
+    id: "satellite", 
+    label: "Satellite View", 
+    url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
+    overlayUrl: "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_And_Places/MapServer/tile/{z}/{y}/{x}" // Transparent hybrid overlay layer
+  },
   { id: "light", label: "Classic Light", url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" },
   { id: "dark", label: "Midnight Dark", url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" },
   { id: "retro", label: "Retro Voyager", url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" }
@@ -268,12 +273,13 @@ export default function WorldMap({
   theme
 }: WorldMapProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  // Set satellite view as default initial state
+  // Set satellite view as default initial state[cite: 1]
   const [currentMapStyle, setCurrentMapStyle] = useState("satellite");
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markerGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
+  const overlayLayerRef = useRef<L.TileLayer | null>(null); // Reference hook tracking boundaries overlay layer
   const isInitialRenderRef = useRef(true);
 
   // Parse telemetry streams to generate coordinates[cite: 1]
@@ -322,6 +328,17 @@ export default function WorldMap({
     }).addTo(map);
 
     tileLayerRef.current = tileLayer;
+
+    // Load overlay layer (Borders/Places labels) if it is supplied on the initial style
+    if (targetStyle.overlayUrl) {
+      const overlayLayer = L.tileLayer(targetStyle.overlayUrl, {
+        subdomains: "abcd",
+        maxZoom: 20,
+        noWrap: true,
+        bounds: bounds
+      }).addTo(map);
+      overlayLayerRef.current = overlayLayer;
+    }
 
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
@@ -431,11 +448,40 @@ export default function WorldMap({
     };
   }, [theme]);
 
-  // Update dynamic map tiles when style customization changes[cite: 1]
+  // Update dynamic map tiles and toggle overlay boundary logic when style custom choices pivot[cite: 1]
   useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const selectedStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
+    
+    // 1. Update primary layer configuration
     if (tileLayerRef.current) {
-      const selectedStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
       tileLayerRef.current.setUrl(selectedStyle.url);
+    }
+
+    // 2. Safely wipe out outdated overlay structures
+    if (overlayLayerRef.current) {
+      map.removeLayer(overlayLayerRef.current);
+      overlayLayerRef.current = null;
+    }
+
+    // 3. Inject reference text/border layers if included in properties object
+    if (selectedStyle.overlayUrl) {
+      const bounds = L.latLngBounds(L.latLng(-65, -180), L.latLng(85, 180));
+      const overlayLayer = L.tileLayer(selectedStyle.overlayUrl, {
+        subdomains: "abcd",
+        maxZoom: 20,
+        noWrap: true,
+        bounds: bounds
+      }).addTo(map);
+      
+      overlayLayerRef.current = overlayLayer;
+      
+      // Ensure overlay text sits directly below UI markers instead of overlapping them
+      if (markerGroupRef.current) {
+        markerGroupRef.current.bringToFront();
+      }
     }
   }, [currentMapStyle]);
 
@@ -670,7 +716,7 @@ export default function WorldMap({
         
         <div className="flex items-center gap-1.5 font-bold">
           <Compass className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`} />
-          <span>EQUIRECTANGULAR SATELLITE</span>
+          <span>EQUIRECTANGULAR HYBRID SATELLITE</span>
         </div>
       </div>
     </div>
