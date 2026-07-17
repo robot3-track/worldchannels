@@ -2194,6 +2194,17 @@ const staticStreams = [
     lat: 28.5729, // Cape Canaveral, US
     lon: -80.6490,
   },
+  {
+    id: "science-discovery",
+    name: "Discovery Science",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/14.m3u8",
+    category: "science",
+    country: "US",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJ-DeH2Hr1cVINcUly-2O8VjjZTQD5fSpRfNM5IQAttQ&s",
+    status: "online",
+    lat: 28.5729, // Cape Canaveral, US
+    lon: -80.6490,
+  },
 
   // --- FREE TV GLOBAL (Category: freetv, Country: Global) ---
   {
