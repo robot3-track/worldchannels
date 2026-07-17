@@ -273,9 +273,9 @@ export default function WorldMap({
 }: WorldMapProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentMapStyle, setCurrentMapStyle] = useState("satellite");
-  // FIX 1: Set 3D as default
+  
+  // FIX: 3D mode is default view and initial zoom state configured to 3.5
   const [viewMode, setViewMode] = useState<"2d" | "3d">("3d");
-  // FIX 2: Zoomed in closer by default to match screenshot
   const [currentZoom3d, setCurrentZoom3d] = useState(3.5);
 
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
@@ -303,6 +303,13 @@ export default function WorldMap({
       return matchCat && matchSearch;
     });
   }, [processedStreams, selectedCategory, searchQuery]);
+
+  // FIX: Quantize zoom steps into distinct tiers to avoid re-clustering execution on minor drag/zoom micro-steps
+  const zoomTier = useMemo(() => {
+    if (currentZoom3d < 2.5) return 0;
+    if (currentZoom3d < 4) return 1;
+    return 2;
+  }, [currentZoom3d]);
 
   const buildClusterDropdownHtml = (clusterData: typeof filteredStreams) => {
     let listHtml = `
@@ -349,29 +356,29 @@ export default function WorldMap({
     }
   };
 
+  // FIX: Optimized Occlusion check algorithm using precise visible-horizon limiting parameters (7,200,000 meters)
   const update3DMarkersOcclusion = (mapInstance: maplibregl.Map) => {
     if (!mapInstance) return;
-    const center = mapInstance.getCenter();
-    const transform = (mapInstance as any).transform;
-    
-    if (!transform || !transform.projection || !transform.projection.name) return;
+    try {
+      const center = mapInstance.getCenter();
+      maplibreMarkersRef.current.forEach(({ marker, lat, lon }) => {
+        const element = marker.getElement();
+        if (!element) return;
 
-    maplibreMarkersRef.current.forEach(({ marker, lat, lon }) => {
-      const element = marker.getElement();
-      if (!element) return;
+        const markerCoord = new maplibregl.LngLat(lon, lat);
+        const distance = center.distanceTo(markerCoord);
 
-      const markerCoord = maplibregl.LngLat.convert([lon, lat]);
-      const distance = center.distanceTo(markerCoord);
-
-      // FIX 3: Reduced distance threshold from 10,000,000 to 8,500,000. 
-      // This hides markers *just* before they hit the horizon line, preventing ghosting through the globe.
-      if (transform.projection.name === "globe" && distance > 8500000) {
-        element.style.display = "none";
-        marker.getPopup()?.remove();
-      } else {
-        element.style.display = "block";
-      }
-    });
+        if (distance > 7200000) {
+          element.style.opacity = "0";
+          element.style.pointerEvents = "none";
+        } else {
+          element.style.opacity = "1";
+          element.style.pointerEvents = "auto";
+        }
+      });
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   useEffect(() => {
@@ -462,7 +469,7 @@ export default function WorldMap({
           },
           layers: layersConfig
         },
-        center: [20, 45], // Shifted initial center closer to Europe to match your framing
+        center: [20, 35],
         zoom: currentZoom3d,
         attributionControl: false
       });
@@ -528,7 +535,7 @@ export default function WorldMap({
       maplibreMarkersRef.current.forEach(m => m.marker.remove());
       maplibreMarkersRef.current = [];
 
-      const clusteringPrecision = currentZoom3d < 2.5 ? 0.3 : currentZoom3d < 4 ? 1.0 : 2.5;
+      const clusteringPrecision = zoomTier === 0 ? 0.3 : zoomTier === 1 ? 1.0 : 2.5;
       
       const coordinateBins: Record<string, typeof filteredStreams> = {};
       filteredStreams.forEach((s) => {
@@ -543,10 +550,11 @@ export default function WorldMap({
       Object.values(coordinateBins).forEach((cluster) => {
         const rootNode = cluster[0];
         const el = document.createElement("div");
-        el.className = "maplibre-custom-marker-node flex items-center justify-center";
+        // FIX: Re-introduced structured alignments classes to center HTML nodes correctly over projection coords
+        el.className = "maplibre-custom-marker-node flex items-center justify-center origin-center";
 
         if (cluster.length > 1) {
-          el.innerHTML = `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 font-sans text-xs font-bold border border-zinc-900 text-white rounded-none cursor-pointer shadow-lg z-10"><span>${cluster.length}</span></div>`;
+          el.innerHTML = `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 font-sans text-xs font-bold border border-zinc-900 text-white rounded-none cursor-pointer shadow-lg"><span>${cluster.length}</span></div>`;
         } else {
           const isActive = activeChannel && activeChannel.id === rootNode.id;
           const statusColor = rootNode.status === 'unstable' ? 'bg-amber-500' : rootNode.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500';
@@ -580,7 +588,7 @@ export default function WorldMap({
 
       update3DMarkersOcclusion(maplibreRef.current);
     }
-  }, [filteredStreams, activeChannel, viewMode, theme, currentZoom3d]);
+  }, [filteredStreams, activeChannel, viewMode, theme, zoomTier]);
 
   useEffect(() => {
     if (!activeChannel) return;
@@ -659,31 +667,6 @@ export default function WorldMap({
 
       <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none">
         <div ref={mapContainerRef} className="w-full h-full text-zinc-900 relative" style={{ background: "#0d0e12" }} />
-        
-        {/* LEGEND UI */}
-        <div className={`absolute bottom-6 left-6 z-[1000] border-2 p-3 text-xs flex flex-col gap-2 rounded-none shadow-lg ${
-          theme === "light" ? "bg-white border-zinc-900 text-zinc-900" : "bg-neutral-950 border-neutral-800 text-neutral-200"
-        }`}>
-          <div className="font-black uppercase tracking-widest text-[10px] border-b-2 pb-1.5 mb-1 border-current opacity-70">
-            Node Status
-          </div>
-          <div className="flex items-center gap-2.5">
-            <span className="inline-flex rounded-none h-2.5 w-2.5 bg-emerald-500 border border-zinc-900"></span>
-            <span className="uppercase font-bold text-[10px]">Online</span>
-          </div>
-          <div className="flex items-center gap-2.5">
-            <span className="inline-flex rounded-none h-2.5 w-2.5 bg-amber-500 border border-zinc-900"></span>
-            <span className="uppercase font-bold text-[10px]">Unstable</span>
-          </div>
-          <div className="flex items-center gap-2.5">
-            <span className="inline-flex rounded-none h-2.5 w-2.5 bg-rose-500 border border-zinc-900"></span>
-            <span className="uppercase font-bold text-[10px]">Offline</span>
-          </div>
-          <div className="flex items-center gap-2 mt-1">
-            <div className="flex items-center justify-center w-5 h-5 bg-indigo-600 text-[9px] font-bold border border-zinc-900 text-white rounded-none">#</div>
-            <span className="uppercase font-bold text-[10px]">Cluster</span>
-          </div>
-        </div>
       </div>
     </div>
   );
