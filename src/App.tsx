@@ -10,17 +10,23 @@ import {
   ArrowRight,
   X
 } from "lucide-react";
-import { StreamChannel, CategoryFilter } from "./types";
+import { StreamChannel, CategoryFilter, TutorialStep } from "./types";
 import WorldMap from "./components/WorldMap";
 import VideoPlayer from "./components/VideoPlayer";
 import ChannelList from "./components/ChannelList";
 
-interface TutorialStep {
-  targetClass: string;
-  title: string;
-  description: string;
-  preferredPlacement?: "top" | "bottom" | "left" | "right";
-  overlap?: boolean;
+// update to prevent errors
+interface ChannelListProps {
+  streams: StreamChannel[];
+  selectedCategory: CategoryFilter;
+  onChangeCategory: (cat: CategoryFilter) => void;
+  selectedChannel: StreamChannel | null;
+  onSelectChannel: (channel: StreamChannel) => void;
+  theme: "light" | "dark";
+  
+  // 🌟 ADD THESE TWO LINES:
+  bookmarkedIds: string[];
+  onToggleBookmark: (channelId: string) => void;
 }
 
 const TUTORIAL_STEPS: TutorialStep[] = [
@@ -67,6 +73,16 @@ export default function App() {
   const [selectedChannel, setSelectedChannel] = useState<StreamChannel | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   
+  // Save to Deck (Favorites) State
+  const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem("deck_favorites_v1");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
   // Tutorial States
   const [runTutorial, setRunTutorial] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
@@ -83,6 +99,20 @@ export default function App() {
     online: 0,
     categoriesCount: { sports: 0, news: 0, science: 0, freetv: 0, country: 0 }
   });
+
+  // Sync Bookmarks to LocalStorage
+  useEffect(() => {
+    localStorage.setItem("deck_favorites_v1", JSON.stringify(bookmarkedIds));
+  }, [bookmarkedIds]);
+
+  // Toggle Bookmark Callback
+  const handleToggleBookmark = useCallback((channelId: string) => {
+    setBookmarkedIds((prev) =>
+      prev.includes(channelId)
+        ? prev.filter((id) => id !== channelId)
+        : [...prev, channelId]
+    );
+  }, []);
 
   const updateTooltipPosition = useCallback(() => {
     if (!runTutorial) return;
@@ -396,6 +426,14 @@ export default function App() {
     return "opacity-30 transition-all duration-300 pointer-events-none";
   };
 
+  // Filter streams strictly based on bookmark selection and category selection
+  const filteredStreams = streams.filter((stream) => {
+    if (selectedCategory === "favorites") {
+      return bookmarkedIds.includes(stream.id);
+    }
+    return true;
+  });
+
   return (
     <div className={`min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300 selection:bg-emerald-500/20 selection:text-emerald-500 ${
       theme === "light" ? "bg-[#faf9f6] text-zinc-900" : "bg-[#0d0e12] text-neutral-100"
@@ -492,7 +530,7 @@ export default function App() {
           {/* World Map */}
           <section className={`w-full world-map-step ${getSpotlightClass("world-map-step")}`}>
             <WorldMap
-              streams={streams}
+              streams={filteredStreams}
               selectedCategory={selectedCategory}
               onSelectChannel={handleSelectChannel}
               activeChannel={selectedChannel}
@@ -517,6 +555,8 @@ export default function App() {
                 onReportBroken={handleReportBroken}
                 onSelectBackup={handleSelectBackup}
                 theme={theme}
+                bookmarkedIds={bookmarkedIds}
+                onToggleBookmark={handleToggleBookmark}
               />
             </div>
 
@@ -530,6 +570,8 @@ export default function App() {
                   selectedChannel={selectedChannel}
                   onSelectChannel={handleSelectChannel}
                   theme={theme}
+                  bookmarkedIds={bookmarkedIds}
+                  onToggleBookmark={handleToggleBookmark}
                 />
               </div>
             </div>

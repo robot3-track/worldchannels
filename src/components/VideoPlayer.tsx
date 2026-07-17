@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useMemo } from "react";
-import { Tv, AlertTriangle, RefreshCw, Play, Pause, Volume2, VolumeX, Maximize, Minimize, Video, Square, Download, Clock } from "lucide-react";
+import { Tv, AlertTriangle, RefreshCw, Play, Pause, Volume2, VolumeX, Maximize, Minimize, Video, Square, Download, Clock, Star } from "lucide-react";
 import { StreamChannel } from "../types";
 
 interface VideoPlayerProps {
@@ -7,6 +7,9 @@ interface VideoPlayerProps {
   onReportBroken: (url: string) => Promise<{ success: boolean; backupAvailable: boolean; backups: StreamChannel[] }>;
   onSelectBackup: (backup: StreamChannel) => void;
   theme: "light" | "dark";
+  // Global Save to Deck bookmark properties
+  bookmarkedIds: string[];
+  onToggleBookmark: (channelId: string) => void;
 }
 
 const EMBED_ONLY_DOMAINS = [
@@ -54,7 +57,9 @@ export default function VideoPlayer({
   channel,
   onReportBroken,
   onSelectBackup,
-  theme
+  theme,
+  bookmarkedIds,
+  onToggleBookmark
 }: VideoPlayerProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -89,6 +94,11 @@ export default function VideoPlayer({
   const [showRecordPanel, setShowRecordPanel] = useState(false);
 
   const strategy = useMemo(() => getPlayerStrategy(channel), [channel?.id, channel?.url]);
+
+  // Derived state to check if the currently loaded channel is bookmarked
+  const isBookmarked = useMemo(() => {
+    return channel ? bookmarkedIds.includes(channel.id) : false;
+  }, [channel, bookmarkedIds]);
 
   const handleMouseMove = () => {
     if (!showControls) setShowControls(true);
@@ -474,6 +484,7 @@ export default function VideoPlayer({
           )}
         </div>
 
+        {/* CONTROLS OVERLAY FOOTER DECK */}
         {strategy.useNativeVideo && (
           <div className={`w-full p-3 border-t flex items-center justify-between gap-4 select-none transition-all duration-300 ${
             isFullscreen 
@@ -502,6 +513,21 @@ export default function VideoPlayer({
                 title="DVR Recording Setup"
               >
                 <Video className="w-4 h-4" />
+              </button>
+
+              {/* INTEGRATED Control Bar Bookmark Button */}
+              <button
+                onClick={() => onToggleBookmark(channel.id)}
+                className={`p-2 rounded-none border transition-all ${
+                  isBookmarked
+                    ? "bg-amber-500 border-amber-500 text-white hover:bg-amber-600 hover:border-amber-600"
+                    : theme === "light"
+                    ? "border-zinc-200 hover:border-zinc-400 bg-white text-zinc-400 hover:text-amber-500"
+                    : "border-neutral-900 hover:border-neutral-700 bg-neutral-950 text-neutral-500 hover:text-amber-500"
+                }`}
+                title={isBookmarked ? "Remove from Deck" : "Save to Deck"}
+              >
+                <Star className={`w-4 h-4 ${isBookmarked ? "fill-current" : ""}`} />
               </button>
             </div>
 
@@ -590,7 +616,7 @@ export default function VideoPlayer({
       )}
 
       {/* METADATA BROADCAST STAT CARD */}
-      <div className={`border rounded-none p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all ${
+      <div className={`border rounded-none p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-all ${
         theme === "light" 
           ? "bg-[#faf9f6] border-zinc-300/80 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]" 
           : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.2)]"
@@ -612,6 +638,21 @@ export default function VideoPlayer({
             </p>
           </div>
         </div>
+
+        {/* STAT CARD TOGGLE INTERFACE */}
+        <button
+          onClick={() => onToggleBookmark(channel.id)}
+          className={`flex items-center gap-2 text-[10px] font-bold font-mono uppercase tracking-wider px-4 py-2.5 border rounded-none transition-all ${
+            isBookmarked
+              ? "bg-amber-500 border-amber-500 text-white hover:bg-amber-600"
+              : theme === "light"
+              ? "bg-white border-zinc-900 text-zinc-900 hover:bg-zinc-50"
+              : "bg-neutral-950 border-neutral-800 text-neutral-200 hover:border-neutral-700"
+          }`}
+        >
+          <Star className={`w-3.5 h-3.5 ${isBookmarked ? "fill-current" : ""}`} />
+          {isBookmarked ? "Remove from Deck" : "Save to Deck"}
+        </button>
       </div>
     </div>
   );

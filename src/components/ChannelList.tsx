@@ -22,6 +22,9 @@ interface ChannelListProps {
   selectedChannel: StreamChannel | null;
   onSelectChannel: (channel: StreamChannel) => void;
   theme: "light" | "dark";
+  // 🌟 Global Save to Deck bookmark states
+  bookmarkedIds: string[];
+  onToggleBookmark: (channelId: string) => void;
 }
 
 export default function ChannelList({
@@ -30,7 +33,9 @@ export default function ChannelList({
   onChangeCategory,
   selectedChannel,
   onSelectChannel,
-  theme
+  theme,
+  bookmarkedIds,
+  onToggleBookmark
 }: ChannelListProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [countryFilter, setCountryFilter] = useState<CountryFilter | "all">("all");
@@ -41,15 +46,7 @@ export default function ChannelList({
   const searchInputRef = useRef<HTMLInputElement>(null);
   const channelListContainerRef = useRef<HTMLDivElement>(null);
 
-  // --- Local Storage State Hooks ---
-  const [bookmarks, setBookmarks] = useState<string[]>(() => {
-    if (typeof window !== "undefined") {
-      const saved = localStorage.getItem("stream_bookmarks");
-      return saved ? JSON.parse(saved) : [];
-    }
-    return [];
-  });
-
+  // --- Local Storage State Hooks (We only keep history locally here) ---
   const [history, setHistory] = useState<string[]>(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("stream_history");
@@ -57,11 +54,6 @@ export default function ChannelList({
     }
     return [];
   });
-
-  // Sync Bookmarks to LocalStorage
-  useEffect(() => {
-    localStorage.setItem("stream_bookmarks", JSON.stringify(bookmarks));
-  }, [bookmarks]);
 
   // Sync History to LocalStorage
   useEffect(() => {
@@ -78,22 +70,16 @@ export default function ChannelList({
     }
   }, [selectedChannel]);
 
-  // Toggle Bookmark Handler
-  const toggleBookmark = (id: string, e: React.MouseEvent) => {
-    e.stopPropagation();
-    setBookmarks((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
-  };
-
   // Reset page pagination bounds back to default when sorting or search criteria alter
   useEffect(() => {
     setVisibleLimit(100);
     setFocusedIndex(-1); // Reset key selection when filter changes
   }, [searchTerm, selectedCategory, countryFilter]);
 
+  // Updated tab categories list to render our new "Favorites" (Saved Deck) second[cite: 2]
   const categories: { value: CategoryFilter; label: string; icon: any }[] = [
     { value: "all", label: "All Feeds", icon: Globe },
+    { value: "favorites", label: "Saved Deck", icon: Star }, // 🌟 Placed second directly below "all"
     { value: "world cup", label: "World Cup", icon: Award },
     { value: "general", label: "General TV", icon: Tv },
     { value: "sports", label: "Sports Live", icon: Award },
@@ -105,7 +91,13 @@ export default function ChannelList({
 
   const processedStreams = useMemo(() => {
     const filtered = streams.filter((stream) => {
-      const matchCategory = selectedCategory === "all" || stream.category === selectedCategory;
+      // Handle the global Category Filter logic here inside search filtering
+      const matchCategory =
+        selectedCategory === "all" ||
+        (selectedCategory === "favorites"
+          ? bookmarkedIds.includes(stream.id)
+          : stream.category === selectedCategory);
+      
       const matchCountry = countryFilter === "all" || stream.country === countryFilter;
       
       const matchSearch =
@@ -116,8 +108,8 @@ export default function ChannelList({
     });
 
     return [...filtered].sort((a, b) => {
-      const aBookmarked = bookmarks.includes(a.id) ? 1 : 0;
-      const bBookmarked = bookmarks.includes(b.id) ? 1 : 0;
+      const aBookmarked = bookmarkedIds.includes(a.id) ? 1 : 0;
+      const bBookmarked = bookmarkedIds.includes(b.id) ? 1 : 0;
       if (aBookmarked !== bBookmarked) {
         return bBookmarked - aBookmarked;
       }
@@ -138,10 +130,12 @@ export default function ChannelList({
       const weightB = b.status === "online" ? 0 : b.status === "unstable" ? 1 : 2;
       return weightA - weightB;
     });
-  }, [streams, selectedCategory, countryFilter, searchTerm, bookmarks, history]);
+  }, [streams, selectedCategory, countryFilter, searchTerm, bookmarkedIds, history]);
 
   const getCategoryCount = (catValue: CategoryFilter) => {
-    return streams.filter(s => catValue === "all" || s.category === catValue).length;
+    if (catValue === "all") return streams.length;
+    if (catValue === "favorites") return bookmarkedIds.length;
+    return streams.filter(s => s.category === catValue).length;
   };
 
   // --- Keyboard Navigation Global Event Listeners ---
@@ -309,7 +303,7 @@ export default function ChannelList({
                 }`}
               >
                 <div className="flex items-center gap-2 truncate">
-                  <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${isSelected ? 'text-white' : 'text-zinc-400'}`} />
+                  <Icon className={`w-3.5 h-3.5 flex-shrink-0 ${isSelected ? 'text-white' : 'text-indigo-400'}`} />
                   <span className="truncate text-[11px] font-bold uppercase tracking-tight">{cat.label}</span>
                 </div>
                 <span className={`text-[9px] font-mono px-1 rounded-none ml-1 ${isSelected ? 'bg-white/20 text-white' : 'bg-zinc-100 dark:bg-neutral-900 text-zinc-500'}`}>
@@ -376,7 +370,7 @@ export default function ChannelList({
             {processedStreams.slice(0, visibleLimit).map((stream, idx) => {
               const isSelected = selectedChannel?.id === stream.id;
               const isFocused = focusedIndex === idx;
-              const isBookmarked = bookmarks.includes(stream.id);
+              const isBookmarked = bookmarkedIds.includes(stream.id);
               const isRecentlyPlayed = history.includes(stream.id) && !isBookmarked;
 
               return (
@@ -454,7 +448,10 @@ export default function ChannelList({
                   <div className="flex items-center gap-2.5 flex-shrink-0">
                     {/* Dynamic Bookmark Hover Trigger */}
                     <button
-                      onClick={(e) => toggleBookmark(stream.id, e)}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onToggleBookmark(stream.id);
+                      }}
                       className={`p-1 transition-colors ${
                         isBookmarked 
                           ? "text-amber-500 hover:text-amber-600" 
