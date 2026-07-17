@@ -84,7 +84,6 @@ export default function App() {
     categoriesCount: { sports: 0, news: 0, science: 0, freetv: 0, country: 0 }
   });
 
-  // Intelligent 4-directional alignment system with viewport collision protection
   const updateTooltipPosition = useCallback(() => {
     if (!runTutorial) return;
 
@@ -144,7 +143,6 @@ export default function App() {
           break;
       }
 
-      // Strict Containment
       const minLeft = scrollLeft + padding;
       const maxLeft = scrollLeft + window.innerWidth - popoverWidth - padding;
       if (left < minLeft) {
@@ -169,7 +167,6 @@ export default function App() {
     }
   }, [runTutorial, currentStep]);
 
-  // Scroll logic
   useEffect(() => {
     if (!runTutorial) return;
 
@@ -189,7 +186,6 @@ export default function App() {
     }
   }, [currentStep, runTutorial, updateTooltipPosition]);
 
-  // Window resize listeners
   useEffect(() => {
     if (!runTutorial) return;
 
@@ -213,7 +209,6 @@ export default function App() {
     };
   }, [runTutorial, currentStep, updateTooltipPosition]);
 
-  // Load streams on startup
   const fetchStreams = async () => {
     try {
       setLoading(true);
@@ -244,20 +239,18 @@ export default function App() {
     fetchStreams();
   }, []);
 
-  // CRITICAL FIX: Trigger tutorial ONLY after app completes loading and streams are present
   useEffect(() => {
     if (!loading && streams.length > 0) {
       const completed = localStorage.getItem(TUTORIAL_STORAGE_KEY);
       if (!completed) {
         const timer = setTimeout(() => {
           setRunTutorial(true);
-        }, 800); // Small delay post-load to let UI transitions finish rendering
+        }, 800);
         return () => clearTimeout(timer);
       }
     }
   }, [loading, streams]);
 
-  // Stats
   useEffect(() => {
     if (streams.length === 0) return;
 
@@ -330,7 +323,6 @@ export default function App() {
     }, 100);
   }, []);
 
-  // Background Sync
   useEffect(() => {
     let pollInterval = 10000;
     let lastCount = streams.length;
@@ -403,41 +395,6 @@ export default function App() {
     }
     return "opacity-30 transition-all duration-300 pointer-events-none";
   };
-
-  // 1. FULL LOADING SYSTEM (Replaces partial flashes of UI with an explicit status deck)
-  if (loading && streams.length === 0) {
-    return (
-      <div className={`min-h-screen flex flex-col items-center justify-center font-mono ${
-        theme === "light" ? "bg-[#faf9f6] text-zinc-900" : "bg-[#0d0e12] text-neutral-100"
-      }`}>
-        <div className="flex flex-col items-center max-w-sm w-full px-6 text-center">
-          <div className="relative mb-8">
-            <div className="w-16 h-16 border-4 border-indigo-500 border-r-transparent animate-spin rounded-full" />
-            <Globe className="w-6 h-6 text-indigo-500 absolute inset-0 m-auto animate-pulse" />
-          </div>
-
-          <div className="space-y-2 w-full">
-            <h1 className="text-sm font-black uppercase tracking-widest text-indigo-500">
-              INITIALIZING DECK COUPLING
-            </h1>
-            
-            {/* Contextual Status Subtitle */}
-            <p className={`text-[10px] tracking-wide uppercase leading-relaxed ${
-              theme === "light" ? "text-zinc-500" : "text-neutral-400"
-            }`}>
-              Binding virtual receiver satellite nodes, parsing global broadcast manifest, and compiling geographical registry.
-            </p>
-          </div>
-
-          <div className={`mt-8 w-full border border-dashed p-3 text-[9px] uppercase ${
-            theme === "light" ? "bg-zinc-100 border-zinc-300 text-zinc-500" : "bg-neutral-900/50 border-neutral-800 text-neutral-500"
-          }`}>
-            <span className="block animate-pulse">STATUS: ESTABLISHING CONNECTIVITY...</span>
-          </div>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className={`min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300 selection:bg-emerald-500/20 selection:text-emerald-500 ${
@@ -579,6 +536,54 @@ export default function App() {
           </section>
         </>
       </main>
+
+      {/* SYSTEM INITIALIZATION GLASS LOADING OVERLAY */}
+      {loading && streams.length === 0 && (
+        <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center font-mono backdrop-blur-md transition-all duration-300 ${
+          theme === "light" ? "bg-[#faf9f6]/75 text-zinc-900" : "bg-[#0d0e12]/75 text-neutral-100"
+        }`}>
+          <div className="flex flex-col items-center max-w-sm w-full px-6 text-center">
+            
+            {/* Embedded World Channels Brand Header / Logo */}
+            <div className="flex items-center gap-3 mb-10">
+              <div className={`w-12 h-12 border-2 flex items-center justify-center relative rounded-none ${
+                theme === "light" ? "bg-white border-zinc-950 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" : "bg-neutral-950 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]"
+              }`}>
+                <Globe className="w-5 h-5 text-indigo-500 animate-spin" />
+                <span className="absolute top-0 left-0 text-[6px] font-mono text-zinc-400 dark:text-neutral-500 p-0.5">SYS</span>
+              </div>
+              <div className="text-left">
+                <div className="flex items-center gap-2">
+                  <h1 className="text-sm font-black uppercase tracking-tight">World Channels</h1>
+                  <span className="text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 border border-emerald-500/20 animate-pulse">Live</span>
+                </div>
+                <p className={`text-[10px] font-mono uppercase tracking-wider ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
+                  Global Channel Explorer
+                </p>
+              </div>
+            </div>
+
+            {/* Dynamic Status Progress Indicator */}
+            <div className="space-y-2 w-full">
+              <h2 className="text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-400">
+                INITIALIZING DECK COUPLING
+              </h2>
+              
+              <p className={`text-[10px] tracking-wide uppercase leading-relaxed ${
+                theme === "light" ? "text-zinc-500" : "text-neutral-400"
+              }`}>
+                Binding virtual receiver satellite nodes, parsing global broadcast manifest, and compiling geographical registry.
+              </p>
+            </div>
+
+            <div className={`mt-8 w-full border border-dashed p-3 text-[9px] uppercase ${
+              theme === "light" ? "bg-zinc-100 border-zinc-300 text-zinc-500" : "bg-neutral-900/50 border-neutral-800 text-neutral-500"
+            }`}>
+              <span className="block animate-pulse">STATUS: ESTABLISHING CONNECTIVITY...</span>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* FLOATING CONTEXTUAL POPUP */}
       <AnimatePresence>
