@@ -6,7 +6,7 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Globe, Compass, Paintbrush } from "lucide-react";
+import { Globe, Compass, Paintbrush, MousePointer, Info } from "lucide-react";
 import { StreamChannel } from "../types";
 
 // Real-world cities distributed geographically across country boundaries
@@ -274,7 +274,6 @@ export default function WorldMap({
   const [searchQuery, setSearchQuery] = useState("");
   const [currentMapStyle, setCurrentMapStyle] = useState("satellite");
   
-  // FIX: 3D mode is default view and initial zoom state configured to 3.5
   const [viewMode, setViewMode] = useState<"2d" | "3d">("3d");
   const [currentZoom3d, setCurrentZoom3d] = useState(3.5);
 
@@ -304,7 +303,6 @@ export default function WorldMap({
     });
   }, [processedStreams, selectedCategory, searchQuery]);
 
-  // FIX: Quantize zoom steps into distinct tiers to avoid re-clustering execution on minor drag/zoom micro-steps
   const zoomTier = useMemo(() => {
     if (currentZoom3d < 2.5) return 0;
     if (currentZoom3d < 4) return 1;
@@ -356,7 +354,6 @@ export default function WorldMap({
     }
   };
 
-  // FIX: Optimized Occlusion check algorithm using precise visible-horizon limiting parameters (7,200,000 meters)
   const update3DMarkersOcclusion = (mapInstance: maplibregl.Map) => {
     if (!mapInstance) return;
     try {
@@ -391,8 +388,9 @@ export default function WorldMap({
       const bounds = L.latLngBounds(L.latLng(-65, -180), L.latLng(85, 180));
       const map = L.map(mapContainerRef.current, {
         center: [20, 0],
-        zoom: 2,
-        minZoom: 2,
+        zoom: 3,
+        // FIX: Bound lower limit so user cannot zoom out to a tiny abstract plain
+        minZoom: 2.8,
         maxZoom: 8,
         maxBounds: bounds,
         maxBoundsViscosity: 1.0,
@@ -471,6 +469,9 @@ export default function WorldMap({
         },
         center: [20, 35],
         zoom: currentZoom3d,
+        // FIX: Set strict minZoom bounds preventing full viewport decay into a tiny black ball blob
+        minZoom: 2.8,
+        maxZoom: 12,
         attributionControl: false
       });
 
@@ -550,7 +551,6 @@ export default function WorldMap({
       Object.values(coordinateBins).forEach((cluster) => {
         const rootNode = cluster[0];
         const el = document.createElement("div");
-        // FIX: Re-introduced structured alignments classes to center HTML nodes correctly over projection coords
         el.className = "maplibre-custom-marker-node flex items-center justify-center origin-center";
 
         if (cluster.length > 1) {
@@ -667,6 +667,55 @@ export default function WorldMap({
 
       <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none">
         <div ref={mapContainerRef} className="w-full h-full text-zinc-900 relative" style={{ background: "#0d0e12" }} />
+
+        {/* FIX: Add an overlay panel providing clear map navigation controls and legends */}
+        <div className={`absolute bottom-4 left-4 z-[1000] border-2 p-3.5 text-[10px] flex flex-col gap-3 rounded-none max-w-[240px] shadow-xl font-mono tracking-tight ${
+          theme === "light" ? "bg-white border-zinc-900 text-zinc-900" : "bg-zinc-950/95 border-neutral-800 text-neutral-200"
+        }`}>
+          <div className="flex items-center gap-1.5 font-black uppercase text-xs border-b pb-1.5 border-neutral-700/50">
+            <Info className="w-3.5 h-3.5 text-indigo-500" />
+            <span>Map Interface Legend</span>
+          </div>
+
+          <div className="flex flex-col gap-1.5 border-b pb-2 border-neutral-700/30">
+            <div className="font-bold uppercase tracking-wider text-[9px] text-indigo-400">Controls</div>
+            <div className="flex items-start gap-2">
+              <MousePointer className="w-3 h-3 mt-0.5 text-zinc-400 flex-shrink-0" />
+              <div>
+                <span className="font-bold uppercase">Left Click + Drag:</span>{" "}
+                {viewMode === "3d" ? "Rotate sphere globe" : "Pan matrix space"}
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <span className="text-zinc-400 font-bold text-xs leading-none">±</span>
+              <div>
+                <span className="font-bold uppercase">Scroll / Wheel:</span> Zoom viewpoint smoothly (limited floor)
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-1.5">
+            <div className="font-bold uppercase tracking-wider text-[9px] text-indigo-400">Node Classes</div>
+            <div className="grid grid-cols-2 gap-1.5">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 bg-emerald-500 rounded-none inline-block border border-zinc-900"></span>
+                <span className="uppercase font-bold text-[9px]">Online</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 bg-amber-500 rounded-none inline-block border border-zinc-900"></span>
+                <span className="uppercase font-bold text-[9px]">Unstable</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 bg-rose-500 rounded-none inline-block border border-zinc-900"></span>
+                <span className="uppercase font-bold text-[9px]">Offline</span>
+              </div>
+              <div className="flex items-center gap-1.5">
+                <span className="w-4 h-4 bg-indigo-600 inline-flex items-center justify-center text-[8px] font-black border border-zinc-900 text-white rounded-none">#</span>
+                <span className="uppercase font-bold text-[9px]">Cluster</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
