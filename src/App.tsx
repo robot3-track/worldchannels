@@ -566,13 +566,13 @@ export default function App() {
             {/* Dynamic Status Progress Indicator */}
             <div className="space-y-2 w-full">
               <h2 className="text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-400">
-                INITIALIZING DECK COUPLING
+                INITIALIZING APPLICATION
               </h2>
               
               <p className={`text-[10px] tracking-wide uppercase leading-relaxed ${
                 theme === "light" ? "text-zinc-500" : "text-neutral-400"
               }`}>
-                Binding virtual receiver satellite nodes, parsing global broadcast manifest, and compiling geographical registry.
+                Opening packages, receiving signals, firing up the app! Please wait as it loads!
               </p>
             </div>
 
