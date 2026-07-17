@@ -489,7 +489,7 @@ export default function App() {
               }`}
             >
               {theme === "light" ? <Moon className="w-3.5 h-3.5 text-indigo-600" /> : <Sun className="w-3.5 h-3.5 text-amber-500" />}
-              <span>{theme === "light" ? "Dark" : "Light"}</span>
+              <span>{theme === "light" ? "Switch to Dark" : "Switch to Light"}</span>
             </button>
 
             <div className={`hidden md:flex items-center gap-3 px-3 py-2 border-2 text-[11px] rounded-none ${
