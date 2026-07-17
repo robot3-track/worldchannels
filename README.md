@@ -6,9 +6,11 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 ## Core Features
 
 - **Live Stream Integration**: Direct access to HLS (.m3u8) streams from over 50 countries.
-- **World Map Interface**: Interactive geospatial dashboard to discover broadcasts by location.
+- **4 World Maps Interface**: Interactive geospatial dashboard with 4 different styles to discover broadcasts by location.
 - **Real-Time Health Monitoring**: Automatic background verification of stream uptime and latency.
 - **Themed UI**: Elegant Dark and Light modes for optimized viewing in any environment.
+- **Bookmarks**: Bookmark and save your favorite channels locally! You can edit your list anytime by deleting or adding channels.
+- **History**: View you channel watched history for easy access!
 
 ![Livestream Center](Screenshot%202026-06-30%20201430.png)
 
@@ -74,4 +76,4 @@ Try it at: https://worldchannels.vercel.app
 
 ## Note to user:
 
-Note: Some community members have asked about World Channels and regarding the streams. Streams are fetched from legit community sources and live updated. IPTV.ORG managed by Github is a community managed repository on Github with constant checks on channels to make sure everything is legal and safe. Even so, as an additional measure, I do take into account to filter out streams that are not legal/copyrighted to ensure that World Channels is 100% legal. Furthermore, some premium channels give free access to some of their content, so it is normal to see a blocking page on those specific channels that state the free access will be down for a certain amount of time- until the copyrighted content is finished. This is completely legal and is a proper process for protecting copyright throughout the countries.
+Note: Some community members have asked about World Channels and regarding the streams. Streams are fetched from legit community sources and live updated. IPTV.ORG managed by Github is a community managed repository on Github with constant checks on channels to make sure **everything is legal and safe**. Even so, as an additional measure, I do take into account to **filter out streams** that are not legal/copyrighted to **ensure that World Channels is 100% legal.** Furthermore, some premium channels give free access to some of their content, so it is normal to see a blocking page on those specific channels that state the free access will be down for a certain amount of time- until the copyrighted content is finished. This is **completely legal and is a proper process for protecting copyright throughout the countries.**
