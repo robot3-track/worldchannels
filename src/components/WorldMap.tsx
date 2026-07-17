@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
-import { Search, Globe, Compass, Paintbrush } from "lucide-react";
+import { Search, Globe, Compass, Paintbrush, ToggleLeft, ToggleRight } from "lucide-react";
 import { StreamChannel } from "../types";
 
 // Real-world cities distributed geographically across country boundaries
@@ -275,6 +275,14 @@ export default function WorldMap({
   const [searchQuery, setSearchQuery] = useState("");
   // Set satellite view as default initial state[cite: 1]
   const [currentMapStyle, setCurrentMapStyle] = useState("satellite");
+  const [is3DMode, setIs3DMode] = useState(false); // Toggle to switch viewports
+  
+  // Dynamic rotation values for 3D Globe Mode
+  const [rotation, setRotation] = useState({ x: -10, y: 0 });
+  const [isDragging, setIsDragging] = useState(false);
+  const dragStartRef = useRef({ x: 0, y: 0 });
+  const rotationStartRef = useRef({ x: 0, y: 0 });
+
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markerGroupRef = useRef<L.MarkerClusterGroup | null>(null);
@@ -300,8 +308,23 @@ export default function WorldMap({
     });
   }, [processedStreams, selectedCategory, searchQuery]);
 
+  // Handle auto-focus rotation when active node switches in 3D Mode
+  useEffect(() => {
+    if (is3DMode && activeChannel) {
+      const matched = processedStreams.find((s) => s.id === activeChannel.id);
+      if (matched) {
+        // Map 2D latitude/longitude direct grid positions smoothly to projection center values
+        setRotation({
+          x: -matched.mappedLat,
+          y: -matched.mappedLon
+        });
+      }
+    }
+  }, [activeChannel, is3DMode, processedStreams]);
+
   // Initialize leaf matrix map onto DOM container hook[cite: 1]
   useEffect(() => {
+    if (is3DMode) return; // Skip 2D initialization when 3D projection runs
     if (!mapContainerRef.current || mapRef.current) return;
 
     const bounds = L.latLngBounds(L.latLng(-65, -180), L.latLng(85, 180));
@@ -446,12 +469,12 @@ export default function WorldMap({
         mapRef.current = null;
       }
     };
-  }, [theme]);
+  }, [theme, is3DMode]);
 
   // Update dynamic map tiles and toggle overlay boundary logic when style custom choices pivot[cite: 1]
   useEffect(() => {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || is3DMode) return;
 
     const selectedStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
     
@@ -483,13 +506,13 @@ export default function WorldMap({
         markerGroupRef.current.bringToFront();
       }
     }
-  }, [currentMapStyle]);
+  }, [currentMapStyle, is3DMode]);
 
   // Update dynamic markers when selection or data changes[cite: 1]
   useEffect(() => {
     const map = mapRef.current;
     const markerGroup = markerGroupRef.current;
-    if (!map || !markerGroup) return;
+    if (!map || !markerGroup || is3DMode) return;
 
     // Clear old layers[cite: 1]
     markerGroup.clearLayers();
@@ -588,12 +611,12 @@ export default function WorldMap({
 
       marker.addTo(markerGroup);
     });
-  }, [filteredStreams, activeChannel, theme]);
+  }, [filteredStreams, activeChannel, theme, is3DMode]);
 
   // Dynamic camera fly-to effect on selection[cite: 1]
   useEffect(() => {
     const map = mapRef.current;
-    if (!activeChannel || !map) return;
+    if (!activeChannel || !map || is3DMode) return;
 
     if (isInitialRenderRef.current) {
       isInitialRenderRef.current = false;
@@ -607,7 +630,61 @@ export default function WorldMap({
         easeLinearity: 0.2
       });
     }
-  }, [activeChannel, processedStreams]);
+  }, [activeChannel, processedStreams, is3DMode]);
+
+  // --- 3D ORTHOGRAPHIC PROJECTION MATHEMATICS FOR SPHERICAL CALCULATIONS ---
+  // Calculates coordinates and tests whether a stream is positioned on the visible side of the 3D globe hemisphere
+  const globePoints = useMemo(() => {
+    const radius = 140; // Pixels
+    const center = 180; // Relative layout grid coordinates
+    
+    // Rotate relative longitude (Y) and latitude (X)
+    const lambda0 = (rotation.y * Math.PI) / 180;
+    const phi0 = (rotation.x * Math.PI) / 180;
+
+    return filteredStreams.map((stream) => {
+      const phi = (stream.mappedLat * Math.PI) / 180;
+      const lambda = (stream.mappedLon * Math.PI) / 180;
+
+      // Calculate angular distance across current hemisphere projection
+      const cosC = Math.sin(phi0) * Math.sin(phi) + Math.cos(phi0) * Math.cos(phi) * Math.cos(lambda - lambda0);
+      const isVisible = cosC > 0; // If angle <= 0, node resides on back portion of globe
+
+      // Orthographic cartographic mapping coordinates
+      const x = radius * Math.cos(phi) * Math.sin(lambda - lambda0) + center;
+      const y = -radius * (Math.cos(phi0) * Math.sin(phi) - Math.sin(phi0) * Math.cos(phi) * Math.cos(lambda - lambda0)) + center;
+
+      return {
+        ...stream,
+        projX: x,
+        projY: y,
+        visible: isVisible
+      };
+    });
+  }, [filteredStreams, rotation]);
+
+  // Drag handles to rotate the 3D Globe Mode
+  const handleMouseDown = (e: React.MouseEvent) => {
+    setIsDragging(true);
+    dragStartRef.current = { x: e.clientX, y: e.clientY };
+    rotationStartRef.current = { ...rotation };
+  };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDragging) return;
+    const deltaX = e.clientX - dragStartRef.current.x;
+    const deltaY = e.clientY - dragStartRef.current.y;
+
+    // Apply scaling factor to rotation delta speed
+    setRotation({
+      x: Math.max(-90, Math.min(90, rotationStartRef.current.x + deltaY * 0.4)),
+      y: rotationStartRef.current.y - deltaX * 0.4
+    });
+  };
+
+  const handleMouseUpOrLeave = () => {
+    setIsDragging(false);
+  };
 
   return (
     <div className={`relative w-full border-2 p-4 md:p-5 overflow-hidden flex flex-col gap-4 font-mono transition-all rounded-none ${
@@ -619,44 +696,64 @@ export default function WorldMap({
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 z-10">
         <div>
           <div className="flex items-center gap-2">
-            <Globe className="w-5 h-5 text-indigo-500" />
+            <Globe className="w-5 h-5 text-indigo-500 animate-spin-slow" />
             <h2 className={`text-sm font-black uppercase tracking-tight ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
-              Telemetry World Map
+              Telemetry World Map {is3DMode ? "(3D GLOBE SPHERE)" : "(2D MULTI-GRID)"}
             </h2>
           </div>
           <p className={`text-[11px] font-sans mt-1 leading-relaxed font-medium ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}`}>
-            A raw global monitoring framework cataloging and rendering active streams to coordinates. Select node indicators to track video relays.
+            A raw global monitoring framework cataloging and rendering active streams to coordinates. Drag, rotate, and interact with live nodes.
           </p>
         </div>
 
         {/* Dynamic Controls Side-by-Side[cite: 1] */}
         <div className="flex flex-wrap items-center gap-3">
           
-          {/* Custom Map Color Switcher - Fixed Light/Dark Theme dropdown config[cite: 1] */}
-          <div className={`flex items-center gap-2 border-2 px-2.5 py-1.5 rounded-none font-bold uppercase transition-all text-xs ${
-            theme === "light"
-              ? "bg-white border-zinc-900 text-zinc-800"
-              : "bg-neutral-950 border-neutral-800 text-neutral-300"
-          }`}>
-            <Paintbrush className="w-3.5 h-3.5 text-indigo-500" />
-            <select
-              value={currentMapStyle}
-              onChange={(e) => setCurrentMapStyle(e.target.value)}
-              className={`bg-transparent text-[11px] font-bold uppercase outline-none cursor-pointer pr-1 ${
-                theme === "light" ? "text-zinc-900" : "text-neutral-200"
-              }`}
-            >
-              {mapStyles.map((style) => (
-                <option 
-                  key={style.id} 
-                  value={style.id} 
-                  className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-100"}
-                >
-                  {style.label}
-                </option>
-              ))}
-            </select>
-          </div>
+          {/* 3D / 2D Mode Switch Toggle */}
+          <button
+            onClick={() => setIs3DMode(!is3DMode)}
+            className={`flex items-center gap-2 border-2 px-2.5 py-1.5 rounded-none font-bold uppercase transition-all text-xs hover:border-indigo-500 ${
+              theme === "light"
+                ? "bg-white border-zinc-900 text-zinc-800"
+                : "bg-neutral-950 border-neutral-800 text-neutral-300"
+            }`}
+          >
+            <Compass className="w-3.5 h-3.5 text-indigo-500" />
+            <span className="text-[10px]">3D Globe:</span>
+            {is3DMode ? (
+              <ToggleRight className="w-5 h-5 text-emerald-500" />
+            ) : (
+              <ToggleLeft className="w-5 h-5 text-zinc-400" />
+            )}
+          </button>
+          
+          {/* Custom Map Color Switcher - Fixed Light/Dark Theme dropdown config (Only applicable in 2D Map mode)[cite: 1] */}
+          {!is3DMode && (
+            <div className={`flex items-center gap-2 border-2 px-2.5 py-1.5 rounded-none font-bold uppercase transition-all text-xs ${
+              theme === "light"
+                ? "bg-white border-zinc-900 text-zinc-800"
+                : "bg-neutral-950 border-neutral-800 text-neutral-300"
+            }`}>
+              <Paintbrush className="w-3.5 h-3.5 text-indigo-500" />
+              <select
+                value={currentMapStyle}
+                onChange={(e) => setCurrentMapStyle(e.target.value)}
+                className={`bg-transparent text-[11px] font-bold uppercase outline-none cursor-pointer pr-1 ${
+                  theme === "light" ? "text-zinc-900" : "text-neutral-200"
+                }`}
+              >
+                {mapStyles.map((style) => (
+                  <option 
+                    key={style.id} 
+                    value={style.id} 
+                    className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-100"}
+                  >
+                    {style.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+          )}
 
           {/* Search Box[cite: 1] */}
           <div className="relative w-full sm:w-64">
@@ -686,13 +783,145 @@ export default function WorldMap({
         </div>
       </div>
 
-      {/* Main Interactive Map Wrapper[cite: 1] */}
+      {/* Main Map Viewport Area */}
       <div className={`relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none ${
         theme === "light" 
           ? "bg-white border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" 
           : "bg-[#0d0e12] border-neutral-800 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.05)]"
       }`}>
-        <div ref={mapContainerRef} className="w-full h-full" id="world-map-leaflet" />
+        
+        {/* 2D View Container (Hidden when 3D Mode is True) */}
+        <div 
+          ref={mapContainerRef} 
+          className={`w-full h-full ${is3DMode ? "hidden" : "block"}`} 
+          id="world-map-leaflet" 
+        />
+
+        {/* 3D Orthographic Vector Globe Container */}
+        {is3DMode && (
+          <div 
+            className="w-full h-full flex items-center justify-center relative select-none overflow-hidden cursor-grab active:cursor-grabbing"
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUpOrLeave}
+            onMouseLeave={handleMouseUpOrLeave}
+          >
+            <div className="absolute top-4 left-4 z-10 p-2 border-2 bg-neutral-950/95 border-neutral-800 text-[9px] uppercase font-bold text-indigo-400">
+              Drag Globe to Rotate <br/>
+              <span className="text-neutral-500">LAT: {(-rotation.x).toFixed(1)}° | LON: {(-rotation.y).toFixed(1)}°</span>
+            </div>
+
+            {/* Spheroid Render Interface */}
+            <svg 
+              viewBox="0 0 360 360" 
+              className="w-[340px] h-[340px] md:w-[400px] md:h-[400px] drop-shadow-[0_0_15px_rgba(99,102,241,0.25)]"
+            >
+              {/* Globe Outer Atmosphere Grid */}
+              <circle 
+                cx="180" 
+                cy="180" 
+                r="140" 
+                fill={theme === "light" ? "#f4f4f5" : "#020205"} 
+                stroke={theme === "light" ? "#18181b" : "#4f46e5"} 
+                strokeWidth="3.5"
+              />
+
+              {/* Wireframe longitude and latitude parallel guide rings */}
+              <path 
+                d="M 40 180 A 140 140 0 0 0 320 180 Z" 
+                fill="none" 
+                stroke={theme === "light" ? "#e4e4e7" : "#1f1f2e"} 
+                strokeWidth="1.5" 
+                strokeDasharray="4 4"
+              />
+              <path 
+                d="M 180 40 A 140 140 0 0 0 180 320 Z" 
+                fill="none" 
+                stroke={theme === "light" ? "#e4e4e7" : "#1f1f2e"} 
+                strokeWidth="1.5" 
+                strokeDasharray="4 4"
+              />
+
+              {/* Render dynamic markers mapped onto orthographic 3D calculations */}
+              {globePoints.map((stream) => {
+                if (!stream.visible) return null;
+
+                const isActive = activeChannel && activeChannel.id === stream.id;
+                let activeColor = "fill-emerald-500 stroke-emerald-200";
+                let shadowColor = "rgba(16,185,129,0.3)";
+
+                if (stream.status === "unstable") {
+                  activeColor = "fill-amber-500 stroke-amber-200";
+                  shadowColor = "rgba(245,158,11,0.3)";
+                } else if (stream.status === "offline") {
+                  activeColor = "fill-rose-500 stroke-rose-200";
+                  shadowColor = "rgba(239,68,68,0.3)";
+                }
+
+                return (
+                  <g 
+                    key={stream.id} 
+                    className="cursor-pointer group"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelectChannel(stream);
+                    }}
+                  >
+                    {/* Pulsing indicator aura */}
+                    <circle 
+                      cx={stream.projX} 
+                      cy={stream.projY} 
+                      r={isActive ? 12 : 6} 
+                      fill={shadowColor}
+                      className={isActive ? "animate-pulse" : ""}
+                    />
+
+                    {/* Hard square brutalist nodes */}
+                    <rect 
+                      x={stream.projX - (isActive ? 4.5 : 3)} 
+                      y={stream.projY - (isActive ? 4.5 : 3)} 
+                      width={isActive ? 9 : 6} 
+                      height={isActive ? 9 : 6} 
+                      className={`${activeColor} transition-all duration-300 stroke-1`}
+                    />
+
+                    {/* Tooltip Hover Tag inside SVG */}
+                    <g className="opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                      <rect 
+                        x={stream.projX + 10} 
+                        y={stream.projY - 18} 
+                        width="110" 
+                        height="26" 
+                        fill={theme === "light" ? "#ffffff" : "#0a0a0f"} 
+                        stroke={theme === "light" ? "#18181b" : "#312e81"} 
+                        strokeWidth="1.5"
+                      />
+                      <text 
+                        x={stream.projX + 16} 
+                        y={stream.projY - 6} 
+                        fontSize="8" 
+                        fontFamily="monospace"
+                        fontWeight="bold"
+                        fill={theme === "light" ? "#18181b" : "#f4f4f5"}
+                      >
+                        {stream.name.length > 18 ? `${stream.name.slice(0, 15)}...` : stream.name}
+                      </text>
+                      <text 
+                        x={stream.projX + 16} 
+                        y={stream.projY + 3} 
+                        fontSize="6" 
+                        fontFamily="monospace"
+                        fill="#6366f1"
+                      >
+                        {stream.cityName} ({stream.country})
+                      </text>
+                    </g>
+                  </g>
+                );
+              })}
+            </svg>
+          </div>
+        )}
       </div>
 
       {/* Legend and Scale Terminal Footer[cite: 1] */}
@@ -716,7 +945,7 @@ export default function WorldMap({
         
         <div className="flex items-center gap-1.5 font-bold">
           <Compass className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`} />
-          <span>EQUIRECTANGULAR HYBRID SATELLITE</span>
+          <span>{is3DMode ? "ORTHOGRAPHIC 3D GLOBE SPHERE" : "EQUIRECTANGULAR HYBRID SATELLITE"}</span>
         </div>
       </div>
     </div>
