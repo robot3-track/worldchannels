@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import L from "leaflet";
+import maplibregl from "maplibre-gl";
 import "leaflet/dist/leaflet.css";
 import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
+import "maplibre-gl/dist/maplibre-gl.css";
 import { Search, Globe, Compass, Paintbrush } from "lucide-react";
 import { StreamChannel } from "../types";
 
@@ -204,7 +206,7 @@ const countryCities: Record<string, { name: string; lat: number; lon: number }[]
   ]
 };
 
-// Advanced coordinate scatter algorithm to isolate adjacent map telemetry nodes[cite: 1]
+// Advanced coordinate scatter algorithm to isolate adjacent map telemetry nodes
 const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   const countryCounts: Record<string, number> = {};
   
@@ -244,17 +246,17 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   });
 };
 
-// Map customization styles config - Satellite has an overlayUrl property assigned[cite: 1]
+// Map customization styles config - Satellite has an overlayUrl property assigned
 const mapStyles = [
   { 
     id: "satellite", 
     label: "Satellite View", 
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    overlayUrl: "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_And_Places/MapServer/tile/{z}/{y}/{x}" // Transparent hybrid overlay layer
+    overlayUrl: "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_And_Places/MapServer/tile/{z}/{y}/{x}"
   },
-  { id: "light", label: "Classic Light", url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" },
-  { id: "dark", label: "Midnight Dark", url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" },
-  { id: "retro", label: "Retro Voyager", url: "https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png" }
+  { id: "light", label: "Classic Light", url: "https://a.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png" },
+  { id: "dark", label: "Midnight Dark", url: "https://a.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png" },
+  { id: "retro", label: "Retro Voyager", url: "https://a.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}.png" }
 ];
 
 interface WorldMapProps {
@@ -273,23 +275,31 @@ export default function WorldMap({
   theme
 }: WorldMapProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  // Set satellite view as default initial state[cite: 1]
   const [currentMapStyle, setCurrentMapStyle] = useState("satellite");
+  const [viewMode, setViewMode] = useState<"2d" | "3d">("2d");
+
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
+  
+  // Explicit Core Map Instance Hooks
   const mapRef = useRef<L.Map | null>(null);
   const markerGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
-  const overlayLayerRef = useRef<L.TileLayer | null>(null); // Reference hook tracking boundaries overlay layer
+  const overlayLayerRef = useRef<L.TileLayer | null>(null);
+  
+  // Explicit 3D MapLibre Core Instance Hooks
+  const maplibreRef = useRef<maplibregl.Map | null>(null);
+  const maplibreMarkersRef = useRef<maplibregl.Marker[]>([]);
+
   const isInitialRenderRef = useRef(true);
 
-  // Parse telemetry streams to generate coordinates[cite: 1]
+  // Parse telemetry streams to generate coordinates
   const processedStreams = useMemo(() => {
     return mapStreamsToSpannedCoordinates(streams);
   }, [streams]);
 
-  // Handle active registry search sorting flags[cite: 1]
+  // Handle active registry search sorting flags with fully strict typing applied
   const filteredStreams = useMemo(() => {
-    return processedStreams.filter((s) => {
+    return processedStreams.filter((s: StreamChannel & { cityName?: string; mappedLat: number; mappedLon: number }) => {
       const matchCat = selectedCategory === "all" || s.category === selectedCategory;
       const matchSearch = searchQuery
         ? s.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -300,312 +310,297 @@ export default function WorldMap({
     });
   }, [processedStreams, selectedCategory, searchQuery]);
 
-  // Initialize leaf matrix map onto DOM container hook[cite: 1]
-  useEffect(() => {
-    if (!mapContainerRef.current || mapRef.current) return;
+  // Helper template structure mapping the explicit popup channel designs
+  const buildClusterDropdownHtml = (clusterData: typeof filteredStreams) => {
+    let listHtml = `
+      <div class="flex flex-col gap-1 max-h-[240px] overflow-y-auto pr-1 no-scrollbar min-w-[220px] font-sans text-xs p-2 rounded-none border-2 ${
+        theme === "light" ? "bg-white text-zinc-900 border-zinc-900" : "bg-neutral-950 text-neutral-200 border-neutral-800"
+      }">
+        <div class="text-[10px] font-bold uppercase tracking-wider mb-2 px-1 flex justify-between border-b-2 ${
+          theme === "light" ? "border-zinc-900 text-zinc-500" : "border-neutral-800 text-neutral-500"
+        } pb-1.5 font-mono">
+          <span>CHANNELS AT POSITION</span>
+          <span class="font-bold">TOTAL: ${clusterData.length}</span>
+        </div>
+    `;
 
-    const bounds = L.latLngBounds(L.latLng(-65, -180), L.latLng(85, 180));
-
-    const map = L.map(mapContainerRef.current, {
-      center: [20, 0],
-      zoom: 2,
-      minZoom: 2,
-      maxZoom: 8,
-      maxBounds: bounds,
-      maxBoundsViscosity: 1.0,
-      zoomControl: false,
-      attributionControl: false
-    });
-
-    // Select default satellite style initially[cite: 1]
-    const targetStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
-
-    const tileLayer = L.tileLayer(targetStyle.url, {
-      subdomains: "abcd",
-      maxZoom: 20,
-      noWrap: true,
-      bounds: bounds
-    }).addTo(map);
-
-    tileLayerRef.current = tileLayer;
-
-    // Load overlay layer (Borders/Places labels) if it is supplied on the initial style
-    if (targetStyle.overlayUrl) {
-      const overlayLayer = L.tileLayer(targetStyle.overlayUrl, {
-        subdomains: "abcd",
-        maxZoom: 20,
-        noWrap: true,
-        bounds: bounds
-      }).addTo(map);
-      overlayLayerRef.current = overlayLayer;
-    }
-
-    L.control.zoom({ position: "bottomright" }).addTo(map);
-
-    // Dynamic marker aggregated clusters[cite: 1]
-    const markerGroup = (L as any).markerClusterGroup({
-      showCoverageOnHover: false,
-      zoomToBoundsOnClick: false, 
-      spiderfyOnMaxZoom: true,
-      maxClusterRadius: 45,
-      disableClusteringAtZoom: 14, 
-      iconCreateFunction: (cluster: any) => {
-        const count = cluster.getChildCount();
-        return L.divIcon({
-          html: `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-900 font-sans text-xs font-bold border ${theme === 'light' ? 'border-zinc-900 text-white' : 'border-indigo-400 text-indigo-100'} rounded-none cursor-pointer"><span>${count}</span></div>`,
-          className: 'custom-cluster-icon',
-          iconSize: [32, 32]
-        });
-      }
-    }).addTo(map);
-
-    // Render multi-stream cluster selection arrays inside popup panel overlays[cite: 1]
-    markerGroup.on('clusterclick', (a: any) => {
-      const markers = a.layer.getAllChildMarkers();
-      const clusterLatLng = a.latlng;
-
-      let listHtml = `
-        <div class="flex flex-col gap-1 max-h-[240px] overflow-y-auto pr-1 no-scrollbar min-w-[220px] font-sans text-xs p-2 rounded-none border-2 ${
-          theme === "light" ? "bg-white text-zinc-900 border-zinc-900" : "bg-neutral-950 text-neutral-200 border-neutral-800"
-        }">
-          <div class="text-[10px] font-bold uppercase tracking-wider mb-2 px-1 flex justify-between border-b-2 ${
-            theme === "light" ? "border-zinc-900 text-zinc-500" : "border-neutral-800 text-neutral-500"
-          } pb-1.5 font-mono">
-            <span>CHANNELS AT POSITION</span>
-            <span class="font-bold">TOTAL: ${markers.length}</span>
+    clusterData.forEach((stream) => {
+      const statusDot = stream.status === "online" ? "bg-emerald-500" : stream.status === "unstable" ? "bg-amber-500" : "bg-rose-500";
+      listHtml += `
+        <div class="channel-popup-item flex items-center justify-between p-2 cursor-pointer transition-all border-2 rounded-none font-mono ${
+          theme === "light" 
+            ? "bg-white border-zinc-900 hover:bg-zinc-50" 
+            : "bg-neutral-900 border-neutral-800 hover:bg-neutral-950 hover:border-neutral-700"
+        } mb-1" data-id="${stream.id}">
+          <div class="flex items-center gap-2 truncate">
+            <div class="w-2.5 h-2.5 rounded-none ${statusDot} flex-shrink-0"></div>
+            <div class="flex flex-col truncate">
+              <span class="text-xs font-bold truncate leading-none mb-1 uppercase">${stream.name}</span>
+              <span class="text-[9px] text-zinc-500 dark:text-neutral-500 tracking-wider uppercase leading-none">SYS: ${stream.category}</span>
+            </div>
           </div>
+          <div class="flex-shrink-0 ml-2 text-indigo-500 font-black text-[10px] uppercase">
+            WATCH
+          </div>
+        </div>
       `;
-
-      markers.forEach((marker: any) => {
-        const stream = marker.options.streamData;
-        if (!stream) return;
-
-        const statusDot = stream.status === "online" ? "bg-emerald-500" : stream.status === "unstable" ? "bg-amber-500" : "bg-rose-500";
-        
-        listHtml += `
-          <div class="channel-popup-item flex items-center justify-between p-2 cursor-pointer transition-all border-2 rounded-none font-mono ${
-            theme === "light" 
-              ? "bg-white border-zinc-900 hover:bg-zinc-50" 
-              : "bg-neutral-900 border-neutral-800 hover:bg-neutral-950 hover:border-neutral-700"
-          } mb-1" data-id="${stream.id}">
-            <div class="flex items-center gap-2 truncate">
-              <div class="w-2.5 h-2.5 rounded-none ${statusDot} flex-shrink-0"></div>
-              <div class="flex flex-col truncate">
-                <span class="text-xs font-bold truncate leading-none mb-1 uppercase">${stream.name}</span>
-                <span class="text-[9px] text-zinc-500 dark:text-neutral-500 tracking-wider uppercase leading-none">SYS: ${stream.category}</span>
-              </div>
-            </div>
-            <div class="flex-shrink-0 ml-2 text-indigo-500 font-black text-[10px] uppercase">
-              WATCH
-            </div>
-          </div>
-        `;
-      });
-
-      listHtml += `</div>`;
-
-      const popup = L.popup({
-        closeButton: false,
-        className: 'custom-cluster-popup brutalist-popup',
-        offset: L.point(0, -10),
-        maxWidth: 260
-      })
-        .setLatLng(clusterLatLng)
-        .setContent(listHtml)
-        .openOn(map);
-
-      // Bind node relay intercept handlers across popup list structures[cite: 1]
-      setTimeout(() => {
-        const container = popup.getElement();
-        if (!container) return;
-        
-        const items = container.querySelectorAll('.channel-popup-item');
-        items.forEach(item => {
-          item.addEventListener('click', () => {
-            const id = (item as HTMLElement).dataset.id;
-            const targetStream = markers.find((m: any) => m.options.streamData?.id === id)?.options.streamData;
-            if (targetStream) {
-              onSelectChannel(targetStream);
-              map.closePopup();
-            }
-          });
-        });
-      }, 100);
     });
-    
-    markerGroupRef.current = markerGroup;
-    mapRef.current = map;
 
-    setTimeout(() => {
-      map.invalidateSize();
-    }, 200);
+    listHtml += `</div>`;
+    return listHtml;
+  };
 
-    return () => {
-      if (mapRef.current) {
-        mapRef.current.remove();
-        mapRef.current = null;
-      }
-    };
-  }, [theme]);
-
-  // Update dynamic map tiles and toggle overlay boundary logic when style custom choices pivot[cite: 1]
-  useEffect(() => {
-    const map = mapRef.current;
-    if (!map) return;
-
-    const selectedStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
-    
-    // 1. Update primary layer configuration
-    if (tileLayerRef.current) {
-      tileLayerRef.current.setUrl(selectedStyle.url);
-    }
-
-    // 2. Safely wipe out outdated overlay structures
-    if (overlayLayerRef.current) {
-      map.removeLayer(overlayLayerRef.current);
+  const wipeMapInstances = () => {
+    if (mapRef.current) {
+      mapRef.current.remove();
+      mapRef.current = null;
+      markerGroupRef.current = null;
+      tileLayerRef.current = null;
       overlayLayerRef.current = null;
     }
-
-    // 3. Inject reference text/border layers if included in properties object
-    if (selectedStyle.overlayUrl) {
-      const bounds = L.latLngBounds(L.latLng(-65, -180), L.latLng(85, 180));
-      const overlayLayer = L.tileLayer(selectedStyle.overlayUrl, {
-        subdomains: "abcd",
-        maxZoom: 20,
-        noWrap: true,
-        bounds: bounds
-      }).addTo(map);
-      
-      overlayLayerRef.current = overlayLayer;
-      
-      // Ensure overlay text sits directly below UI markers instead of overlapping them
-      if (markerGroupRef.current) {
-        markerGroupRef.current.bringToFront();
-      }
+    if (maplibreRef.current) {
+      maplibreMarkersRef.current.forEach(m => m.remove());
+      maplibreMarkersRef.current = [];
+      maplibreRef.current.remove();
+      maplibreRef.current = null;
     }
-  }, [currentMapStyle]);
+  };
 
-  // Update dynamic markers when selection or data changes[cite: 1]
+  // Orchestrate Active Canvas mounting engines
   useEffect(() => {
-    const map = mapRef.current;
-    const markerGroup = markerGroupRef.current;
-    if (!map || !markerGroup) return;
+    if (!mapContainerRef.current) return;
+    wipeMapInstances();
 
-    // Clear old layers[cite: 1]
-    markerGroup.clearLayers();
+    const selectedStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
 
-    // Map each stream to an interactive Leaflet marker[cite: 1]
-    filteredStreams.forEach((stream) => {
-      const lat = stream.mappedLat;
-      const lon = stream.mappedLon;
-      const cityName = stream.cityName;
-      const isActive = activeChannel && activeChannel.id === stream.id;
+    // ==================== EDGE MODE A: LEAFLET 2D ====================
+    if (viewMode === "2d") {
+      const bounds = L.latLngBounds(L.latLng(-65, -180), L.latLng(85, 180));
+      const map = L.map(mapContainerRef.current, {
+        center: [20, 0],
+        zoom: 2,
+        minZoom: 2,
+        maxZoom: 8,
+        maxBounds: bounds,
+        maxBoundsViscosity: 1.0,
+        zoomControl: false,
+        attributionControl: false
+      });
 
-      // Ensure all classes are statically recognizable by Tailwind compiler[cite: 1]
-      let pingColorClass = "bg-emerald-400/40";
-      let pulseRingClass = "bg-emerald-400/20";
-      let pulseBorderClass = "border-emerald-400/30";
-      let activeDotColorClass = "bg-emerald-500";
+      const tileLayer = L.tileLayer(selectedStyle.url, {
+        subdomains: "abcd", maxZoom: 20, noWrap: true, bounds: bounds
+      }).addTo(map);
+      tileLayerRef.current = tileLayer;
 
-      if (stream.status === "unstable") {
-        pingColorClass = "bg-amber-400/40";
-        pulseRingClass = "bg-amber-400/20";
-        pulseBorderClass = "border-amber-400/30";
-        activeDotColorClass = "bg-amber-500";
-      } else if (stream.status === "offline") {
-        pingColorClass = "bg-rose-400/40";
-        pulseRingClass = "bg-rose-400/20";
-        pulseBorderClass = "border-rose-400/30";
-        activeDotColorClass = "bg-rose-500";
+      if (selectedStyle.overlayUrl) {
+        overlayLayerRef.current = L.tileLayer(selectedStyle.overlayUrl, {
+          subdomains: "abcd", maxZoom: 20, noWrap: true, bounds: bounds
+        }).addTo(map);
       }
 
-      // HTML template for pulsing map nodes - Hard flat brutalist squares[cite: 1]
-      const markerHtml = isActive
-        ? `
-        <div class="relative flex items-center justify-center">
-          <span class="absolute inline-flex h-9 w-9 rounded-none ${pingColorClass} animate-ping"></span>
-          <span class="absolute inline-flex h-6 w-6 rounded-none ${pulseRingClass} border-2 ${pulseBorderClass}"></span>
-          <span class="relative inline-flex rounded-none h-3.5 w-3.5 ${activeDotColorClass} border-2 ${theme === "light" ? "border-zinc-900" : "border-neutral-950"} shadow-sm"></span>
-        </div>
-        `
-        : `
-        <div class="relative flex items-center justify-center">
-          <span class="absolute inline-flex h-4 w-4 rounded-none ${stream.status === 'unstable' ? 'bg-amber-500/20' : stream.status === 'offline' ? 'bg-rose-500/20' : 'bg-emerald-500/20'} animate-pulse"></span>
-          <span class="relative inline-flex rounded-none h-2.5 w-2.5 ${stream.status === 'unstable' ? 'bg-amber-500' : stream.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border-2 ${theme === "light" ? "border-zinc-900" : "border-neutral-950"}"></span>
-        </div>
-        `;
+      L.control.zoom({ position: "bottomright" }).addTo(map);
 
-      const customIcon = L.divIcon({
-        html: markerHtml,
-        className: "custom-map-marker-wrapper",
-        iconSize: [24, 24],
-        iconAnchor: [12, 12]
+      const markerGroup = (L as any).markerClusterGroup({
+        showCoverageOnHover: false,
+        zoomToBoundsOnClick: false, 
+        spiderfyOnMaxZoom: true,
+        maxClusterRadius: 45,
+        disableClusteringAtZoom: 14, 
+        iconCreateFunction: (cluster: any) => {
+          const count = cluster.getChildCount();
+          return L.divIcon({
+            html: `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-900 font-sans text-xs font-bold border ${theme === 'light' ? 'border-zinc-900 text-white' : 'border-indigo-400 text-indigo-100'} rounded-none cursor-pointer"><span>${count}</span></div>`,
+            className: 'custom-cluster-icon',
+            iconSize: [32, 32]
+          });
+        }
+      }).addTo(map);
+
+      markerGroup.on('clusterclick', (a: any) => {
+        const childMarkers = a.layer.getAllChildMarkers();
+        const clusterStreams = childMarkers.map((m: any) => m.options.streamData).filter(Boolean);
+        
+        const popup = L.popup({
+          closeButton: false, className: 'custom-cluster-popup brutalist-popup', offset: L.point(0, -10), maxWidth: 260
+        })
+          .setLatLng(a.latlng)
+          .setContent(buildClusterDropdownHtml(clusterStreams))
+          .openOn(map);
+
+        setTimeout(() => {
+          popup.getElement()?.querySelectorAll('.channel-popup-item').forEach(item => {
+            item.addEventListener('click', () => {
+              const targetStream = clusterStreams.find((s: typeof clusterStreams[0]) => s.id === (item as HTMLElement).dataset.id);
+              if (targetStream) { onSelectChannel(targetStream); map.closePopup(); }
+            });
+          });
+        }, 100);
       });
 
-      // Tailored minimal modern popup structure[cite: 1]
-      const popupContent = `
-        <div class="p-3 font-mono text-[11px] rounded-none border-2 ${
-          theme === "light" 
-            ? "text-zinc-900 bg-white border-zinc-900" 
-            : "text-neutral-200 bg-neutral-950 border-neutral-850"
-        } min-w-[220px]">
-          <div class="flex items-center gap-2 border-b-2 pb-1.5 uppercase ${theme === "light" ? "border-zinc-900" : "border-neutral-850"}">
-            <span class="w-2.5 h-2.5 rounded-none ${stream.status === 'unstable' ? 'bg-amber-500 animate-pulse' : stream.status === 'offline' ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}"></span>
-            <span class="font-bold truncate">${stream.name}</span>
-          </div>
-          <div class="mt-2 flex justify-between items-center font-bold text-[10px] ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}">
-            <span class="uppercase">${cityName}</span>
-            <span class="text-[9px] font-black px-1.5 py-0.5 border-2 ${
-              theme === "light" ? "bg-zinc-50 text-zinc-900 border-zinc-900" : "bg-neutral-900 text-neutral-300 border-neutral-800"
-            }">${stream.country}</span>
-          </div>
-          <div class="text-[9px] font-bold mt-1.5 uppercase ${theme === "light" ? "text-zinc-400" : "text-neutral-500"}">
-            SYS REGISTRY: ${stream.category}
-          </div>
-          <div class="mt-2.5 pt-2 border-t-2 text-[9px] font-bold flex items-center gap-1.5 uppercase ${
-            stream.status === 'offline' ? 'text-rose-600' : stream.status === 'unstable' ? 'text-amber-500' : 'text-emerald-500'
-          } ${theme === "light" ? "border-zinc-900" : "border-neutral-850"}">
-            <span>//</span>
-            <span>${stream.status === 'offline' ? 'LINK FAIL' : stream.status === 'unstable' ? 'SIGNAL UNSTABLE' : 'LAUNCH BROADCAST'}</span>
-          </div>
-        </div>
-      `;
-
-      const marker = L.marker([lat, lon], { 
-        icon: customIcon,
-        streamData: stream 
-      } as any);
+      markerGroupRef.current = markerGroup;
+      mapRef.current = map;
       
-      marker.bindPopup(popupContent, {
-        className: "custom-leaflet-popup brutalist-popup",
-        closeButton: false,
-        offset: [0, -6]
+      setTimeout(() => map.invalidateSize(), 200);
+
+    // ==================== EDGE MODE B: MAPLIBRE 3D GLOBE ====================
+    } else {
+      const layersConfig: any[] = [{ id: "base-raster", type: "raster", source: "raster-tiles" }];
+      if (selectedStyle.overlayUrl) {
+        layersConfig.push({ id: "overlay-raster", type: "raster", source: "overlay-tiles" });
+      }
+
+      const maplibre = new maplibregl.Map({
+        container: mapContainerRef.current,
+        style: {
+          version: 8,
+          sources: {
+            "raster-tiles": { type: "raster", tiles: [selectedStyle.url], tileSize: 256 },
+            ...(selectedStyle.overlayUrl && { "overlay-tiles": { type: "raster", tiles: [selectedStyle.overlayUrl], tileSize: 256 } })
+          },
+          layers: layersConfig
+        },
+        center: [0, 20],
+        zoom: 1.5,
+        attributionControl: false
       });
 
-      marker.on("click", () => {
-        onSelectChannel(stream);
+      maplibre.on("style.load", () => {
+        maplibre.setProjection({ type: "globe" });
       });
 
-      marker.addTo(markerGroup);
-    });
-  }, [filteredStreams, activeChannel, theme]);
+      maplibreRef.current = maplibre;
+    }
 
-  // Dynamic camera fly-to effect on selection[cite: 1]
+    return () => wipeMapInstances();
+  }, [viewMode, currentMapStyle]);
+
+  // Synchronize Marker Nodes Layouts
   useEffect(() => {
-    const map = mapRef.current;
-    if (!activeChannel || !map) return;
+    if (viewMode === "2d" && mapRef.current && markerGroupRef.current) {
+      const markerGroup = markerGroupRef.current;
+      markerGroup.clearLayers();
+
+      filteredStreams.forEach((stream) => {
+        const isActive = activeChannel && activeChannel.id === stream.id;
+        let pingColorClass = "bg-emerald-400/40";
+        let pulseRingClass = "bg-emerald-400/20";
+        let pulseBorderClass = "border-emerald-400/30";
+        let activeDotColorClass = "bg-emerald-500";
+
+        if (stream.status === "unstable") {
+          pingColorClass = "bg-amber-400/40";
+          pulseRingClass = "bg-amber-400/20";
+          pulseBorderClass = "border-amber-400/30";
+          activeDotColorClass = "bg-amber-500";
+        } else if (stream.status === "offline") {
+          pingColorClass = "bg-rose-400/40";
+          pulseRingClass = "bg-rose-400/20";
+          pulseBorderClass = "border-rose-400/30";
+          activeDotColorClass = "bg-rose-500";
+        }
+
+        const markerHtml = isActive
+          ? `<div class="relative flex items-center justify-center">
+              <span class="absolute inline-flex h-9 w-9 rounded-none ${pingColorClass} animate-ping"></span>
+              <span class="absolute inline-flex h-6 w-6 rounded-none ${pulseRingClass} border-2 ${pulseBorderClass}"></span>
+              <span class="relative inline-flex rounded-none h-3.5 w-3.5 ${activeDotColorClass} border-2 ${theme === "light" ? "border-zinc-900" : "border-neutral-950"} shadow-sm"></span>
+             </div>`
+          : `<div class="relative flex items-center justify-center">
+              <span class="absolute inline-flex h-4 w-4 rounded-none ${stream.status === 'unstable' ? 'bg-amber-500/20' : stream.status === 'offline' ? 'bg-rose-500/20' : 'bg-emerald-500/20'} animate-pulse"></span>
+              <span class="relative inline-flex rounded-none h-2.5 w-2.5 ${stream.status === 'unstable' ? 'bg-amber-500' : stream.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border-2 ${theme === "light" ? "border-zinc-900" : "border-neutral-950"}"></span>
+             </div>`;
+
+        const popupContent = `
+          <div class="p-3 font-mono text-[11px] rounded-none border-2 ${theme === "light" ? "text-zinc-900 bg-white border-zinc-900" : "text-neutral-200 bg-neutral-950 border-neutral-850"} min-w-[220px]">
+            <div class="flex items-center gap-2 border-b-2 pb-1.5 uppercase ${theme === "light" ? "border-zinc-900" : "border-neutral-850"}">
+              <span class="w-2.5 h-2.5 rounded-none ${stream.status === 'unstable' ? 'bg-amber-500 animate-pulse' : stream.status === 'offline' ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}"></span>
+              <span class="font-bold truncate">${stream.name}</span>
+            </div>
+            <div class="mt-2 flex justify-between items-center font-bold text-[10px] ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}">
+              <span class="uppercase">${stream.cityName}</span>
+              <span class="text-[9px] font-black px-1.5 py-0.5 border-2 ${theme === "light" ? "bg-zinc-50 text-zinc-900 border-zinc-900" : "bg-neutral-900 text-neutral-300 border-neutral-800"}">${stream.country}</span>
+            </div>
+            <div class="text-[9px] font-bold mt-1.5 uppercase ${theme === "light" ? "text-zinc-400" : "text-neutral-500"}">SYS REGISTRY: ${stream.category}</div>
+            <div class="mt-2.5 pt-2 border-t-2 text-[9px] font-bold flex items-center gap-1.5 uppercase ${stream.status === 'offline' ? 'text-rose-600' : stream.status === 'unstable' ? 'text-amber-500' : 'text-emerald-500'} ${theme === "light" ? "border-zinc-900" : "border-neutral-850"}">
+              <span>//</span><span>${stream.status === 'offline' ? 'LINK FAIL' : stream.status === 'unstable' ? 'SIGNAL UNSTABLE' : 'LAUNCH BROADCAST'}</span>
+            </div>
+          </div>`;
+
+        const marker = L.marker([stream.mappedLat, stream.mappedLon], {
+          icon: L.divIcon({ html: markerHtml, className: "custom-map-marker-wrapper", iconSize: [24, 24], iconAnchor: [12, 12] }),
+          streamData: stream
+        } as any).bindPopup(popupContent, { className: "custom-leaflet-popup brutalist-popup", closeButton: false, offset: [0, -6] });
+
+        marker.on("click", () => onSelectChannel(stream));
+        marker.addTo(markerGroup);
+      });
+
+    } else if (viewMode === "3d" && maplibreRef.current) {
+      maplibreMarkersRef.current.forEach(m => m.remove());
+      maplibreMarkersRef.current = [];
+
+      // Grid allocation for 3D simulation clustering mapping with typed arrays
+      const coordinateBins: Record<string, typeof filteredStreams> = {};
+      filteredStreams.forEach((s: typeof filteredStreams[number]) => {
+        const key = `${s.mappedLat.toFixed(1)}_${s.mappedLon.toFixed(1)}`;
+        if (!coordinateBins[key]) coordinateBins[key] = [];
+        coordinateBins[key].push(s);
+      });
+
+      Object.values(coordinateBins).forEach((cluster) => {
+        const rootNode = cluster[0];
+        const el = document.createElement("div");
+
+        if (cluster.length > 1) {
+          el.innerHTML = `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 font-sans text-xs font-bold border border-zinc-900 text-white rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] cursor-pointer"><span>${cluster.length}</span></div>`;
+        } else {
+          const isActive = activeChannel && activeChannel.id === rootNode.id;
+          el.innerHTML = isActive 
+            ? `<div class="relative flex items-center justify-center w-6 h-6">
+                <span class="absolute inline-flex h-6 w-6 rounded-none ${rootNode.status === 'unstable' ? 'bg-amber-400/40' : rootNode.status === 'offline' ? 'bg-rose-400/40' : 'bg-emerald-400/40'} animate-ping"></span>
+                <span class="relative inline-flex rounded-none h-3 w-3 ${rootNode.status === 'unstable' ? 'bg-amber-500' : rootNode.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border-2 border-zinc-900 cursor-pointer"></span>
+               </div>`
+            : `<span class="relative inline-flex rounded-none h-2.5 w-2.5 ${rootNode.status === 'unstable' ? 'bg-amber-500' : rootNode.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border-2 border-zinc-900 cursor-pointer"></span>`;
+        }
+
+        const maplibrePopup = new maplibregl.Popup({ closeButton: false, offset: 12, className: "brutalist-3d-popup" })
+          .setHTML(buildClusterDropdownHtml(cluster));
+
+        const marker3d = new maplibregl.Marker({ element: el })
+          .setLngLat([rootNode.mappedLon, rootNode.mappedLat])
+          .setPopup(maplibrePopup)
+          .addTo(maplibreRef.current!);
+
+        maplibrePopup.on("open", () => {
+          maplibrePopup.getElement()?.querySelectorAll(".channel-popup-item").forEach((item) => {
+            item.addEventListener("click", () => {
+              const match = cluster.find((s: typeof cluster[number]) => s.id === (item as HTMLElement).dataset.id);
+              if (match) { onSelectChannel(match); maplibrePopup.remove(); }
+            });
+          });
+        });
+
+        maplibreMarkersRef.current.push(marker3d);
+      });
+    }
+  }, [filteredStreams, activeChannel, viewMode, theme]);
+
+  // Handle active stream focused fly transitions with typing explicitly matched
+  useEffect(() => {
+    if (!activeChannel) return;
 
     if (isInitialRenderRef.current) {
       isInitialRenderRef.current = false;
       return;
     }
 
-    const matched = processedStreams.find((s) => s.id === activeChannel.id);
-    if (matched) {
-      map.flyTo([matched.mappedLat, matched.mappedLon], 5, {
-        duration: 1.6,
-        easeLinearity: 0.2
-      });
+    const matched = processedStreams.find((s: typeof processedStreams[number]) => s.id === activeChannel.id);
+    if (!matched) return;
+
+    if (viewMode === "2d" && mapRef.current) {
+      mapRef.current.flyTo([matched.mappedLat, matched.mappedLon], 5, { duration: 1.6, easeLinearity: 0.2 });
+    } else if (viewMode === "3d" && maplibreRef.current) {
+      maplibreRef.current.flyTo({ center: [matched.mappedLon, matched.mappedLat], zoom: 4.5, duration: 1600 });
     }
   }, [activeChannel, processedStreams]);
 
@@ -615,7 +610,6 @@ export default function WorldMap({
         ? "bg-[#faf9f6] border-zinc-900 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]"
         : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.1)]"
     }`}>
-      {/* Dynamic Header[cite: 1] */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 z-10">
         <div>
           <div className="flex items-center gap-2">
@@ -629,14 +623,26 @@ export default function WorldMap({
           </p>
         </div>
 
-        {/* Dynamic Controls Side-by-Side[cite: 1] */}
         <div className="flex flex-wrap items-center gap-3">
-          
-          {/* Custom Map Color Switcher - Fixed Light/Dark Theme dropdown config[cite: 1] */}
+          {/* Dimension Matrix Hot Switcher Engine Control */}
           <div className={`flex items-center gap-2 border-2 px-2.5 py-1.5 rounded-none font-bold uppercase transition-all text-xs ${
-            theme === "light"
-              ? "bg-white border-zinc-900 text-zinc-800"
-              : "bg-neutral-950 border-neutral-800 text-neutral-300"
+            theme === "light" ? "bg-white border-zinc-900 text-zinc-800" : "bg-neutral-950 border-neutral-800 text-neutral-300"
+          }`}>
+            <Compass className="w-3.5 h-3.5 text-indigo-500" />
+            <select
+              value={viewMode}
+              onChange={(e) => setViewMode(e.target.value as "2d" | "3d")}
+              className={`bg-transparent text-[11px] font-bold uppercase outline-none cursor-pointer pr-1 ${
+                theme === "light" ? "text-zinc-900" : "text-neutral-200"
+              }`}
+            >
+              <option value="2d" className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-100"}>2D Matrix</option>
+              <option value="3d" className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-100"}>3D Sphere Globe</option>
+            </select>
+          </div>
+
+          <div className={`flex items-center gap-2 border-2 px-2.5 py-1.5 rounded-none font-bold uppercase transition-all text-xs ${
+            theme === "light" ? "bg-white border-zinc-900 text-zinc-800" : "bg-neutral-950 border-neutral-800 text-neutral-300"
           }`}>
             <Paintbrush className="w-3.5 h-3.5 text-indigo-500" />
             <select
@@ -647,18 +653,13 @@ export default function WorldMap({
               }`}
             >
               {mapStyles.map((style) => (
-                <option 
-                  key={style.id} 
-                  value={style.id} 
-                  className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-100"}
-                >
+                <option key={style.id} value={style.id} className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-100"}>
                   {style.label}
                 </option>
               ))}
             </select>
           </div>
 
-          {/* Search Box[cite: 1] */}
           <div className="relative w-full sm:w-64">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <Search className={`h-3.5 w-3.5 ${theme === "light" ? "text-zinc-500" : "text-neutral-600"}`} />
@@ -686,16 +687,14 @@ export default function WorldMap({
         </div>
       </div>
 
-      {/* Main Interactive Map Wrapper[cite: 1] */}
       <div className={`relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none ${
         theme === "light" 
           ? "bg-white border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" 
           : "bg-[#0d0e12] border-neutral-800 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.05)]"
       }`}>
-        <div ref={mapContainerRef} className="w-full h-full" id="world-map-leaflet" />
+        <div ref={mapContainerRef} className="w-full h-full text-zinc-900" style={{ background: "#0d0e12" }} />
       </div>
 
-      {/* Legend and Scale Terminal Footer[cite: 1] */}
       <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] font-bold border-t-2 pt-3.5 uppercase ${
         theme === "light" ? "text-zinc-600 border-zinc-900" : "text-neutral-500 border-neutral-800"
       }`}>
@@ -704,19 +703,13 @@ export default function WorldMap({
             <span className="w-2 h-2 rounded-none bg-emerald-500 relative flex"><span className="animate-ping absolute inline-flex h-full w-full rounded-none bg-emerald-400 opacity-75" /></span>
             Active links
           </span>
-          <span className="flex items-center gap-1.5 font-bold">
-            <span className="w-2 h-2 rounded-none bg-amber-500" />
-            Unstable node
-          </span>
-          <span className="flex items-center gap-1.5 font-bold">
-            <span className="w-2 h-2 rounded-none bg-rose-500" />
-            Terminal offline
-          </span>
+          <span className="flex items-center gap-1.5 font-bold"><span className="w-2 h-2 rounded-none bg-amber-500" />Unstable node</span>
+          <span className="flex items-center gap-1.5 font-bold"><span className="w-2 h-2 rounded-none bg-rose-500" />Terminal offline</span>
         </div>
         
         <div className="flex items-center gap-1.5 font-bold">
           <Compass className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`} />
-          <span>EQUIRECTANGULAR HYBRID SATELLITE</span>
+          <span>{viewMode === "2d" ? "EQUIRECTANGULAR HYBRID MATRIX (2D)" : "TRUE SPHERICAL PROJECTION LAYER (3D)"}</span>
         </div>
       </div>
     </div>
