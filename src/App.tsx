@@ -28,7 +28,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
     targetClass: "world-map-step",
     title: "Global Map Tracker",
     description: "Click any glowing coordinate node on this map to immediately bind a satellite connection and load that region's local broadcast.",
-    preferredPlacement: "bottom", // Switched to bottom with overlap to guarantee on-screen rendering on mobile
+    preferredPlacement: "bottom", 
     overlap: true 
   },
   {
@@ -57,8 +57,7 @@ const TUTORIAL_STEPS: TutorialStep[] = [
   }
 ];
 
-// CRITICAL: Synchronized unique key to fix first-time user startup
-const TUTORIAL_STORAGE_KEY = "deck_tutorial_completed_v7_final";
+const TUTORIAL_STORAGE_KEY = "deck_tutorial_completed_v8_final";
 
 export default function App() {
   const [streams, setStreams] = useState<StreamChannel[]>([]);
@@ -105,11 +104,8 @@ export default function App() {
       const padding = 16;
       
       let placement = activeStep.preferredPlacement || "bottom";
-      
-      // Pull inside the target bounds if overlap is enabled
       const gapOffset = activeStep.overlap ? -80 : 12;
 
-      // Handle screen-edge placements intelligently
       if (placement === "left" && rect.left < popoverWidth + padding) {
         placement = "right"; 
       } else if (placement === "right" && window.innerWidth - rect.right < popoverWidth + padding) {
@@ -148,7 +144,7 @@ export default function App() {
           break;
       }
 
-      // STRICT VIEWPORT CONTAINMENT COUPLING
+      // Strict Containment
       const minLeft = scrollLeft + padding;
       const maxLeft = scrollLeft + window.innerWidth - popoverWidth - padding;
       if (left < minLeft) {
@@ -173,7 +169,7 @@ export default function App() {
     }
   }, [runTutorial, currentStep]);
 
-  // Handle smooth scroll centering and delay anchor positioning
+  // Scroll logic
   useEffect(() => {
     if (!runTutorial) return;
 
@@ -193,7 +189,7 @@ export default function App() {
     }
   }, [currentStep, runTutorial, updateTooltipPosition]);
 
-  // Keep popover coordinates synchronized
+  // Window resize listeners
   useEffect(() => {
     if (!runTutorial) return;
 
@@ -217,7 +213,7 @@ export default function App() {
     };
   }, [runTutorial, currentStep, updateTooltipPosition]);
 
-  // Fetch streams from backend
+  // Load streams on startup
   const fetchStreams = async () => {
     try {
       setLoading(true);
@@ -246,18 +242,22 @@ export default function App() {
 
   useEffect(() => {
     fetchStreams();
-    
-    // Checked with the absolute final storage key
-    const completed = localStorage.getItem(TUTORIAL_STORAGE_KEY);
-    if (!completed) {
-      const timer = setTimeout(() => {
-        setRunTutorial(true);
-      }, 1500);
-      return () => clearTimeout(timer);
-    }
   }, []);
 
-  // Calculate statistics
+  // CRITICAL FIX: Trigger tutorial ONLY after app completes loading and streams are present
+  useEffect(() => {
+    if (!loading && streams.length > 0) {
+      const completed = localStorage.getItem(TUTORIAL_STORAGE_KEY);
+      if (!completed) {
+        const timer = setTimeout(() => {
+          setRunTutorial(true);
+        }, 800); // Small delay post-load to let UI transitions finish rendering
+        return () => clearTimeout(timer);
+      }
+    }
+  }, [loading, streams]);
+
+  // Stats
   useEffect(() => {
     if (streams.length === 0) return;
 
@@ -330,7 +330,7 @@ export default function App() {
     }, 100);
   }, []);
 
-  // Periodic background check
+  // Background Sync
   useEffect(() => {
     let pollInterval = 10000;
     let lastCount = streams.length;
@@ -403,6 +403,41 @@ export default function App() {
     }
     return "opacity-30 transition-all duration-300 pointer-events-none";
   };
+
+  // 1. FULL LOADING SYSTEM (Replaces partial flashes of UI with an explicit status deck)
+  if (loading && streams.length === 0) {
+    return (
+      <div className={`min-h-screen flex flex-col items-center justify-center font-mono ${
+        theme === "light" ? "bg-[#faf9f6] text-zinc-900" : "bg-[#0d0e12] text-neutral-100"
+      }`}>
+        <div className="flex flex-col items-center max-w-sm w-full px-6 text-center">
+          <div className="relative mb-8">
+            <div className="w-16 h-16 border-4 border-indigo-500 border-r-transparent animate-spin rounded-full" />
+            <Globe className="w-6 h-6 text-indigo-500 absolute inset-0 m-auto animate-pulse" />
+          </div>
+
+          <div className="space-y-2 w-full">
+            <h1 className="text-sm font-black uppercase tracking-widest text-indigo-500">
+              INITIALIZING DECK COUPLING
+            </h1>
+            
+            {/* Contextual Status Subtitle */}
+            <p className={`text-[10px] tracking-wide uppercase leading-relaxed ${
+              theme === "light" ? "text-zinc-500" : "text-neutral-400"
+            }`}>
+              Binding virtual receiver satellite nodes, parsing global broadcast manifest, and compiling geographical registry.
+            </p>
+          </div>
+
+          <div className={`mt-8 w-full border border-dashed p-3 text-[9px] uppercase ${
+            theme === "light" ? "bg-zinc-100 border-zinc-300 text-zinc-500" : "bg-neutral-900/50 border-neutral-800 text-neutral-500"
+          }`}>
+            <span className="block animate-pulse">STATUS: ESTABLISHING CONNECTIVITY...</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className={`min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300 selection:bg-emerald-500/20 selection:text-emerald-500 ${
@@ -496,63 +531,53 @@ export default function App() {
           </div>
         )}
 
-        {loading && streams.length === 0 ? (
-          <div className="flex-grow flex flex-col items-center justify-center py-28 text-center font-mono">
-            <div className="relative mb-6">
-              <div className="w-12 h-12 border-2 border-indigo-500 border-r-transparent animate-spin rounded-none" />
-              <Globe className="w-5 h-5 text-indigo-500 absolute inset-0 m-auto" />
-            </div>
-            <h3 className="text-xs font-black uppercase">Loading Stream Channels...</h3>
-          </div>
-        ) : (
-          <>
-            {/* World Map */}
-            <section className={`w-full world-map-step ${getSpotlightClass("world-map-step")}`}>
-              <WorldMap
-                streams={streams}
-                selectedCategory={selectedCategory}
-                onSelectChannel={handleSelectChannel}
-                activeChannel={selectedChannel}
+        <>
+          {/* World Map */}
+          <section className={`w-full world-map-step ${getSpotlightClass("world-map-step")}`}>
+            <WorldMap
+              streams={streams}
+              selectedCategory={selectedCategory}
+              onSelectChannel={handleSelectChannel}
+              activeChannel={selectedChannel}
+              theme={theme}
+            />
+          </section>
+
+          {/* Video Player & Registry */}
+          <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            {/* Live Player */}
+            <div id="live-player-section" className={`lg:col-span-8 flex flex-col gap-4 scroll-mt-24 player-step ${getSpotlightClass("player-step")}`}>
+              <div className="flex items-end justify-between pb-1.5 border-b-2 border-zinc-900 dark:border-neutral-800">
+                <div className="flex items-center gap-2">
+                  <Tv className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-800" : "text-neutral-400"}`} />
+                  <h2 className="text-xs font-black uppercase">Live Broadcast Monitor</h2>
+                </div>
+              </div>
+
+              <VideoPlayer
+                channel={selectedChannel}
+                onReportBroken={handleReportBroken}
+                onSelectBackup={handleSelectBackup}
                 theme={theme}
               />
-            </section>
+            </div>
 
-            {/* Video Player & Registry */}
-            <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-              
-              {/* Live Player */}
-              <div id="live-player-section" className={`lg:col-span-8 flex flex-col gap-4 scroll-mt-24 player-step ${getSpotlightClass("player-step")}`}>
-                <div className="flex items-end justify-between pb-1.5 border-b-2 border-zinc-900 dark:border-neutral-800">
-                  <div className="flex items-center gap-2">
-                    <Tv className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-800" : "text-neutral-400"}`} />
-                    <h2 className="text-xs font-black uppercase">Live Broadcast Monitor</h2>
-                  </div>
-                </div>
-
-                <VideoPlayer
-                  channel={selectedChannel}
-                  onReportBroken={handleReportBroken}
-                  onSelectBackup={handleSelectBackup}
+            {/* Sidebar Channels */}
+            <div className="lg:col-span-4 flex flex-col gap-6">
+              <div className={`search-bar-step category-filter-step channel-list-step ${getSpotlightClass(currentStep === 1 ? "search-bar-step" : currentStep === 2 ? "category-filter-step" : "channel-list-step")}`}>
+                <ChannelList
+                  streams={streams}
+                  selectedCategory={selectedCategory}
+                  onChangeCategory={(cat) => setSelectedCategory(cat)}
+                  selectedChannel={selectedChannel}
+                  onSelectChannel={handleSelectChannel}
                   theme={theme}
                 />
               </div>
-
-              {/* Sidebar Channels */}
-              <div className="lg:col-span-4 flex flex-col gap-6">
-                <div className={`search-bar-step category-filter-step channel-list-step ${getSpotlightClass(currentStep === 1 ? "search-bar-step" : currentStep === 2 ? "category-filter-step" : "channel-list-step")}`}>
-                  <ChannelList
-                    streams={streams}
-                    selectedCategory={selectedCategory}
-                    onChangeCategory={(cat) => setSelectedCategory(cat)}
-                    selectedChannel={selectedChannel}
-                    onSelectChannel={handleSelectChannel}
-                    theme={theme}
-                  />
-                </div>
-              </div>
-            </section>
-          </>
-        )}
+            </div>
+          </section>
+        </>
       </main>
 
       {/* FLOATING CONTEXTUAL POPUP */}
@@ -577,7 +602,7 @@ export default function App() {
                   : "bg-[#111218] border-indigo-500 text-neutral-100 shadow-[0_4px_20px_rgba(99,102,241,0.25)]"
               }`}
             >
-              {/* Dynamic 4-Directional Arrow */}
+              {/* Dynamic Arrow */}
               {!(TUTORIAL_STEPS[currentStep].overlap) && (
                 <div
                   style={{
