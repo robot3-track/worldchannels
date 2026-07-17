@@ -204,7 +204,6 @@ const countryCities: Record<string, { name: string; lat: number; lon: number }[]
   ]
 };
 
-// Advanced coordinate scatter algorithm to isolate adjacent map telemetry nodes[cite: 1]
 const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   const countryCounts: Record<string, number> = {};
   
@@ -229,7 +228,6 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
     const cityIndex = index % cities.length;
     const baseCity = cities[cityIndex];
     
-    // Slight deterministic spiral offset to handle marker overlapping configurations
     const angle = index * 137.5; 
     const radius = 0.06 * Math.sqrt(index + 1); 
     const latShift = Math.sin(angle * (Math.PI / 180)) * radius;
@@ -244,13 +242,12 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   });
 };
 
-// Map customization styles config - Satellite has an overlayUrl property assigned[cite: 1]
 const mapStyles = [
   { 
     id: "satellite", 
     label: "Satellite View", 
     url: "https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}",
-    overlayUrl: "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_And_Places/MapServer/tile/{z}/{y}/{x}" // Transparent hybrid overlay layer
+    overlayUrl: "https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_And_Places/MapServer/tile/{z}/{y}/{x}"
   },
   { id: "light", label: "Classic Light", url: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png" },
   { id: "dark", label: "Midnight Dark", url: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" },
@@ -273,21 +270,18 @@ export default function WorldMap({
   theme
 }: WorldMapProps) {
   const [searchQuery, setSearchQuery] = useState("");
-  // Set satellite view as default initial state[cite: 1]
   const [currentMapStyle, setCurrentMapStyle] = useState("satellite");
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<L.Map | null>(null);
   const markerGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
-  const overlayLayerRef = useRef<L.TileLayer | null>(null); // Reference hook tracking boundaries overlay layer
+  const overlayLayerRef = useRef<L.TileLayer | null>(null);
   const isInitialRenderRef = useRef(true);
 
-  // Parse telemetry streams to generate coordinates[cite: 1]
   const processedStreams = useMemo(() => {
     return mapStreamsToSpannedCoordinates(streams);
   }, [streams]);
 
-  // Handle active registry search sorting flags[cite: 1]
   const filteredStreams = useMemo(() => {
     return processedStreams.filter((s) => {
       const matchCat = selectedCategory === "all" || s.category === selectedCategory;
@@ -300,49 +294,44 @@ export default function WorldMap({
     });
   }, [processedStreams, selectedCategory, searchQuery]);
 
-  // Initialize leaf matrix map onto DOM container hook[cite: 1]
+  // Fix 1: Initialize full continuous world map layout
   useEffect(() => {
     if (!mapContainerRef.current || mapRef.current) return;
 
-    const bounds = L.latLngBounds(L.latLng(-65, -180), L.latLng(85, 180));
+    // Allowed vertical panning constraints but leaving continuous horizontal tracking open
+    const worldBounds = L.latLngBounds(L.latLng(-85, -180), L.latLng(85, 180));
 
     const map = L.map(mapContainerRef.current, {
       center: [20, 0],
       zoom: 2,
       minZoom: 2,
       maxZoom: 8,
-      maxBounds: bounds,
-      maxBoundsViscosity: 1.0,
       zoomControl: false,
-      attributionControl: false
+      attributionControl: false,
+      worldCopyJump: true // Seamless wrapping loop across the antimeridian
     });
 
-    // Select default satellite style initially[cite: 1]
     const targetStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
 
     const tileLayer = L.tileLayer(targetStyle.url, {
       subdomains: "abcd",
       maxZoom: 20,
-      noWrap: true,
-      bounds: bounds
+      noWrap: false // Re-enable continuous looping layout natively
     }).addTo(map);
 
     tileLayerRef.current = tileLayer;
 
-    // Load overlay layer (Borders/Places labels) if it is supplied on the initial style
     if (targetStyle.overlayUrl) {
       const overlayLayer = L.tileLayer(targetStyle.overlayUrl, {
         subdomains: "abcd",
         maxZoom: 20,
-        noWrap: true,
-        bounds: bounds
+        noWrap: false
       }).addTo(map);
       overlayLayerRef.current = overlayLayer;
     }
 
     L.control.zoom({ position: "bottomright" }).addTo(map);
 
-    // Dynamic marker aggregated clusters[cite: 1]
     const markerGroup = (L as any).markerClusterGroup({
       showCoverageOnHover: false,
       zoomToBoundsOnClick: false, 
@@ -359,7 +348,7 @@ export default function WorldMap({
       }
     }).addTo(map);
 
-    // Render multi-stream cluster selection arrays inside popup panel overlays[cite: 1]
+    // Event delegation handling drop-down nested layouts safely inside modern UI layouts
     markerGroup.on('clusterclick', (a: any) => {
       const markers = a.layer.getAllChildMarkers();
       const clusterLatLng = a.latlng;
@@ -414,7 +403,6 @@ export default function WorldMap({
         .setContent(listHtml)
         .openOn(map);
 
-      // Bind node relay intercept handlers across popup list structures[cite: 1]
       setTimeout(() => {
         const container = popup.getElement();
         if (!container) return;
@@ -448,60 +436,54 @@ export default function WorldMap({
     };
   }, [theme]);
 
-  // Update dynamic map tiles and toggle overlay boundary logic when style custom choices pivot[cite: 1]
+  // Handle layer/theme shifts safely
   useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
 
     const selectedStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
     
-    // 1. Update primary layer configuration
     if (tileLayerRef.current) {
       tileLayerRef.current.setUrl(selectedStyle.url);
     }
 
-    // 2. Safely wipe out outdated overlay structures
     if (overlayLayerRef.current) {
       map.removeLayer(overlayLayerRef.current);
       overlayLayerRef.current = null;
     }
 
-    // 3. Inject reference text/border layers if included in properties object
     if (selectedStyle.overlayUrl) {
-      const bounds = L.latLngBounds(L.latLng(-65, -180), L.latLng(85, 180));
       const overlayLayer = L.tileLayer(selectedStyle.overlayUrl, {
         subdomains: "abcd",
         maxZoom: 20,
-        noWrap: true,
-        bounds: bounds
+        noWrap: false
       }).addTo(map);
       
       overlayLayerRef.current = overlayLayer;
       
-      // Ensure overlay text sits directly below UI markers instead of overlapping them
       if (markerGroupRef.current) {
         markerGroupRef.current.bringToFront();
       }
     }
   }, [currentMapStyle]);
 
-  // Update dynamic markers when selection or data changes[cite: 1]
+  // Fix 2: Supercharged markers performance optimization (Wipe loops using native batch processing)
   useEffect(() => {
     const map = mapRef.current;
     const markerGroup = markerGroupRef.current;
     if (!map || !markerGroup) return;
 
-    // Clear old layers[cite: 1]
     markerGroup.clearLayers();
 
-    // Map each stream to an interactive Leaflet marker[cite: 1]
+    // Use an allocation array to batch push coordinates in one single refflow transaction step
+    const newMarkersList: L.Marker[] = [];
+
     filteredStreams.forEach((stream) => {
       const lat = stream.mappedLat;
       const lon = stream.mappedLon;
       const cityName = stream.cityName;
       const isActive = activeChannel && activeChannel.id === stream.id;
 
-      // Ensure all classes are statically recognizable by Tailwind compiler[cite: 1]
       let pingColorClass = "bg-emerald-400/40";
       let pulseRingClass = "bg-emerald-400/20";
       let pulseBorderClass = "border-emerald-400/30";
@@ -519,7 +501,6 @@ export default function WorldMap({
         activeDotColorClass = "bg-rose-500";
       }
 
-      // HTML template for pulsing map nodes - Hard flat brutalist squares[cite: 1]
       const markerHtml = isActive
         ? `
         <div class="relative flex items-center justify-center">
@@ -542,7 +523,6 @@ export default function WorldMap({
         iconAnchor: [12, 12]
       });
 
-      // Tailored minimal modern popup structure[cite: 1]
       const popupContent = `
         <div class="p-3 font-mono text-[11px] rounded-none border-2 ${
           theme === "light" 
@@ -586,11 +566,13 @@ export default function WorldMap({
         onSelectChannel(stream);
       });
 
-      marker.addTo(markerGroup);
+      newMarkersList.push(marker);
     });
+
+    // Native batch optimization: add layers simultaneously to fix long load tracking delays!
+    markerGroup.addLayers(newMarkersList);
   }, [filteredStreams, activeChannel, theme]);
 
-  // Dynamic camera fly-to effect on selection[cite: 1]
   useEffect(() => {
     const map = mapRef.current;
     if (!activeChannel || !map) return;
@@ -615,7 +597,6 @@ export default function WorldMap({
         ? "bg-[#faf9f6] border-zinc-900 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]"
         : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.1)]"
     }`}>
-      {/* Dynamic Header[cite: 1] */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 z-10">
         <div>
           <div className="flex items-center gap-2">
@@ -629,10 +610,7 @@ export default function WorldMap({
           </p>
         </div>
 
-        {/* Dynamic Controls Side-by-Side[cite: 1] */}
         <div className="flex flex-wrap items-center gap-3">
-          
-          {/* Custom Map Color Switcher - Fixed Light/Dark Theme dropdown config[cite: 1] */}
           <div className={`flex items-center gap-2 border-2 px-2.5 py-1.5 rounded-none font-bold uppercase transition-all text-xs ${
             theme === "light"
               ? "bg-white border-zinc-900 text-zinc-800"
@@ -658,7 +636,6 @@ export default function WorldMap({
             </select>
           </div>
 
-          {/* Search Box[cite: 1] */}
           <div className="relative w-full sm:w-64">
             <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <Search className={`h-3.5 w-3.5 ${theme === "light" ? "text-zinc-500" : "text-neutral-600"}`} />
@@ -686,7 +663,6 @@ export default function WorldMap({
         </div>
       </div>
 
-      {/* Main Interactive Map Wrapper[cite: 1] */}
       <div className={`relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none ${
         theme === "light" 
           ? "bg-white border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" 
@@ -695,7 +671,6 @@ export default function WorldMap({
         <div ref={mapContainerRef} className="w-full h-full" id="world-map-leaflet" />
       </div>
 
-      {/* Legend and Scale Terminal Footer[cite: 1] */}
       <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] font-bold border-t-2 pt-3.5 uppercase ${
         theme === "light" ? "text-zinc-600 border-zinc-900" : "text-neutral-500 border-neutral-800"
       }`}>
@@ -716,7 +691,7 @@ export default function WorldMap({
         
         <div className="flex items-center gap-1.5 font-bold">
           <Compass className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`} />
-          <span>EQUIRECTANGULAR HYBRID SATELLITE</span>
+          <span>CONTINUOUS WRAPPING WORLD LAYOUT</span>
         </div>
       </div>
     </div>
