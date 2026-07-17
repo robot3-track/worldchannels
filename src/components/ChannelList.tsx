@@ -89,6 +89,7 @@ export default function ChannelList({
     { value: "country", label: "Local Broadcasters", icon: SlidersHorizontal }
   ];
 
+  // 1. Processed Streams definition first...
   const processedStreams = useMemo(() => {
     const filtered = streams.filter((stream) => {
       // Handle the global Category Filter logic here inside search filtering
@@ -132,6 +133,16 @@ export default function ChannelList({
     });
   }, [streams, selectedCategory, countryFilter, searchTerm, bookmarkedIds, history]);
 
+  // 2. ...And now we can safely use processedStreams inside our sync hook![cite: 3]
+  useEffect(() => {
+    if (selectedChannel) {
+      const idx = processedStreams.findIndex((s) => s.id === selectedChannel.id);
+      if (idx !== -1) {
+        setFocusedIndex(idx);
+      }
+    }
+  }, [selectedChannel, processedStreams]);
+
   const getCategoryCount = (catValue: CategoryFilter) => {
     if (catValue === "all") return streams.length;
     if (catValue === "favorites") return bookmarkedIds.length;
@@ -158,46 +169,46 @@ export default function ChannelList({
 
       // Check contextual state
       const limit = Math.min(processedStreams.length, visibleLimit);
+      if (limit === 0) return;
 
-      // 3. Arrow down to navigate lists
+      // Helper function to handle safe channel switching and container auto-scroll
+      const switchChannelTo = (targetIdx: number) => {
+        const channel = processedStreams[targetIdx];
+        if (channel) {
+          onSelectChannel(channel);
+          setFocusedIndex(targetIdx);
+
+          // Smooth scroll container to keep keyboard selection visible
+          // Adding 1 offset due to the list description header block inside container
+          const activeEl = channelListContainerRef.current?.children[targetIdx + 1] as HTMLElement;
+          if (activeEl) {
+            activeEl.scrollIntoView({ block: "nearest" });
+          }
+        }
+      };
+
+      // 3. Arrow down to navigate lists (automatically plays the feed)[cite: 3]
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setFocusedIndex((prev) => {
-          const nextIdx = prev + 1;
-          const targetIdx = nextIdx < limit ? nextIdx : prev;
-          
-          // Smooth scroll container to keep keyboard selection visible
-          const activeEl = channelListContainerRef.current?.children[targetIdx + 1] as HTMLElement;
-          if (activeEl) {
-            activeEl.scrollIntoView({ block: "nearest" });
-          }
-          return targetIdx;
-        });
+        const nextIdx = focusedIndex + 1;
+        if (nextIdx < limit) {
+          switchChannelTo(nextIdx);
+        }
       }
 
-      // 4. Arrow up to navigate lists
+      // 4. Arrow up to navigate lists (automatically plays the feed)[cite: 3]
       if (e.key === "ArrowUp") {
         e.preventDefault();
-        setFocusedIndex((prev) => {
-          const nextIdx = prev - 1;
-          const targetIdx = nextIdx >= 0 ? nextIdx : prev;
-
-          const activeEl = channelListContainerRef.current?.children[targetIdx + 1] as HTMLElement;
-          if (activeEl) {
-            activeEl.scrollIntoView({ block: "nearest" });
-          }
-          return targetIdx;
-        });
+        const prevIdx = focusedIndex - 1;
+        if (prevIdx >= 0) {
+          switchChannelTo(prevIdx);
+        }
       }
 
-      // 5. Enter to select currently highlighted channel
+      // 5. Enter fallback selection rules
       if (e.key === "Enter") {
         const isTyping = document.activeElement === searchInputRef.current;
-        
-        if (focusedIndex >= 0 && focusedIndex < limit) {
-          e.preventDefault();
-          onSelectChannel(processedStreams[focusedIndex]);
-        } else if (isTyping && processedStreams.length > 0) {
+        if (isTyping && processedStreams.length > 0 && focusedIndex === -1) {
           e.preventDefault();
           onSelectChannel(processedStreams[0]);
           searchInputRef.current?.blur();
