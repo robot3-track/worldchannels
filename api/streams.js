@@ -1866,6 +1866,17 @@ const staticStreams = [
     lon: -77.0369,
   },
   {
+    id: "country-us-disneyjr3",
+    name: "Disney Jr. US (Server 3)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/96.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/48/DisneyJr3Dver.png/revision/latest?cb=20240601030018",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
     id: "country-us-natgeo",
     name: "Nat Geo (US)",
     url: "https://s2.bufaloweb.com/bufalo29/index.m3u8",
