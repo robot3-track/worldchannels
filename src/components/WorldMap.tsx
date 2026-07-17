@@ -6,7 +6,7 @@ import "leaflet.markercluster/dist/MarkerCluster.css";
 import "leaflet.markercluster/dist/MarkerCluster.Default.css";
 import "leaflet.markercluster";
 import "maplibre-gl/dist/maplibre-gl.css";
-import { Search, Globe, Compass, Paintbrush } from "lucide-react";
+import { Globe, Compass, Paintbrush } from "lucide-react";
 import { StreamChannel } from "../types";
 
 // Real-world cities distributed geographically across country boundaries
@@ -302,7 +302,6 @@ export default function WorldMap({
     });
   }, [processedStreams, selectedCategory, searchQuery]);
 
-  // Enhanced Dropdown/Popup Visibility Layout (High contrast design, opaque surfaces, prominent labels)
   const buildClusterDropdownHtml = (clusterData: typeof filteredStreams) => {
     let listHtml = `
       <div class="flex flex-col gap-1.5 max-h-[250px] overflow-y-auto pr-1 no-scrollbar min-w-[240px] font-mono text-xs p-2.5 shadow-2xl rounded-none border-2 border-indigo-600 bg-zinc-950 text-neutral-100">
@@ -348,13 +347,11 @@ export default function WorldMap({
     }
   };
 
-  // Safe Backface Occlusion handling to prevent 'Cannot read properties of undefined (reading 'name')'
   const update3DMarkersOcclusion = (mapInstance: maplibregl.Map) => {
     if (!mapInstance) return;
     const center = mapInstance.getCenter();
     const transform = (mapInstance as any).transform;
     
-    // SAFE NAVIGATION CHECK: Early exit if projection pipeline isn't fully ready yet
     if (!transform || !transform.projection || !transform.projection.name) return;
 
     maplibreMarkersRef.current.forEach(({ marker, lat, lon }) => {
@@ -468,6 +465,17 @@ export default function WorldMap({
 
       maplibre.on("style.load", () => {
         maplibre.setProjection({ type: "globe" });
+        
+        // Integrated fix for ts(2339) using type assertion[cite: 5]
+        const mapAny = maplibre as any;
+        if (typeof mapAny.setFog === 'function') {
+          mapAny.setFog({
+            "range": [-1, 2],
+            "color": "#0d0e12",
+            "high-color": "#0d0e12",
+            "space-color": "#0d0e12"
+          });
+        }
       });
 
       maplibre.on("zoomend", () => {
@@ -483,7 +491,6 @@ export default function WorldMap({
     return () => wipeMapInstances();
   }, [viewMode, currentMapStyle]);
 
-  // Synchronize Marker Nodes Layouts
   useEffect(() => {
     if (viewMode === "2d" && mapRef.current && markerGroupRef.current) {
       const markerGroup = markerGroupRef.current;
