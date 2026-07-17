@@ -466,7 +466,6 @@ export default function WorldMap({
       maplibre.on("style.load", () => {
         maplibre.setProjection({ type: "globe" });
         
-        // Integrated fix for ts(2339) using type assertion[cite: 5]
         const mapAny = maplibre as any;
         if (typeof mapAny.setFog === 'function') {
           mapAny.setFog({
