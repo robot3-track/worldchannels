@@ -524,7 +524,8 @@ export default function WorldMap({
       maplibreMarkersRef.current.forEach(m => m.marker.remove());
       maplibreMarkersRef.current = [];
 
-      const clusteringPrecision = currentZoom3d < 2.5 ? 0.3 : currentZoom3d < 4 ? 1.0 : 2.5;
+      // FIX: Corrected inverted clustering logic to cluster heavily when zoomed out, lightly when zoomed in
+      const clusteringPrecision = currentZoom3d < 2.5 ? 12.0 : currentZoom3d < 4 ? 6.0 : 2.0;
       
       const coordinateBins: Record<string, typeof filteredStreams> = {};
       filteredStreams.forEach((s) => {
@@ -539,10 +540,10 @@ export default function WorldMap({
       Object.values(coordinateBins).forEach((cluster) => {
         const rootNode = cluster[0];
         const el = document.createElement("div");
-        el.className = "maplibre-custom-marker-node";
+        el.className = "maplibre-custom-marker-node flex items-center justify-center";
 
         if (cluster.length > 1) {
-          el.innerHTML = `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 font-sans text-xs font-bold border border-zinc-900 text-white rounded-none cursor-pointer shadow-lg"><span>${cluster.length}</span></div>`;
+          el.innerHTML = `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 font-sans text-xs font-bold border border-zinc-900 text-white rounded-none cursor-pointer shadow-lg z-10"><span>${cluster.length}</span></div>`;
         } else {
           const isActive = activeChannel && activeChannel.id === rootNode.id;
           const statusColor = rootNode.status === 'unstable' ? 'bg-amber-500' : rootNode.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500';
@@ -654,7 +655,32 @@ export default function WorldMap({
       </div>
 
       <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none">
-        <div ref={mapContainerRef} className="w-full h-full text-zinc-900" style={{ background: "#0d0e12" }} />
+        <div ref={mapContainerRef} className="w-full h-full text-zinc-900 relative" style={{ background: "#0d0e12" }} />
+        
+        {/* NEW LEGEND UI */}
+        <div className={`absolute bottom-6 left-6 z-[1000] border-2 p-3 text-xs flex flex-col gap-2 rounded-none shadow-lg ${
+          theme === "light" ? "bg-white border-zinc-900 text-zinc-900" : "bg-neutral-950 border-neutral-800 text-neutral-200"
+        }`}>
+          <div className="font-black uppercase tracking-widest text-[10px] border-b-2 pb-1.5 mb-1 border-current opacity-70">
+            Node Status
+          </div>
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex rounded-none h-2.5 w-2.5 bg-emerald-500 border border-zinc-900"></span>
+            <span className="uppercase font-bold text-[10px]">Online</span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex rounded-none h-2.5 w-2.5 bg-amber-500 border border-zinc-900"></span>
+            <span className="uppercase font-bold text-[10px]">Unstable</span>
+          </div>
+          <div className="flex items-center gap-2.5">
+            <span className="inline-flex rounded-none h-2.5 w-2.5 bg-rose-500 border border-zinc-900"></span>
+            <span className="uppercase font-bold text-[10px]">Offline</span>
+          </div>
+          <div className="flex items-center gap-2 mt-1">
+            <div className="flex items-center justify-center w-5 h-5 bg-indigo-600 text-[9px] font-bold border border-zinc-900 text-white rounded-none">#</div>
+            <span className="uppercase font-bold text-[10px]">Cluster</span>
+          </div>
+        </div>
       </div>
     </div>
   );
