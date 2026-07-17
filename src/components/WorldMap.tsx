@@ -389,7 +389,6 @@ export default function WorldMap({
       const map = L.map(mapContainerRef.current, {
         center: [20, 0],
         zoom: 3,
-        // FIX: Bound lower limit so user cannot zoom out to a tiny abstract plain
         minZoom: 2.8,
         maxZoom: 8,
         maxBounds: bounds,
@@ -469,7 +468,6 @@ export default function WorldMap({
         },
         center: [20, 35],
         zoom: currentZoom3d,
-        // FIX: Set strict minZoom bounds preventing full viewport decay into a tiny black ball blob
         minZoom: 2.8,
         maxZoom: 12,
         attributionControl: false
@@ -668,8 +666,8 @@ export default function WorldMap({
       <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none">
         <div ref={mapContainerRef} className="w-full h-full text-zinc-900 relative" style={{ background: "#0d0e12" }} />
 
-        {/* FIX: Add an overlay panel providing clear map navigation controls and legends */}
-        <div className={`absolute bottom-4 left-4 z-[1000] border-2 p-3.5 text-[10px] flex flex-col gap-3 rounded-none max-w-[240px] shadow-xl font-mono tracking-tight ${
+        {/* HIDE ON MOBILE: Replaced 'flex' with 'hidden sm:flex' to cleanly hide legend on mobile viewports */}
+        <div className={`absolute bottom-4 left-4 z-[1000] border-2 p-3.5 text-[10px] hidden sm:flex flex-col gap-3 rounded-none max-w-[240px] shadow-xl font-mono tracking-tight ${
           theme === "light" ? "bg-white border-zinc-900 text-zinc-900" : "bg-zinc-950/95 border-neutral-800 text-neutral-200"
         }`}>
           <div className="flex items-center gap-1.5 font-black uppercase text-xs border-b pb-1.5 border-neutral-700/50">
