@@ -273,8 +273,10 @@ export default function WorldMap({
 }: WorldMapProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [currentMapStyle, setCurrentMapStyle] = useState("satellite");
-  const [viewMode, setViewMode] = useState<"2d" | "3d">("2d");
-  const [currentZoom3d, setCurrentZoom3d] = useState(1.5);
+  // FIX 1: Set 3D as default
+  const [viewMode, setViewMode] = useState<"2d" | "3d">("3d");
+  // FIX 2: Zoomed in closer by default to match screenshot
+  const [currentZoom3d, setCurrentZoom3d] = useState(3.5);
 
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   
@@ -361,7 +363,9 @@ export default function WorldMap({
       const markerCoord = maplibregl.LngLat.convert([lon, lat]);
       const distance = center.distanceTo(markerCoord);
 
-      if (transform.projection.name === "globe" && distance > 10000000) {
+      // FIX 3: Reduced distance threshold from 10,000,000 to 8,500,000. 
+      // This hides markers *just* before they hit the horizon line, preventing ghosting through the globe.
+      if (transform.projection.name === "globe" && distance > 8500000) {
         element.style.display = "none";
         marker.getPopup()?.remove();
       } else {
@@ -458,7 +462,7 @@ export default function WorldMap({
           },
           layers: layersConfig
         },
-        center: [0, 20],
+        center: [20, 45], // Shifted initial center closer to Europe to match your framing
         zoom: currentZoom3d,
         attributionControl: false
       });
@@ -524,8 +528,7 @@ export default function WorldMap({
       maplibreMarkersRef.current.forEach(m => m.marker.remove());
       maplibreMarkersRef.current = [];
 
-      // FIX: Corrected inverted clustering logic to cluster heavily when zoomed out, lightly when zoomed in
-      const clusteringPrecision = currentZoom3d < 2.5 ? 12.0 : currentZoom3d < 4 ? 6.0 : 2.0;
+      const clusteringPrecision = currentZoom3d < 2.5 ? 0.3 : currentZoom3d < 4 ? 1.0 : 2.5;
       
       const coordinateBins: Record<string, typeof filteredStreams> = {};
       filteredStreams.forEach((s) => {
@@ -657,7 +660,7 @@ export default function WorldMap({
       <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none">
         <div ref={mapContainerRef} className="w-full h-full text-zinc-900 relative" style={{ background: "#0d0e12" }} />
         
-        {/* NEW LEGEND UI */}
+        {/* LEGEND UI */}
         <div className={`absolute bottom-6 left-6 z-[1000] border-2 p-3 text-xs flex flex-col gap-2 rounded-none shadow-lg ${
           theme === "light" ? "bg-white border-zinc-900 text-zinc-900" : "bg-neutral-950 border-neutral-800 text-neutral-200"
         }`}>
