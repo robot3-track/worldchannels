@@ -518,7 +518,7 @@ const staticStreams = [
     lon: 2.3522,
   },
   {
-    id: "sports-persiana-sports",
+    id: "sports-persiana-sports1",
     name: "Persiana Sports Iran",
     url: "https://edge22.776740.ir.cdn.ir/hls2/persiana.m3u8",
     category: "sports",
@@ -645,7 +645,7 @@ const staticStreams = [
     category: "world cup",
     country: "TH",
     logo: "https://static.wikia.nocookie.net/logopedia/images/3/35/MonomaxSportsTV-logo.png/revision/latest?cb=20260611164039",
-    status: "offline",
+    status: "unstable",
     lat: 15.8700, // Thailand
     lon: 100.9925,
   },
@@ -861,7 +861,7 @@ const staticStreams = [
     category: "world cup",
     country: "UK",
     logo: "https://upload.wikimedia.org/wikipedia/en/0/0b/ITV_plc_2025_logo.svg",
-    status: "online",
+    status: "unstable",
     lat: 51.5074, // London, UK (EuroNews HQ)
     lon: -0.1278,
   },
@@ -873,7 +873,7 @@ const staticStreams = [
     category: "world cup",
     country: "KZ",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQj_ccV6kSCrhDyj8C76j_feKig0a7wdC46zOKhg3c0WCrvaJVr0rGO_Xcp&s=10",
-    status: "online",
+    status: "unstable",
     lat: 51.1605, // Astana, Kazakhstan
     lon: 71.4704,
   },
@@ -944,7 +944,7 @@ const staticStreams = [
     category: "world cup",
     country: "US",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Telemundo_logo_2018.svg/1920px-Telemundo_logo_2018.svg.png",
-    status: "offline",
+    status: "unstable",
     lat: 18.2208, // San Juan, Puerto Rico
     lon: -66.5901,
   },
@@ -956,7 +956,7 @@ const staticStreams = [
     category: "world cup",
     country: "US",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Telemundo_logo_2018.svg/1920px-Telemundo_logo_2018.svg.png",
-    status: "offline",
+    status: "unstable",
     lat: 34.0522, // Los Angeles, California, USA
     lon: -118.2437,
   },
@@ -1192,7 +1192,7 @@ const staticStreams = [
     category: "world cup",
     country: "GE",
     logo: "https://static.wikia.nocookie.net/logopedia/images/e/ef/Setanta_Sports_2023.svg/revision/latest/scale-to-width-down/78?cb=20230804042115",
-    status: "online",
+    status: "offline",
     lat: 41.7151, // Tbilisi, Georgia
     lon: 44.8271,
   },
