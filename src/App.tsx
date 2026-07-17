@@ -60,7 +60,7 @@ export default function App() {
   const [selectedChannel, setSelectedChannel] = useState<StreamChannel | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   
-  // Save to Deck (Favorites) State
+  // Save to Deck (Favorites) State[cite: 2]
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem("deck_favorites_v1");
@@ -70,7 +70,17 @@ export default function App() {
     }
   });
 
-  // Tutorial States
+  // 🕒 Track the last 4 recently played channel IDs
+  const [recentChannelIds, setRecentChannelIds] = useState<string[]>(() => {
+    try {
+      const saved = localStorage.getItem("deck_recent_channels_v1");
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  });
+
+  // Tutorial States[cite: 2]
   const [runTutorial, setRunTutorial] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [tooltipCoords, setTooltipCoords] = useState({ 
@@ -87,12 +97,17 @@ export default function App() {
     categoriesCount: { sports: 0, news: 0, science: 0, freetv: 0, country: 0 }
   });
 
-  // Sync Bookmarks to LocalStorage
+  // Sync Bookmarks to LocalStorage[cite: 2]
   useEffect(() => {
     localStorage.setItem("deck_favorites_v1", JSON.stringify(bookmarkedIds));
   }, [bookmarkedIds]);
 
-  // Toggle Bookmark Callback
+  // 🕒 Sync Recently Played to LocalStorage
+  useEffect(() => {
+    localStorage.setItem("deck_recent_channels_v1", JSON.stringify(recentChannelIds));
+  }, [recentChannelIds]);
+
+  // Toggle Bookmark Callback[cite: 2]
   const handleToggleBookmark = useCallback((channelId: string) => {
     setBookmarkedIds((prev) =>
       prev.includes(channelId)
@@ -101,7 +116,7 @@ export default function App() {
     );
   }, []);
 
-  // Clear Entire Saved Deck Handler
+  // Clear Entire Saved Deck Handler[cite: 2]
   const handleClearAllBookmarks = useCallback(() => {
     if (window.confirm("Are you sure you want to clear your entire Saved Deck?")) {
       setBookmarkedIds([]);
@@ -339,6 +354,13 @@ export default function App() {
 
   const handleSelectChannel = useCallback((channel: StreamChannel) => {
     setSelectedChannel(channel);
+    
+    // 🕒 Update recently played feed history (keep unique, max 4 items, latest first)
+    setRecentChannelIds((prev) => {
+      const filtered = prev.filter((id) => id !== channel.id);
+      return [channel.id, ...filtered].slice(0, 4);
+    });
+
     setTimeout(() => {
       const playerElement = document.getElementById("live-player-section");
       if (playerElement) {
@@ -420,7 +442,7 @@ export default function App() {
     return "opacity-30 transition-all duration-300 pointer-events-none";
   };
 
-  // Filter streams strictly based on bookmark selection and category selection
+  // Filter streams strictly based on bookmark selection and category selection[cite: 2]
   const filteredStreams = streams.filter((stream) => {
     if (selectedCategory === "favorites") {
       return bookmarkedIds.includes(stream.id);
@@ -457,7 +479,7 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono">
-            {/* Clear Deck Shortcut Button */}
+            {/* Clear Deck Shortcut Button[cite: 2] */}
             {bookmarkedIds.length > 0 && (
               <button
                 onClick={handleClearAllBookmarks}
@@ -489,7 +511,7 @@ export default function App() {
               }`}
             >
               {theme === "light" ? <Moon className="w-3.5 h-3.5 text-indigo-600" /> : <Sun className="w-3.5 h-3.5 text-amber-500" />}
-              <span>{theme === "light" ? "Switch to Dark" : "Switch to Light"}</span>
+              <span>{theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}</span>
             </button>
 
             <div className={`hidden md:flex items-center gap-3 px-3 py-2 border-2 text-[11px] rounded-none ${
@@ -563,6 +585,37 @@ export default function App() {
                 bookmarkedIds={bookmarkedIds}
                 onToggleBookmark={handleToggleBookmark}
               />
+
+              {/* 🕒 Recently Played History Strip[cite: 1] */}
+              {recentChannelIds.length > 0 && (
+                <div className={`p-2 border-2 text-[10px] font-mono flex items-center gap-2 overflow-x-auto rounded-none ${
+                  theme === "light" ? "bg-zinc-100 border-zinc-900" : "bg-neutral-950 border-neutral-850"
+                }`}>
+                  <span className="text-zinc-500 uppercase font-black tracking-wider flex-shrink-0">
+                    Recent Feeds:
+                  </span>
+                  <div className="flex items-center gap-1.5 overflow-x-auto">
+                    {recentChannelIds
+                      .map((id) => streams.find((s) => s.id === id))
+                      .filter((channel): channel is StreamChannel => !!channel)
+                      .map((channel) => (
+                        <button
+                          key={channel.id}
+                          onClick={() => handleSelectChannel(channel)}
+                          className={`px-2 py-0.5 border text-[9px] font-bold uppercase transition-all hover:border-indigo-500 truncate max-w-[140px] cursor-pointer rounded-none ${
+                            selectedChannel?.id === channel.id
+                              ? "bg-indigo-500/10 border-indigo-500 text-indigo-500"
+                              : theme === "light"
+                              ? "bg-white border-zinc-300 text-zinc-700 hover:bg-zinc-50"
+                              : "bg-neutral-900 border-neutral-800 text-neutral-400 hover:text-neutral-200"
+                          }`}
+                        >
+                          {channel.name}
+                        </button>
+                      ))}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Sidebar Channels */}
