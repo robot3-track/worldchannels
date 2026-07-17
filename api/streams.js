@@ -2171,7 +2171,7 @@ const staticStreams = [
     lon: -95.7129,
   },
 
-  // --- SCIENCE (Category: science, Country: Global/Specific) ---
+  // --- SCIENCE (Category: science,  Country: Global/Specific) ---
   {
     id: "science-nasa",
     name: "NASA Live Space Station",
