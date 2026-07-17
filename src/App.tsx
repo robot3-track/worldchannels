@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback, useRef } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import {
   Globe,
@@ -8,26 +8,13 @@ import {
   Sun,
   Moon,
   ArrowRight,
-  X
+  X,
+  Trash2
 } from "lucide-react";
 import { StreamChannel, CategoryFilter, TutorialStep } from "./types";
 import WorldMap from "./components/WorldMap";
 import VideoPlayer from "./components/VideoPlayer";
 import ChannelList from "./components/ChannelList";
-
-// update to prevent errors
-interface ChannelListProps {
-  streams: StreamChannel[];
-  selectedCategory: CategoryFilter;
-  onChangeCategory: (cat: CategoryFilter) => void;
-  selectedChannel: StreamChannel | null;
-  onSelectChannel: (channel: StreamChannel) => void;
-  theme: "light" | "dark";
-  
-  // 🌟 ADD THESE TWO LINES:
-  bookmarkedIds: string[];
-  onToggleBookmark: (channelId: string) => void;
-}
 
 const TUTORIAL_STEPS: TutorialStep[] = [
   {
@@ -112,6 +99,13 @@ export default function App() {
         ? prev.filter((id) => id !== channelId)
         : [...prev, channelId]
     );
+  }, []);
+
+  // Clear Entire Saved Deck Handler
+  const handleClearAllBookmarks = useCallback(() => {
+    if (window.confirm("Are you sure you want to clear your entire Saved Deck?")) {
+      setBookmarkedIds([]);
+    }
   }, []);
 
   const updateTooltipPosition = useCallback(() => {
@@ -463,6 +457,17 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono">
+            {/* Clear Deck Shortcut Button */}
+            {bookmarkedIds.length > 0 && (
+              <button
+                onClick={handleClearAllBookmarks}
+                className="px-2.5 py-2 border-2 text-[10px] font-bold uppercase transition-all active:translate-y-0.5 cursor-pointer flex items-center gap-1.5 rounded-none bg-rose-500/5 border-rose-500/30 text-rose-500 hover:bg-rose-500/10"
+              >
+                <Trash2 className="w-3.5 h-3.5" />
+                <span>Wipe Deck ({bookmarkedIds.length})</span>
+              </button>
+            )}
+
             <button
               onClick={handleRestartTutorial}
               className={`px-2.5 py-2 border-2 text-[10px] font-bold uppercase transition-all active:translate-y-0.5 cursor-pointer flex items-center gap-1.5 rounded-none ${
@@ -484,7 +489,7 @@ export default function App() {
               }`}
             >
               {theme === "light" ? <Moon className="w-3.5 h-3.5 text-indigo-600" /> : <Sun className="w-3.5 h-3.5 text-amber-500" />}
-              <span>{theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}</span>
+              <span>{theme === "light" ? "Dark" : "Light"}</span>
             </button>
 
             <div className={`hidden md:flex items-center gap-3 px-3 py-2 border-2 text-[11px] rounded-none ${
@@ -586,7 +591,6 @@ export default function App() {
         }`}>
           <div className="flex flex-col items-center max-w-sm w-full px-6 text-center">
             
-            {/* Embedded World Channels Brand Header / Logo */}
             <div className="flex items-center gap-3 mb-10">
               <div className={`w-12 h-12 border-2 flex items-center justify-center relative rounded-none ${
                 theme === "light" ? "bg-white border-zinc-950 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" : "bg-neutral-950 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]"
@@ -605,7 +609,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Dynamic Status Progress Indicator */}
             <div className="space-y-2 w-full">
               <h2 className="text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-400">
                 INITIALIZING APPLICATION
