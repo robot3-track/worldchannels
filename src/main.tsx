@@ -1,5 +1,5 @@
 import {StrictMode} from 'react';
-import { Analytics } from "@vercel/analytics/next";
+import { Analytics } from "@vercel/analytics/react";
 // @ts-ignore: Missing type declarations for react-dom/client
 import {createRoot} from 'react-dom/client';
 import App from './App.tsx';
