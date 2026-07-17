@@ -105,7 +105,7 @@ const regionalCities = [
     { keys: ["qatar", "doha", "al jazeera"], lat: 25.2854, lon: 51.5310, country: "QA" },
     { keys: ["middle east", "dubai", "uae", "abu dhabi", "sharjah", "al yaum tv", "al ghad tv"], lat: 25.2048, lon: 55.2708, country: "AE" },
     { keys: ["istanbul", "turkey", "trt", "haberturk"], lat: 41.0082, lon: 28.9784, country: "TR" },
-    { keys: ["tokyo", "nhk", "fuji tv", "fujitv", "asahi", "tbs japan", "tokyo mx", "nippon tv", "weathernews japan", "wowow", "sky a+", "j sports", "cgntv japan"], lat: 35.6762, lon: 139.6503, country: "JP" },
+    { keys: ["tokyo", "nhk", "fuji tv", "fujitv", "asahi", "tbs japan", "tokyo mx", "nippon tv", "weathernews japan", "j sports", "cgntv japan"], lat: 35.6762, lon: 139.6503, country: "JP" },
     { keys: ["beijing", "china", "cgtn", "cctv", "西安丝路", "山东卫视"], lat: 39.9042, lon: 116.4074, country: "CN" },
     { keys: ["seoul", "korea", "sbs world", "kbs world", "arirang", "mbn", "sbs sports", "chosun"], lat: 37.5665, lon: 126.9780, country: "KR" },
     { keys: ["taipei", "taiwan", "pts", "set news", "f tv "], lat: 25.0330, lon: 121.5654, country: "TW" },
@@ -2531,6 +2531,8 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/be.m3u", category: "country", country: "BE" },
       { url: "https://iptv-org.github.io/iptv/countries/ch.m3u", category: "country", country: "CH" },
       { url: "https://iptv-org.github.io/iptv/countries/kp.m3u", category: "country", country: "KP" },
+      { url: "https://iptv-org.github.io/iptv/countries/mx.m3u", category: "country", country: "MX" },
+      { url: "https://iptv-org.github.io/iptv/countries/eg.m3u", category: "country", country: "EG" },
       { url: "https://ncdn.telewebion.ir/faratar/live/playlist.m3u8", category: "world cup", country: "IR" },
       { url: "https://iptv-org.github.io/iptv/index.m3u", category: "country"},
       { url: "https://biostartvworld.pages.dev/biostartvworld.m3u?ch=btv&play=aHR0cHM6Ly90di5iZXlvbmR0YXhjb25zdWx0YW50cy5jb20vYXBpL3Byb3h5P3VybD1odHRwOi8vMTk4LjE5NS4yMzkuNTA6ODA5NS9idHYvdHJhY2tzLXYxYTEvbW9uby5tM3U4&ext=.m3u8", category: "country" }
