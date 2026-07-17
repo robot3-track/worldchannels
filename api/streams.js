@@ -367,6 +367,18 @@ const staticStreams = [
     lon: -74.2973, 
   },
   {
+    id: "sports-winsport-1",
+    name: "Winsport 1 (Colombia)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/125.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "CO",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/b0/Win_Sports%2B_logo.svg/3840px-Win_Sports%2B_logo.svg.png",
+    status: "online",
+    lat: 4.5709, // Colombia
+    lon: -74.2973, 
+  },
+  {
     id: "sports-claro-sports",
     name: "Claro Sports (Argentina)",
     url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/103.m3u8",
@@ -437,6 +449,18 @@ const staticStreams = [
     status: "online",
     lat: 23.6850, // Dhaka, Bangladesh
     lon: 90.3563,
+  },
+  {
+    id: "sports-univision-deportes",
+    name: "Univision Deportes (Mexico)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/156.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "MX",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/a/af/Logo_Univision_2019.svg",
+    status: "online",
+    lat: 19.4326, // Mexico City, Mexico
+    lon: -99.1332,
   },
   {
     id: "sports-tivibu-sport",
@@ -959,6 +983,18 @@ const staticStreams = [
     status: "unstable",
     lat: 34.0522, // Los Angeles, California, USA
     lon: -118.2437,
+  },
+  {
+    id: "sports-tyc-sports2",
+    name: "TYC Sports 2 (Argentina)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/380.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "AR",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcScKJf0nmlb78uuc6GWqRj2GARu9CxqRKvksb5q9VuA9Q&s",
+    status: "online",
+    lat: -34.6037, // Buenos Aires, Argentina
+    lon: -58.3816,
   },
   { 
     id: "sports-caze-tv", 
@@ -1866,8 +1902,19 @@ const staticStreams = [
     lon: -77.0369,
   },
   {
-    id: "country-us-disneyjr3",
-    name: "Disney Jr. US (Server 3)",
+    id: "country-us-disneychannel",
+    name: "Disney Channel US",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/96.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/4/48/DisneyJr3Dver.png/revision/latest?cb=20240601030018",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-disneychannel2",
+    name: "Disney Channel (Server 2) US",
     url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/96.m3u8",
     category: "country",
     country: "US",
@@ -1891,6 +1938,17 @@ const staticStreams = [
     id: "country-us-nickelodeon",
     name: "Nickelodeon (US)",
     url: "https://s2.bufaloweb.com/bufalo20/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Nickelodeon_2023_logo_%28outline%29.svg/1280px-Nickelodeon_2023_logo_%28outline%29.svg.png",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-nickelodeonjr",
+    name: "Nickelodeon JR (US)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/90.m3u8",
     category: "country",
     country: "US",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e5/Nickelodeon_2023_logo_%28outline%29.svg/1280px-Nickelodeon_2023_logo_%28outline%29.svg.png",
