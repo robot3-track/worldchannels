@@ -206,6 +206,7 @@ const countryCities: Record<string, { name: string; lat: number; lon: number }[]
   ]
 };
 
+// Advanced coordinate scatter algorithm to isolate adjacent map telemetry nodes
 const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   const countryCounts: Record<string, number> = {};
   
@@ -230,6 +231,7 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
     const cityIndex = index % cities.length;
     const baseCity = cities[cityIndex];
     
+    // Slight deterministic spiral offset to handle marker overlapping configurations
     const angle = index * 137.5; 
     const radius = 0.06 * Math.sqrt(index + 1); 
     const latShift = Math.sin(angle * (Math.PI / 180)) * radius;
@@ -244,6 +246,7 @@ const mapStreamsToSpannedCoordinates = (streamsList: StreamChannel[]) => {
   });
 };
 
+// Map customization styles config - Satellite has an overlayUrl property assigned
 const mapStyles = [
   { 
     id: "satellite", 
@@ -274,24 +277,27 @@ export default function WorldMap({
   const [searchQuery, setSearchQuery] = useState("");
   const [currentMapStyle, setCurrentMapStyle] = useState("satellite");
   const [viewMode, setViewMode] = useState<"2d" | "3d">("2d");
-  const [currentZoom3d, setCurrentZoom3d] = useState(1.5);
 
   const mapContainerRef = useRef<HTMLDivElement | null>(null);
   
+  // Explicit Core Map Instance Hooks
   const mapRef = useRef<L.Map | null>(null);
   const markerGroupRef = useRef<L.MarkerClusterGroup | null>(null);
   const tileLayerRef = useRef<L.TileLayer | null>(null);
   const overlayLayerRef = useRef<L.TileLayer | null>(null);
   
+  // Explicit 3D MapLibre Core Instance Hooks
   const maplibreRef = useRef<maplibregl.Map | null>(null);
-  const maplibreMarkersRef = useRef<{ marker: maplibregl.Marker; lat: number; lon: number }[]>([]);
+  const maplibreMarkersRef = useRef<maplibregl.Marker[]>([]);
 
   const isInitialRenderRef = useRef(true);
 
+  // Parse telemetry streams to generate coordinates
   const processedStreams = useMemo(() => {
     return mapStreamsToSpannedCoordinates(streams);
   }, [streams]);
 
+  // Handle active registry search sorting flags with fully strict typing applied
   const filteredStreams = useMemo(() => {
     return processedStreams.filter((s: StreamChannel & { cityName?: string; mappedLat: number; mappedLon: number }) => {
       const matchCat = selectedCategory === "all" || s.category === selectedCategory;
@@ -304,6 +310,7 @@ export default function WorldMap({
     });
   }, [processedStreams, selectedCategory, searchQuery]);
 
+  // Helper template structure mapping the explicit popup channel designs
   const buildClusterDropdownHtml = (clusterData: typeof filteredStreams) => {
     let listHtml = `
       <div class="flex flex-col gap-1 max-h-[240px] overflow-y-auto pr-1 no-scrollbar min-w-[220px] font-sans text-xs p-2 rounded-none border-2 ${
@@ -352,43 +359,21 @@ export default function WorldMap({
       overlayLayerRef.current = null;
     }
     if (maplibreRef.current) {
-      maplibreMarkersRef.current.forEach(m => m.marker.remove());
+      maplibreMarkersRef.current.forEach(m => m.remove());
       maplibreMarkersRef.current = [];
       maplibreRef.current.remove();
       maplibreRef.current = null;
     }
   };
 
-  // Occlusion logic to calculate if a 3D marker is facing the camera or hidden behind the globe core backface
-  const update3DMarkersOcclusion = (mapInstance: maplibregl.Map) => {
-    const center = mapInstance.getCenter();
-    const transform = (mapInstance as any).transform;
-    
-    maplibreMarkersRef.current.forEach(({ marker, lat, lon }) => {
-      const element = marker.getElement();
-      if (!element) return;
-
-      // When the projection is a globe, MapLibre tracks globe positioning visibility internally through structural transforms
-      // Checking horizon visibility via camera center distance prevents markers from rendering on back-facings
-      const markerCoord = maplibregl.LngLat.convert([lon, lat]);
-      const distance = center.distanceTo(markerCoord);
-
-      // Explicit angular occlusion threshold: if distance spans greater than a quarter of the globe circumference, hide it
-      if (transform.projection.name === "globe" && distance > 10000000) {
-        element.style.display = "none";
-        marker.getPopup()?.remove();
-      } else {
-        element.style.display = "block";
-      }
-    });
-  };
-
+  // Orchestrate Active Canvas mounting engines
   useEffect(() => {
     if (!mapContainerRef.current) return;
     wipeMapInstances();
 
     const selectedStyle = mapStyles.find(style => style.id === currentMapStyle) || mapStyles[0];
 
+    // ==================== EDGE MODE A: LEAFLET 2D ====================
     if (viewMode === "2d") {
       const bounds = L.latLngBounds(L.latLng(-65, -180), L.latLng(85, 180));
       const map = L.map(mapContainerRef.current, {
@@ -402,29 +387,29 @@ export default function WorldMap({
         attributionControl: false
       });
 
-      L.tileLayer(selectedStyle.url, {
+      const tileLayer = L.tileLayer(selectedStyle.url, {
         subdomains: "abcd", maxZoom: 20, noWrap: true, bounds: bounds
       }).addTo(map);
+      tileLayerRef.current = tileLayer;
 
       if (selectedStyle.overlayUrl) {
-        L.tileLayer(selectedStyle.overlayUrl, {
+        overlayLayerRef.current = L.tileLayer(selectedStyle.overlayUrl, {
           subdomains: "abcd", maxZoom: 20, noWrap: true, bounds: bounds
         }).addTo(map);
       }
 
       L.control.zoom({ position: "bottomright" }).addTo(map);
 
-      // Clean performance config for 2D clusters
       const markerGroup = (L as any).markerClusterGroup({
         showCoverageOnHover: false,
         zoomToBoundsOnClick: false, 
         spiderfyOnMaxZoom: true,
-        maxClusterRadius: 55, // Combines further out when zoomed far out
+        maxClusterRadius: 45,
         disableClusteringAtZoom: 14, 
         iconCreateFunction: (cluster: any) => {
           const count = cluster.getChildCount();
           return L.divIcon({
-            html: `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 font-sans text-xs font-bold border ${theme === 'light' ? 'border-zinc-900 text-white' : 'border-indigo-400 text-indigo-100'} rounded-none cursor-pointer"><span>${count}</span></div>`,
+            html: `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 hover:bg-indigo-700 dark:bg-indigo-900 font-sans text-xs font-bold border ${theme === 'light' ? 'border-zinc-900 text-white' : 'border-indigo-400 text-indigo-100'} rounded-none cursor-pointer"><span>${count}</span></div>`,
             className: 'custom-cluster-icon',
             iconSize: [32, 32]
           });
@@ -449,13 +434,15 @@ export default function WorldMap({
               if (targetStream) { onSelectChannel(targetStream); map.closePopup(); }
             });
           });
-        }, 80);
+        }, 100);
       });
 
       markerGroupRef.current = markerGroup;
       mapRef.current = map;
-      setTimeout(() => map.invalidateSize(), 100);
+      
+      setTimeout(() => map.invalidateSize(), 200);
 
+    // ==================== EDGE MODE B: MAPLIBRE 3D GLOBE ====================
     } else {
       const layersConfig: any[] = [{ id: "base-raster", type: "raster", source: "raster-tiles" }];
       if (selectedStyle.overlayUrl) {
@@ -473,22 +460,13 @@ export default function WorldMap({
           layers: layersConfig
         },
         center: [0, 20],
-        zoom: currentZoom3d,
+        zoom: 1.5,
         attributionControl: false
       });
 
       maplibre.on("style.load", () => {
         maplibre.setProjection({ type: "globe" });
       });
-
-      // Track zoom mutations to trigger cluster grouping recalculations natively
-      maplibre.on("zoomend", () => {
-        setCurrentZoom3d(maplibre.getZoom());
-      });
-
-      // Fire backface check whenever camera shifts position or renders frames
-      maplibre.on("move", () => update3DMarkersOcclusion(maplibre));
-      maplibre.on("render", () => update3DMarkersOcclusion(maplibre));
 
       maplibreRef.current = maplibre;
     }
@@ -504,32 +482,52 @@ export default function WorldMap({
 
       filteredStreams.forEach((stream) => {
         const isActive = activeChannel && activeChannel.id === stream.id;
-        let pingColorClass = stream.status === "unstable" ? "bg-amber-400/40" : stream.status === "offline" ? "bg-rose-400/40" : "bg-emerald-400/40";
-        let activeDotColorClass = stream.status === "unstable" ? "bg-amber-500" : stream.status === "offline" ? "bg-rose-500" : "bg-emerald-500";
+        let pingColorClass = "bg-emerald-400/40";
+        let pulseRingClass = "bg-emerald-400/20";
+        let pulseBorderClass = "border-emerald-400/30";
+        let activeDotColorClass = "bg-emerald-500";
+
+        if (stream.status === "unstable") {
+          pingColorClass = "bg-amber-400/40";
+          pulseRingClass = "bg-amber-400/20";
+          pulseBorderClass = "border-amber-400/30";
+          activeDotColorClass = "bg-amber-500";
+        } else if (stream.status === "offline") {
+          pingColorClass = "bg-rose-400/40";
+          pulseRingClass = "bg-rose-400/20";
+          pulseBorderClass = "border-rose-400/30";
+          activeDotColorClass = "bg-rose-500";
+        }
 
         const markerHtml = isActive
           ? `<div class="relative flex items-center justify-center">
               <span class="absolute inline-flex h-9 w-9 rounded-none ${pingColorClass} animate-ping"></span>
+              <span class="absolute inline-flex h-6 w-6 rounded-none ${pulseRingClass} border-2 ${pulseBorderClass}"></span>
               <span class="relative inline-flex rounded-none h-3.5 w-3.5 ${activeDotColorClass} border-2 ${theme === "light" ? "border-zinc-900" : "border-neutral-950"} shadow-sm"></span>
              </div>`
           : `<div class="relative flex items-center justify-center">
-              <span class="relative inline-flex rounded-none h-2.5 w-2.5 ${activeDotColorClass} border-2 ${theme === "light" ? "border-zinc-900" : "border-neutral-950"}"></span>
+              <span class="absolute inline-flex h-4 w-4 rounded-none ${stream.status === 'unstable' ? 'bg-amber-500/20' : stream.status === 'offline' ? 'bg-rose-500/20' : 'bg-emerald-500/20'} animate-pulse"></span>
+              <span class="relative inline-flex rounded-none h-2.5 w-2.5 ${stream.status === 'unstable' ? 'bg-amber-500' : stream.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border-2 ${theme === "light" ? "border-zinc-900" : "border-neutral-950"}"></span>
              </div>`;
 
         const popupContent = `
           <div class="p-3 font-mono text-[11px] rounded-none border-2 ${theme === "light" ? "text-zinc-900 bg-white border-zinc-900" : "text-neutral-200 bg-neutral-950 border-neutral-850"} min-w-[220px]">
             <div class="flex items-center gap-2 border-b-2 pb-1.5 uppercase ${theme === "light" ? "border-zinc-900" : "border-neutral-850"}">
-              <span class="w-2.5 h-2.5 rounded-none ${activeDotColorClass}"></span>
+              <span class="w-2.5 h-2.5 rounded-none ${stream.status === 'unstable' ? 'bg-amber-500 animate-pulse' : stream.status === 'offline' ? 'bg-rose-500 animate-pulse' : 'bg-emerald-500 animate-pulse'}"></span>
               <span class="font-bold truncate">${stream.name}</span>
             </div>
             <div class="mt-2 flex justify-between items-center font-bold text-[10px] ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}">
               <span class="uppercase">${stream.cityName}</span>
               <span class="text-[9px] font-black px-1.5 py-0.5 border-2 ${theme === "light" ? "bg-zinc-50 text-zinc-900 border-zinc-900" : "bg-neutral-900 text-neutral-300 border-neutral-800"}">${stream.country}</span>
             </div>
+            <div class="text-[9px] font-bold mt-1.5 uppercase ${theme === "light" ? "text-zinc-400" : "text-neutral-500"}">SYS REGISTRY: ${stream.category}</div>
+            <div class="mt-2.5 pt-2 border-t-2 text-[9px] font-bold flex items-center gap-1.5 uppercase ${stream.status === 'offline' ? 'text-rose-600' : stream.status === 'unstable' ? 'text-amber-500' : 'text-emerald-500'} ${theme === "light" ? "border-zinc-900" : "border-neutral-850"}">
+              <span>//</span><span>${stream.status === 'offline' ? 'LINK FAIL' : stream.status === 'unstable' ? 'SIGNAL UNSTABLE' : 'LAUNCH BROADCAST'}</span>
+            </div>
           </div>`;
 
         const marker = L.marker([stream.mappedLat, stream.mappedLon], {
-          icon: L.divIcon({ html: markerHtml, className: "custom-map-marker-wrapper", iconSize: [24, 24] }),
+          icon: L.divIcon({ html: markerHtml, className: "custom-map-marker-wrapper", iconSize: [24, 24], iconAnchor: [12, 12] }),
           streamData: stream
         } as any).bindPopup(popupContent, { className: "custom-leaflet-popup brutalist-popup", closeButton: false, offset: [0, -6] });
 
@@ -538,19 +536,13 @@ export default function WorldMap({
       });
 
     } else if (viewMode === "3d" && maplibreRef.current) {
-      maplibreMarkersRef.current.forEach(m => m.marker.remove());
+      maplibreMarkersRef.current.forEach(m => m.remove());
       maplibreMarkersRef.current = [];
 
-      // Dynamic Clustering Algorithm for 3D View mode:
-      // Threshold adjusts based on currentZoom3d to stack adjacent markers over wider spaces as the view pulls back
-      const clusteringPrecision = currentZoom3d < 2.5 ? 0.3 : currentZoom3d < 4 ? 1.0 : 2.5;
-      
+      // Grid allocation for 3D simulation clustering mapping with typed arrays
       const coordinateBins: Record<string, typeof filteredStreams> = {};
-      filteredStreams.forEach((s) => {
-        const latBin = Math.round(s.mappedLat / clusteringPrecision) * clusteringPrecision;
-        const lonBin = Math.round(s.mappedLon / clusteringPrecision) * clusteringPrecision;
-        const key = `${latBin.toFixed(2)}_${lonBin.toFixed(2)}`;
-        
+      filteredStreams.forEach((s: typeof filteredStreams[number]) => {
+        const key = `${s.mappedLat.toFixed(1)}_${s.mappedLon.toFixed(1)}`;
         if (!coordinateBins[key]) coordinateBins[key] = [];
         coordinateBins[key].push(s);
       });
@@ -558,19 +550,17 @@ export default function WorldMap({
       Object.values(coordinateBins).forEach((cluster) => {
         const rootNode = cluster[0];
         const el = document.createElement("div");
-        el.className = "maplibre-custom-marker-node";
 
         if (cluster.length > 1) {
-          el.innerHTML = `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 font-sans text-xs font-bold border border-zinc-900 text-white rounded-none cursor-pointer"><span>${cluster.length}</span></div>`;
+          el.innerHTML = `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 font-sans text-xs font-bold border border-zinc-900 text-white rounded-none shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] cursor-pointer"><span>${cluster.length}</span></div>`;
         } else {
           const isActive = activeChannel && activeChannel.id === rootNode.id;
-          const statusColor = rootNode.status === 'unstable' ? 'bg-amber-500' : rootNode.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500';
           el.innerHTML = isActive 
             ? `<div class="relative flex items-center justify-center w-6 h-6">
-                <span class="absolute inline-flex h-6 w-6 rounded-none ${statusColor}/40 animate-ping"></span>
-                <span class="relative inline-flex rounded-none h-3 w-3 ${statusColor} border-2 border-zinc-900 cursor-pointer"></span>
+                <span class="absolute inline-flex h-6 w-6 rounded-none ${rootNode.status === 'unstable' ? 'bg-amber-400/40' : rootNode.status === 'offline' ? 'bg-rose-400/40' : 'bg-emerald-400/40'} animate-ping"></span>
+                <span class="relative inline-flex rounded-none h-3 w-3 ${rootNode.status === 'unstable' ? 'bg-amber-500' : rootNode.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border-2 border-zinc-900 cursor-pointer"></span>
                </div>`
-            : `<span class="relative inline-flex rounded-none h-2.5 w-2.5 ${statusColor} border-2 border-zinc-900 cursor-pointer"></span>`;
+            : `<span class="relative inline-flex rounded-none h-2.5 w-2.5 ${rootNode.status === 'unstable' ? 'bg-amber-500' : rootNode.status === 'offline' ? 'bg-rose-500' : 'bg-emerald-500'} border-2 border-zinc-900 cursor-pointer"></span>`;
         }
 
         const maplibrePopup = new maplibregl.Popup({ closeButton: false, offset: 12, className: "brutalist-3d-popup" })
@@ -584,40 +574,41 @@ export default function WorldMap({
         maplibrePopup.on("open", () => {
           maplibrePopup.getElement()?.querySelectorAll(".channel-popup-item").forEach((item) => {
             item.addEventListener("click", () => {
-              const match = cluster.find((s) => s.id === (item as HTMLElement).dataset.id);
+              const match = cluster.find((s: typeof cluster[number]) => s.id === (item as HTMLElement).dataset.id);
               if (match) { onSelectChannel(match); maplibrePopup.remove(); }
             });
           });
         });
 
-        maplibreMarkersRef.current.push({ marker: marker3d, lat: rootNode.mappedLat, lon: rootNode.mappedLon });
+        maplibreMarkersRef.current.push(marker3d);
       });
-
-      // Run an immediate occlusion pass right after appending new markers
-      update3DMarkersOcclusion(maplibreRef.current);
     }
-  }, [filteredStreams, activeChannel, viewMode, theme, currentZoom3d]);
+  }, [filteredStreams, activeChannel, viewMode, theme]);
 
+  // Handle active stream focused fly transitions with typing explicitly matched
   useEffect(() => {
     if (!activeChannel) return;
+
     if (isInitialRenderRef.current) {
       isInitialRenderRef.current = false;
       return;
     }
 
-    const matched = processedStreams.find((s) => s.id === activeChannel.id);
+    const matched = processedStreams.find((s: typeof processedStreams[number]) => s.id === activeChannel.id);
     if (!matched) return;
 
     if (viewMode === "2d" && mapRef.current) {
-      mapRef.current.flyTo([matched.mappedLat, matched.mappedLon], 5, { duration: 1.2 });
+      mapRef.current.flyTo([matched.mappedLat, matched.mappedLon], 5, { duration: 1.6, easeLinearity: 0.2 });
     } else if (viewMode === "3d" && maplibreRef.current) {
-      maplibreRef.current.flyTo({ center: [matched.mappedLon, matched.mappedLat], zoom: 4.5, duration: 1200 });
+      maplibreRef.current.flyTo({ center: [matched.mappedLon, matched.mappedLat], zoom: 4.5, duration: 1600 });
     }
   }, [activeChannel, processedStreams]);
 
   return (
     <div className={`relative w-full border-2 p-4 md:p-5 overflow-hidden flex flex-col gap-4 font-mono transition-all rounded-none ${
-      theme === "light" ? "bg-[#faf9f6] border-zinc-900 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]" : "bg-[#0d0e12] border-neutral-800"
+      theme === "light"
+        ? "bg-[#faf9f6] border-zinc-900 shadow-[4px_4px_0px_0px_rgba(24,24,27,1)]"
+        : "bg-[#0d0e12] border-neutral-800 shadow-[4px_4px_0px_0px_rgba(99,102,241,0.1)]"
     }`}>
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 z-10">
         <div>
@@ -627,9 +618,13 @@ export default function WorldMap({
               Telemetry World Map
             </h2>
           </div>
+          <p className={`text-[11px] font-sans mt-1 leading-relaxed font-medium ${theme === "light" ? "text-zinc-500" : "text-neutral-400"}`}>
+            A raw global monitoring framework cataloging and rendering active streams to coordinates. Select node indicators to track video relays.
+          </p>
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          {/* Dimension Matrix Hot Switcher Engine Control */}
           <div className={`flex items-center gap-2 border-2 px-2.5 py-1.5 rounded-none font-bold uppercase transition-all text-xs ${
             theme === "light" ? "bg-white border-zinc-900 text-zinc-800" : "bg-neutral-950 border-neutral-800 text-neutral-300"
           }`}>
@@ -637,10 +632,12 @@ export default function WorldMap({
             <select
               value={viewMode}
               onChange={(e) => setViewMode(e.target.value as "2d" | "3d")}
-              className={`bg-transparent text-[11px] font-bold uppercase outline-none cursor-pointer pr-1 ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}
+              className={`bg-transparent text-[11px] font-bold uppercase outline-none cursor-pointer pr-1 ${
+                theme === "light" ? "text-zinc-900" : "text-neutral-200"
+              }`}
             >
-              <option value="2d">2D MAP</option>
-              <option value="3d">3D GLOBE</option>
+              <option value="2d" className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-100"}>2D Matrix</option>
+              <option value="3d" className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-100"}>3D Sphere Globe</option>
             </select>
           </div>
 
@@ -651,30 +648,69 @@ export default function WorldMap({
             <select
               value={currentMapStyle}
               onChange={(e) => setCurrentMapStyle(e.target.value)}
-              className={`bg-transparent text-[11px] font-bold uppercase outline-none cursor-pointer pr-1 ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}
+              className={`bg-transparent text-[11px] font-bold uppercase outline-none cursor-pointer pr-1 ${
+                theme === "light" ? "text-zinc-900" : "text-neutral-200"
+              }`}
             >
               {mapStyles.map((style) => (
-                <option key={style.id} value={style.id}>{style.label}</option>
+                <option key={style.id} value={style.id} className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-100"}>
+                  {style.label}
+                </option>
               ))}
             </select>
           </div>
 
           <div className="relative w-full sm:w-64">
+            <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+              <Search className={`h-3.5 w-3.5 ${theme === "light" ? "text-zinc-500" : "text-neutral-600"}`} />
+            </span>
             <input
               type="text"
-              className={`w-full border-2 pl-4 pr-12 py-1.5 text-xs transition-all rounded-none uppercase font-bold tracking-tight ${
-                theme === "light" ? "bg-white border-zinc-900 text-zinc-900" : "bg-neutral-950 border-neutral-800 text-neutral-200"
+              className={`w-full border-2 pl-9 pr-12 py-1.5 text-xs transition-all rounded-none uppercase font-bold tracking-tight ${
+                theme === "light"
+                  ? "bg-white border-zinc-900 text-zinc-900 placeholder-zinc-400 focus:outline-none"
+                  : "bg-neutral-950 border-neutral-800 text-neutral-200 placeholder-neutral-700 focus:outline-none"
               }`}
               placeholder="Query node..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery("")}
+                className="absolute inset-y-0 right-0 pr-3 flex items-center text-[10px] font-bold text-zinc-500 dark:text-neutral-400 hover:text-indigo-500 transition-colors cursor-pointer uppercase"
+              >
+                Clear
+              </button>
+            )}
           </div>
         </div>
       </div>
 
-      <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none">
+      <div className={`relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none ${
+        theme === "light" 
+          ? "bg-white border-zinc-900 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" 
+          : "bg-[#0d0e12] border-neutral-800 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.05)]"
+      }`}>
         <div ref={mapContainerRef} className="w-full h-full text-zinc-900" style={{ background: "#0d0e12" }} />
+      </div>
+
+      <div className={`flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-[10px] font-bold border-t-2 pt-3.5 uppercase ${
+        theme === "light" ? "text-zinc-600 border-zinc-900" : "text-neutral-500 border-neutral-800"
+      }`}>
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          <span className="flex items-center gap-1.5 font-bold">
+            <span className="w-2 h-2 rounded-none bg-emerald-500 relative flex"><span className="animate-ping absolute inline-flex h-full w-full rounded-none bg-emerald-400 opacity-75" /></span>
+            Active links
+          </span>
+          <span className="flex items-center gap-1.5 font-bold"><span className="w-2 h-2 rounded-none bg-amber-500" />Unstable node</span>
+          <span className="flex items-center gap-1.5 font-bold"><span className="w-2 h-2 rounded-none bg-rose-500" />Terminal offline</span>
+        </div>
+        
+        <div className="flex items-center gap-1.5 font-bold">
+          <Compass className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`} />
+          <span>{viewMode === "2d" ? "EQUIRECTANGULAR HYBRID MATRIX (2D)" : "TRUE SPHERICAL PROJECTION LAYER (3D)"}</span>
+        </div>
       </div>
     </div>
   );
