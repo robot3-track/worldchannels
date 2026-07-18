@@ -2121,13 +2121,35 @@ const staticStreams = [
   {
     id: "sports-zidane-tv",
     name: "Zidane TV",
-    url: "https://www.youtube.com/embed/pUHW38gNkwY?si=4MDOk_ktPEyw2oci",
+    url: "https://www.youtube.com/embed/pUHW38gNkwY?si=4MDOk_ktPEyw2oci&controls=0",
     category: "sports",
     country: "FR",
     logo: "https://i.pinimg.com/1200x/b3/ae/98/b3ae98f762ae3a0452e2d0aa0a9f11e9.jpg",
     status: "online",
     lat: 48.8566, // Paris, France
     lon: 2.3522,
+  },
+  {
+    id: "sports-ronaldo-tv",
+    name: "Ronaldo TV",
+    url: "https://www.youtube.com/embed/aeapZzsujqc?si=9_HQLXm3StVsmuQM&controls=0",
+    category: "sports",
+    country: "PO",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRTAYPFUCy44r9LszgAOX8nBeL9RmPtljx0FLUoGTrMr_hWLEhuh9lPF5pn&s=10",
+    status: "online",
+    lat: 38.736946, // Lisbon, Portugal
+    lon: -9.142685,
+  },
+  {
+    id: "sports-messi-tv",
+    name: "Messi TV",
+    url: "https://www.youtube.com/embed/bkRsglVUXnQ?si=6VhiqcICaK8R_pqQ&controls=0",
+    category: "sports",
+    country: "AR",
+    logo: "https://i.pinimg.com/736x/b0/0a/3a/b00a3ab83d4f52a972a284c2ed0d6cf2.jpg",
+    status: "online",
+    lat: -34.6037, // Buenos Aires, Argentina
+    lon: -58.3816,
   },
   {
     id:"news-kurdistan",
