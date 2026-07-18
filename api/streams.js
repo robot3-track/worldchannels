@@ -698,6 +698,18 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
+    id: "sports-somoy-tv2",
+    name: "Somoy TV 2 (Bangladesh)",
+    url: "https://live.thebosstv.com:30443/dwlive/Somoy-TV/playlist.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "BD",
+    logo: "https://upload.wikimedia.org/wikipedia/en/thumb/c/c4/SOMOY_TV_Logo.svg/500px-SOMOY_TV_Logo.svg.png",
+    status: "online",
+    lat: 23.6850, // Dhaka, Bangladesh
+    lon: 90.3563,
+  },
+  {
     id: "sports-mono-max1",
     name: "MonoMax TV (Thailand)",
     url: "https://love.jco5sjujta.workers.dev:443/lx-origin/th-monomax01_720/chunks.m3u8",
@@ -2087,7 +2099,7 @@ const staticStreams = [
     id: "cam-us-telemundo",
     name: "Live Telemundo Security Cam",
     url: "https://content.uplynk.com/channel/b6a96ed39d694ae1b738faa98cf7dd3f.m3u8", 
-    category: "sports",
+    category: "news",
     country: "US",
     logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
     status: "online",
@@ -2105,6 +2117,17 @@ const staticStreams = [
     status: "online",
     lat: 25.7617,
     lon: -80.1918
+  },
+  {
+    id: "sports-zidane-tv",
+    name: "Zidane TV",
+    url: "https://www.youtube.com/embed/videoseries?list=PL3hJySy08n2C_dUT3KRW5th7fLjs7rkYa&autoplay=1&mute=1",
+    category: "sports",
+    country: "FR",
+    logo: "https://i.pinimg.com/1200x/b3/ae/98/b3ae98f762ae3a0452e2d0aa0a9f11e9.jpg",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
   },
   {
     id:"news-kurdistan",
