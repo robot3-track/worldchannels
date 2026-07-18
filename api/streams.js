@@ -2480,6 +2480,17 @@ const staticStreams = [
     lon: 106.8456,
   },
   {
+    id: "country-us-cnn",
+    name: "CNN NOW",
+    url: "https://amg01448-samsungin-cnnnow-samsungin-4npqg.amagi.tv/playlist/amg01448-samsungin-cnnnow-samsungin/playlist.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/CNN_Logo_%282014%29.svg/1920px-CNN_Logo_%282014%29.svg.png",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
     id: "country-id-tvrf",
     name: "TVRInternational Romania",
     url: "https://tvr-international.lg.mncdn.com/tvrinternational/smil:tvrinternational.smil/chunklist_b5160000.m3u8", // Working backup
