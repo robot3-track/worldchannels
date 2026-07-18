@@ -356,7 +356,7 @@ const staticStreams = [
   },
   {
     id: "sports-us-telemundo1",
-    name: "Telemundo Sports 1 HD",
+    name: "Telemundo EN VIVO HD",
     url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/144.m3u8",
     category: "sports",
     category: "world cup",
@@ -368,8 +368,20 @@ const staticStreams = [
   },
   {
     id: "sports-us-telemundo2",
-    name: "Telemundo Sports 1 HD (Server 2)",
+    name: "Telemundo EN VIVO HD (Server 2)",
     url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/143.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
+    status: "online",
+    lat: 25.7617,
+    lon: -80.1918
+  },
+  {
+    id: "sports-us-telemundo3",
+    name: "Telemundo EN VIVO HD (Server 3)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/27.m3u8",
     category: "sports",
     category: "world cup",
     country: "US",
@@ -2890,6 +2902,7 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/eg.m3u", category: "country", country: "EG" },
       { url: "https://raw.githubusercontent.com/IgorMunarim/Canais-1/38abd63f0c7116896ecf1957398b88a523ae3025/mundo.m3u", category: "news"},
       { url: "https://raw.githubusercontent.com/alirezaaziz/deu/7e0ce6e2b0f6da9bd76f89162686a716cc4c479d/iran.m3u", category: "country", country: "IR"},
+      { url: "https://raw.githubusercontent.com/IgorMunarim/Canais-1/38abd63f0c7116896ecf1957398b88a523ae3025/auto-racing.m3u", category: "sports"},
       { url: "https://ncdn.telewebion.ir/faratar/live/playlist.m3u8", category: "world cup", country: "IR" },
       { url: "https://iptv-org.github.io/iptv/index.m3u", category: "country"},
       { url: "https://raw.githubusercontent.com/fatinssinan42/latestiptv/57c2a3f7bf714e260aa50f8d4370b7b5534f1977/fifa.m3u", category: "sports"},
