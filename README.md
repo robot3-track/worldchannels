@@ -20,6 +20,8 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 *  **Disney Jr**: Official Disney Jr. Channel 24/7
 *  **HBO Family**: Official HBO Family Channel
 *  **Discovery Kids**: Official Discovery Kids Channel 24/7
+*  **Doraemon TV**: Official Doraemon Japan
+*  **Tom and Jerry TV**: Official Tom & Jerry TV
 
 ## 2026 World Cup Broadcasters
 
