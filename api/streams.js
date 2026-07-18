@@ -355,6 +355,30 @@ const staticStreams = [
     lon: -58.3816,
   },
   {
+    id: "sports-us-telemundo1",
+    name: "Telemundo Sports 1 HD",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/144.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
+    status: "online",
+    lat: 25.7617,
+    lon: -80.1918
+  },
+  {
+    id: "sports-us-telemundo2",
+    name: "Telemundo Sports 1 HD (Server 2)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/143.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
+    status: "online",
+    lat: 25.7617,
+    lon: -80.1918
+  },
+  {
     id: "sports-winsport-plus",
     name: "Winsport Plus (Colombia)",
     url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/126.m3u8",
@@ -992,18 +1016,6 @@ const staticStreams = [
     status: "online",
     lat: 38.9697, // Ashgabat, Turkmenistan
     lon: 58.3794,
-  },
-  {
-    id: "sports-us-telemundo1",
-    name: "Telemundo Sports 1 HD",
-    url: "https://tda-nnaa-drct-pa6dy.fast.nbcuni.com/live/master_2.m3u8",
-    category: "sports",
-    category: "world cup",
-    country: "US",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
-    status: "online",
-    lat: 25.7617,
-    lon: -80.1918
   },
   {
     id: "sports-mtv-backup",
