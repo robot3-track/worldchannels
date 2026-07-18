@@ -1740,6 +1740,17 @@ const staticStreams = [
     lon: -0.1278,
   },
   {
+    id:"news-bbc-persia",
+    name: "BBC Persia",
+    url: "https://vs-hls-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/t=3840/v=pv14/b=5070016/main.m3u8",
+    category: "news",
+    country: "IR",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/BBC_Earth_2023.svg/500px-BBC_Earth_2023.svg.png",
+    status: "online",
+    lat: 35.6892, // Tehran, Iran
+    lon: 51.3890,
+  },
+  {
     id: "sports-fifaplus",
     name: "FIFA+ Live",
     url: "https://www.youtube.com/embed/live_stream?channel=UCYiGK8hGLxqHn9uGjFk3p7g", // High quality official stable FIFA+ live channel stream
