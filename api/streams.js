@@ -391,6 +391,30 @@ const staticStreams = [
     lon: -58.3816,
   },
   {
+    id: "sports-uzbekistan-sport",
+    name: "Sport Uzbekistan",
+    url: "https://s04.watcher.uz/59/video.m3u8?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjb250cmFjdF9pZCI6MjcwMTc3LCJsb2dpbiI6InR2LTI3MDE3NyIsInRlbXBvcmFyeSI6ZmFsc2UsImlzX29hdXRoIjpmYWxzZSwiY3JlYXRlZF90aW1lIjoxNjUwMjgzMDI3fQ.LadLj4b6plIxTGCWntQQqsQGZ3R9EsvwhaXQd1sur2g%3A158",
+    category: "sports",
+    category: "world cup",
+    country: "UZ",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/O%27zbekistan-sport.png/500px-O%27zbekistan-sport.png",
+    status: "online",
+    lat: 41.2646, // Tashkent, Uzbekistan
+    lon: 69.2150,
+  },
+  {
+    id: "sports-uzbekistan-sport2",
+    name: "Sport Uzbekistan (Server 2)",
+    url: "https://stream9.itv.uz/t/EbO9UWuxHhEUHe_q9Bj_0Q/e/1759836672/1004/tracks-v1a1/timeshift_rel-74.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "UZ",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/O%27zbekistan-sport.png/500px-O%27zbekistan-sport.png",
+    status: "online",
+    lat: 41.2646, // Tashkent, Uzbekistan
+    lon: 69.2150,
+  },
+  {
     id: "sports-bein-2fr",
     name: "Bein Sports 2 France",
     url: "https://ua102.online24.pm:8443/1102/video.m3u8?token=350B326FB34F4B8",
