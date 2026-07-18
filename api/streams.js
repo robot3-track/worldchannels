@@ -2121,7 +2121,7 @@ const staticStreams = [
   {
     id: "sports-zidane-tv",
     name: "Zidane TV",
-    url: "https://www.youtube.com/embed/videoseries?list=PL3hJySy08n2C_dUT3KRW5th7fLjs7rkYa&autoplay=1&mute=1",
+    url: "https://www.youtube.com/embed/videoseries?list=PL3hJySy08n2BEd7tUWkTEI-wq2ED967sF&autoplay=1&mute=1",
     category: "sports",
     country: "FR",
     logo: "https://i.pinimg.com/1200x/b3/ae/98/b3ae98f762ae3a0452e2d0aa0a9f11e9.jpg",
