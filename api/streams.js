@@ -670,7 +670,7 @@ const staticStreams = [
     country: "TR",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRXbOrKM6rU1xQCzGe_ZfaJ_WWstdJR5Y7nYBgU0JGSew&s",
     status: "online",
-    lat: 39.9334, // Ankara, Turkey
+    lat: 39.9334, // Ankara, Turkeye
     lon: 32.8597,
   },
   {
