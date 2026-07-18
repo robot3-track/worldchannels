@@ -391,6 +391,30 @@ const staticStreams = [
     lon: -80.1918
   },
   {
+    id: "sports-us-telemundo4",
+    name: "Telemundo EN VIVO HD (Server 4)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/77.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
+    status: "online",
+    lat: 25.7617,
+    lon: -80.1918
+  },
+  {
+    id: "sports-us-telemundo5",
+    name: "Telemundo EN VIVO HD (Server 5)",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/74.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/6/68/Telemundo_logo_2018.svg",
+    status: "online",
+    lat: 25.7617,
+    lon: -80.1918
+  },
+  {
     id: "sports-winsport-plus",
     name: "Winsport Plus (Colombia)",
     url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/126.m3u8",
