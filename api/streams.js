@@ -2764,6 +2764,7 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/eg.m3u", category: "country", country: "EG" },
       { url: "https://ncdn.telewebion.ir/faratar/live/playlist.m3u8", category: "world cup", country: "IR" },
       { url: "https://iptv-org.github.io/iptv/index.m3u", category: "country"},
+      { url: "https://raw.githubusercontent.com/fatinssinan42/latestiptv/57c2a3f7bf714e260aa50f8d4370b7b5534f1977/fifa.m3u", category: "world cup"},
       { url: "https://biostartvworld.pages.dev/biostartvworld.m3u?ch=btv&play=aHR0cHM6Ly90di5iZXlvbmR0YXhjb25zdWx0YW50cy5jb20vYXBpL3Byb3h5P3VybD1odHRwOi8vMTk4LjE5NS4yMzkuNTA6ODA5NS9idHYvdHJhY2tzLXYxYTEvbW9uby5tM3U4&ext=.m3u8", category: "country" }
     ];
 
