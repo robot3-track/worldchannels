@@ -800,6 +800,28 @@ const staticStreams = [
     lon: -77.0369,
   },
   {
+    id: "country-cartoon-network",
+    name: "Cartoon Network (US)",
+    url: "https://mflixott.com/tv/toffee-by-maruf/live.php?id=cartoon_network_hd&e=.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Cartoon_Network_2010_logo.svg/1280px-Cartoon_Network_2010_logo.svg.png",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-cartoon-network2",
+    name: "Cartoon Network 2 (US)",
+    url: "https://mflixott.com/tv/toffee-by-maruf/live.php?id=cartoon_network_sd&e=.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Cartoon_Network_2010_logo.svg/1280px-Cartoon_Network_2010_logo.svg.png",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
     id: "country-us-natgeo",
     name: "Nat Geo (US)",
     url: "https://s2.bufaloweb.com/bufalo29/index.m3u8",
@@ -847,6 +869,17 @@ const staticStreams = [
     id: "country-us-discoverykids",
     name: "Discovery Kids (US)",
     url: "https://s2.bufaloweb.com/bufalo24/index.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjvctsx0V1-vupQ4HYFdGRTkwt08cAhOKr5I0CthspRw&s",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-discoverykids2",
+    name: "Discovery Kids 2 (US)",
+    url: "https://mflixott.com/tv/toffee-by-maruf/live.php?id=discovery_kids&e=.m3u8",
     category: "country",
     country: "US",
     logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjvctsx0V1-vupQ4HYFdGRTkwt08cAhOKr5I0CthspRw&s",
@@ -2165,6 +2198,17 @@ const staticStreams = [
     lon: -118.2437,
   },
   {
+    id: "sports-zee-bollywood",
+    name: "Zee Bollywood",
+    url: "https://mflixott.com/tv/toffee-by-maruf/live.php?id=zee_bollywood&e=.m3u8",
+    category: "movies",
+    country: "IN",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/10/Z_Bangla_logo.jpg/250px-Z_Bangla_logo.jpg",
+    status: "online",
+    lat: 28.6139, // New Delhi, India
+    lon: 77.2090,
+  },
+  {
     id: "cam-us-telemundo",
     name: "Live Telemundo Security Cam",
     url: "https://content.uplynk.com/channel/b6a96ed39d694ae1b738faa98cf7dd3f.m3u8", 
@@ -2355,6 +2399,17 @@ const staticStreams = [
     lat: 28.5729, // Cape Canaveral, US
     lon: -80.6490,
   },
+  {
+    id: "science-discovery2",
+    name: "Discovery Science 2",
+    url: "https://mflixott.com/tv/toffee-by-maruf/live.php?id=discovery_science&e=.m3u8",
+    category: "science",
+    country: "US",
+    logo: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJ-DeH2Hr1cVINcUly-2O8VjjZTQD5fSpRfNM5IQAttQ&s",
+    status: "online",
+    lat: 28.5729, // Cape Canaveral, US
+    lon: -80.6490,
+  },
 
   // --- FREE TV GLOBAL (Category: freetv, Country: Global) ---
   {
@@ -2495,6 +2550,17 @@ const staticStreams = [
     id: "country-us-cnn",
     name: "CNN NOW",
     url: "https://amg01448-samsungin-cnnnow-samsungin-4npqg.amagi.tv/playlist/amg01448-samsungin-cnnnow-samsungin/playlist.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/CNN_Logo_%282014%29.svg/1920px-CNN_Logo_%282014%29.svg.png",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
+    id: "country-us-cnn2",
+    name: "CNN NOW (Server 2)",
+    url: "https://mflixott.com/tv/toffee-by-maruf/live.php?id=cnn&e=.m3u8",
     category: "country",
     country: "US",
     logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/CNN_Logo_%282014%29.svg/1920px-CNN_Logo_%282014%29.svg.png",

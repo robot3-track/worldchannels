@@ -20,6 +20,7 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 *  **Disney Jr**: Official Disney Jr. Channel 24/7
 *  **HBO Family**: Official HBO Family Channel
 *  **Discovery Kids**: Official Discovery Kids Channel 24/7
+*  **Cartoon Network**: Official Cartoon Network Channel US
 *  **Doraemon TV**: Official Doraemon Japan
 *  **Tom and Jerry TV**: Official Tom & Jerry TV
 
