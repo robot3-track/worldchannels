@@ -29,6 +29,24 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 * **Crunchyroll TV**: Live Crunchyroll TV, free 24/7
 * **Anime X HIDive**: Live, free anime 24/7
 * **Animation+**: Live, free anime 24/7
+* **Pluto Anime**: Live, free anime 24/7
+* **Mr. Bean Anime Italy**: Fun free anime from Italy
+* **Anime Vision**: Anime 24/7
+
+
+## News Channels
+* **CNN**: Official Live CNN
+* **CBS News** : Official Live CBS News
+* **Telemundo News**: Official Telemundo News
+* **Weathernews Japan**: Weather in Japan
+* **TRT Turkey**: Official Turkeye News
+* **EuroNews**: Newsource for Europe
+* **SABC News**: South African News
+* **CCTV 4**: China News
+* **Kurdistan News**: News from Kurdistan region
+* **France 24 English**: News from France in English
+* **AND TONS MORE NEWS FROM ALMOST EVERY COUNTRY!**
+
 
 ## 2026 World Cup Broadcasters
 
