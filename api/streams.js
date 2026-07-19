@@ -2831,7 +2831,7 @@ const staticStreams = [
   {
     id: "sports-tsn-5",
     name: "TSN 5 (Canada)",
-    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/424.m3u88",
+    url: "https://tv.topmediatv.net:25463/live/TopMediaWeb/bOteTR8ED1/424.m3u8",
     category: "sports",
     category: "world cup",
     country: "CA",
