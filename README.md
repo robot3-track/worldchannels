@@ -23,6 +23,12 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 *  **Cartoon Network**: Official Cartoon Network Channel US
 *  **Doraemon TV**: Official Doraemon Japan
 *  **Tom and Jerry TV**: Official Tom & Jerry TV
+*  **Baby Shark TV**: Official Baby Shark TV
+
+## Anime Broadcasters
+* **Crunchyroll TV**: Live Crunchyroll TV, free 24/7
+* **Anime X HIDive**: Live, free anime 24/7
+* **Animation+**: Live, free anime 24/7
 
 ## 2026 World Cup Broadcasters
 
