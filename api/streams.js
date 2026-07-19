@@ -2905,6 +2905,7 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/categories/general.m3u", category: "country" },
       { url: "https://iptv-org.github.io/iptv/categories/music.m3u", category: "music"},
       { url: "https://iptv-org.github.io/iptv/countries/jp.m3u", category: "country", country: "JP" },
+      { url: "https://raw.githubusercontent.com/hououinkami/AppleTV/d76d99b3fa3ef2b666f447f08cee4d1f4612c420/Source/Japan.m3u", category: "country", country: "JP" },
       { url: "https://iptv-org.github.io/iptv/countries/kr.m3u", category: "country", country: "KR" },
       { url: "https://iptv-org.github.io/iptv/countries/vn.m3u", category: "country", country: "VN" },
       { url: "https://iptv-org.github.io/iptv/countries/sa.m3u", category: "country", country: "SA" },
