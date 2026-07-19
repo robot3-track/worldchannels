@@ -2943,6 +2943,7 @@ export default async function handler(request, response) {
       { url: "https://ncdn.telewebion.ir/faratar/live/playlist.m3u8", category: "world cup", country: "IR" },
       { url: "https://iptv-org.github.io/iptv/index.m3u", category: "country"},
       { url: "https://raw.githubusercontent.com/awoodal57/DrewLive/7a3a8e92eae1d8575a7e421f6859a83dc6296353/Roku.m3u8", category: "general"},
+      { url: "https://raw.githubusercontent.com/Matnos2/listas/b0e39548ca23939f8c64ea1398b24bd557486e04/m3u8/plex-all.m3u8", category: "general"},
       { url: "https://raw.githubusercontent.com/Kkbrothers8795/world_ip_tv/b7de4c521881561b0f9ea6087f3503c9e7d07509/output/news.m3u", category: "news"},
       { url: "https://raw.githubusercontent.com/fatinssinan42/latestiptv/57c2a3f7bf714e260aa50f8d4370b7b5534f1977/fifa.m3u", category: "sports"},
       { url: "https://raw.githubusercontent.com/juandell90/juandell90.github.io/4d180382b38f75434cfe9f88c3e189ff53ef0fd4/play/PRM.m3u8", category: "general"},
