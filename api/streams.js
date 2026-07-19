@@ -842,6 +842,17 @@ const staticStreams = [
     lon: 90.3563,
   },
   {
+    id: "country-us-crunchyroll",
+    name: "Crunchyroll US",
+    url: "https://aka-live1050.delivery.roku.com/cdd53068-81e9-4898-999d-7f4f6d0b28ad/t2-origin/out/v1/live.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/0/08/Crunchyroll_Logo.png",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
     id: "country-us-disneyjr",
     name: "Disney Jr. US",
     url: "https://s2.bufaloweb.com/bufalo21/index.m3u8",
