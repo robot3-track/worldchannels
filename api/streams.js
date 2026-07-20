@@ -3030,7 +3030,6 @@ export default async function handler(request, response) {
       { url: "https://raw.githubusercontent.com/alirezaaziz/deu/7e0ce6e2b0f6da9bd76f89162686a716cc4c479d/iran.m3u", category: "country", country: "IR"},
       { url: "https://raw.githubusercontent.com/IgorMunarim/Canais-1/38abd63f0c7116896ecf1957398b88a523ae3025/auto-racing.m3u", category: "sports"},
       { url: "https://ncdn.telewebion.ir/faratar/live/playlist.m3u8", category: "world cup", country: "IR" },
-      { url: "https://iptv-org.github.io/iptv/index.m3u", category: "country"},
       { url: "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8", category: "country"},
       { url: "https://raw.githubusercontent.com/razuahammad55/live-tv-hub/e5a0c3b9be5e13921772edb85fd1533bbe4a4e56/t/m.m3u", category: "general"},
       { url: "https://raw.githubusercontent.com/awoodal57/DrewLive/7a3a8e92eae1d8575a7e421f6859a83dc6296353/Roku.m3u8", category: "general"},
