@@ -1,4 +1,4 @@
-![Global Channels Map](Screenshot%202026-06-24%20214755.png)
+![Global Channels Map](Screenshot%202026-07-19%20192741.png)
 # Global Broadcast Network
 
 A high-performance, real-time IPTV streaming dashboard designed for the global news & sports events. This application provides a unified interface to access sports feeds, national broadcasters, and real-time news from across the globe.
@@ -48,9 +48,9 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 * **AND TONS MORE NEWS FROM ALMOST EVERY COUNTRY!**
 
 
-## 2026 World Cup Broadcasters
+## Soccer Broadcasters
 
-Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup. Key partners include:
+Tailored for 2026, we have integrated specialized feeds for the FIFA World Cup and Other Sporting Events. Key partners include:
 
 *   **Antena Sports**: Official Broadcaster for Italy, providing HD coverage of all tournament matches and match analysis.
 *   **Bein Sports 1-3 France**: Official Broadcaster for France, providing HD coverage of all 104 matches.
