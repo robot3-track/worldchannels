@@ -2339,6 +2339,17 @@ const staticStreams = [
     lon: 2.3522,
   },
   {
+    id: "sports-lequipe2",
+    name: "L'Equipe TV 2(FR)",
+    url: "https://jmp2.uk/stvp-FR200016Y5", // Direct stable L'Equipe TV feed
+    category: "sports",
+    country: "FR",
+    logo: "https://i.ibb.co/KXhYwm0/lequipe.png",
+    status: "online",
+    lat: 48.8566, // Paris, France
+    lon: 2.3522,
+  },
+  {
     id: "sports-pluto-sports",
     name: "Pluto TV Sports (US)",
     url: "https://service-stitcher.clusters.pluto.tv/stitch/hls/channel/5d8a9e0f6f4c0c001a1c97c3/master.m3u8?advertisingId=&appName=web&appVersion=unknown&appStoreUrl=&architecture=&buildVersion=&clientTime=0&deviceDNT=0&deviceId=123&deviceMake=unknown&deviceModel=unknown&deviceType=web&deviceVersion=unknown&includeExtendedEvents=false&sid=123&userId=", // Official Pluto TV Sports ID
