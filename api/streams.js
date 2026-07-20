@@ -2419,7 +2419,7 @@ const staticStreams = [
   {
     id: "sports-messi-tv",
     name: "Messi TV",
-    url: "https://www.youtube.com/embed/bkRsglVUXnQ?si=6VhiqcICaK8R_pqQ&controls=0",
+    url: "https://www.youtube.com/embed/242wugrAhzA?si=DAaaHcWNMIL6YhXS",
     category: "sports",
     country: "AR",
     logo: "https://i.pinimg.com/736x/b0/0a/3a/b00a3ab83d4f52a972a284c2ed0d6cf2.jpg",
