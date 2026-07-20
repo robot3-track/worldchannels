@@ -80,7 +80,7 @@ export default function ChannelList({
   const categories: { value: CategoryFilter; label: string; icon: any }[] = [
     { value: "all", label: "All Feeds", icon: Globe },
     { value: "favorites", label: "Saved Deck", icon: Star }, // 🌟 Placed second directly below "all"
-    { value: "world cup", label: "World Cup", icon: Award },
+    { value: "world cup", label: "Live Soccer", icon: Award },
     { value: "general", label: "General TV", icon: Tv },
     { value: "sports", label: "Sports Live", icon: Award },
     { value: "news", label: "World News", icon: Radio },

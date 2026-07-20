@@ -853,6 +853,17 @@ const staticStreams = [
     lon: -77.0369,
   },
   {
+    id: "country-us-animexhidive",
+    name: "Anime X Hidive",
+    url: "https://wurlrainbowmedia.global.transmit.live/hls/68c497de18e2a74e37774fb3/v1/amc_anime_x_hidive_1/lg_us/latest/main/hls/playlist.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://cdn.cookielaw.org/logos/9ba987d0-417d-4455-ab02-764b3dc7f03e/01905b7a-3996-73c3-a7b6-1b4cedb97d6d/f62c8641-1f86-4368-b917-1f6693841a1b/HIDIVELogoPNG.png",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
     id: "country-us-disneyjr",
     name: "Disney Jr. US",
     url: "https://s2.bufaloweb.com/bufalo21/index.m3u8",
