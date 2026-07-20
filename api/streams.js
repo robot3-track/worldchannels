@@ -2081,6 +2081,17 @@ const staticStreams = [
     lon: -0.1278,
   },
   {
+    id:"news-sony-bbc",
+    name: "Sony BBC Earth",
+    url: "https://wildearth-plex.amagi.tv/master.m3u8",
+    category: "news",
+    country: "UK",
+    logo: "https://raw.githubusercontent.com/subirkumarpaul/Logo/main/Sony%20BBC%20Earth.jpeg",
+    status: "online",
+    lat: 51.5074, // London, UK (BBC HQ)
+    lon: -0.1278,
+  },
+  {
     id:"news-bbc-persia",
     name: "BBC Persia",
     url: "https://vs-hls-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/t=3840/v=pv14/b=5070016/main.m3u8",
