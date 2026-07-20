@@ -818,6 +818,18 @@ const staticStreams = [
     lon: 32.8597,
   },
   {
+    id: "sports-bein-serbia",
+    name: "Bein Sports Serbia",
+    url: "https://ua.online24.pm/play/1101/350B326FB34F4B8/video.m3u8",
+    category: "sports",
+    category: "world cup",
+    country: "RS",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d4/BeIN_Sports_logo_%28horizontal_version%29.svg/500px-BeIN_Sports_logo_%28horizontal_version%29.svg.png",
+    status: "online",
+    lat: 44.0000,
+    lon: 21.0000,
+  },
+  {
     id: "sports-somoy-tv",
     name: "Somoy TV (Bangladesh)",
     url: "https://live.thebosstv.com:30443/dwlive/Somoy-TV/chunks.m3u8",
