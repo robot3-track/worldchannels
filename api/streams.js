@@ -2451,6 +2451,17 @@ const staticStreams = [
   },
   // --- NEWS (Category: news, Country: Global/Specific) ---
   {
+    id: "news-skyuk",
+    name: "Sky News UK",
+    url: "https://d39chvnxm26pgp.cloudfront.net/v1/master/72588bff830dec7b26d7cbbf5f3c24928aec5c03/cc-sthen6ms4vxgv-stage/WNSFO/ABR.m3u8",
+    category: "news",
+    country: "UK",
+    logo: "https://static.wikia.nocookie.net/logopedia/images/f/f0/Sky_News_Arabia_2024.svg/revision/latest?cb=20240721145837",
+    status: "online",
+    lat: 55.3781,
+    lon: -3.4360,
+  },
+  {
     id: "news-skyarabia",
     name: "Sky News Arabia",
     url: "https://stream.skynewsarabia.com/ott/ott.m3u8",
