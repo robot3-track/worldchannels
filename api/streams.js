@@ -2611,6 +2611,17 @@ const staticStreams = [
     lon: -77.0369,
   },
   {
+    id: "country-us-pbs2",
+    name: "PBS Kids US 2",
+    url: "https://2-fss-2.streamhoster.com/pl_140/amlst:200914-1298290/chunklist_b2000000_DVR.m3u8",
+    category: "country",
+    country: "US",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e3/PBS_Kids_logo_%282022%29.svg/960px-PBS_Kids_logo_%282022%29.svg.png",
+    status: "online",
+    lat: 38.9072, // Washington D.C., US
+    lon: -77.0369,
+  },
+  {
     id: "news-univision",
     name: "Univision News",
     url: "https://linear-254.frequency.stream/mt/studio/254/hls/master/playlist_1280x720.m3u8",
