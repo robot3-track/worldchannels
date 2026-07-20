@@ -2070,6 +2070,17 @@ const staticStreams = [
     lon: -0.1278,
   },
   {
+    id:"news-bbc-earth2",
+    name: "BBC Earth (Server 2)",
+    url: "https://amg00793-amg00793c6-xumo-us-2669.playouts.now.amagi.tv/BBCStudios-BBCEarthA-hls/playlist540p.m3u8",
+    category: "news",
+    country: "UK",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7e/BBC_Earth_2023.svg/500px-BBC_Earth_2023.svg.png",
+    status: "online",
+    lat: 51.5074, // London, UK (BBC HQ)
+    lon: -0.1278,
+  },
+  {
     id:"news-bbc-persia",
     name: "BBC Persia",
     url: "https://vs-hls-pushb-ww-live.akamaized.net/x=4/i=urn:bbc:pips:service:bbc_persian_tv/t=3840/v=pv14/b=5070016/main.m3u8",
