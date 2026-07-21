@@ -358,46 +358,46 @@ export default function WorldMap({
   const update3DMarkersOcclusion = (mapInstance: maplibregl.Map) => {
     if (!mapInstance) return;
     try {
-      const center = mapInstance.getCenter();
-      const centerRadLat = (center.lat * Math.PI) / 180;
-      const centerRadLon = (center.lng * Math.PI) / 180;
+      // Cast mapInstance to any to bypass strict type checking for internal globe camera APIs
+      const mapAny = mapInstance as any;
+      const camera = typeof mapAny.getFreeCameraOptions === "function" 
+        ? mapAny.getFreeCameraOptions() 
+        : null;
 
-      // Camera vector in 3D Cartesian coordinates
-      const camX = Math.cos(centerRadLat) * Math.cos(centerRadLon);
-      const camY = Math.cos(centerRadLat) * Math.sin(centerRadLon);
-      const camZ = Math.sin(centerRadLat);
+      if (!camera || !camera.position) return;
+
+      const camPos = camera.position;
 
       maplibreMarkersRef.current.forEach(({ marker, lat, lon }) => {
         const element = marker.getElement();
         if (!element) return;
 
-        // Ensure transition styling is present for smooth fading
         if (!element.style.transition) {
-          element.style.transition = "opacity 0.25s ease-in-out";
+          element.style.transition = "opacity 0.2s ease-in-out";
         }
 
-        const markerRadLat = (lat * Math.PI) / 180;
-        const markerRadLon = (lon * Math.PI) / 180;
+        const phi = ((90 - lat) * Math.PI) / 180;
+        const theta = ((lon + 180) * Math.PI) / 180;
 
-        // Marker surface normal vector
-        const markerX = Math.cos(markerRadLat) * Math.cos(markerRadLon);
-        const markerY = Math.cos(markerRadLat) * Math.sin(markerRadLon);
-        const markerZ = Math.sin(markerRadLat);
+        const markerX = Math.sin(phi) * Math.cos(theta);
+        const markerY = Math.sin(phi) * Math.sin(theta);
+        const markerZ = Math.cos(phi);
 
-        // Dot product to check alignment with camera facing direction
-        const dotProduct = camX * markerX + camY * markerY + camZ * markerZ;
+        const lengthCam = Math.sqrt(camPos.x * camPos.x + camPos.y * camPos.y + camPos.z * camPos.z);
+        if (lengthCam === 0) return;
+        
+        const camX = camPos.x / lengthCam;
+        const camY = camPos.y / lengthCam;
+        const camZ = camPos.z / lengthCam;
 
-        // Smooth threshold buffer: 
-        // dotProduct > 0.15 = Fully visible
-        // dotProduct between -0.05 and 0.15 = Smooth fade transition near the horizon edge
-        // dotProduct < -0.05 = Completely hidden on the back side
-        if (dotProduct > 0.15) {
+        const dot = camX * markerX + camY * markerY + camZ * markerZ;
+
+        if (dot > 0.04) {
           element.style.opacity = "1";
           element.style.pointerEvents = "auto";
-        } else if (dotProduct > -0.05) {
-          // Calculate a smooth proportional opacity for the horizon edge
-          const opacityVal = (dotProduct - (-0.05)) / (0.15 - (-0.05));
-          element.style.opacity = opacityVal.toFixed(2);
+        } else if (dot > -0.02) {
+          const opacityVal = (dot - (-0.02)) / (0.04 - (-0.02));
+          element.style.opacity = Math.max(0, Math.min(1, opacityVal)).toFixed(2);
           element.style.pointerEvents = "none";
         } else {
           element.style.opacity = "0";
@@ -405,7 +405,7 @@ export default function WorldMap({
         }
       });
     } catch (e) {
-      console.error(e);
+      // Fallback silently if camera options aren't fully initialized yet
     }
   };
   
