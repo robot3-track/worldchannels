@@ -72,3 +72,10 @@
   border-bottom: 1px solid #262626 !important;
   box-shadow: none !important;
 }
+
+/* -------------------------------------------------------------
+ * MapLibre / Globe Backface Marker Visibility Fix
+ * ------------------------------------------------------------- */
+.maplibregl-marker-covered {
+  display: none !important;
+}
