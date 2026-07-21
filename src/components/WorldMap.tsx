@@ -303,9 +303,10 @@ export default function WorldMap({
     });
   }, [processedStreams, selectedCategory, searchQuery]);
 
+  // Zoom tiers adjusted for aggressive clustering and 50% restricted zoom out limit (minZoom set higher)
   const zoomTier = useMemo(() => {
-    if (currentZoom3d < 2.5) return 0;
-    if (currentZoom3d < 4) return 1;
+    if (currentZoom3d < 3.2) return 0;
+    if (currentZoom3d < 4.5) return 1;
     return 2;
   }, [currentZoom3d]);
 
@@ -388,9 +389,9 @@ export default function WorldMap({
       const bounds = L.latLngBounds(L.latLng(-65, -180), L.latLng(85, 180));
       const map = L.map(mapContainerRef.current, {
         center: [20, 0],
-        zoom: 3,
-        minZoom: 2.8,
-        maxZoom: 8,
+        zoom: 3.5,
+        minZoom: 3.2, // Restricted zoom out limit by ~50%
+        maxZoom: 12,
         maxBounds: bounds,
         maxBoundsViscosity: 1.0,
         zoomControl: false,
@@ -409,12 +410,12 @@ export default function WorldMap({
 
       L.control.zoom({ position: "bottomright" }).addTo(map);
 
-      // maxClusterRadius automatically scales down cluster grouping when zooming in, and clusters aggressively when zooming out
+      // Increased maxClusterRadius for much more aggressive clustering when zooming out
       const markerGroup = (L as any).markerClusterGroup({
         showCoverageOnHover: false,
         zoomToBoundsOnClick: false, 
         spiderfyOnMaxZoom: true,
-        maxClusterRadius: 80,
+        maxClusterRadius: 140,
         disableClusteringAtZoom: 14, 
         iconCreateFunction: (cluster: any) => {
           const count = cluster.getChildCount();
@@ -469,8 +470,8 @@ export default function WorldMap({
         },
         center: [20, 35],
         zoom: currentZoom3d,
-        minZoom: 2.8,
-        maxZoom: 12,
+        minZoom: 3.2, // Restricted zoom out limit by ~50%
+        maxZoom: 14,
         attributionControl: false
       });
 
@@ -535,8 +536,8 @@ export default function WorldMap({
       maplibreMarkersRef.current.forEach(m => m.marker.remove());
       maplibreMarkersRef.current = [];
 
-      // Inverted precision scale: Lower zoom levels (zoomed out) now have larger grid multipliers to force aggressive clustering, while higher zoom levels (zoomed in) use smaller multipliers to uncluster nodes.
-      const clusteringPrecision = zoomTier === 0 ? 5.0 : zoomTier === 1 ? 2.5 : 0.8;
+      // Much wider bins at lower zoom levels for significantly more aggressive clustering when zooming out
+      const clusteringPrecision = zoomTier === 0 ? 8.0 : zoomTier === 1 ? 3.5 : 0.6;
       
       const coordinateBins: Record<string, typeof filteredStreams> = {};
       filteredStreams.forEach((s) => {
@@ -600,10 +601,11 @@ export default function WorldMap({
     const matched = processedStreams.find((s) => s.id === activeChannel.id);
     if (!matched) return;
 
+    // Zooming in all the way to maximum detail on the selected channel
     if (viewMode === "2d" && mapRef.current) {
-      mapRef.current.flyTo([matched.mappedLat, matched.mappedLon], 5, { duration: 1.2 });
+      mapRef.current.flyTo([matched.mappedLat, matched.mappedLon], 11, { duration: 1.2 });
     } else if (viewMode === "3d" && maplibreRef.current) {
-      maplibreRef.current.flyTo({ center: [matched.mappedLon, matched.mappedLat], zoom: 4.5, duration: 1200 });
+      maplibreRef.current.flyTo({ center: [matched.mappedLon, matched.mappedLat], zoom: 11, duration: 1200 });
     }
   }, [activeChannel, processedStreams]);
 
