@@ -83,7 +83,7 @@
   /* Force the browser to put these on the GPU for instant rendering */
   will-change: opacity, transform;
   
-  /* Quick, smooth fade instead of snapping into existence */
+  /* Quick, smooth fade IN when the hiding class is removed */
   transition: opacity 0.15s ease-out !important;
 }
 
@@ -95,6 +95,9 @@
 .hidden-marker {
   opacity: 0 !important;
   pointer-events: none !important;
+  
+  /* OVERRIDE: Vanish instantly when going behind the globe. No ghosting. */
+  transition: opacity 0s !important; 
   
   /* Make colors transparent in case child elements try to override the parent's opacity */
   background-color: transparent !important;
