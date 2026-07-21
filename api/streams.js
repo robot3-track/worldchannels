@@ -606,12 +606,11 @@ function parseM3U(data, category) {
       current.logo = logoMatch ? logoMatch[1] : "";
       
       const countryMatch = line.match(/tvg-country="([^"]+)"/);
-      current.country = countryMatch ? countryMatch[1].toUpperCase() : "Global";
+      // Fix: If tvg-country is missing, pass an empty string or null instead of "Global" 
+      // so resolveChannelLocation can properly inspect the channel name instead of short-circuiting.
+      current.country = countryMatch ? countryMatch[1].toUpperCase() : "";
 
     } else if (line.startsWith("#EXTVLCOPT:")) {
-      // 1. Identifies header options inside the playlist
-      // Captures options formatted like: #EXTVLCOPT:http-user-agent=Mozilla/5.0
-      // Captures options formatted like: #EXTVLCOPT:http-referrer=https://example.com
       if (current.headers) {
         const optMatch = line.match(/#EXTVLCOPT:http-(user-agent|referrer)=(.*)/i);
         if (optMatch) {
@@ -621,7 +620,7 @@ function parseM3U(data, category) {
           if (key === "user-agent") {
             current.headers["User-Agent"] = value;
           } else if (key === "referrer") {
-            current.headers["Referer"] = value; // Canonical HTTP format spelling
+            current.headers["Referer"] = value;
           }
         }
       }
@@ -642,7 +641,6 @@ function parseM3U(data, category) {
           lon: resolved.lon
         };
 
-        // 2. Only map and append headers if any were successfully identified
         if (Object.keys(current.headers).length > 0) {
           channelObj.headers = current.headers;
         }
