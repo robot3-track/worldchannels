@@ -552,11 +552,11 @@ export default function ChannelList({
             theme === "light" ? "bg-zinc-100/50 border-zinc-300" : "bg-neutral-950/40 border-neutral-800"
           }`}>
             <Activity className="w-5 h-5 text-zinc-400 mx-auto mb-2 animate-pulse" />
-            <p className={`text-xs font-bold font-mono uppercase tracking-wide ${theme === "light" ? "text-zinc-700" : "text-neutral-400"}`}>NO SIGNAL DETECTED</p>
+            <p className={`text-xs font-bold font-mono uppercase tracking-wide ${theme === "light" ? "text-zinc-700" : "text-neutral-400"}`}>0 MATCHES</p>
             <p className={`text-[10px] mt-1 max-w-[200px] mx-auto leading-relaxed ${
               theme === "light" ? "text-zinc-400" : "text-neutral-600"
             }`}>
-              Check keywords or broaden frequency criteria.
+              Check keywords or broaden your search terms! Have a channel you want to request to add? Make a pull request.
             </p>
           </div>
         ) : (
