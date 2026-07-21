@@ -358,14 +358,23 @@ export default function WorldMap({
     if (!mapInstance) return;
     try {
       const center = mapInstance.getCenter();
+      const container = mapInstance.getContainer();
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+
       maplibreMarkersRef.current.forEach(({ marker, lat, lon }) => {
         const element = marker.getElement();
         if (!element) return;
 
         const markerCoord = new maplibregl.LngLat(lon, lat);
         const distance = center.distanceTo(markerCoord);
+        
+        // Project coordinates to screen pixels to verify viewport bounds visibility
+        const point = mapInstance.project(markerCoord);
+        const isInsideViewport = point.x >= -50 && point.x <= width + 50 && point.y >= -50 && point.y <= height + 50;
 
-        if (distance > 7200000) {
+        // Hide markers that are past the horizon (> ~9,000km surface distance) or out of screen bounds
+        if (distance > 9000000 || !isInsideViewport) {
           element.style.opacity = "0";
           element.style.pointerEvents = "none";
         } else {
@@ -549,7 +558,7 @@ export default function WorldMap({
       Object.values(coordinateBins).forEach((cluster) => {
         const rootNode = cluster[0];
         const el = document.createElement("div");
-        el.className = "maplibre-custom-marker-node flex items-center justify-center origin-center";
+        el.className = "maplibre-custom-marker-node flex items-center justify-center origin-center transition-opacity duration-300";
 
         if (cluster.length > 1) {
           el.innerHTML = `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 font-sans text-xs font-bold border border-zinc-900 text-white rounded-none cursor-pointer shadow-lg"><span>${cluster.length}</span></div>`;
