@@ -409,11 +409,12 @@ export default function WorldMap({
 
       L.control.zoom({ position: "bottomright" }).addTo(map);
 
+      // Increased maxClusterRadius from 55 to 110 so markers group together more easily over broader distances
       const markerGroup = (L as any).markerClusterGroup({
         showCoverageOnHover: false,
         zoomToBoundsOnClick: false, 
         spiderfyOnMaxZoom: true,
-        maxClusterRadius: 55,
+        maxClusterRadius: 110,
         disableClusteringAtZoom: 14, 
         iconCreateFunction: (cluster: any) => {
           const count = cluster.getChildCount();
@@ -534,7 +535,8 @@ export default function WorldMap({
       maplibreMarkersRef.current.forEach(m => m.marker.remove());
       maplibreMarkersRef.current = [];
 
-      const clusteringPrecision = zoomTier === 0 ? 0.3 : zoomTier === 1 ? 1.0 : 2.5;
+      // Increased precision multipliers so bins cover wider areas and group markers more easily when zoomed out
+      const clusteringPrecision = zoomTier === 0 ? 1.2 : zoomTier === 1 ? 2.5 : 4.5;
       
       const coordinateBins: Record<string, typeof filteredStreams> = {};
       filteredStreams.forEach((s) => {
