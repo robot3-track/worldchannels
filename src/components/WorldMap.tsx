@@ -358,23 +358,14 @@ export default function WorldMap({
     if (!mapInstance) return;
     try {
       const center = mapInstance.getCenter();
-      const container = mapInstance.getContainer();
-      const width = container.clientWidth;
-      const height = container.clientHeight;
-
       maplibreMarkersRef.current.forEach(({ marker, lat, lon }) => {
         const element = marker.getElement();
         if (!element) return;
 
         const markerCoord = new maplibregl.LngLat(lon, lat);
         const distance = center.distanceTo(markerCoord);
-        
-        // Project coordinates to screen pixels to verify viewport bounds visibility
-        const point = mapInstance.project(markerCoord);
-        const isInsideViewport = point.x >= -50 && point.x <= width + 50 && point.y >= -50 && point.y <= height + 50;
 
-        // Hide markers that are past the horizon (> ~9,000km surface distance) or out of screen bounds
-        if (distance > 9000000 || !isInsideViewport) {
+        if (distance > 7200000) {
           element.style.opacity = "0";
           element.style.pointerEvents = "none";
         } else {
@@ -558,7 +549,7 @@ export default function WorldMap({
       Object.values(coordinateBins).forEach((cluster) => {
         const rootNode = cluster[0];
         const el = document.createElement("div");
-        el.className = "maplibre-custom-marker-node flex items-center justify-center origin-center transition-opacity duration-300";
+        el.className = "maplibre-custom-marker-node flex items-center justify-center origin-center";
 
         if (cluster.length > 1) {
           el.innerHTML = `<div class="flex items-center justify-center w-8 h-8 bg-indigo-600 font-sans text-xs font-bold border border-zinc-900 text-white rounded-none cursor-pointer shadow-lg"><span>${cluster.length}</span></div>`;
@@ -718,7 +709,7 @@ export default function WorldMap({
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-4 h-4 bg-indigo-600 inline-flex items-center justify-center text-[8px] font-black border border-zinc-900 text-white rounded-none">#</span>
-                <span className="uppercase font-bold text-[9px]">Clustering</span>
+                <span className="uppercase font-bold text-[9px]">Cluster</span>
               </div>
             </div>
           </div>
