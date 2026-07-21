@@ -1,0 +1,97 @@
+name: Auto-Create PR from Stream Submission
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  create-pr:
+    if: contains(github.event.issue.labels.*.name, 'stream-submission')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Parse Issue Body & Append Stream
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const issueBody = context.payload.issue.body;
+
+            // Helper to parse values out of issue template sections
+            function getFieldValue(label) {
+              const regex = new RegExp(`### ${label}\\s*\\n\\s*([^\\n]+)`);
+              const match = issueBody.match(regex);
+              return match ? match[1].trim() : '';
+            }
+
+            const name = getFieldValue('Channel Name');
+            const country = getFieldValue('Country Code');
+            const category = getFieldValue('Category');
+            const url = getFieldValue('Stream / M3U8 URL');
+
+            if (!name || !url) {
+              throw new Error('Missing channel name or stream URL in issue body.');
+            }
+
+            // Path to streams.js file inside the api/ folder
+            const filePath = 'api/streams.js';
+            let content = fs.readFileSync(filePath, 'utf8');
+
+            const newStreamObj = {
+              id: `stream-${Date.now()}`,
+              name: name,
+              country: country || 'US',
+              category: category || 'general',
+              url: url,
+              status: 'online'
+            };
+
+            const formattedJson = JSON.stringify(newStreamObj, null, 2);
+
+            // Append the object right before the closing bracket '];'
+            content = content.replace(/\]\s*;?\s*$/, `,\n  ${formattedJson}\n];`);
+            fs.writeFileSync(filePath, content, 'utf8');
+
+            // Export variables for git commit/PR step
+            core.exportVariable('STREAM_NAME', name);
+            core.exportVariable('BRANCH_NAME', `add-stream-${Date.now()}`);
+
+      - name: Create Branch & Commit Changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$BRANCH_NAME"
+          git add api/streams.js
+          git commit -m "feat: add stream channel '$STREAM_NAME'"
+          git push origin "$BRANCH_NAME"
+
+      - name: Open Pull Request
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const branchName = process.env.BRANCH_NAME;
+            const streamName = process.env.STREAM_NAME;
+
+            const pr = await github.rest.pulls.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              title: `Stream Submission: ${streamName}`,
+              head: branchName,
+              base: 'main', // Change to 'master' if your main branch is named master
+              body: `Automated PR generated from submission issue #${context.payload.issue.number}.\n\nCloses #${context.payload.issue.number}`
+            });
+
+            // Leave a comment on the original issue pointing to the PR
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: `A Pull Request has been automatically opened to add this stream: ${pr.data.html_url}`
+            });

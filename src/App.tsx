@@ -9,12 +9,14 @@ import {
   Moon,
   ArrowRight,
   X,
-  Trash2
+  Trash2,
+  PlusCircle
 } from "lucide-react";
 import { StreamChannel, CategoryFilter, TutorialStep } from "./types";
 import WorldMap from "./components/WorldMap";
 import VideoPlayer from "./components/VideoPlayer";
 import ChannelList from "./components/ChannelList";
+import { SubmitStreamModal } from "./components/SubmitStreamModal";
 
 const TUTORIAL_STEPS: TutorialStep[] = [
   {
@@ -59,8 +61,9 @@ export default function App() {
   const [selectedCategory, setSelectedCategory] = useState<CategoryFilter>("all");
   const [selectedChannel, setSelectedChannel] = useState<StreamChannel | null>(null);
   const [theme, setTheme] = useState<"light" | "dark">("dark");
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   
-  // Save to Deck (Favorites) State[cite: 2]
+  // Save to Deck (Favorites) State
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem("deck_favorites_v1");
@@ -70,7 +73,7 @@ export default function App() {
     }
   });
 
-  // 🕒 Track the last 4 recently played channel IDs
+  // Track the last 4 recently played channel IDs
   const [recentChannelIds, setRecentChannelIds] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem("deck_recent_channels_v1");
@@ -80,7 +83,7 @@ export default function App() {
     }
   });
 
-  // Tutorial States[cite: 2]
+  // Tutorial States
   const [runTutorial, setRunTutorial] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [tooltipCoords, setTooltipCoords] = useState({ 
@@ -97,17 +100,17 @@ export default function App() {
     categoriesCount: { sports: 0, news: 0, science: 0, freetv: 0, country: 0 }
   });
 
-  // Sync Bookmarks to LocalStorage[cite: 2]
+  // Sync Bookmarks to LocalStorage
   useEffect(() => {
     localStorage.setItem("deck_favorites_v1", JSON.stringify(bookmarkedIds));
   }, [bookmarkedIds]);
 
-  // 🕒 Sync Recently Played to LocalStorage
+  // Sync Recently Played to LocalStorage
   useEffect(() => {
     localStorage.setItem("deck_recent_channels_v1", JSON.stringify(recentChannelIds));
   }, [recentChannelIds]);
 
-  // Toggle Bookmark Callback[cite: 2]
+  // Toggle Bookmark Callback
   const handleToggleBookmark = useCallback((channelId: string) => {
     setBookmarkedIds((prev) =>
       prev.includes(channelId)
@@ -116,7 +119,7 @@ export default function App() {
     );
   }, []);
 
-  // Clear Entire Saved Deck Handler[cite: 2]
+  // Clear Entire Saved Deck Handler
   const handleClearAllBookmarks = useCallback(() => {
     if (window.confirm("Are you sure you want to clear your entire Saved Deck?")) {
       setBookmarkedIds([]);
@@ -355,7 +358,7 @@ export default function App() {
   const handleSelectChannel = useCallback((channel: StreamChannel) => {
     setSelectedChannel(channel);
     
-    // 🕒 Update recently played feed history (keep unique, max 4 items, latest first)
+    // Update recently played feed history (keep unique, max 4 items, latest first)
     setRecentChannelIds((prev) => {
       const filtered = prev.filter((id) => id !== channel.id);
       return [channel.id, ...filtered].slice(0, 4);
@@ -442,7 +445,7 @@ export default function App() {
     return "opacity-30 transition-all duration-300 pointer-events-none";
   };
 
-  // Filter streams strictly based on bookmark selection and category selection[cite: 2]
+  // Filter streams strictly based on bookmark selection and category selection
   const filteredStreams = streams.filter((stream) => {
     if (selectedCategory === "favorites") {
       return bookmarkedIds.includes(stream.id);
@@ -479,7 +482,7 @@ export default function App() {
           </div>
 
           <div className="flex items-center gap-2 text-xs font-mono">
-            {/* Clear Deck Shortcut Button[cite: 2] */}
+            {/* Clear Deck Shortcut Button */}
             {bookmarkedIds.length > 0 && (
               <button
                 onClick={handleClearAllBookmarks}
@@ -586,7 +589,7 @@ export default function App() {
                 onToggleBookmark={handleToggleBookmark}
               />
 
-              {/* 🕒 Recently Played History Strip[cite: 1] */}
+              {/* Recently Played History Strip */}
               {recentChannelIds.length > 0 && (
                 <div className={`p-2 border-2 text-[10px] font-mono flex items-center gap-2 overflow-x-auto rounded-none ${
                   theme === "light" ? "bg-zinc-100 border-zinc-900" : "bg-neutral-950 border-neutral-850"
@@ -636,6 +639,36 @@ export default function App() {
           </section>
         </>
       </main>
+
+      {/* FOOTER AREA WITH NON-INTRUSIVE SUBMIT CHANNEL BUTTON */}
+      <footer className={`mt-auto border-t-2 font-mono py-6 px-6 ${
+        theme === "light" ? "border-zinc-900 bg-zinc-100 text-zinc-600" : "border-neutral-800 bg-[#0a0b0e] text-neutral-500"
+      }`}>
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
+          <p className="text-[10px] uppercase tracking-wider">
+            WORLD CHANNELS &copy; {new Date().getFullYear()} &bull; SATELLITE STREAM NETWORK
+          </p>
+
+          <button
+            onClick={() => setIsSubmitModalOpen(true)}
+            className={`px-3 py-1.5 border text-[10px] font-bold uppercase transition-all flex items-center gap-1.5 cursor-pointer ${
+              theme === "light"
+                ? "bg-white border-zinc-400 text-zinc-700 hover:border-zinc-900 hover:text-zinc-900"
+                : "bg-neutral-900 border-neutral-700 text-neutral-400 hover:border-indigo-500 hover:text-indigo-400"
+            }`}
+          >
+            <PlusCircle className="w-3.5 h-3.5" />
+            <span>Submit a Channel</span>
+          </button>
+        </div>
+      </footer>
+
+      {/* SUBMIT STREAM MODAL */}
+      <SubmitStreamModal
+        isOpen={isSubmitModalOpen}
+        onClose={() => setIsSubmitModalOpen(false)}
+        theme={theme}
+      />
 
       {/* SYSTEM INITIALIZATION GLASS LOADING OVERLAY */}
       {loading && streams.length === 0 && (
