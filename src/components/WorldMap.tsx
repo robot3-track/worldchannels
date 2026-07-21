@@ -358,7 +358,6 @@ export default function WorldMap({
   const update3DMarkersOcclusion = (mapInstance: maplibregl.Map) => {
     if (!mapInstance) return;
     try {
-      // Cast mapInstance to any to bypass strict type checking for internal globe camera APIs
       const mapAny = mapInstance as any;
       const camera = typeof mapAny.getFreeCameraOptions === "function" 
         ? mapAny.getFreeCameraOptions() 
@@ -372,9 +371,8 @@ export default function WorldMap({
         const element = marker.getElement();
         if (!element) return;
 
-        if (!element.style.transition) {
-          element.style.transition = "opacity 0.2s ease-in-out";
-        }
+        // Remove transition so it toggles instantly without fading overhead
+        element.style.transition = "none";
 
         const phi = ((90 - lat) * Math.PI) / 180;
         const theta = ((lon + 180) * Math.PI) / 180;
@@ -392,16 +390,15 @@ export default function WorldMap({
 
         const dot = camX * markerX + camY * markerY + camZ * markerZ;
 
-        if (dot > 0.04) {
+        // Strictly show if on the front hemisphere, completely hide otherwise
+        if (dot > 0) {
           element.style.opacity = "1";
           element.style.pointerEvents = "auto";
-        } else if (dot > -0.02) {
-          const opacityVal = (dot - (-0.02)) / (0.04 - (-0.02));
-          element.style.opacity = Math.max(0, Math.min(1, opacityVal)).toFixed(2);
-          element.style.pointerEvents = "none";
+          element.style.display = "block";
         } else {
           element.style.opacity = "0";
           element.style.pointerEvents = "none";
+          element.style.display = "none"; // Completely hidden to optimize DOM paint performance
         }
       });
     } catch (e) {
