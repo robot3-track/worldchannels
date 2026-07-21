@@ -84,22 +84,19 @@
   will-change: opacity, transform;
   
   /* Quick, smooth fade IN when the hiding class is removed */
-  transition: opacity 0.15s ease-out !important;
+  transition: opacity 0.15s ease-out;
 }
 
 /* 
-  Ensures that when markers are pushed off-screen or occluded by the sphere,
-  they are visually hidden but retained in layout to prevent recalculation lag.
-*/
-.hidden-channel,
-.hidden-marker {
+ * Completely cuts off markers on the backside of the globe immediately 
+ * without ghosting, overlapping, or performance lag.
+ */
+.maplibre-custom-marker-node.is-hidden,
+.custom-map-marker-wrapper.is-hidden {
   opacity: 0 !important;
   pointer-events: none !important;
-  
-  /* OVERRIDE: Vanish instantly when going behind the globe. No ghosting. */
-  transition: opacity 0s !important; 
-  
-  /* Make colors transparent in case child elements try to override the parent's opacity */
+  visibility: hidden !important;
+  transition: none !important;
   background-color: transparent !important;
   border-color: transparent !important;
   color: transparent !important;

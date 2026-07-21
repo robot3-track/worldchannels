@@ -384,22 +384,17 @@ export default function WorldMap({
 
         const dot = camX * markerX + camY * markerY + camZ * markerZ;
 
-        // If on the front hemisphere, ensure it's attached to the map
-        if (dot > 0) {
-          const el = marker.getElement();
-          if (el && !el.parentNode) {
+        const el = marker.getElement();
+        if (!el) return;
+
+        // If on the front hemisphere, show it. If on the back, toggle the CSS class.
+        if (dot > 0.02) { // Small positive buffer prevents edge jitter
+          if (!el.parentNode) {
             marker.addTo(mapInstance);
           }
-          if (el) {
-            el.style.display = "block";
-            el.style.opacity = "1";
-          }
+          el.classList.remove("is-hidden");
         } else {
-          // If on the back side, completely remove from DOM/render tree to prevent clogs & ghosting
-          const el = marker.getElement();
-          if (el && el.parentNode) {
-            marker.remove(); // Removes from DOM layout completely without deleting the JS object reference
-          }
+          el.classList.add("is-hidden");
         }
       });
     } catch (e) {
