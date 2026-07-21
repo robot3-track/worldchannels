@@ -303,11 +303,10 @@ export default function WorldMap({
     });
   }, [processedStreams, selectedCategory, searchQuery]);
 
-  // FIX: Corrected zoom tiers to reflect the 2.8 minZoom map bounds properly.
   const zoomTier = useMemo(() => {
-    if (currentZoom3d < 4.5) return 0; // Zoomed out (Continent view)
-    if (currentZoom3d < 6.5) return 1; // Mid zoom (Region view)
-    return 2;                         // Zoomed in (City view)
+    if (currentZoom3d < 2.5) return 0;
+    if (currentZoom3d < 4) return 1;
+    return 2;
   }, [currentZoom3d]);
 
   const buildClusterDropdownHtml = (clusterData: typeof filteredStreams) => {
@@ -358,50 +357,27 @@ export default function WorldMap({
   const update3DMarkersOcclusion = (mapInstance: maplibregl.Map) => {
     if (!mapInstance) return;
     try {
-      const mapAny = mapInstance as any;
-      const camera = typeof mapAny.getFreeCameraOptions === "function" 
-        ? mapAny.getFreeCameraOptions() 
-        : null;
-
-      if (!camera || !camera.position) return;
-
-      const camPos = camera.position;
-
+      const center = mapInstance.getCenter();
       maplibreMarkersRef.current.forEach(({ marker, lat, lon }) => {
-        const phi = ((90 - lat) * Math.PI) / 180;
-        const theta = ((lon + 180) * Math.PI) / 180;
+        const element = marker.getElement();
+        if (!element) return;
 
-        const markerX = Math.sin(phi) * Math.cos(theta);
-        const markerY = Math.sin(phi) * Math.sin(theta);
-        const markerZ = Math.cos(phi);
+        const markerCoord = new maplibregl.LngLat(lon, lat);
+        const distance = center.distanceTo(markerCoord);
 
-        const lengthCam = Math.sqrt(camPos.x * camPos.x + camPos.y * camPos.y + camPos.z * camPos.z);
-        if (lengthCam === 0) return;
-        
-        const camX = camPos.x / lengthCam;
-        const camY = camPos.y / lengthCam;
-        const camZ = camPos.z / lengthCam;
-
-        const dot = camX * markerX + camY * markerY + camZ * markerZ;
-
-        const el = marker.getElement();
-        if (!el) return;
-
-        // If on the front hemisphere, show it. If on the back, toggle the CSS class.
-        if (dot > 0.02) { // Small positive buffer prevents edge jitter
-          if (!el.parentNode) {
-            marker.addTo(mapInstance);
-          }
-          el.classList.remove("is-hidden");
+        if (distance > 7200000) {
+          element.style.opacity = "0";
+          element.style.pointerEvents = "none";
         } else {
-          el.classList.add("is-hidden");
+          element.style.opacity = "1";
+          element.style.pointerEvents = "auto";
         }
       });
     } catch (e) {
       console.error(e);
     }
   };
-  
+
   useEffect(() => {
     if (!mapContainerRef.current) return;
     wipeMapInstances();
@@ -516,9 +492,6 @@ export default function WorldMap({
       });
 
       maplibre.on("move", () => update3DMarkersOcclusion(maplibre));
-      maplibre.on("rotate", () => update3DMarkersOcclusion(maplibre));
-      maplibre.on("pitchend", () => update3DMarkersOcclusion(maplibre));
-      maplibre.on("zoomend", () => update3DMarkersOcclusion(maplibre));
       maplibre.on("render", () => update3DMarkersOcclusion(maplibre));
 
       maplibreRef.current = maplibre;
@@ -561,8 +534,7 @@ export default function WorldMap({
       maplibreMarkersRef.current.forEach(m => m.marker.remove());
       maplibreMarkersRef.current = [];
 
-      // FIX: Reversed values and scaled them up. Larger bin size = fewer markers to render when zoomed out.
-      const clusteringPrecision = zoomTier === 0 ? 6.0 : zoomTier === 1 ? 2.5 : 0.5;
+      const clusteringPrecision = zoomTier === 0 ? 0.3 : zoomTier === 1 ? 1.0 : 2.5;
       
       const coordinateBins: Record<string, typeof filteredStreams> = {};
       filteredStreams.forEach((s) => {
@@ -694,6 +666,7 @@ export default function WorldMap({
       <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none">
         <div ref={mapContainerRef} className="w-full h-full text-zinc-900 relative" style={{ background: "#0d0e12" }} />
 
+        {/* HIDE ON MOBILE: Replaced 'flex' with 'hidden sm:flex' to cleanly hide legend on mobile viewports */}
         <div className={`absolute bottom-4 left-4 z-[1000] border-2 p-3.5 text-[10px] hidden sm:flex flex-col gap-3 rounded-none max-w-[240px] shadow-xl font-mono tracking-tight ${
           theme === "light" ? "bg-white border-zinc-900 text-zinc-900" : "bg-zinc-950/95 border-neutral-800 text-neutral-200"
         }`}>

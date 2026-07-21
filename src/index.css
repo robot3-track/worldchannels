@@ -12,7 +12,7 @@
 
 /* Organic glass noise grain overlay - clean URL syntax */
 .bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.000'/%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.015'/%3E%3C/svg%3E");
 }
 
 /* Linear buffering/loading progress interpolation */
@@ -71,33 +71,4 @@
   border-left: 1px solid #262626 !important;
   border-bottom: 1px solid #262626 !important;
   box-shadow: none !important;
-}
-
-/* -------------------------------------------------------------
- * Map Markers: GPU-Accelerated Opacity Hiding & Transitions
- * ------------------------------------------------------------- */
-
-/* Target the custom nodes generated in the React component for MapLibre/Leaflet */
-.maplibre-custom-marker-node,
-.custom-map-marker-wrapper {
-  /* Force the browser to put these on the GPU for instant rendering */
-  will-change: opacity, transform;
-  
-  /* Quick, smooth fade IN when the hiding class is removed */
-  transition: opacity 0.15s ease-out;
-}
-
-/* 
- * Completely cuts off markers on the backside of the globe immediately 
- * without ghosting, overlapping, or performance lag.
- */
-.maplibre-custom-marker-node.is-hidden,
-.custom-map-marker-wrapper.is-hidden {
-  opacity: 0 !important;
-  pointer-events: none !important;
-  visibility: hidden !important;
-  transition: none !important;
-  background-color: transparent !important;
-  border-color: transparent !important;
-  color: transparent !important;
 }
