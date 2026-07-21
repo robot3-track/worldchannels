@@ -618,7 +618,7 @@ export default function WorldMap({
           <div className="flex items-center gap-2">
             <Globe className="w-5 h-5 text-indigo-500" />
             <h2 className={`text-sm font-black uppercase tracking-tight ${theme === "light" ? "text-zinc-900" : "text-neutral-100"}`}>
-              Telemetry World Map
+              Live World Map
             </h2>
           </div>
         </div>
