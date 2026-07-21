@@ -709,7 +709,7 @@ export default function WorldMap({
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-4 h-4 bg-indigo-600 inline-flex items-center justify-center text-[8px] font-black border border-zinc-900 text-white rounded-none">#</span>
-                <span className="uppercase font-bold text-[9px]">Cluster</span>
+                <span className="uppercase font-bold text-[9px]">Clustering</span>
               </div>
             </div>
           </div>
