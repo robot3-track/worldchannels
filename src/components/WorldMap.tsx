@@ -629,8 +629,8 @@ export default function WorldMap({
               onChange={(e) => setViewMode(e.target.value as "2d" | "3d")}
               className={`bg-transparent text-[11px] font-bold uppercase outline-none cursor-pointer pr-1 ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}
             >
-              <option value="2d" className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-200"}>2D Matrix</option>
-              <option value="3d" className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-200"}>3D Sphere Globe</option>
+              <option value="2d">2D Matrix</option>
+              <option value="3d">3D Sphere Globe</option>
             </select>
           </div>
 
@@ -644,7 +644,7 @@ export default function WorldMap({
               className={`bg-transparent text-[11px] font-bold uppercase outline-none cursor-pointer pr-1 ${theme === "light" ? "text-zinc-900" : "text-neutral-200"}`}
             >
               {mapStyles.map((style) => (
-                <option key={style.id} value={style.id} className={theme === "light" ? "bg-white text-zinc-900" : "bg-neutral-950 text-neutral-200"}>{style.label}</option>
+                <option key={style.id} value={style.id}>{style.label}</option>
               ))}
             </select>
           </div>
@@ -709,7 +709,7 @@ export default function WorldMap({
               </div>
               <div className="flex items-center gap-1.5">
                 <span className="w-4 h-4 bg-indigo-600 inline-flex items-center justify-center text-[8px] font-black border border-zinc-900 text-white rounded-none">#</span>
-                <span className="uppercase font-bold text-[9px]">Clustering</span>
+                <span className="uppercase font-bold text-[9px]">Cluster</span>
               </div>
             </div>
           </div>
