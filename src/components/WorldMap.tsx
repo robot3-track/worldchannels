@@ -368,12 +368,6 @@ export default function WorldMap({
       const camPos = camera.position;
 
       maplibreMarkersRef.current.forEach(({ marker, lat, lon }) => {
-        const element = marker.getElement();
-        if (!element) return;
-
-        // Remove transition so it toggles instantly without fading overhead
-        element.style.transition = "none";
-
         const phi = ((90 - lat) * Math.PI) / 180;
         const theta = ((lon + 180) * Math.PI) / 180;
 
@@ -390,19 +384,26 @@ export default function WorldMap({
 
         const dot = camX * markerX + camY * markerY + camZ * markerZ;
 
-        // Strictly show if on the front hemisphere, completely hide otherwise
+        // If on the front hemisphere, ensure it's attached to the map
         if (dot > 0) {
-          element.style.opacity = "1";
-          element.style.pointerEvents = "auto";
-          element.style.display = "block";
+          const el = marker.getElement();
+          if (el && !el.parentNode) {
+            marker.addTo(mapInstance);
+          }
+          if (el) {
+            el.style.display = "block";
+            el.style.opacity = "1";
+          }
         } else {
-          element.style.opacity = "0";
-          element.style.pointerEvents = "none";
-          element.style.display = "none"; // Completely hidden to optimize DOM paint performance
+          // If on the back side, completely remove from DOM/render tree to prevent clogs & ghosting
+          const el = marker.getElement();
+          if (el && el.parentNode) {
+            marker.remove(); // Removes from DOM layout completely without deleting the JS object reference
+          }
         }
       });
     } catch (e) {
-      // Fallback silently if camera options aren't fully initialized yet
+      console.error(e);
     }
   };
   
