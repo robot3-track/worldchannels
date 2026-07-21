@@ -476,7 +476,7 @@ export default function ChannelList({
         <span className={`text-[9px] font-black uppercase tracking-widest block mb-2 font-mono ${
           theme === "light" ? "text-zinc-500" : "text-neutral-500"
         }`}>
-          CATEGORY SELECT
+          Select Your Category
         </span>
         <div className="grid grid-cols-2 gap-1 max-h-24 overflow-y-auto no-scrollbar">
           {categories.map((cat) => {
@@ -509,12 +509,12 @@ export default function ChannelList({
         </div>
       </div>
 
-      {/* Minimalist Regional Dropdown */}
+      {/* regional dropdown menu */}
       <div className="mb-5">
         <span className={`text-[9px] font-black uppercase tracking-widest block mb-1.5 font-mono ${
           theme === "light" ? "text-zinc-500" : "text-neutral-500"
         }`}>
-          REGION FREQUENCY
+          Select Your Region
         </span>
         <select
           value={countryFilter}
