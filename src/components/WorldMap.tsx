@@ -303,10 +303,11 @@ export default function WorldMap({
     });
   }, [processedStreams, selectedCategory, searchQuery]);
 
+  // FIX: Corrected zoom tiers to reflect the 2.8 minZoom map bounds properly.
   const zoomTier = useMemo(() => {
-    if (currentZoom3d < 2.5) return 0;
-    if (currentZoom3d < 4) return 1;
-    return 2;
+    if (currentZoom3d < 4.5) return 0; // Zoomed out (Continent view)
+    if (currentZoom3d < 6.5) return 1; // Mid zoom (Region view)
+    return 2;                          // Zoomed in (City view)
   }, [currentZoom3d]);
 
   const buildClusterDropdownHtml = (clusterData: typeof filteredStreams) => {
@@ -534,7 +535,8 @@ export default function WorldMap({
       maplibreMarkersRef.current.forEach(m => m.marker.remove());
       maplibreMarkersRef.current = [];
 
-      const clusteringPrecision = zoomTier === 0 ? 0.3 : zoomTier === 1 ? 1.0 : 2.5;
+      // FIX: Reversed values and scaled them up. Larger bin size = fewer markers to render when zoomed out.
+      const clusteringPrecision = zoomTier === 0 ? 6.0 : zoomTier === 1 ? 2.5 : 0.5;
       
       const coordinateBins: Record<string, typeof filteredStreams> = {};
       filteredStreams.forEach((s) => {
@@ -666,7 +668,6 @@ export default function WorldMap({
       <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none">
         <div ref={mapContainerRef} className="w-full h-full text-zinc-900 relative" style={{ background: "#0d0e12" }} />
 
-        {/* HIDE ON MOBILE: Replaced 'flex' with 'hidden sm:flex' to cleanly hide legend on mobile viewports */}
         <div className={`absolute bottom-4 left-4 z-[1000] border-2 p-3.5 text-[10px] hidden sm:flex flex-col gap-3 rounded-none max-w-[240px] shadow-xl font-mono tracking-tight ${
           theme === "light" ? "bg-white border-zinc-900 text-zinc-900" : "bg-zinc-950/95 border-neutral-800 text-neutral-200"
         }`}>
