@@ -84,7 +84,7 @@
   will-change: opacity, transform;
   
   /* Quick, smooth fade IN when the hiding class is removed */
-  transition: opacity 0.01s ease-out;
+  transition: opacity 0.15s ease-out;
 }
 
 /* 
