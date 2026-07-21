@@ -79,14 +79,15 @@ export default function ChannelList({
   // Updated tab categories list to render our new "Favorites" (Saved Deck) second[cite: 2]
   const categories: { value: CategoryFilter; label: string; icon: any }[] = [
     { value: "all", label: "All Feeds", icon: Globe },
-    { value: "favorites", label: "Saved Deck", icon: Star }, // 🌟 Placed second directly below "all"
+    { value: "favorites", label: "Saved Deck", icon: Star },
+    { value: "general", label: "Entertainment/General", icon: Tv },
+    { value: "sports", label: "All Live Sports", icon: Award },
     { value: "world cup", label: "Live Soccer", icon: Award },
-    { value: "general", label: "General TV", icon: Tv },
-    { value: "sports", label: "Sports Live", icon: Award },
+    { value: "country", label: "Local Broadcasters", icon: SlidersHorizontal },
     { value: "news", label: "World News", icon: Radio },
     { value: "science", label: "Documentary", icon: BookOpen },
-    { value: "freetv", label: "Global TV", icon: Tv },
-    { value: "country", label: "Local Broadcasters", icon: SlidersHorizontal }
+    { value: "freetv", label: "Global/Movies TV", icon: Tv }
+
   ];
 
   // 1. Processed Streams definition first...
