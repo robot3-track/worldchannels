@@ -307,7 +307,7 @@ export default function WorldMap({
   const zoomTier = useMemo(() => {
     if (currentZoom3d < 4.5) return 0; // Zoomed out (Continent view)
     if (currentZoom3d < 6.5) return 1; // Mid zoom (Region view)
-    return 2;                          // Zoomed in (City view)
+    return 2;                         // Zoomed in (City view)
   }, [currentZoom3d]);
 
   const buildClusterDropdownHtml = (clusterData: typeof filteredStreams) => {
@@ -359,14 +359,31 @@ export default function WorldMap({
     if (!mapInstance) return;
     try {
       const center = mapInstance.getCenter();
+      const centerRadLat = (center.lat * Math.PI) / 180;
+      const centerRadLon = (center.lng * Math.PI) / 180;
+
+      // Camera vector in 3D Cartesian coordinates
+      const camX = Math.cos(centerRadLat) * Math.cos(centerRadLon);
+      const camY = Math.cos(centerRadLat) * Math.sin(centerRadLon);
+      const camZ = Math.sin(centerRadLat);
+
       maplibreMarkersRef.current.forEach(({ marker, lat, lon }) => {
         const element = marker.getElement();
         if (!element) return;
 
-        const markerCoord = new maplibregl.LngLat(lon, lat);
-        const distance = center.distanceTo(markerCoord);
+        const markerRadLat = (lat * Math.PI) / 180;
+        const markerRadLon = (lon * Math.PI) / 180;
 
-        if (distance > 7200000) {
+        // Marker surface normal vector
+        const markerX = Math.cos(markerRadLat) * Math.cos(markerRadLon);
+        const markerY = Math.cos(markerRadLat) * Math.sin(markerRadLon);
+        const markerZ = Math.sin(markerRadLat);
+
+        // Dot product to check if marker is facing the camera
+        const dotProduct = camX * markerX + camY * markerY + camZ * markerZ;
+
+        // If dotProduct < 0.05, the marker is on the back side of the globe
+        if (dotProduct < 0.05) {
           element.style.opacity = "0";
           element.style.pointerEvents = "none";
         } else {
@@ -493,6 +510,9 @@ export default function WorldMap({
       });
 
       maplibre.on("move", () => update3DMarkersOcclusion(maplibre));
+      maplibre.on("rotate", () => update3DMarkersOcclusion(maplibre));
+      maplibre.on("pitchend", () => update3DMarkersOcclusion(maplibre));
+      maplibre.on("zoomend", () => update3DMarkersOcclusion(maplibre));
       maplibre.on("render", () => update3DMarkersOcclusion(maplibre));
 
       maplibreRef.current = maplibre;
