@@ -72,3 +72,32 @@
   border-bottom: 1px solid #262626 !important;
   box-shadow: none !important;
 }
+
+/* -------------------------------------------------------------
+ * Map Markers: GPU-Accelerated Opacity Hiding & Transitions
+ * ------------------------------------------------------------- */
+
+/* Target the custom nodes generated in the React component for MapLibre/Leaflet */
+.maplibre-custom-marker-node,
+.custom-map-marker-wrapper {
+  /* Force the browser to put these on the GPU for instant rendering */
+  will-change: opacity, transform;
+  
+  /* Quick, smooth fade instead of snapping into existence */
+  transition: opacity 0.15s ease-out !important;
+}
+
+/* 
+  Ensures that when markers are pushed off-screen or occluded by the sphere,
+  they are visually hidden but retained in layout to prevent recalculation lag.
+*/
+.hidden-channel,
+.hidden-marker {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  
+  /* Make colors transparent in case child elements try to override the parent's opacity */
+  background-color: transparent !important;
+  border-color: transparent !important;
+  color: transparent !important;
+}
