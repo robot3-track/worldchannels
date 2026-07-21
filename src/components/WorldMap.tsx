@@ -409,12 +409,12 @@ export default function WorldMap({
 
       L.control.zoom({ position: "bottomright" }).addTo(map);
 
-      // Increased maxClusterRadius from 55 to 110 so markers group together more easily over broader distances
+      // maxClusterRadius automatically scales down cluster grouping when zooming in, and clusters aggressively when zooming out
       const markerGroup = (L as any).markerClusterGroup({
         showCoverageOnHover: false,
         zoomToBoundsOnClick: false, 
         spiderfyOnMaxZoom: true,
-        maxClusterRadius: 110,
+        maxClusterRadius: 80,
         disableClusteringAtZoom: 14, 
         iconCreateFunction: (cluster: any) => {
           const count = cluster.getChildCount();
@@ -535,8 +535,8 @@ export default function WorldMap({
       maplibreMarkersRef.current.forEach(m => m.marker.remove());
       maplibreMarkersRef.current = [];
 
-      // Increased precision multipliers so bins cover wider areas and group markers more easily when zoomed out
-      const clusteringPrecision = zoomTier === 0 ? 1.2 : zoomTier === 1 ? 2.5 : 4.5;
+      // Inverted precision scale: Lower zoom levels (zoomed out) now have larger grid multipliers to force aggressive clustering, while higher zoom levels (zoomed in) use smaller multipliers to uncluster nodes.
+      const clusteringPrecision = zoomTier === 0 ? 5.0 : zoomTier === 1 ? 2.5 : 0.8;
       
       const coordinateBins: Record<string, typeof filteredStreams> = {};
       filteredStreams.forEach((s) => {
@@ -668,7 +668,6 @@ export default function WorldMap({
       <div className="relative w-full h-[400px] md:h-[480px] overflow-hidden border-2 z-0 p-1 rounded-none">
         <div ref={mapContainerRef} className="w-full h-full text-zinc-900 relative" style={{ background: "#0d0e12" }} />
 
-        {/* HIDE ON MOBILE: Replaced 'flex' with 'hidden sm:flex' to cleanly hide legend on mobile viewports */}
         <div className={`absolute bottom-4 left-4 z-[1000] border-2 p-3.5 text-[10px] hidden sm:flex flex-col gap-3 rounded-none max-w-[240px] shadow-xl font-mono tracking-tight ${
           theme === "light" ? "bg-white border-zinc-900 text-zinc-900" : "bg-zinc-950/95 border-neutral-800 text-neutral-200"
         }`}>
