@@ -371,6 +371,11 @@ export default function WorldMap({
         const element = marker.getElement();
         if (!element) return;
 
+        // Ensure transition styling is present for smooth fading
+        if (!element.style.transition) {
+          element.style.transition = "opacity 0.25s ease-in-out";
+        }
+
         const markerRadLat = (lat * Math.PI) / 180;
         const markerRadLon = (lon * Math.PI) / 180;
 
@@ -379,23 +384,31 @@ export default function WorldMap({
         const markerY = Math.cos(markerRadLat) * Math.sin(markerRadLon);
         const markerZ = Math.sin(markerRadLat);
 
-        // Dot product to check if marker is facing the camera
+        // Dot product to check alignment with camera facing direction
         const dotProduct = camX * markerX + camY * markerY + camZ * markerZ;
 
-        // If dotProduct < 0.05, the marker is on the back side of the globe
-        if (dotProduct < 0.05) {
-          element.style.opacity = "0";
-          element.style.pointerEvents = "none";
-        } else {
+        // Smooth threshold buffer: 
+        // dotProduct > 0.15 = Fully visible
+        // dotProduct between -0.05 and 0.15 = Smooth fade transition near the horizon edge
+        // dotProduct < -0.05 = Completely hidden on the back side
+        if (dotProduct > 0.15) {
           element.style.opacity = "1";
           element.style.pointerEvents = "auto";
+        } else if (dotProduct > -0.05) {
+          // Calculate a smooth proportional opacity for the horizon edge
+          const opacityVal = (dotProduct - (-0.05)) / (0.15 - (-0.05));
+          element.style.opacity = opacityVal.toFixed(2);
+          element.style.pointerEvents = "none";
+        } else {
+          element.style.opacity = "0";
+          element.style.pointerEvents = "none";
         }
       });
     } catch (e) {
       console.error(e);
     }
   };
-
+  
   useEffect(() => {
     if (!mapContainerRef.current) return;
     wipeMapInstances();
