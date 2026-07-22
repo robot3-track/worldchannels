@@ -24,7 +24,7 @@ export interface TutorialStep {
 
 export type CategoryFilter = 
   | "all" 
-  | "favorites" // new feature for my latest commit lol!
+  | "favorites"
   | "world cup" 
   | "general" 
   | "sports" 
