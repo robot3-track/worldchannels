@@ -3423,7 +3423,7 @@ export default async function handler(request, response) {
       allStreams = allStreams.concat(list.slice(0, 400));
     });
 
-    // Deduplication, Namespace Compliance, and Status Estimation
+    // Deduplication, Namespace Compliance, and Status Estimation update loading times as well
     const uniqueStreams = [];
     const seenUrls = new Set();
 
