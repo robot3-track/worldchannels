@@ -3406,6 +3406,7 @@ export default async function handler(request, response) {
       { url: "https://raw.githubusercontent.com/IgorMunarim/Canais-1/38abd63f0c7116896ecf1957398b88a523ae3025/auto-racing.m3u", category: "sports"},
       { url: "https://ncdn.telewebion.ir/faratar/live/playlist.m3u8", category: "world cup", country: "IR" },
       { url: "https://raw.githubusercontent.com/Free-TV/IPTV/master/playlist.m3u8", category: "country"},
+      { url: "https://raw.githubusercontent.com/shiheb/iptv-player/87b8f4a47139f4d4e6c6b7fa04467e4c55658f41/Arabe/Palestine.m3u", category: "country", country: "PS"},
       { url: "https://raw.githubusercontent.com/razuahammad55/live-tv-hub/e5a0c3b9be5e13921772edb85fd1533bbe4a4e56/t/m.m3u", category: "general"},
       { url: "https://raw.githubusercontent.com/awoodal57/DrewLive/7a3a8e92eae1d8575a7e421f6859a83dc6296353/Roku.m3u8", category: "general"},
       { url: "https://raw.githubusercontent.com/Matnos2/listas/b0e39548ca23939f8c64ea1398b24bd557486e04/m3u8/plex-all.m3u8", category: "general"},
