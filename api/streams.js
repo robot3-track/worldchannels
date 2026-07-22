@@ -3704,6 +3704,7 @@ export default async function handler(request, response) {
       { url: "https://raw.githubusercontent.com/iprd-org/iprd/4c77a2c0daa82256491fee4442582be3af1799aa/streams/va/va.m3u", category: "country", country: "VA"},
       { url: "https://raw.githubusercontent.com/shiheb/iptv-player/87b8f4a47139f4d4e6c6b7fa04467e4c55658f41/Arabe/Palestine.m3u", category: "country", country: "PS"},
       { url: "https://raw.githubusercontent.com/razuahammad55/live-tv-hub/e5a0c3b9be5e13921772edb85fd1533bbe4a4e56/t/m.m3u", category: "general"},
+      { url: "https://raw.githubusercontent.com/judy-gotv/iptv/refs/heads/main/samsung.m3u", category: "general"},
       { url: "https://raw.githubusercontent.com/awoodal57/DrewLive/7a3a8e92eae1d8575a7e421f6859a83dc6296353/Roku.m3u8", category: "general"},
       { url: "https://raw.githubusercontent.com/Matnos2/listas/b0e39548ca23939f8c64ea1398b24bd557486e04/m3u8/plex-all.m3u8", category: "general"},
       { url: "https://raw.githubusercontent.com/Kkbrothers8795/world_ip_tv/b7de4c521881561b0f9ea6087f3503c9e7d07509/output/news.m3u", category: "news"},
