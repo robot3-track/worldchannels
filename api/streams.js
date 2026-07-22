@@ -3400,7 +3400,7 @@ export default async function handler(request, response) {
       { url: "https://iptv-org.github.io/iptv/countries/kp.m3u", category: "country", country: "KP" },
       { url: "https://iptv-org.github.io/iptv/countries/mx.m3u", category: "country", country: "MX" },
       { url: "https://iptv-org.github.io/iptv/countries/eg.m3u", category: "country", country: "EG" },
-      { url: "https://iptv-org.github.io/iptv/countries/va.m3u", category: "country", country: "VA"},
+      { url: "https://iptv-org.github.io/iptv/countries/va.m3u", category: "country", country: "VA" },
       { url: "https://raw.githubusercontent.com/LITUATUI/M3UPT/refs/heads/main/M3U/M3UPT.m3u", category: "general"},
       { url: "https://raw.githubusercontent.com/IgorMunarim/Canais-1/38abd63f0c7116896ecf1957398b88a523ae3025/mundo.m3u", category: "news"},
       { url: "https://raw.githubusercontent.com/alirezaaziz/deu/7e0ce6e2b0f6da9bd76f89162686a716cc4c479d/iran.m3u", category: "country", country: "IR"},
