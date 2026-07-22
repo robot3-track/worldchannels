@@ -13,7 +13,7 @@ import http from "http";
 //   status: "online" | "unstable" | "offline";
 //   lat: number;
 //   lon: number;
-// }
+// } fix loading times
 
 // Map of country names to Lat/Lon coordinates
 const countryCoords = {
