@@ -1,4 +1,5 @@
 ![Global Channels Map](Screenshot%202026-07-19%20192741.png)
+
 [![Build Android APK Artifact](https://github.com/robot3-track/worldchannels/actions/workflows/android-build.yml/badge.svg)](https://github.com/robot3-track/worldchannels/actions/workflows/android-build.yml)
 # Global Broadcast Network
 
@@ -11,7 +12,7 @@ A high-performance, real-time IPTV streaming dashboard designed for the global n
 - **Real-Time Health Monitoring**: Automatic background verification of stream uptime and latency.
 - **Themed UI**: Elegant Dark and Light modes for optimized viewing in any environment.
 - **Bookmarks**: Bookmark and save your favorite channels locally! You can edit your list anytime by deleting or adding channels.
-- **History**: View you channel watched history for easy access!
+- **History**: View your channel watched history for easy access!
 
 ![Livestream Center](Screenshot%202026-06-30%20201430.png)
 
