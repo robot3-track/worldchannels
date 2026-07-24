@@ -1,4 +1,5 @@
 ![Global Channels Map](Screenshot%202026-07-19%20192741.png)
+[![Build Android APK Artifact](https://github.com/robot3-track/worldchannels/actions/workflows/android-build.yml/badge.svg)](https://github.com/robot3-track/worldchannels/actions/workflows/android-build.yml)
 # Global Broadcast Network
 
 A high-performance, real-time IPTV streaming dashboard designed for the global news & sports events. This application provides a unified interface to access sports feeds, national broadcasters, and real-time news from across the globe.
