@@ -6,6 +6,32 @@ import http from "http";
 const HTTP_AGENT = new http.Agent({ keepAlive: true, maxSockets: 32 });
 const HTTPS_AGENT = new https.Agent({ keepAlive: true, maxSockets: 32 });
 
+// Small LRU cache helper used for m3u and location caches
+function createLRU(limit) {
+  const map = new Map();
+  return {
+    get(key) {
+      const v = map.get(key);
+      if (v === undefined) return undefined;
+      map.delete(key);
+      map.set(key, v);
+      return v;
+    },
+    set(key, value) {
+      if (map.has(key)) map.delete(key);
+      map.set(key, value);
+      if (map.size > limit) {
+        const oldest = map.keys().next().value;
+        map.delete(oldest);
+      }
+    },
+    delete(key) { return map.delete(key); },
+    has(key) { return map.has(key); },
+    clear() { map.clear(); },
+    get size() { return map.size; }
+  };
+}
+
 // Interface for streams (JS version)
 // {
 //   id: string;
@@ -670,8 +696,8 @@ const landCentroids = [
     { country: "Global", lat: 39.8283, lon: -98.5795 }
   ];
 
-const channelLocationCache = new Map();
 const LOCATION_CACHE_LIMIT = 50000;
+const channelLocationCache = createLRU(LOCATION_CACHE_LIMIT);
 
 function resolveChannelLocation(channelName, m3uCountry) {
   const safeName = String(channelName || "");
@@ -721,14 +747,15 @@ function resolveChannelLocation(channelName, m3uCountry) {
   return result;
 }
 
-const STREAM_CACHE_TTL = 5 * 60 * 1000;
-const M3U_CACHE_TTL = 5 * 60 * 1000; // cache M3U downloads per-source for 5 minutes
+const STREAM_CACHE_TTL = Number(process.env.STREAM_CACHE_TTL_MS) || 30 * 60 * 1000; // 30 minutes default
+const M3U_CACHE_TTL = Number(process.env.M3U_CACHE_TTL_MS) || 6 * 60 * 60 * 1000; // 6 hours default (lists change infrequently)
 let streamCache = null;
 let streamCacheExpires = 0;
 let streamBuildPromise = null;
 
-// Per-URL M3U fetch cache and failure/backoff tracking
-const m3uFetchCache = new Map(); // url -> { data, expiresAt }
+// Per-URL M3U fetch cache and failure/backoff tracking (LRU to bound memory)
+const m3uFetchCache = createLRU(1000); // store recent 1000 source responses
+const m3uFetchInProgress = new Map();
 const sourceFailureCounts = new Map(); // url -> failure count
 const sourceFailedUntil = new Map(); // url -> timestamp (ms) until which we skip attempts
 
@@ -755,18 +782,10 @@ async function mapWithConcurrency(items, limit, worker) {
 }
 
 
-function downloadM3U(urlStr) {
+// Network fetcher that downloads an M3U and updates caches. Returns data string.
+function fetchAndCacheM3U(urlStr) {
   return new Promise((resolve) => {
     try {
-      const now = Date.now();
-      // return cached data if still valid
-      const cached = m3uFetchCache.get(urlStr);
-      if (cached && cached.expiresAt > now) return resolve(cached.data);
-
-      // if source recently failed, skip attempts until backoff expires
-      const failedUntil = sourceFailedUntil.get(urlStr);
-      if (failedUntil && failedUntil > now) return resolve("");
-
       const client = urlStr.startsWith("https") ? https : http;
       const agent = urlStr.startsWith("https") ? HTTPS_AGENT : HTTP_AGENT;
 
@@ -781,7 +800,6 @@ function downloadM3U(urlStr) {
       }, (res) => {
         if (res.statusCode !== 200) {
           res.resume();
-          // record failure/backoff
           const failures = (sourceFailureCounts.get(urlStr) || 0) + 1;
           sourceFailureCounts.set(urlStr, failures);
           sourceFailedUntil.set(urlStr, Date.now() + Math.min(60_000 * failures, 15 * 60 * 1000));
@@ -794,7 +812,6 @@ function downloadM3U(urlStr) {
         res.on("data", (chunk) => {
           bytes += chunk.length;
           if (bytes > MAX_BYTES) {
-            // too large, abort and treat as empty
             try { req.destroy(); } catch (e) {}
             return resolve("");
           }
@@ -826,12 +843,49 @@ function downloadM3U(urlStr) {
         sourceFailedUntil.set(urlStr, Date.now() + Math.min(60_000 * failures, 15 * 60 * 1000));
         resolve("");
       });
+
       req.on("error", () => {
         const failures = (sourceFailureCounts.get(urlStr) || 0) + 1;
         sourceFailureCounts.set(urlStr, failures);
         sourceFailedUntil.set(urlStr, Date.now() + Math.min(60_000 * failures, 15 * 60 * 1000));
         resolve("");
       });
+    } catch (e) {
+      resolve("");
+    }
+  });
+}
+
+function downloadM3U(urlStr) {
+  return new Promise((resolve) => {
+    try {
+      const now = Date.now();
+      // return cached data if still valid
+      const cached = m3uFetchCache.get(urlStr);
+      if (cached && cached.expiresAt > now) return resolve(cached.data);
+
+      // If we have an expired cached value, serve stale immediately and refresh in background
+      if (cached && cached.expiresAt <= now) {
+        if (!m3uFetchInProgress.has(urlStr)) {
+          const p = fetchAndCacheM3U(urlStr).finally(() => m3uFetchInProgress.delete(urlStr));
+          m3uFetchInProgress.set(urlStr, p);
+        }
+        return resolve(cached.data);
+      }
+
+      // if source recently failed, skip attempts until backoff expires
+      const failedUntil = sourceFailedUntil.get(urlStr);
+      if (failedUntil && failedUntil > now) return resolve("");
+
+      // no cached data - fetch now (dedupe with in-progress map)
+      if (m3uFetchInProgress.has(urlStr)) {
+        m3uFetchInProgress.get(urlStr).then((d) => resolve(d));
+        return;
+      }
+
+      const fetchPromise = fetchAndCacheM3U(urlStr);
+      m3uFetchInProgress.set(urlStr, fetchPromise);
+      fetchPromise.finally(() => m3uFetchInProgress.delete(urlStr)).then((data) => resolve(data));
     } catch (e) {
       resolve("");
     }
