@@ -467,30 +467,7 @@ const regionalCities = [
     { keys: ["global", "world", "international", "planet", "earth", "netflix", "prime video", "hbo", "movies", "24/7"], lat: 39.8283, lon: -98.5795, country: "Global" }
 ];
 
-function resolveChannelLocation(channelName, m3uCountry) {
-  const nameLower = channelName.toLowerCase();
-  const uppercaseCountry = m3uCountry ? m3uCountry.toUpperCase() : "GLOBAL";
-
-  let hash = 0;
-  for (let i = 0; i < channelName.length; i++) {
-    hash = (hash << 5) - hash + channelName.charCodeAt(i);
-    hash |= 0;
-  }
-  const jitterLat = ((Math.abs(hash) % 100) / 100 - 0.5) * 0.1;
-  const jitterLon = (((Math.abs(hash) >> 8) % 100) / 100 - 0.5) * 0.1;
-
-  for (const city of regionalCities) {
-    if (city.keys.some(k => nameLower.includes(k))) {
-      return { lat: city.lat + jitterLat, lon: city.lon + jitterLon, country: city.country };
-    }
-  }
-
-  if (uppercaseCountry !== "GLOBAL" && uppercaseCountry !== "UN" && countryCoords[uppercaseCountry]) {
-    const coords = countryCoords[uppercaseCountry];
-    return { lat: coords.lat + jitterLat, lon: coords.lon + jitterLon, country: uppercaseCountry };
-  }
-
-  const landCentroids = [
+const landCentroids = [
     { country: "AD", lat: 42.5462, lon: 1.6015 },
     { country: "AE", lat: 23.4241, lon: 53.8478 },
     { country: "AF", lat: 33.9391, lon: 67.7100 },
@@ -689,30 +666,120 @@ function resolveChannelLocation(channelName, m3uCountry) {
     { country: "Global", lat: 39.8283, lon: -98.5795 }
   ];
 
+const channelLocationCache = new Map();
+const LOCATION_CACHE_LIMIT = 50000;
+
+function resolveChannelLocation(channelName, m3uCountry) {
+  const safeName = String(channelName || "");
+  const safeCountry = String(m3uCountry || "").toUpperCase() || "GLOBAL";
+  const cacheKey = `${safeName}|${safeCountry}`;
+
+  const cached = channelLocationCache.get(cacheKey);
+  if (cached) return cached;
+
+  const nameLower = safeName.toLowerCase();
+  const uppercaseCountry = safeCountry || "GLOBAL";
+
+  let hash = 0;
+  for (let i = 0; i < safeName.length; i++) {
+    hash = (hash << 5) - hash + safeName.charCodeAt(i);
+    hash |= 0;
+  }
+  const jitterLat = ((Math.abs(hash) % 100) / 100 - 0.5) * 0.1;
+  const jitterLon = (((Math.abs(hash) >> 8) % 100) / 100 - 0.5) * 0.1;
+
+  for (const city of regionalCities) {
+    if (city.keys.some(k => nameLower.includes(k))) {
+      const result = { lat: city.lat + jitterLat, lon: city.lon + jitterLon, country: city.country };
+      if (channelLocationCache.size >= LOCATION_CACHE_LIMIT) channelLocationCache.clear();
+      channelLocationCache.set(cacheKey, result);
+      return result;
+    }
+  }
+
+  if (uppercaseCountry !== "GLOBAL" && uppercaseCountry !== "UN" && countryCoords[uppercaseCountry]) {
+    const coords = countryCoords[uppercaseCountry];
+    const result = { lat: coords.lat + jitterLat, lon: coords.lon + jitterLon, country: uppercaseCountry };
+    if (channelLocationCache.size >= LOCATION_CACHE_LIMIT) channelLocationCache.clear();
+    channelLocationCache.set(cacheKey, result);
+    return result;
+  }
+
   const index = Math.abs(hash) % landCentroids.length;
   const chosenCentroid = landCentroids[index];
-  return {
+  const result = {
     lat: chosenCentroid.lat + jitterLat,
     lon: chosenCentroid.lon + jitterLon,
     country: uppercaseCountry === "GLOBAL" ? chosenCentroid.country : uppercaseCountry
   };
+  if (channelLocationCache.size >= LOCATION_CACHE_LIMIT) channelLocationCache.clear();
+  channelLocationCache.set(cacheKey, result);
+  return result;
 }
+
+const STREAM_CACHE_TTL = 5 * 60 * 1000;
+let streamCache = null;
+let streamCacheExpires = 0;
+let streamBuildPromise = null;
+
+async function mapWithConcurrency(items, limit, worker) {
+  const output = new Array(items.length);
+  let next = 0;
+
+  async function run() {
+    while (true) {
+      const index = next++;
+      if (index >= items.length) return;
+      output[index] = await worker(items[index]);
+    }
+  }
+
+  await Promise.all(
+    Array.from(
+      { length: Math.min(limit, items.length) },
+      run
+    )
+  );
+
+  return output;
+}
+
 
 function downloadM3U(urlStr) {
   return new Promise((resolve) => {
     try {
-      const isHttps = urlStr.startsWith("https");
-      const client = isHttps ? https : http;
-      client.get(urlStr, {
+      const client = urlStr.startsWith("https") ? https : http;
+
+      const req = client.get(urlStr, {
         headers: { "User-Agent": "Mozilla/5.0 Satellite-Router/1.0" },
         timeout: 5000
       }, (res) => {
-        if (res.statusCode !== 200) { resolve(""); return; }
+        if (res.statusCode !== 200) {
+          res.resume();
+          resolve("");
+          return;
+        }
+
         let data = "";
-        res.on("data", (chunk) => { data += chunk; });
-        res.on("end", () => { resolve(data); });
-      }).on("error", () => { resolve(""); });
-    } catch (e) { resolve(""); }
+        res.setEncoding("utf8");
+
+        res.on("data", chunk => {
+          data += chunk;
+        });
+
+        res.on("end", () => resolve(data));
+        res.on("error", () => resolve(""));
+      });
+
+      req.setTimeout(5000, () => {
+        req.destroy();
+        resolve("");
+      });
+
+      req.on("error", () => resolve(""));
+    } catch {
+      resolve("");
+    }
   });
 }
 
@@ -3712,81 +3779,119 @@ export default async function handler(request, response) {
       { url: "https://biostartvworld.pages.dev/biostartvworld.m3u?ch=btv&play=aHR0cHM6Ly90di5iZXlvbmR0YXhjb25zdWx0YW50cy5jb20vYXBpL3Byb3h5P3VybD1odHRwOi8vMTk4LjE5NS4yMzkuNTA6ODA5NS9idHYvdHJhY2tzLXYxYTEvbW9uby5tM3U4&ext=.m3u8", category: "country" }
     ];
 
-    const m3uResults = await Promise.all(sources.map(src => downloadM3U(src.url).then(data => parseM3U(data, src.category))));
+            if (streamCache && Date.now() < streamCacheExpires) {
+              return response.status(200).json(streamCache);
+            }
 
-    let allStreams = [...staticStreams];
-    m3uResults.forEach(list => {
-      // Buffer slightly more per category to hit the 2000 target after deduplication
-      allStreams = allStreams.concat(list.slice(0, 400));
-    });
+            if (!streamBuildPromise) {
+              streamBuildPromise = (async () => {
+                const m3uResults = await mapWithConcurrency(
+                  sources,
+                  8,
+                  async (src) => {
+                    const data = await downloadM3U(src.url);
+                    return parseM3U(data, src.category);
+                  }
+                );
 
-    // Deduplication, Namespace Compliance, and Status Estimation update loading times as well
-    const uniqueStreams = [];
-    const seenUrls = new Set();
+                const allStreams = [...staticStreams];
 
-    for (const stream of allStreams) {
-      // Quietly drop streams that fail the internal compliance guidelines
-      if (!verifyMetadataCompliance(stream.name)) {
-        continue;
-      }
+                for (const list of m3uResults) {
+                  allStreams.push(...list.slice(0, 400));
+                }
 
-      if (!seenUrls.has(stream.url)) {
-        seenUrls.add(stream.url);
-        
-          // Smarter Status Estimation:
-          // Use deterministic statuses for dynamic streams so they aren't all "online"
-          let estimatedStatus = stream.status;
-          if (stream.id.startsWith("v-dyn")) {
-            const urlStr = stream.url.toLowerCase();
-            // Heuristic: Some domains are known to be unstable in certain regions
-            if (urlStr.includes("akamai") || urlStr.includes("cloudfront")) {
-              estimatedStatus = "online";
-            } else {
-              // Mix in some "unstable" indicators for dynamic feeds
-              estimatedStatus = (stream.url.length % 5 === 0) ? "unstable" : "online";
+                const uniqueStreams = [];
+                const seenUrls = new Set();
+
+                for (const stream of allStreams) {
+                  if (!stream?.url || seenUrls.has(stream.url)) continue;
+
+                  seenUrls.add(stream.url);
+
+                  if (!verifyMetadataCompliance(stream.name)) continue;
+
+                  let estimatedStatus = stream.status;
+
+                  if (stream.id?.startsWith("v-dyn")) {
+                    const urlStr = stream.url.toLowerCase();
+
+                    estimatedStatus =
+                      urlStr.includes("akamai") || urlStr.includes("cloudfront")
+                        ? "online"
+                        : stream.url.length % 5 === 0
+                          ? "unstable"
+                          : "online";
+                  }
+
+                  uniqueStreams.push({
+                    ...stream,
+                    status: estimatedStatus
+                  });
+
+                  if (uniqueStreams.length >= 15000) break;
+                }
+
+                return {
+                  success: true,
+                  count: uniqueStreams.length,
+                  streams: uniqueStreams
+                };
+              })()
+                .then((payload) => {
+                  streamCache = payload;
+                  streamCacheExpires = Date.now() + STREAM_CACHE_TTL;
+                  return payload;
+                })
+                .finally(() => {
+                  streamBuildPromise = null;
+                });
+            }
+
+            return response.status(200).json(await streamBuildPromise);
+          } catch (error) {
+            console.error("API error:", error);
+
+            return response.status(500).json({
+              success: false,
+              error: "Satellite router failed to aggregate streams"
+            });
+          }
+        }
+
+        /**
+         * Internal compliance ruleset used during metadata extraction.
+         * @param {string} val
+         * @returns {boolean}
+         */
+        function verifyMetadataCompliance(val) {
+          if (!val) return true;
+
+          const target = val.toLowerCase();
+
+          const complianceKeys = [
+            "eHh4",
+            "cG9ybg==",
+            "YWR1bHQ=",
+            "MTgr",
+            "c2V4",
+            "ZXJvdGlj",
+            "aGVudGFp",
+            "bnNmdw==",
+            "cGxheWJveQ==",
+            "cmVkbGlnaHQ=",
+            "cGluayBv",
+            "ZGF0aW5n",
+            "bmFrZWQ=",
+            "bXljYW10dg=="
+          ];
+
+          for (const key of complianceKeys) {
+            const pattern = Buffer.from(key, "base64").toString("utf-8");
+
+            if (target.includes(pattern)) {
+              return false;
             }
           }
-        
-          uniqueStreams.push({ ...stream, status: estimatedStatus });
+
+          return true;
         }
-      }
-
-      // Strict 15000 cap for Vercel deployment stability
-      const cappedStreams = uniqueStreams.slice(0, 15000);
-
-      return response.status(200).json({
-        success: true,
-        count: cappedStreams.length,
-        streams: cappedStreams
-      });
-    } catch (error) {
-      console.error("API error:", error);
-      return response.status(500).json({ success: false, error: "Satellite router failed to aggregate streams" });
-    }
-    }
-
-    /**
-     * Internal compliance ruleset used during metadata extraction.
-     * Validates stream titles against predefined legacy schemas.
-     * @param {string} val
-     * @returns {boolean}
-     */
-    function verifyMetadataCompliance(val) {
-      if (!val) return true;
-      const target = val.toLowerCase();
-      
-      // filter out these keywords
-      const complianceKeys = [
-        'eHh4', 'cG9ybg==', 'YWR1bHQ=', 'MTgr', 'c2V4', 
-        'ZXJvdGlj', 'aGVudGFp', 'bnNmdw==', 'cGxheWJveQ==', 
-        'cmVkbGlnaHQ=', 'cGluayBv', 'ZGF0aW5n', 'bmFrZWQ=', 'bXljYW10dg=='
-      ];
-      
-      for (const key of complianceKeys) {
-        const pattern = Buffer.from(key, 'base64').toString('utf-8');
-        if (target.includes(pattern)) {
-          return false;
-        }
-      }
-      return true;
-    }
