@@ -465,9 +465,6 @@ export default function App() {
             <div>
               <div className="flex items-center gap-2">
                 <h1 className="text-sm font-semibold tracking-tight uppercase">World Channels</h1>
-                <span className="text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded border border-emerald-500/20">
-                  NETWORK LIVE
-                </span>
               </div>
               <p className={`text-xs ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
                 Global Television Network & Feed Directory
@@ -507,7 +504,7 @@ export default function App() {
               }`}
             >
               {theme === "light" ? <Moon className="w-3.5 h-3.5 text-slate-700" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
-              <span>{theme === "light" ? "Dark Theme" : "Light Theme"}</span>
+              <span>{theme === "light" ? "Switch toDark Theme" : "Switch to Light Theme"}</span>
             </button>
 
             <div className={`hidden md:flex items-center gap-3 px-3 py-1.5 border rounded-md text-xs font-mono ${
