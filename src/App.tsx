@@ -21,38 +21,38 @@ import { SubmitStreamModal } from "./components/SubmitStreamModal";
 const TUTORIAL_STEPS: TutorialStep[] = [
   {
     targetClass: "world-map-step",
-    title: "Global Map Tracker",
-    description: "Click any glowing coordinate node on this map to immediately bind a satellite connection and load that region's local broadcast.",
+    title: "Global Interactive Map",
+    description: "Select any active coordinate node across the globe to initialize the satellite connection and stream local broadcasts.",
     preferredPlacement: "bottom", 
     overlap: true 
   },
   {
     targetClass: "search-bar-step",
-    title: "Instant Search",
-    description: "Type here to quickly filter channels by name, tags, or countries. Pro tip: Press the [/] key anywhere on your keyboard to instantly jump here.",
+    title: "Directory Search",
+    description: "Filter live feeds by station name, network tags, or region. Shortcut: Press [/] anywhere to focus search.",
     preferredPlacement: "left"
   },
   {
     targetClass: "category-filter-step",
-    title: "Filter by Category",
-    description: "Easily narrow down feeds. Toggle between Sports, News, Documentaries, or general Free TV to clean up your channel options.",
+    title: "Category Filtering",
+    description: "Segment incoming signals by genre, including News, Sports, Documentaries, or General Entertainment.",
     preferredPlacement: "left"
   },
   {
     targetClass: "channel-list-step",
-    title: "Channel Registry",
-    description: "Scroll and select available channels here. Use your Up/Down arrow keys on your keyboard to navigate quickly, and press Enter to select.",
+    title: "Station Directory",
+    description: "Browse available broadasting feeds. Navigate using standard arrow keys and press Enter to select.",
     preferredPlacement: "left"
   },
   {
     targetClass: "player-step",
-    title: "Live Video Feed",
-    description: "Your main monitoring screen. If a stream fails, use the console tools directly beneath this screen to automatically fetch a working backup channel.",
+    title: "Primary Broadcast Output",
+    description: "Main video stream display. Signal fallback controls are located directly below for switching to redundant backup sources.",
     preferredPlacement: "right"
   }
 ];
 
-const TUTORIAL_STORAGE_KEY = "deck_tutorial_completed_v8_final";
+const TUTORIAL_STORAGE_KEY = "world_channels_onboarding_completed_v1";
 
 export default function App() {
   const [streams, setStreams] = useState<StreamChannel[]>([]);
@@ -63,27 +63,24 @@ export default function App() {
   const [theme, setTheme] = useState<"light" | "dark">("dark");
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   
-  // Save to Deck (Favorites) State
   const [bookmarkedIds, setBookmarkedIds] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem("deck_favorites_v1");
+      const saved = localStorage.getItem("world_channels_favorites_v1");
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
     }
   });
 
-  // Track the last 4 recently played channel IDs
   const [recentChannelIds, setRecentChannelIds] = useState<string[]>(() => {
     try {
-      const saved = localStorage.getItem("deck_recent_channels_v1");
+      const saved = localStorage.getItem("world_channels_recents_v1");
       return saved ? JSON.parse(saved) : [];
     } catch {
       return [];
     }
   });
 
-  // Tutorial States
   const [runTutorial, setRunTutorial] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [tooltipCoords, setTooltipCoords] = useState({ 
@@ -100,17 +97,14 @@ export default function App() {
     categoriesCount: { sports: 0, news: 0, science: 0, freetv: 0, country: 0 }
   });
 
-  // Sync Bookmarks to LocalStorage
   useEffect(() => {
-    localStorage.setItem("deck_favorites_v1", JSON.stringify(bookmarkedIds));
+    localStorage.setItem("world_channels_favorites_v1", JSON.stringify(bookmarkedIds));
   }, [bookmarkedIds]);
 
-  // Sync Recently Played to LocalStorage
   useEffect(() => {
-    localStorage.setItem("deck_recent_channels_v1", JSON.stringify(recentChannelIds));
+    localStorage.setItem("world_channels_recents_v1", JSON.stringify(recentChannelIds));
   }, [recentChannelIds]);
 
-  // Toggle Bookmark Callback
   const handleToggleBookmark = useCallback((channelId: string) => {
     setBookmarkedIds((prev) =>
       prev.includes(channelId)
@@ -119,9 +113,8 @@ export default function App() {
     );
   }, []);
 
-  // Clear Entire Saved Deck Handler
   const handleClearAllBookmarks = useCallback(() => {
-    if (window.confirm("Are you sure you want to clear your entire Saved Deck?")) {
+    if (window.confirm("Are you sure you want to clear all bookmarked stations?")) {
       setBookmarkedIds([]);
     }
   }, []);
@@ -267,11 +260,11 @@ export default function App() {
           setSelectedChannel(data.streams[0]);
         }
       } else {
-        throw new Error("Invalid API response format");
+        throw new Error("Invalid response standard");
       }
     } catch (err: any) {
-      console.error("Error fetching streams:", err);
-      setError("Failed to boot up stream satellite router. Reconnecting...");
+      console.error("Broadcast acquisition error:", err);
+      setError("Unable to initialize broadcast signal network. Attempting re-connection...");
     } finally {
       setLoading(false);
     }
@@ -338,7 +331,7 @@ export default function App() {
         backups: data.backups || []
       };
     } catch (err) {
-      console.error("Failed reporting broken link:", err);
+      console.error("Signal incident logging error:", err);
       return { success: false, backupAvailable: false, backups: [] };
     }
   }, []);
@@ -358,7 +351,6 @@ export default function App() {
   const handleSelectChannel = useCallback((channel: StreamChannel) => {
     setSelectedChannel(channel);
     
-    // Update recently played feed history (keep unique, max 4 items, latest first)
     setRecentChannelIds((prev) => {
       const filtered = prev.filter((id) => id !== channel.id);
       return [channel.id, ...filtered].slice(0, 4);
@@ -404,7 +396,7 @@ export default function App() {
           lastCount = newCount;
         }
       } catch (err) {
-        console.error("Error background-syncing streams:", err);
+        console.error("Background network synchronization error:", err);
       }
       timeoutId = setTimeout(syncAllStreams, pollInterval);
     };
@@ -439,13 +431,12 @@ export default function App() {
     const activeStep = TUTORIAL_STEPS[currentStep];
     if (activeStep.targetClass === stepClass) {
       return theme === "light"
-        ? "ring-4 ring-indigo-600 ring-offset-4 ring-offset-[#faf9f6] z-40 relative scale-[1.002] transition-all duration-300 shadow-xl"
-        : "ring-4 ring-indigo-500 ring-offset-4 ring-offset-[#0d0e12] z-40 relative scale-[1.002] transition-all duration-300 shadow-[0_0_30px_rgba(99,102,241,0.3)]";
+        ? "ring-2 ring-blue-600 ring-offset-2 ring-offset-slate-50 z-40 relative transition-all duration-300 shadow-md"
+        : "ring-2 ring-blue-500 ring-offset-2 ring-offset-slate-950 z-40 relative transition-all duration-300 shadow-lg shadow-blue-500/10";
     }
-    return "opacity-30 transition-all duration-300 pointer-events-none";
+    return "opacity-40 transition-all duration-300 pointer-events-none";
   };
 
-  // Filter streams strictly based on bookmark selection and category selection
   const filteredStreams = streams.filter((stream) => {
     if (selectedCategory === "favorites") {
       return bookmarkedIds.includes(stream.id);
@@ -454,110 +445,114 @@ export default function App() {
   });
 
   return (
-    <div className={`min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-300 selection:bg-emerald-500/20 selection:text-emerald-500 ${
-      theme === "light" ? "bg-[#faf9f6] text-zinc-900" : "bg-[#0d0e12] text-neutral-100"
+    <div className={`min-h-screen flex flex-col relative overflow-x-hidden transition-colors duration-200 selection:bg-blue-500/20 selection:text-blue-500 ${
+      theme === "light" ? "bg-slate-50 text-slate-900" : "bg-slate-950 text-slate-100"
     }`}>
       
-      {/* Header */}
-      <header className={`border-b-2 sticky top-0 z-50 transition-all duration-300 font-sans ${
-        theme === "light" ? "border-zinc-900 bg-[#faf9f6]" : "border-neutral-800 bg-[#0d0e12]"
+      {/* Broadcast Header */}
+      <header className={`border-b sticky top-0 z-50 backdrop-blur-md transition-colors duration-200 ${
+        theme === "light" 
+          ? "border-slate-200 bg-white/90" 
+          : "border-slate-800/80 bg-slate-950/90"
       }`}>
-        <div className="max-w-7xl mx-auto px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className={`w-10 h-10 border-2 flex items-center justify-center relative rounded-none ${
-              theme === "light" ? "bg-white border-zinc-950 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" : "bg-neutral-950 border-neutral-850 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.5)]"
+            <div className={`w-9 h-9 flex items-center justify-center rounded-lg transition-colors ${
+              theme === "light" ? "bg-slate-100 border border-slate-200" : "bg-slate-900 border border-slate-800"
             }`}>
-              <Globe className={`w-4 h-4 text-indigo-500 ${loading ? 'animate-spin' : ''}`} />
-              <span className="absolute top-0 left-0 text-[6px] font-mono text-zinc-400 dark:text-neutral-500 p-0.5">SYS</span>
+              <Globe className={`w-5 h-5 text-blue-500 ${loading ? 'animate-spin' : ''}`} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-sm font-black uppercase tracking-tight">World Channels</h1>
-                <span className="text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 border border-emerald-500/20">Live</span>
+                <h1 className="text-sm font-semibold tracking-tight uppercase">World Channels</h1>
+                <span className="text-[10px] font-mono font-medium bg-emerald-500/10 text-emerald-500 px-2 py-0.5 rounded border border-emerald-500/20">
+                  NETWORK LIVE
+                </span>
               </div>
-              <p className={`text-[10px] font-mono uppercase tracking-wider ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
-                Global Channel Explorer
+              <p className={`text-xs ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
+                Global Television Network & Feed Directory
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-2 text-xs font-mono">
-            {/* Clear Deck Shortcut Button */}
+          <div className="flex items-center gap-2 text-xs">
             {bookmarkedIds.length > 0 && (
               <button
                 onClick={handleClearAllBookmarks}
-                className="px-2.5 py-2 border-2 text-[10px] font-bold uppercase transition-all active:translate-y-0.5 cursor-pointer flex items-center gap-1.5 rounded-none bg-rose-500/5 border-rose-500/30 text-rose-500 hover:bg-rose-500/10"
+                className="px-3 py-1.5 border rounded-md text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 bg-rose-500/10 border-rose-500/20 text-rose-500 hover:bg-rose-500/20"
               >
                 <Trash2 className="w-3.5 h-3.5" />
-                <span>Wipe Deck ({bookmarkedIds.length})</span>
+                <span>Clear Bookmarks ({bookmarkedIds.length})</span>
               </button>
             )}
 
             <button
               onClick={handleRestartTutorial}
-              className={`px-2.5 py-2 border-2 text-[10px] font-bold uppercase transition-all active:translate-y-0.5 cursor-pointer flex items-center gap-1.5 rounded-none ${
+              className={`px-3 py-1.5 border rounded-md text-xs font-medium transition-all cursor-pointer flex items-center gap-1.5 ${
                 theme === "light"
-                  ? "bg-white border-zinc-900 text-zinc-800 hover:bg-zinc-50 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]"
-                  : "bg-neutral-950 border-neutral-800 text-neutral-400 hover:border-neutral-700 hover:text-neutral-200 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.2)]"
+                  ? "bg-white border-slate-200 text-slate-700 hover:bg-slate-100"
+                  : "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800"
               }`}
             >
-              <HelpCircle className="w-3.5 h-3.5 text-indigo-500" />
-              <span>Show Guide</span>
+              <HelpCircle className="w-3.5 h-3.5 text-blue-500" />
+              <span>Platform Tour</span>
             </button>
 
             <button
               onClick={() => setTheme(theme === "light" ? "dark" : "light")}
-              className={`px-2.5 py-2 border-2 text-[10px] font-bold uppercase transition-all active:translate-y-0.5 cursor-pointer flex items-center gap-2 rounded-none ${
+              className={`px-3 py-1.5 border rounded-md text-xs font-medium transition-all cursor-pointer flex items-center gap-2 ${
                 theme === "light"
-                  ? "bg-white border-zinc-900 text-zinc-800 hover:bg-zinc-50 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]"
-                  : "bg-neutral-950 border-neutral-800 text-neutral-400 hover:border-neutral-700 hover:text-neutral-200 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.2)]"
+                  ? "bg-white border-slate-200 text-slate-700 hover:bg-slate-100"
+                  : "bg-slate-900 border-slate-800 text-slate-300 hover:bg-slate-800"
               }`}
             >
-              {theme === "light" ? <Moon className="w-3.5 h-3.5 text-indigo-600" /> : <Sun className="w-3.5 h-3.5 text-amber-500" />}
-              <span>{theme === "light" ? "Switch to Dark Mode" : "Switch to Light Mode"}</span>
+              {theme === "light" ? <Moon className="w-3.5 h-3.5 text-slate-700" /> : <Sun className="w-3.5 h-3.5 text-amber-400" />}
+              <span>{theme === "light" ? "Dark Theme" : "Light Theme"}</span>
             </button>
 
-            <div className={`hidden md:flex items-center gap-3 px-3 py-2 border-2 text-[11px] rounded-none ${
-              theme === "light" ? "bg-white border-zinc-900 text-zinc-600 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" : "bg-neutral-950 border-neutral-800 text-neutral-400 shadow-[2px_2px_0px_0px_rgba(99,102,241,0.2)]"
+            <div className={`hidden md:flex items-center gap-3 px-3 py-1.5 border rounded-md text-xs font-mono ${
+              theme === "light" ? "bg-slate-100 border-slate-200 text-slate-600" : "bg-slate-900 border-slate-800 text-slate-400"
             }`}>
-              <span>FEEDS: <b className={theme === "light" ? "text-zinc-900" : "text-neutral-100"}>{stats.total}</b></span>
-              <div className={`h-3 w-px ${theme === "light" ? "bg-zinc-200" : "bg-neutral-800"}`} />
-              <div className="flex items-center gap-1">
-                <span className="relative flex h-1.5 w-1.5 rounded-none">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-none bg-emerald-400 opacity-75" />
-                  <span className="relative inline-flex rounded-none h-1.5 w-1.5 bg-emerald-500" />
+              <span>Feeds: <b className={theme === "light" ? "text-slate-900" : "text-slate-100"}>{stats.total}</b></span>
+              <div className={`h-3 w-px ${theme === "light" ? "bg-slate-300" : "bg-slate-800"}`} />
+              <div className="flex items-center gap-1.5">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
                 </span>
-                <span>LIVE: <b className="text-emerald-600 dark:text-emerald-400">{stats.online}</b></span>
+                <span>Active: <b className="text-emerald-500">{stats.online}</b></span>
               </div>
             </div>
           </div>
         </div>
       </header>
 
-      {/* Main Grid */}
-      <main className="flex-grow max-w-7xl w-full mx-auto px-6 py-6 md:py-8 flex flex-col gap-6 z-10 font-sans">
+      {/* Main Container */}
+      <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 py-6 flex flex-col gap-6 z-10">
         
-        <div className={`p-3 border-2 text-[11px] font-mono tracking-tight rounded-none ${
-          theme === "light" ? "bg-amber-100 border-zinc-900 text-amber-950" : "bg-[#1c140d] border-neutral-800 text-amber-400"
+        <div className={`p-3 border rounded-lg text-xs tracking-tight ${
+          theme === "light" ? "bg-blue-50/50 border-blue-200/60 text-blue-950" : "bg-blue-950/30 border-blue-900/50 text-blue-200"
         }`}>
           <div className="flex items-center gap-2.5">
-            <Info className="w-3.5 h-3.5 flex-shrink-0 text-amber-500" />
-            <p className="uppercase">
-              Map locations depend on broadcast satellite coordinates. If feeds miss, 
-              <button onClick={() => window.location.reload()} className="mx-1 underline font-bold cursor-pointer">REFRESH SYSTEM</button>.
+            <Info className="w-4 h-4 flex-shrink-0 text-blue-500" />
+            <p>
+              Geographic coordinates represent signal origin points. If a stream becomes unresponsive, 
+              <button onClick={() => window.location.reload()} className="mx-1 font-semibold underline cursor-pointer">re-initialize connection</button>.
             </p>
           </div>
         </div>
 
         {error && (
-          <div className="bg-rose-500/5 border-2 border-rose-500/30 p-4 flex items-center justify-between gap-4 text-xs font-mono text-rose-600 dark:text-rose-400 rounded-none">
-            <span className="font-bold">[LINK_FAILURE]: {error}</span>
-            <button onClick={fetchStreams} className="bg-rose-500/10 hover:bg-rose-500/20 border-2 border-rose-500/30 px-3 py-1.5 uppercase font-bold text-[10px] rounded-none">Retry</button>
+          <div className="bg-rose-500/10 border border-rose-500/20 p-4 rounded-lg flex items-center justify-between gap-4 text-xs font-mono text-rose-500">
+            <span className="font-medium">Connection Alert: {error}</span>
+            <button onClick={fetchStreams} className="bg-rose-500/20 hover:bg-rose-500/30 border border-rose-500/30 px-3 py-1.5 font-medium rounded transition-colors">
+              Reconnect
+            </button>
           </div>
         )}
 
         <>
-          {/* World Map */}
+          {/* Map Display */}
           <section className={`w-full world-map-step ${getSpotlightClass("world-map-step")}`}>
             <WorldMap
               streams={filteredStreams}
@@ -568,15 +563,15 @@ export default function App() {
             />
           </section>
 
-          {/* Video Player & Registry */}
+          {/* Primary Viewport & Controls */}
           <section className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
             
-            {/* Live Player */}
+            {/* Player Main Area */}
             <div id="live-player-section" className={`lg:col-span-8 flex flex-col gap-4 scroll-mt-24 player-step ${getSpotlightClass("player-step")}`}>
-              <div className="flex items-end justify-between pb-1.5 border-b-2 border-zinc-900 dark:border-neutral-800">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
                 <div className="flex items-center gap-2">
-                  <Tv className={`w-3.5 h-3.5 ${theme === "light" ? "text-zinc-800" : "text-neutral-400"}`} />
-                  <h2 className="text-xs font-black uppercase">Live Broadcast Monitor</h2>
+                  <Tv className={`w-4 h-4 ${theme === "light" ? "text-slate-700" : "text-slate-300"}`} />
+                  <h2 className="text-xs font-bold uppercase tracking-wider">Live Broadcast Feed</h2>
                 </div>
               </div>
 
@@ -589,15 +584,15 @@ export default function App() {
                 onToggleBookmark={handleToggleBookmark}
               />
 
-              {/* Recently Played History Strip */}
+              {/* History Bar */}
               {recentChannelIds.length > 0 && (
-                <div className={`p-2 border-2 text-[10px] font-mono flex items-center gap-2 overflow-x-auto rounded-none ${
-                  theme === "light" ? "bg-zinc-100 border-zinc-900" : "bg-neutral-950 border-neutral-850"
+                <div className={`p-2.5 border rounded-lg text-xs flex items-center gap-3 overflow-x-auto ${
+                  theme === "light" ? "bg-white border-slate-200" : "bg-slate-900/60 border-slate-800"
                 }`}>
-                  <span className="text-zinc-500 uppercase font-black tracking-wider flex-shrink-0">
-                    Recent Feeds:
+                  <span className="text-slate-500 uppercase font-semibold text-[11px] tracking-wider flex-shrink-0">
+                    Recent Stations:
                   </span>
-                  <div className="flex items-center gap-1.5 overflow-x-auto">
+                  <div className="flex items-center gap-2 overflow-x-auto">
                     {recentChannelIds
                       .map((id) => streams.find((s) => s.id === id))
                       .filter((channel): channel is StreamChannel => !!channel)
@@ -605,12 +600,12 @@ export default function App() {
                         <button
                           key={channel.id}
                           onClick={() => handleSelectChannel(channel)}
-                          className={`px-2 py-0.5 border text-[9px] font-bold uppercase transition-all hover:border-indigo-500 truncate max-w-[140px] cursor-pointer rounded-none ${
+                          className={`px-2.5 py-1 border text-xs font-medium rounded transition-all hover:border-blue-500 truncate max-w-[150px] cursor-pointer ${
                             selectedChannel?.id === channel.id
-                              ? "bg-indigo-500/10 border-indigo-500 text-indigo-500"
+                              ? "bg-blue-500/10 border-blue-500 text-blue-500"
                               : theme === "light"
-                              ? "bg-white border-zinc-300 text-zinc-700 hover:bg-zinc-50"
-                              : "bg-neutral-900 border-neutral-800 text-neutral-400 hover:text-neutral-200"
+                              ? "bg-slate-50 border-slate-200 text-slate-700 hover:bg-slate-100"
+                              : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
                           }`}
                         >
                           {channel.name}
@@ -621,7 +616,7 @@ export default function App() {
               )}
             </div>
 
-            {/* Sidebar Channels */}
+            {/* Sidebar Directory */}
             <div className="lg:col-span-4 flex flex-col gap-6">
               <div className={`search-bar-step category-filter-step channel-list-step ${getSpotlightClass(currentStep === 1 ? "search-bar-step" : currentStep === 2 ? "category-filter-step" : "channel-list-step")}`}>
                 <ChannelList
@@ -640,105 +635,98 @@ export default function App() {
         </>
       </main>
 
-      {/* FOOTER AREA WITH NON-INTRUSIVE SUBMIT CHANNEL BUTTON */}
-      <footer className={`mt-auto border-t-2 font-mono py-6 px-6 ${
-        theme === "light" ? "border-zinc-900 bg-zinc-100 text-zinc-600" : "border-neutral-800 bg-[#0a0b0e] text-neutral-500"
+      {/* Broadcaster Footer */}
+      <footer className={`mt-auto border-t py-6 px-6 ${
+        theme === "light" ? "border-slate-200 bg-white text-slate-600" : "border-slate-800 bg-slate-950 text-slate-400"
       }`}>
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <p className="text-[10px] uppercase tracking-wider">
-            WORLD CHANNELS &copy; {new Date().getFullYear()} &bull; SATELLITE STREAM NETWORK
+          <p className="tracking-wide">
+            WORLD CHANNELS BROADCAST NETWORK &copy; {new Date().getFullYear()} &bull; GLOBAL LIVE DISTRIBUTION
           </p>
 
           <button
             onClick={() => setIsSubmitModalOpen(true)}
-            className={`px-3 py-1.5 border text-[10px] font-bold uppercase transition-all flex items-center gap-1.5 cursor-pointer ${
+            className={`px-3 py-1.5 border rounded-md text-xs font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
               theme === "light"
-                ? "bg-white border-zinc-400 text-zinc-700 hover:border-zinc-900 hover:text-zinc-900"
-                : "bg-neutral-900 border-neutral-700 text-neutral-400 hover:border-indigo-500 hover:text-indigo-400"
+                ? "bg-slate-50 border-slate-200 text-slate-700 hover:border-slate-400"
+                : "bg-slate-900 border-slate-800 text-slate-300 hover:border-blue-500 hover:text-blue-400"
             }`}
           >
-            <PlusCircle className="w-3.5 h-3.5" />
-            <span>Submit a Channel</span>
+            <PlusCircle className="w-4 h-4" />
+            <span>Submit Feed Direct</span>
           </button>
         </div>
       </footer>
 
-      {/* SUBMIT STREAM MODAL */}
       <SubmitStreamModal
         isOpen={isSubmitModalOpen}
         onClose={() => setIsSubmitModalOpen(false)}
         theme={theme}
       />
 
-      {/* SYSTEM INITIALIZATION GLASS LOADING OVERLAY */}
+      {/* Network Loader Screen */}
       {loading && streams.length === 0 && (
-        <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center font-mono backdrop-blur-md transition-all duration-300 ${
-          theme === "light" ? "bg-[#faf9f6]/75 text-zinc-900" : "bg-[#0d0e12]/75 text-neutral-100"
+        <div className={`fixed inset-0 z-[100] flex flex-col items-center justify-center backdrop-blur-sm transition-opacity duration-200 ${
+          theme === "light" ? "bg-slate-50/90 text-slate-900" : "bg-slate-950/90 text-slate-100"
         }`}>
           <div className="flex flex-col items-center max-w-sm w-full px-6 text-center">
             
-            <div className="flex items-center gap-3 mb-10">
-              <div className={`w-12 h-12 border-2 flex items-center justify-center relative rounded-none ${
-                theme === "light" ? "bg-white border-zinc-950 shadow-[2px_2px_0px_0px_rgba(24,24,27,1)]" : "bg-neutral-950 border-indigo-500 shadow-[0_0_15px_rgba(99,102,241,0.2)]"
+            <div className="flex items-center gap-3 mb-8">
+              <div className={`w-12 h-12 border rounded-xl flex items-center justify-center ${
+                theme === "light" ? "bg-white border-slate-200 shadow-sm" : "bg-slate-900 border-slate-800"
               }`}>
-                <Globe className="w-5 h-5 text-indigo-500 animate-spin" />
-                <span className="absolute top-0 left-0 text-[6px] font-mono text-zinc-400 dark:text-neutral-500 p-0.5">SYS</span>
+                <Globe className="w-6 h-6 text-blue-500 animate-spin" />
               </div>
               <div className="text-left">
                 <div className="flex items-center gap-2">
-                  <h1 className="text-sm font-black uppercase tracking-tight">World Channels</h1>
-                  <span className="text-[9px] font-mono font-bold bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-1.5 py-0.5 border border-emerald-500/20 animate-pulse">Live</span>
+                  <h1 className="text-base font-bold tracking-tight uppercase">World Channels</h1>
                 </div>
-                <p className={`text-[10px] font-mono uppercase tracking-wider ${theme === "light" ? "text-zinc-500" : "text-neutral-500"}`}>
-                  Global Channel Explorer
+                <p className={`text-xs ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
+                  Global Live Broadcaster Network
                 </p>
               </div>
             </div>
 
             <div className="space-y-2 w-full">
-              <h2 className="text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-400">
-                Starting the Application!
+              <h2 className="text-xs font-semibold uppercase tracking-wider text-blue-500">
+                Initializing Broadcast Network
               </h2>
-              
-              <p className={`text-[10px] tracking-wide uppercase leading-relaxed ${
-                theme === "light" ? "text-zinc-500" : "text-neutral-400"
-              }`}>
-                Opening packages, receiving signals, firing up the app! Please wait as it loads!
+              <p className={`text-xs ${theme === "light" ? "text-slate-500" : "text-slate-400"}`}>
+                Connecting to primary satellite feeds and retrieving global distribution lists.
               </p>
             </div>
 
-            <div className={`mt-8 w-full border border-dashed p-3 text-[9px] uppercase ${
-              theme === "light" ? "bg-zinc-100 border-zinc-300 text-zinc-500" : "bg-neutral-900/50 border-neutral-800 text-neutral-500"
+            <div className={`mt-8 w-full border rounded-md p-3 text-xs font-mono ${
+              theme === "light" ? "bg-slate-100 border-slate-200 text-slate-600" : "bg-slate-900/50 border-slate-800 text-slate-400"
             }`}>
-              <span className="block animate-pulse">Status: Connecting to servers...</span>
+              <span className="block animate-pulse">Establishing broadcast handshake...</span>
             </div>
           </div>
         </div>
       )}
 
-      {/* FLOATING CONTEXTUAL POPUP */}
+      {/* Interactive Guide Overlay */}
       <AnimatePresence>
         {runTutorial && (
           <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-50">
-            <div className="fixed inset-0 pointer-events-auto bg-black/45 backdrop-blur-[1px] z-40" onClick={handleSkipTutorial} />
+            <div className="fixed inset-0 pointer-events-auto bg-slate-950/50 backdrop-blur-[2px] z-40" onClick={handleSkipTutorial} />
             
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
+              initial={{ opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ duration: 0.2 }}
+              exit={{ opacity: 0, scale: 0.98 }}
+              transition={{ duration: 0.15 }}
               style={{
                 position: "absolute",
                 top: `${tooltipCoords.top}px`,
                 left: `${tooltipCoords.left}px`,
               }}
-              className={`w-[320px] pointer-events-auto border-2 p-5 shadow-2xl z-50 rounded-lg font-sans transition-all duration-150 ${
+              className={`w-[320px] pointer-events-auto border p-5 shadow-xl z-50 rounded-lg transition-all duration-150 ${
                 theme === "light"
-                  ? "bg-white border-zinc-950 text-zinc-900 shadow-[4px_4px_12px_rgba(0,0,0,0.15)]"
-                  : "bg-[#111218] border-indigo-500 text-neutral-100 shadow-[0_4px_20px_rgba(99,102,241,0.25)]"
+                  ? "bg-white border-slate-200 text-slate-900"
+                  : "bg-slate-900 border-slate-800 text-slate-100"
               }`}
             >
-              {/* Dynamic Arrow */}
               {!(TUTORIAL_STEPS[currentStep].overlap) && (
                 <div
                   style={{
@@ -746,57 +734,55 @@ export default function App() {
                     top: tooltipCoords.placement === "left" || tooltipCoords.placement === "right" ? `${tooltipCoords.arrowTop}px` : undefined,
                     transform: (tooltipCoords.placement === "left" || tooltipCoords.placement === "right") ? "translateY(-50%) rotate(45deg)" : "translateX(-50%) rotate(45deg)",
                   }}
-                  className={`absolute w-3.5 h-3.5 transition-all duration-300 ${
-                    tooltipCoords.placement === "bottom" ? "-top-[8px] border-t-2 border-l-2" :
-                    tooltipCoords.placement === "top" ? "-bottom-[8px] border-b-2 border-r-2" :
-                    tooltipCoords.placement === "right" ? "-left-[8px] border-b-2 border-l-2" :
-                    "-right-[8px] border-t-2 border-r-2"
+                  className={`absolute w-3 h-3 transition-all duration-300 ${
+                    tooltipCoords.placement === "bottom" ? "-top-[7px] border-t border-l" :
+                    tooltipCoords.placement === "top" ? "-bottom-[7px] border-b border-r" :
+                    tooltipCoords.placement === "right" ? "-left-[7px] border-b border-l" :
+                    "-right-[7px] border-t border-r"
                   } ${
                     theme === "light"
-                      ? "bg-white border-zinc-950"
-                      : "bg-[#111218] border-indigo-500"
+                      ? "bg-white border-slate-200"
+                      : "bg-slate-900 border-slate-800"
                   }`}
                 />
               )}
 
-              {/* Close Button */}
               <button 
                 onClick={handleSkipTutorial}
-                className="absolute top-3 right-3 text-zinc-400 hover:text-rose-500 transition-colors cursor-pointer"
-                title="Dismiss Guide"
+                className="absolute top-3 right-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                title="Close Guide"
               >
                 <X className="w-4 h-4" />
               </button>
 
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] font-mono font-bold tracking-wider text-indigo-500 dark:text-indigo-400 uppercase">
+                <span className="text-[10px] font-mono font-medium tracking-wider text-blue-500 uppercase">
                   Step {currentStep + 1} of {TUTORIAL_STEPS.length}
                 </span>
               </div>
 
-              <h4 className="text-sm font-bold tracking-tight mb-1 text-zinc-900 dark:text-white uppercase">
+              <h4 className="text-sm font-semibold tracking-tight mb-1 text-slate-900 dark:text-white">
                 {TUTORIAL_STEPS[currentStep].title}
               </h4>
               
-              <p className="text-[12px] leading-relaxed text-zinc-500 dark:text-neutral-400 mb-4 font-normal">
+              <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400 mb-4 font-normal">
                 {TUTORIAL_STEPS[currentStep].description}
               </p>
 
-              {/* Actions */}
-              <div className="flex items-center justify-between pt-3 border-t border-zinc-200 dark:border-neutral-800">
+              <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
                 <button
                   onClick={handleSkipTutorial}
-                  className="text-[11px] font-mono text-zinc-400 hover:text-rose-500 transition-colors uppercase font-semibold cursor-pointer"
+                  className="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors uppercase font-medium cursor-pointer"
                 >
-                  Skip
+                  Dismiss
                 </button>
                 
                 <button
                   onClick={handleNextTutorial}
-                  className={`px-3 py-1.5 text-[11px] font-sans font-bold tracking-wide flex items-center gap-1 transition-all active:translate-y-0.5 rounded-md cursor-pointer ${
+                  className={`px-3 py-1.5 text-xs font-semibold tracking-wide flex items-center gap-1 transition-all rounded-md cursor-pointer ${
                     theme === "light"
-                      ? "bg-zinc-900 text-white hover:bg-zinc-800"
-                      : "bg-indigo-600 text-white hover:bg-indigo-500"
+                      ? "bg-slate-900 text-white hover:bg-slate-800"
+                      : "bg-blue-600 text-white hover:bg-blue-500"
                   }`}
                 >
                   <span>{currentStep === TUTORIAL_STEPS.length - 1 ? "Finish" : "Next"}</span>
