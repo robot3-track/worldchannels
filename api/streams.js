@@ -892,71 +892,93 @@ function downloadM3U(urlStr) {
   });
 }
 
+// Precompiled regexes and a small, fast FNV-1a 32-bit hasher used to create short stable ids
+const _m3uLogoRegex = /tvg-logo="([^"]+)"/;
+const _m3uCountryRegex = /tvg-country="([^"]+)"/;
+const _extVlcOptRegex = /#EXTVLCOPT:http-(user-agent|referrer)=(.*)/i;
+const _urlLineRegex = /^https?:\/\//i;
+
+function _fnv1a32hex(str) {
+  // FNV-1a 32-bit
+  let hash = 2166136261 >>> 0;
+  for (let i = 0; i < str.length; i++) {
+    hash ^= str.charCodeAt(i);
+    hash = Math.imul(hash, 16777619) >>> 0;
+  }
+  return (hash >>> 0).toString(16).padStart(8, '0');
+}
+
 function parseM3U(data, category) {
   const list = [];
   if (!data) return list;
-  
-  const lines = data.split("\n");
-  let current = {};
+
+  const lines = data.split('\n');
+  let currentName = null;
+  let currentLogo = '';
+  let currentCountry = '';
+  let currentHeaders = null;
   let count = 0;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
+    if (!line) continue;
 
-    if (line.startsWith("#EXTINF:")) {
-      current = { headers: {} }; // Initialize headers object for the channel
-      
-      const commaIndex = line.lastIndexOf(",");
-      if (commaIndex !== -1) current.name = line.substring(commaIndex + 1).trim();
-      
-      const logoMatch = line.match(/tvg-logo="([^"]+)"/);
-      current.logo = logoMatch ? logoMatch[1] : "";
-      
-      const countryMatch = line.match(/tvg-country="([^"]+)"/);
-      // Fix: If tvg-country is missing, pass an empty string or null instead of "Global" 
-      // so resolveChannelLocation can properly inspect the channel name instead of short-circuiting.
-      current.country = countryMatch ? countryMatch[1].toUpperCase() : "";
+    if (line.startsWith('#EXTINF:')) {
+      currentName = '';
+      currentLogo = '';
+      currentCountry = '';
+      currentHeaders = null;
 
-    } else if (line.startsWith("#EXTVLCOPT:")) {
-      if (current.headers) {
-        const optMatch = line.match(/#EXTVLCOPT:http-(user-agent|referrer)=(.*)/i);
+      const commaIndex = line.lastIndexOf(',');
+      if (commaIndex !== -1) currentName = line.substring(commaIndex + 1).trim();
+
+      const logoMatch = _m3uLogoRegex.exec(line);
+      if (logoMatch) currentLogo = logoMatch[1];
+
+      const countryMatch = _m3uCountryRegex.exec(line);
+      if (countryMatch) currentCountry = countryMatch[1].toUpperCase();
+
+    } else if (line.startsWith('#EXTVLCOPT:')) {
+      if (currentName) {
+        const optMatch = _extVlcOptRegex.exec(line);
         if (optMatch) {
           const key = optMatch[1].toLowerCase();
           const value = optMatch[2].trim();
-          
-          if (key === "user-agent") {
-            current.headers["User-Agent"] = value;
-          } else if (key === "referrer") {
-            current.headers["Referer"] = value;
-          }
+          if (!currentHeaders) currentHeaders = {};
+          if (key === 'user-agent') currentHeaders['User-Agent'] = value;
+          else if (key === 'referrer') currentHeaders['Referer'] = value;
         }
       }
 
-    } else if (line.startsWith("http") && current.name) {
-      if (line.includes(".m3u8")) {
-        const resolved = resolveChannelLocation(current.name, current.country);
-        
+    } else if (_urlLineRegex.test(line) && currentName) {
+      if (line.includes('.m3u8')) {
+        const resolved = resolveChannelLocation(currentName, currentCountry);
+        const id = `v-dyn-${category}-${count++}-${_fnv1a32hex(line).substring(0, 8)}`;
+
         const channelObj = {
-          id: `v-dyn-${category}-${count++}-${Buffer.from(line).toString('base64').substring(0, 8)}`,
-          name: current.name,
+          id,
+          name: currentName,
           url: line,
           category: category,
           country: resolved.country,
-          logo: current.logo || "https://images.unsplash.com/photo-1585829365294-fa8c63327f31?auto=format&fit=crop&w=120&h=120&q=80",
-          status: "online",
+          logo: currentLogo || "https://images.unsplash.com/photo-1585829365294-fa8c63327f31?auto=format&fit=crop&w=120&h=120&q=80",
+          status: 'online',
           lat: resolved.lat,
           lon: resolved.lon
         };
 
-        if (Object.keys(current.headers).length > 0) {
-          channelObj.headers = current.headers;
-        }
-
+        if (currentHeaders && Object.keys(currentHeaders).length) channelObj.headers = currentHeaders;
         list.push(channelObj);
       }
-      current = {}; // Reset container state
+
+      // reset
+      currentName = null;
+      currentLogo = '';
+      currentCountry = '';
+      currentHeaders = null;
     }
   }
+
   return list;
 }
 
