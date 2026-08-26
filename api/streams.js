@@ -2,6 +2,10 @@
 import https from "https";
 import http from "http";
 
+// Keep-alive agents to reduce socket creation overhead and CPU
+const HTTP_AGENT = new http.Agent({ keepAlive: true, maxSockets: 32 });
+const HTTPS_AGENT = new https.Agent({ keepAlive: true, maxSockets: 32 });
+
 // Interface for streams (JS version)
 // {
 //   id: string;
@@ -718,9 +722,15 @@ function resolveChannelLocation(channelName, m3uCountry) {
 }
 
 const STREAM_CACHE_TTL = 5 * 60 * 1000;
+const M3U_CACHE_TTL = 5 * 60 * 1000; // cache M3U downloads per-source for 5 minutes
 let streamCache = null;
 let streamCacheExpires = 0;
 let streamBuildPromise = null;
+
+// Per-URL M3U fetch cache and failure/backoff tracking
+const m3uFetchCache = new Map(); // url -> { data, expiresAt }
+const sourceFailureCounts = new Map(); // url -> failure count
+const sourceFailedUntil = new Map(); // url -> timestamp (ms) until which we skip attempts
 
 async function mapWithConcurrency(items, limit, worker) {
   const output = new Array(items.length);
@@ -748,36 +758,81 @@ async function mapWithConcurrency(items, limit, worker) {
 function downloadM3U(urlStr) {
   return new Promise((resolve) => {
     try {
+      const now = Date.now();
+      // return cached data if still valid
+      const cached = m3uFetchCache.get(urlStr);
+      if (cached && cached.expiresAt > now) return resolve(cached.data);
+
+      // if source recently failed, skip attempts until backoff expires
+      const failedUntil = sourceFailedUntil.get(urlStr);
+      if (failedUntil && failedUntil > now) return resolve("");
+
       const client = urlStr.startsWith("https") ? https : http;
+      const agent = urlStr.startsWith("https") ? HTTPS_AGENT : HTTP_AGENT;
+
+      const MAX_BYTES = 200 * 1024; // 200KB cap per M3U to avoid huge downloads
+      const TIMEOUT_MS = 6000;
+      let bytes = 0;
 
       const req = client.get(urlStr, {
         headers: { "User-Agent": "Mozilla/5.0 Satellite-Router/1.0" },
-        timeout: 5000
+        timeout: TIMEOUT_MS,
+        agent
       }, (res) => {
         if (res.statusCode !== 200) {
           res.resume();
-          resolve("");
-          return;
+          // record failure/backoff
+          const failures = (sourceFailureCounts.get(urlStr) || 0) + 1;
+          sourceFailureCounts.set(urlStr, failures);
+          sourceFailedUntil.set(urlStr, Date.now() + Math.min(60_000 * failures, 15 * 60 * 1000));
+          return resolve("");
         }
 
         let data = "";
         res.setEncoding("utf8");
 
-        res.on("data", chunk => {
+        res.on("data", (chunk) => {
+          bytes += chunk.length;
+          if (bytes > MAX_BYTES) {
+            // too large, abort and treat as empty
+            try { req.destroy(); } catch (e) {}
+            return resolve("");
+          }
           data += chunk;
         });
 
-        res.on("end", () => resolve(data));
-        res.on("error", () => resolve(""));
+        res.on("end", () => {
+          // success: clear failure counters and cache result
+          sourceFailureCounts.delete(urlStr);
+          sourceFailedUntil.delete(urlStr);
+
+          const expiresAt = Date.now() + M3U_CACHE_TTL;
+          try { m3uFetchCache.set(urlStr, { data, expiresAt }); } catch (e) {}
+          resolve(data);
+        });
+
+        res.on("error", () => {
+          const failures = (sourceFailureCounts.get(urlStr) || 0) + 1;
+          sourceFailureCounts.set(urlStr, failures);
+          sourceFailedUntil.set(urlStr, Date.now() + Math.min(60_000 * failures, 15 * 60 * 1000));
+          resolve("");
+        });
       });
 
-      req.setTimeout(5000, () => {
-        req.destroy();
+      req.setTimeout(TIMEOUT_MS, () => {
+        try { req.destroy(); } catch (e) {}
+        const failures = (sourceFailureCounts.get(urlStr) || 0) + 1;
+        sourceFailureCounts.set(urlStr, failures);
+        sourceFailedUntil.set(urlStr, Date.now() + Math.min(60_000 * failures, 15 * 60 * 1000));
         resolve("");
       });
-
-      req.on("error", () => resolve(""));
-    } catch {
+      req.on("error", () => {
+        const failures = (sourceFailureCounts.get(urlStr) || 0) + 1;
+        sourceFailureCounts.set(urlStr, failures);
+        sourceFailedUntil.set(urlStr, Date.now() + Math.min(60_000 * failures, 15 * 60 * 1000));
+        resolve("");
+      });
+    } catch (e) {
       resolve("");
     }
   });
