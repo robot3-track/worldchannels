@@ -32,6 +32,26 @@ function createLRU(limit) {
   };
 }
 
+// Pre-decode base64 compliance keys once at module load to avoid per-request decoding
+const _COMPLIANCE_KEYS_BASE64 = [
+  "eHh4",
+  "cG9ybg==",
+  "YWR1bHQ=",
+  "MTgr",
+  "c2V4",
+  "ZXJvdGlj",
+  "aGVudGFp",
+  "bnNmdw==",
+  "cGxheWJveQ==",
+  "cmVkbGlnaHQ=",
+  "cGluayBv",
+  "ZGF0aW5n",
+  "bmFrZWQ=",
+  "bXljYW10dg=="
+];
+
+const _compliancePatterns = _COMPLIANCE_KEYS_BASE64.map(k => Buffer.from(k, 'base64').toString('utf8').toLowerCase());
+
 // Interface for streams (JS version)
 // {
 //   id: string;
@@ -721,7 +741,6 @@ function resolveChannelLocation(channelName, m3uCountry) {
   for (const city of regionalCities) {
     if (city.keys.some(k => nameLower.includes(k))) {
       const result = { lat: city.lat + jitterLat, lon: city.lon + jitterLon, country: city.country };
-      if (channelLocationCache.size >= LOCATION_CACHE_LIMIT) channelLocationCache.clear();
       channelLocationCache.set(cacheKey, result);
       return result;
     }
@@ -730,7 +749,6 @@ function resolveChannelLocation(channelName, m3uCountry) {
   if (uppercaseCountry !== "GLOBAL" && uppercaseCountry !== "UN" && countryCoords[uppercaseCountry]) {
     const coords = countryCoords[uppercaseCountry];
     const result = { lat: coords.lat + jitterLat, lon: coords.lon + jitterLon, country: uppercaseCountry };
-    if (channelLocationCache.size >= LOCATION_CACHE_LIMIT) channelLocationCache.clear();
     channelLocationCache.set(cacheKey, result);
     return result;
   }
@@ -742,7 +760,6 @@ function resolveChannelLocation(channelName, m3uCountry) {
     lon: chosenCentroid.lon + jitterLon,
     country: uppercaseCountry === "GLOBAL" ? chosenCentroid.country : uppercaseCountry
   };
-  if (channelLocationCache.size >= LOCATION_CACHE_LIMIT) channelLocationCache.clear();
   channelLocationCache.set(cacheKey, result);
   return result;
 }
@@ -3925,41 +3942,41 @@ export default async function handler(request, response) {
                   }
                 );
 
-                const allStreams = [...staticStreams];
-
-                for (const list of m3uResults) {
-                  allStreams.push(...list.slice(0, 400));
-                }
-
                 const uniqueStreams = [];
                 const seenUrls = new Set();
 
-                for (const stream of allStreams) {
-                  if (!stream?.url || seenUrls.has(stream.url)) continue;
+                // Add static streams first (avoid creating a full copied array)
+                for (let i = 0; i < staticStreams.length; i++) {
+                  const s = staticStreams[i];
+                  if (!s?.url || seenUrls.has(s.url)) continue;
+                  if (!verifyMetadataCompliance(s.name)) continue;
+                  seenUrls.add(s.url);
+                  uniqueStreams.push(s);
+                  if (uniqueStreams.length >= 15000) break;
+                }
 
-                  seenUrls.add(stream.url);
+                // Merge dynamic streams with per-list cap and dedupe
+                for (let li = 0; li < m3uResults.length && uniqueStreams.length < 15000; li++) {
+                  const list = m3uResults[li] || [];
+                  const limit = Math.min(400, list.length);
+                  for (let j = 0; j < limit && uniqueStreams.length < 15000; j++) {
+                    const stream = list[j];
+                    if (!stream?.url || seenUrls.has(stream.url)) continue;
+                    if (!verifyMetadataCompliance(stream.name)) continue;
+                    seenUrls.add(stream.url);
 
-                  if (!verifyMetadataCompliance(stream.name)) continue;
-
-                  let estimatedStatus = stream.status;
-
-                  if (stream.id?.startsWith("v-dyn")) {
-                    const urlStr = stream.url.toLowerCase();
-
-                    estimatedStatus =
-                      urlStr.includes("akamai") || urlStr.includes("cloudfront")
+                    let estimatedStatus = stream.status;
+                    if (stream.id?.startsWith("v-dyn")) {
+                      const urlStr = stream.url.toLowerCase();
+                      estimatedStatus = urlStr.includes("akamai") || urlStr.includes("cloudfront")
                         ? "online"
                         : stream.url.length % 5 === 0
                           ? "unstable"
                           : "online";
+                    }
+
+                    uniqueStreams.push({ ...stream, status: estimatedStatus });
                   }
-
-                  uniqueStreams.push({
-                    ...stream,
-                    status: estimatedStatus
-                  });
-
-                  if (uniqueStreams.length >= 15000) break;
                 }
 
                 return {
@@ -3999,30 +4016,15 @@ export default async function handler(request, response) {
 
           const target = val.toLowerCase();
 
-          const complianceKeys = [
-            "eHh4",
-            "cG9ybg==",
-            "YWR1bHQ=",
-            "MTgr",
-            "c2V4",
-            "ZXJvdGlj",
-            "aGVudGFp",
-            "bnNmdw==",
-            "cGxheWJveQ==",
-            "cmVkbGlnaHQ=",
-            "cGluayBv",
-            "ZGF0aW5n",
-            "bmFrZWQ=",
-            "bXljYW10dg=="
-          ];
-
-          for (const key of complianceKeys) {
-            const pattern = Buffer.from(key, "base64").toString("utf-8");
-
-            if (target.includes(pattern)) {
-              return false;
+          // Use pre-decoded, lowercased compliance patterns to avoid per-call base64 decoding
+          // (patterns are defined at module load for minimal active CPU per request)
+          if (typeof _compliancePatterns !== 'undefined' && _compliancePatterns.length) {
+            for (let i = 0; i < _compliancePatterns.length; i++) {
+              if (target.includes(_compliancePatterns[i])) return false;
             }
+            return true;
           }
 
+          // Fallback (shouldn't happen): conservative pass-through
           return true;
         }
