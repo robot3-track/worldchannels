@@ -697,7 +697,7 @@ export default function App() {
 
             <div className="space-y-2 w-full">
               <h2 className="text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-400">
-                INITIALIZING APPLICATION
+                Starting the Application!
               </h2>
               
               <p className={`text-[10px] tracking-wide uppercase leading-relaxed ${
@@ -710,7 +710,7 @@ export default function App() {
             <div className={`mt-8 w-full border border-dashed p-3 text-[9px] uppercase ${
               theme === "light" ? "bg-zinc-100 border-zinc-300 text-zinc-500" : "bg-neutral-900/50 border-neutral-800 text-neutral-500"
             }`}>
-              <span className="block animate-pulse">STATUS: ESTABLISHING CONNECTIVITY...</span>
+              <span className="block animate-pulse">Status: Connecting to servers...</span>
             </div>
           </div>
         </div>
